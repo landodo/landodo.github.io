@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+<meta name="robots" content="index, follow">
+<title>Every Annotation Counts | Landodo&#39;s NoteBook</title>
+<meta name="keywords" content="医学图像分割, 深监督" />
+<meta name="description" content="Every Annotation Counts: Multi-label Deep Supervision for Medical Image Segmentation CVPR 2021 代码未开源 关键词：semi-weakly supervised、pseudo-labels、Multi-label Deep S">
+<meta name="author" content="">
+<link rel="canonical" href="http://landodo.github.io/posts/every-annotation-counts/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://landodo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://landodo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://landodo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://landodo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://landodo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Every Annotation Counts" />
+<meta property="og:description" content="Every Annotation Counts: Multi-label Deep Supervision for Medical Image Segmentation CVPR 2021 代码未开源 关键词：semi-weakly supervised、pseudo-labels、Multi-label Deep S" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://landodo.github.io/posts/every-annotation-counts/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-11-26T22:53:19&#43;08:00" />
+<meta property="article:modified_time" content="2021-11-26T22:53:19&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Every Annotation Counts"/>
+<meta name="twitter:description" content="Every Annotation Counts: Multi-label Deep Supervision for Medical Image Segmentation CVPR 2021 代码未开源 关键词：semi-weakly supervised、pseudo-labels、Multi-label Deep S"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://landodo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Every Annotation Counts",
+      "item": "http://landodo.github.io/posts/every-annotation-counts/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Every Annotation Counts",
+  "name": "Every Annotation Counts",
+  "description": "Every Annotation Counts: Multi-label Deep Supervision for Medical Image Segmentation CVPR 2021 代码未开源 关键词：semi-weakly supervised、pseudo-labels、Multi-label Deep S",
+  "keywords": [
+    "医学图像分割", "深监督"
+  ],
+  "articleBody": "Every Annotation Counts: Multi-label Deep Supervision for Medical Image Segmentation\n  CVPR 2021\n  代码未开源\n  关键词：semi-weakly supervised、pseudo-labels、Multi-label Deep Supervision、Self-Taught Deep Supervision、Mean-Taught Deep Supervision\n  Abstract 针对医学图像分割任务，本论文提出一种半-弱监督方法（semi-weakly supervised segmentation algorithm ），该方法建立在深度监督和师生模式的基础上，并且容易整合不同的监督信号。考虑如何将深监督整合到较低的层次，multi-label deep supervision 是本方法成果的关键。\n通过提出的训练机制（novel training regime for segmentation），可以灵活利用图像，这些图像要么有像素级标注、要么有边框标注、要么有全局标注、要么无标注。将标注需求降低 94.22%，比全监督的方法只降低 5% mIoU。在视网膜液分割数据集上进行实验验证。\n1 Introduction 像素级标注在医学图像语义分割任务中获取代价昂贵。因此，所面临的问题是最小化所需的注释工作，同时最大化模型的准确性。\n现有的方法：结合无标注的数据，快速获取不同质量的弱标签，如从 image-level 到 bounding box 标注。半监督、弱监督方法（semi- and weakly-supervised approaches）取得了令人信服的结果。\n针对像素级标注小数据集，本文提出通过一种新的深度监督，将训练信号整合到分割网络层中，通过丰富的未标注图像放大这些信号。然后利用 mean-teacher 分割模型推理出健壮的伪标签（pseudo-labels）\n本文的贡献：\n（1）对不同数量的训练样本和大量不同的监督类型进行了深入的研究，以实现语义分割；\n（2）引入了一种新的深度监督范式，适用于所提出的 Multi-label Deep Supervision 技术，在此基础上，引入了灵活的半-弱监督路径来集成未标记或弱标记的图像：新的自学深度监督方法（Self-Taught Deep Supervision）。\n（3）Mean-Taught Deep Supervision 增加了对扰动的不变性和健壮的伪标签生成，获得了接近完全监督基线的结果，而只使用了 5.78% 的标签。\n3 Proposed Approach semi-weakly supervised semantic segmentation\nMulti-label Deep Supervision\n对于半-弱监督的语义分割（semi-weakly supervised semantic segmentation），图像数据集为：\n 图像 $x_i$ 可以有不同的标注，如：  $m_i$：pixel-wise annotated mask $b_i$：bounding box $g_i$：image-level label no annotation（无标注）    对于每张图像 $x \\in \\mathcal{D}$，并不一定包含对于的分割图 $\\mathcal{M}$。即每张图像可能有 mask、bounding box、image-level label 或无标注。对于没有 mask 情况，称为半监督分割。\nSupervision integration\n在 encoder-decoder 架构中集成额外的输出（deep supervision）。这些输出在decoder 中的特征图 $f_0, …, f_h$ 上进行操作。其中，$f_0$ 是 decoder 最里面的特征图，$f_h$ 是最外边的特征图。\n特征图 $f_i$ 的空间维度为 $H_i \\times W_i$：\n 实验中：$H_0 « H_h$，$W_0 « W_h$ 输出头 $k_i$ 基于 $f_i$ 计算预测结果：$k_i(f_i) \\in \\mathbb{R}^{C \\times H_i \\times W_i}$  深监督信号（Supervision signals）\n不同的监督模式需要不同的损失函数，在有像素级掩码（seg map）的情况下，训练语义分割模型最常见的目标是最小化交叉熵损失：\n3.2 Multi-label Deeply Supervised Nets 参数高效的多标签深度监督\n深度监督集成到分割网络中的方式存在问题。即，全尺寸的 ground-truth 和网络特征图的空间分辨率之间的空间维度不匹配。\n The problem we identify is the way deep supervision is commonly integrated into segmentation networks. Specifically, the challenge arises due to the mismatch in spatial dimensions between the full-scale ground-truth mask and the smaller spatial resolution within the network’s feature maps (Equation 5).\n 除了使用有损的最近邻插值外，大多数工作是迫使网络学习提升尺度（up-scaling）来解决 ground-truth mask 和 low-resolution spatial features 之间的不匹配。up-scaling 后，标准的输出头将特征图转换为与 mask 相同的 size。\n总结两个缺点：\n（1）网络必须学会 up-scaling，代价是额外的参数；\n（2）中间特征担负着对输出空间中复杂的分类信息和空间关系进行建模的重任，我们怀疑这些信息和空间关系在解码过程中是有用的，但可能只是作为更稳定梯度的跳跃连接。\n (2) intermediate features are burdened to model complex classification information and spatial relations in output space that we question to be useful in the decoding process, but presumably only serve as skip-connections for more stable gradients.\n 本论文建议将特征图中每个位置（x，y）的每个特征向量 $f^{:,x,y}$ 建模为其在输入图像中感受野的 patch-descriptors。因此，我们的目标是将 patch-descriptors 的感受野中包含的所有像素的语义信息植入模型。我们认为，这可以通过强制执行多标签损失来实现，其标签包含接受域中存在的所有语义类别。\n由此可见，我们可以简单地缩小 ground-truth mask 的比例，使之与特征图的大小相匹配，而不需要花费任何参数，并包含限制在感受野中的所有类别的标签，以保留语义信息。down-scaling 过程可以通过 max-pooling 实现。降尺度后的目标 $m_i^{*} \\in \\mathbb{R}^{C \\times H_i \\times W_i}$ 包含特征 $f_i^{:,x, y}$ （patch-descriptor，由特征感受野内的空间位置汇总而成）的多标签 Ground Truth。\n down-scaled multi-label ground-truths: $m$ feature maps: $f$  Self-taught deep supervision\n使用多标签深度监督（Multi-label Deep Supervision）生成伪标签，下采样平滑了噪声监督信号（Fig 2. Right）。\nSelf-taught Deep Supervision 通过如下方式为未标注样本生成 binary ground-truth tensor。\n 将未标注图像 $x_i$ 通过分割网络获得伪标签 $p_i$； 利用伪标签实施 Multi-label Deep Supervision； 最外层对真实 ground-truth 和 pseudo-label 设置单独的输出头；  一个输出头使用干净的标签计算交叉熵损失； 另一个输出头使用公式（9）和伪标签计算损失；   伪标签的推理生成，使用的是干净标签的输出头；  如果 image-level label $g_i$ 可以获取，可以进一步将生成的伪标签约束到包含在 $g_i$ 中的类。以类似的方式，相关联的边界框标签 $b_i$ 可以将伪标签约束为位于粗略区域内。这导致了弱标签图像的灵活集成，以提高伪标签质量。\nMean-taught deep supervision.\n通过(1)强制关于扰动的一致预测和(2)使用教师模型来生成更健壮的伪标签，该教师模型是先前迭代的所有模型的组合。\nMean-Teachers（即先前模型参数的指数移动平均数）\n通过使用学生模型和先前教师模型的移动平均值不断更新教师模型的参数来维护教师模型，可以获得更好的预测。因此，教师不会单独接受培训，而只是通过以下方式进行更新：\n $\\theta$ 表示模型参数 $t$ 表示训练迭代 $\\alpha$ 平滑参数  4 Experiments output-head for pseudo-labels 和 standard output-head 有什么区别？\n goround truth 不同，噪声伪标签用于平滑    过分割问题，是否可以加入一个分类的深监督来缓解？\n多尺度 concatenate 和这个方法的区别？\n",
+  "wordCount" : "2500",
+  "inLanguage": "en",
+  "datePublished": "2021-11-26T22:53:19+08:00",
+  "dateModified": "2021-11-26T22:53:19+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://landodo.github.io/posts/every-annotation-counts/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Landodo's NoteBook",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://landodo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://landodo.github.io/" accesskey="h" title="Landodo&#39;s NoteBook (Alt + H)">Landodo&#39;s NoteBook</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://landodo.github.io/search" title="🔍Search (Alt &#43; /)" accesskey=/>
+                    <span>🔍Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/tags" title="Tag">
+                    <span>Tag</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/cs-zoo" title="CS ZOO">
+                    <span>CS ZOO</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://landodo.github.io/">Home</a>&nbsp;»&nbsp;<a href="http://landodo.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      Every Annotation Counts
+    </h1>
+    <div class="post-meta"><span title='2021-11-26 22:53:19 +0800 CST'>November 26, 2021</span>&nbsp;·&nbsp;5 min&nbsp;·&nbsp;2500 words
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#abstract" aria-label="Abstract">Abstract</a></li>
+                <li>
+                    <a href="#1-introduction" aria-label="1 Introduction">1 Introduction</a></li>
+                <li>
+                    <a href="#3-proposed-approach" aria-label="3 Proposed Approach">3 Proposed Approach</a><ul>
+                        
+                <li>
+                    <a href="#32-multi-label-deeply-supervised-nets" aria-label="3.2 Multi-label Deeply Supervised Nets">3.2 Multi-label Deeply Supervised Nets</a></li></ul>
+                </li>
+                <li>
+                    <a href="#4-experiments" aria-label="4 Experiments">4 Experiments</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><p><strong>Every Annotation Counts: Multi-label Deep Supervision for Medical Image Segmentation</strong></p>
+<ul>
+<li>
+<p>CVPR 2021</p>
+</li>
+<li>
+<p>代码未开源</p>
+</li>
+<li>
+<p>关键词：semi-weakly supervised、pseudo-labels、Multi-label Deep Supervision、Self-Taught Deep Supervision、Mean-Taught Deep Supervision</p>
+</li>
+</ul>
+<h2 id="abstract">Abstract<a hidden class="anchor" aria-hidden="true" href="#abstract">#</a></h2>
+<p>针对医学图像分割任务，本论文提出一种<a href="">半-弱监督方法</a>（semi-weakly supervised segmentation algorithm ），该方法建立在<strong>深度监督</strong>和<strong>师生模式</strong>的基础上，并且容易整合不同的监督信号。考虑如何将深监督整合到较低的层次，multi-label deep supervision 是本方法成果的关键。</p>
+<p>通过提出的<strong>训练机制</strong>（novel training regime for segmentation），可以灵活利用图像，这些图像要么有像素级标注、要么有边框标注、要么有全局标注、要么无标注。将标注需求降低 94.22%，比全监督的方法只降低 5% mIoU。在视网膜液分割数据集上进行实验验证。</p>
+<h2 id="1-introduction">1 Introduction<a hidden class="anchor" aria-hidden="true" href="#1-introduction">#</a></h2>
+<p><strong>像素级标注</strong>在医学图像语义分割任务中获取代价昂贵。因此，所面临的问题是最小化所需的注释工作，同时最大化模型的准确性。</p>
+<p><img loading="lazy" src="./20211126/5.png" alt=""  />
+</p>
+<p>现有的方法：结合无标注的数据，快速获取不同质量的弱标签，如从 image-level 到 bounding box 标注。半监督、弱监督方法（semi- and weakly-supervised approaches）取得了令人信服的结果。</p>
+<p>针对像素级标注小数据集，本文提出通过一种新的<strong>深度监督</strong>，将训练信号整合到分割网络层中，通过丰富的<strong>未标注图像</strong>放大这些信号。然后利用 mean-teacher 分割模型推理出健壮的伪标签（pseudo-labels）</p>
+<p>本文的贡献：</p>
+<p>（1）对不同数量的训练样本和大量不同的监督类型进行了深入的研究，以实现语义分割；</p>
+<p>（2）引入了一种新的深度监督范式，适用于所提出的 <em>Multi-label Deep Supervision</em> 技术，在此基础上，引入了灵活的半-弱监督路径来集成未标记或弱标记的图像：新的自学深度监督方法（<!-- raw HTML omitted -->Self-Taught Deep Supervision<!-- raw HTML omitted -->）。</p>
+<p>（3）Mean-Taught Deep Supervision 增加了对扰动的不变性和健壮的伪标签生成，获得了接近完全监督基线的结果，而只使用了 5.78% 的标签。</p>
+<h2 id="3-proposed-approach">3 Proposed Approach<a hidden class="anchor" aria-hidden="true" href="#3-proposed-approach">#</a></h2>
+<p><em>semi-weakly supervised semantic segmentation</em></p>
+<p><em>Multi-label Deep Supervision</em></p>
+<p>对于半-弱监督的语义分割（semi-weakly supervised semantic segmentation），图像数据集为：</p>
+<p><img loading="lazy" src="./20211126/1.png" alt=""  />
+</p>
+<ul>
+<li>图像 $x_i$ 可以有不同的标注，如：
+<ul>
+<li>$m_i$：pixel-wise annotated mask</li>
+<li>$b_i$：bounding box</li>
+<li>$g_i$：image-level label</li>
+<li>no annotation（无标注）</li>
+</ul>
+</li>
+</ul>
+<p><img loading="lazy" src="./20211126/2.png" alt=""  />
+</p>
+<p>对于每张图像 $x \in \mathcal{D}$，并不一定包含对于的分割图 $\mathcal{M}$。即每张图像可能有 mask、bounding box、image-level label 或无标注。对于没有 mask 情况，称为半监督分割。</p>
+<p><strong>Supervision integration</strong></p>
+<p>在 encoder-decoder 架构中集成额外的输出（deep supervision）。这些输出在decoder 中的特征图 $f_0, &hellip;, f_h$ 上进行操作。其中，$f_0$ 是 decoder 最里面的特征图，$f_h$ 是最外边的特征图。</p>
+<p>特征图 $f_i$ 的空间维度为 $H_i \times W_i$：</p>
+<p><img loading="lazy" src="./20211126/3.png" alt=""  />
+</p>
+<ul>
+<li>实验中：$H_0 &laquo; H_h$，$W_0 &laquo; W_h$</li>
+<li>输出头 $k_i$ 基于 $f_i$ 计算预测结果：$k_i(f_i) \in \mathbb{R}^{C \times H_i \times W_i}$</li>
+</ul>
+<p><strong>深监督信号（Supervision signals）</strong></p>
+<p>不同的监督模式需要不同的损失函数，在有像素级掩码（seg map）的情况下，训练语义分割模型最常见的目标是最小化交叉熵损失：</p>
+<p><img loading="lazy" src="./20211126/4.png" alt=""  />
+</p>
+<h3 id="32-multi-label-deeply-supervised-nets">3.2 Multi-label Deeply Supervised Nets<a hidden class="anchor" aria-hidden="true" href="#32-multi-label-deeply-supervised-nets">#</a></h3>
+<p><img loading="lazy" src="./20211126/6.png" alt=""  />
+</p>
+<p><strong>参数高效的多标签深度监督</strong></p>
+<p>深度监督集成到分割网络中的方式存在问题。即，全尺寸的 ground-truth 和网络特征图的空间分辨率之间的空间维度不匹配。</p>
+<blockquote>
+<p>The problem we identify is the way deep supervision is commonly integrated into segmentation networks. Specifically, the challenge arises due to the mismatch in spatial dimensions between the full-scale ground-truth mask and the smaller spatial resolution within the network’s feature maps (Equation 5).</p>
+</blockquote>
+<p>除了使用有损的<strong>最近邻插值</strong>外，大多数工作是迫使网络学习提升尺度（up-scaling）来解决 ground-truth mask 和 low-resolution spatial features 之间的不匹配。up-scaling 后，标准的输出头将特征图转换为与 mask 相同的 size。</p>
+<p>总结两个缺点：</p>
+<p>（1）网络必须学会 up-scaling，代价是额外的参数；</p>
+<p>（2）中间特征担负着对输出空间中复杂的分类信息和空间关系进行建模的重任，我们怀疑这些信息和空间关系在解码过程中是有用的，但可能只是作为更稳定梯度的跳跃连接。</p>
+<blockquote>
+<p>(2) intermediate features are burdened to model complex classification information and spatial relations in output space that we question to be useful in the decoding process, but presumably only serve as skip-connections for more stable gradients.</p>
+</blockquote>
+<p>本论文建议将特征图中每个位置（x，y）的每个特征向量 $f^{:,x,y}$ 建模为其在输入图像中感受野的 patch-descriptors。因此，我们的目标是将 patch-descriptors 的感受野中包含的所有像素的语义信息植入模型。我们认为，这可以通过强制执行多标签损失来实现，其标签包含接受域中存在的所有语义类别。</p>
+<p><!-- raw HTML omitted -->由此可见，我们可以简单地缩小 ground-truth mask 的比例，使之与特征图的大小相匹配，而不需要花费任何参数，并包含限制在感受野中的所有类别的标签，以保留语义信息。<!-- raw HTML omitted --></p>
+<p>down-scaling 过程可以通过 max-pooling 实现。降尺度后的目标 $m_i^{*} \in \mathbb{R}^{C \times H_i \times W_i}$ 包含特征 $f_i^{:,x, y}$ （patch-descriptor，由特征感受野内的空间位置汇总而成）的多标签 Ground Truth。</p>
+<p><img loading="lazy" src="./20211126/7.png" alt=""  />
+</p>
+<ul>
+<li>down-scaled multi-label ground-truths: $m$</li>
+<li>feature maps: $f$</li>
+</ul>
+<p><img loading="lazy" src="./20211126/8.png" alt=""  />
+</p>
+<p><strong>Self-taught deep supervision</strong></p>
+<p>使用多标签深度监督（<em>Multi-label Deep Supervision</em>）生成伪标签，下采样平滑了噪声监督信号（Fig 2. Right）。</p>
+<p><em>Self-taught Deep Supervision</em> 通过如下方式为未标注样本生成 binary ground-truth tensor。</p>
+<ul>
+<li>将未标注图像 $x_i$ 通过分割网络获得伪标签 $p_i$；</li>
+<li>利用伪标签实施 <em>Multi-label Deep Supervision</em>；</li>
+<li>最外层对真实 ground-truth 和 pseudo-label 设置单独的输出头；
+<ul>
+<li>一个输出头使用干净的标签计算交叉熵损失；</li>
+<li>另一个输出头使用公式（9）和伪标签计算损失；</li>
+</ul>
+</li>
+<li>伪标签的推理生成，使用的是干净标签的输出头；</li>
+</ul>
+<p>如果 image-level label $g_i$ 可以获取，可以进一步将生成的伪标签约束到包含在 $g_i$ 中的类。以类似的方式，相关联的边界框标签 $b_i$ 可以将伪标签约束为位于粗略区域内。这导致了弱标签图像的灵活集成，以提高伪标签质量。</p>
+<p><strong>Mean-taught deep supervision.</strong></p>
+<p>通过(1)强制关于扰动的一致预测和(2)使用教师模型来生成更健壮的伪标签，该教师模型是先前迭代的所有模型的组合。</p>
+<p>Mean-Teachers（即先前模型参数的指数移动平均数）</p>
+<p>通过使用学生模型和先前教师模型的移动平均值不断更新教师模型的参数来维护教师模型，可以获得更好的预测。因此，教师不会单独接受培训，而只是通过以下方式进行更新：</p>
+<p><img loading="lazy" src="./20211126/9.png" alt=""  />
+</p>
+<ul>
+<li>$\theta$ 表示模型参数</li>
+<li>$t$ 表示训练迭代</li>
+<li>$\alpha$ 平滑参数</li>
+</ul>
+<h2 id="4-experiments">4 Experiments<a hidden class="anchor" aria-hidden="true" href="#4-experiments">#</a></h2>
+<p>output-head for pseudo-labels 和 standard output-head 有什么区别？</p>
+<ul>
+<li>goround truth 不同，噪声伪标签用于平滑</li>
+<li></li>
+</ul>
+<hr>
+<p>过分割问题，是否可以加入一个分类的深监督来缓解？</p>
+<p>多尺度 concatenate 和这个方法的区别？</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://landodo.github.io/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/">医学图像分割</a></li>
+      <li><a href="http://landodo.github.io/tags/%E6%B7%B1%E7%9B%91%E7%9D%A3/">深监督</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://landodo.github.io/posts/boundary-patch-refinement/">
+    <span class="title">« Prev Page</span>
+    <br>
+    <span>Boundary Patch Refinement</span>
+  </a>
+  <a class="next" href="http://landodo.github.io/posts/deep-clustering-notes/">
+    <span class="title">Next Page »</span>
+    <br>
+    <span>深度聚类 Deep Clustering</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>Landon</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

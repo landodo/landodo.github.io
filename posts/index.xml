@@ -18,6 +18,15 @@
     </item>
     
     <item>
+      <title>Every Annotation Counts</title>
+      <link>http://landodo.github.io/posts/every-annotation-counts/</link>
+      <pubDate>Fri, 26 Nov 2021 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/every-annotation-counts/</guid>
+      <description>Every Annotation Counts: Multi-label Deep Supervision for Medical Image Segmentation CVPR 2021 代码未开源 关键词：semi-weakly supervised、pseudo-labels、Multi-label Deep S</description>
+    </item>
+    
+    <item>
       <title>深度聚类 Deep Clustering</title>
       <link>http://landodo.github.io/posts/deep-clustering-notes/</link>
       <pubDate>Fri, 30 Jul 2021 17:22:19 +0800</pubDate>
