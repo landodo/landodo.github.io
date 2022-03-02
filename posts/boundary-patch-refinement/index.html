@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+<meta name="robots" content="index, follow">
+<title>Boundary Patch Refinement | Landodo&#39;s NoteBook</title>
+<meta name="keywords" content="论文阅读, 图像分割" />
+<meta name="description" content="Look Closer to Segment Better: Boundary Patch Refinement for Instance Segmentation论文简介： 作者：Chufeng Tang（https://chufengt.github.io/）">
+<meta name="author" content="">
+<link rel="canonical" href="http://landodo.github.io/posts/boundary-patch-refinement/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://landodo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://landodo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://landodo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://landodo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://landodo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Boundary Patch Refinement" />
+<meta property="og:description" content="Look Closer to Segment Better: Boundary Patch Refinement for Instance Segmentation论文简介： 作者：Chufeng Tang（https://chufengt.github.io/）" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://landodo.github.io/posts/boundary-patch-refinement/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-02-18T22:21:52&#43;08:00" />
+<meta property="article:modified_time" content="2022-02-18T22:21:52&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Boundary Patch Refinement"/>
+<meta name="twitter:description" content="Look Closer to Segment Better: Boundary Patch Refinement for Instance Segmentation论文简介： 作者：Chufeng Tang（https://chufengt.github.io/）"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://landodo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Boundary Patch Refinement",
+      "item": "http://landodo.github.io/posts/boundary-patch-refinement/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Boundary Patch Refinement",
+  "name": "Boundary Patch Refinement",
+  "description": "Look Closer to Segment Better: Boundary Patch Refinement for Instance Segmentation论文简介： 作者：Chufeng Tang（https://chufengt.github.io/）",
+  "keywords": [
+    "论文阅读", "图像分割"
+  ],
+  "articleBody": "Look Closer to Segment Better: Boundary Patch Refinement for Instance Segmentation论文简介：\n 作者：Chufeng Tang（https://chufengt.github.io/） CVPR 2021 单位：清华大学计算机科学与技术系人工智能研究所 代码：https://github.com/tinyalpha/BPR  思考：\n（0）实例分割精度要想进一步提升，应该在哪里下功夫？\nTable 1 显示了边界修复所带来的性能提升具有巨大的潜力。\n（1）由于硬件的限制，分割时一般需要 Resize 或切 Patch。那么，应该怎么切patch呢？\n  随机切固定size的patch；\n  按网格切；\n  按实例所在位置切；\n  ✅先进行一个粗分割，然后以粗分割的边界为中心，提取Patch块。\n  （2）High-level information/Low-level information？\n高层次语义信息用于提供定位和粗略分割实例（localize and roughly segment objects）；低层次语义信息用于对于分割局部边界细节更为关键。在单一模型中权衡两者是非常困难的。\n（3）本文提出的BPR作为一种后处理方案，目前已有的后处理框架是怎么做的？\n设计一个边界感知的分割模型是一个分割任务的研究热点。主要的有两个方向：\n 集成一个额外的、专门的模块(分支)来处理边界； 基于现有分割模型的结果和后处理方案来细化边界  PolyTransform：将实例的轮廓转换为一组多边形顶点，应用基于Transformer的网络来预测顶点向对象边界的偏移；缺点：巨大的实例patch和复杂的Transformer架构。     注：PolyTransform(CVPR 2020)\n Abstract 由于特征图的空间分辨率较低，以及边界像素比例极低导致的不平衡问题，预测分割图的边界通常不精确。为了解决这个问题，本论文提出了一个概念上简单但有效的后处理改进框架，将实例分割模型的结果进行边界质量改进，称为 BPR。启发自看得更近，分割边界更好（looking closer to segment boundaries better），沿着预测的实例边界提取并细化一系列小边界 patch。通过更高分辨率的边界 patch 细化网络（BPR）。BPR 框架在 Cityspace 基准上，尤其是在边界感知指标上，比 Mask R-CNN 基线有显著改进。将 BPR 框架应用于“PolyTransform+SegFix”基线后，在 Cityspace 排行榜上取得了 SOTA。\n1 Introduction 分割所面临的最重要的问题之一是实例边界分割不精确（Figure 1 Left）。校正物体边界附近的误差像素可以大大提高 Mask 质量（Table 1），对于较小的物体，在一定的欧几里德距离(1px/2px/3px)范围内的像素可以获得较大的增益（AP 为9.4/14.2/17.8）。\n导致低质量边界分割的关键问题有两个：\n（1）特征图空间分辨率的降低使得物体边界周围的细节消失，预测的边界总是粗糙和不精确的（Figure 1,4）。\n（2）物体边界周围的像素只占整个图像的一小部分（不到1%），而且本质上很难分类。不平衡导致了优化偏向，低估了边界像素的重要性。\n许多研究试图改善边界质量，但上述问题仍未得到很好的解决。\n考虑到人工标注行为， 标注人员通常首先对给定图像中的每个对象进行定位和分类，然后在低分辨率下显式或隐式地分割一些粗略的实例掩码。之后，为了获得高质量的模板，注释者需要反复放大局部边界区域，探索更清晰、分辨率更高的边界分割。直观地说，需要高级语义来定位和粗略地分割对象，而低层细节（例如颜色一致性和对比度）对于分割局部边界区域更为关键。本文受人类分割行为的启发，提出了一种概念上简单而有效的后处理框架，通过crop-then-refine策略来提高边界质量。\n 首先提取沿预测实例边界的一系列小图像块； 拼接预测图像边界块后，将送入细化网络，细化粗边界。 精确的小块随后被重新组装成紧凑且高质量的实例分割图。  我们将提出的框架称为边界补丁精化（BPR，Boundary Patch Refinement）。\n由于我们只在对象边界附近裁剪，因此可以用比以往方法高得多的分辨率来处理 patch，从而可以更好地保留低层细节。同时，小patch中边界像素的比例自然增加，可以消除优化偏差。\n在本文的框架中，采用了目前流行的HRNet，它可以在整个网络中保持高分辨率的表示。提出的方法也是一种后处理方案，重点是对边界块进行细化，以提高分割图质量。\n3 Framework 提出框架的概述如 Figure 2 所示。作为一种后处理机制，无需对预分割模型本身进行任何修改或微调。\n3.1 边界块提取 Boundary Patch Extraction 首先需要确定掩码的哪一部分应该被细化。我们提出了一种有效的滑动窗式算法来提取沿预测实例边界的一系列patch。具体地说，我们密集地分配了一组方形边界框，框的中心区域应该覆盖边界像素，如图2(B)所示。得到的方框仍然包含较大的重叠和冗余，因此我们进一步应用非最大抑制(NMS)算法过滤出patch的子集(图2c)。经验表明，重叠越大，分割性能越好，但同时也存在计算量较大的问题。我们可以调整NMS阈值来控制重叠的数量，以实现更好的速度/精度折衷。除了图像补丁（image patches）外，我们还从给定的实例掩码中提取相应的二值掩码（corresponding binary mask patches）。调整拼接image patches、mask patches后，输入到 boundary patch refinement network 中。\n3.2. 边界块细化 Boundary Patch Refinement Mask Patch\n提供的位置和语义信息，使得精化网络无需从头开始学习实例级语义。取而代之的是，优化网络只需要学习如何定位决策边界周围的硬像素，并将它们推到正确的一侧。这一目标可以通过探索局部和高分辨率图像patch中提供的低级别图像特性（例如，颜色一致性和对比度）来实现。相邻的实例可能共享一个相同的边界patch，而学习目标则完全不同且不确定。如果不使用mask patch，则模型很难收敛（Figure 3）。\nBoundary Patch Refinement Network.\n采用HRNetV2，它可以在整个网络中保持高分辨率表示。通过适当增大输入大小，可以得到比以往方法更高分辨率的边界块。\nReassembling.\n将精分割的边界块替换先前的预测，对于那些边界框外没有细化的像素，预测是不变的。对于相邻patch重叠的区域，进行简单的求和取平均，应用0.5的阈值来区分前景和背景。\n3.3. Learning and Inference 基于从训练图像中提取的边界块来训练细化网络。在训练过程，只从预测掩码与地面真实掩码的交集大于0.5的实例中提取边界块，而在推理过程中保留所有预测实例。使用像素级的二进制交叉熵损失，用对应的地面真实掩模对模型输出进行监督。在训练时将NMS消除阈值固定为0.25，而在推理时根据速度要求采用不同的阈值。\n4 Experiments 数据集：Cityscape\n评价指标：COCO-style mask AP、F-score（AF：Average F-score）\n",
+  "wordCount" : "2647",
+  "inLanguage": "en",
+  "datePublished": "2022-02-18T22:21:52+08:00",
+  "dateModified": "2022-02-18T22:21:52+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://landodo.github.io/posts/boundary-patch-refinement/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Landodo's NoteBook",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://landodo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://landodo.github.io/" accesskey="h" title="Landodo&#39;s NoteBook (Alt + H)">Landodo&#39;s NoteBook</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://landodo.github.io/search" title="🔍Search (Alt &#43; /)" accesskey=/>
+                    <span>🔍Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/tags" title="Tag">
+                    <span>Tag</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/cs-zoo" title="CS ZOO">
+                    <span>CS ZOO</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://landodo.github.io/">Home</a>&nbsp;»&nbsp;<a href="http://landodo.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      Boundary Patch Refinement
+    </h1>
+    <div class="post-meta"><span title='2022-02-18 22:21:52 +0800 CST'>February 18, 2022</span>&nbsp;·&nbsp;6 min&nbsp;·&nbsp;2647 words
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#abstract" aria-label="Abstract">Abstract</a></li>
+                <li>
+                    <a href="#1-introduction" aria-label="1 Introduction">1 Introduction</a></li>
+                <li>
+                    <a href="#3-framework" aria-label="3 Framework">3 Framework</a><ul>
+                        
+                <li>
+                    <a href="#31-%e8%be%b9%e7%95%8c%e5%9d%97%e6%8f%90%e5%8f%96-boundary-patch-extraction" aria-label="3.1 边界块提取 Boundary Patch Extraction">3.1 边界块提取 Boundary Patch Extraction</a></li>
+                <li>
+                    <a href="#32-%e8%be%b9%e7%95%8c%e5%9d%97%e7%bb%86%e5%8c%96-boundary-patch-refinement" aria-label="3.2. 边界块细化 Boundary Patch Refinement">3.2. 边界块细化 Boundary Patch Refinement</a></li>
+                <li>
+                    <a href="#33-learning-and-inference" aria-label="3.3. Learning and Inference">3.3. Learning and Inference</a></li></ul>
+                </li>
+                <li>
+                    <a href="#4-experiments" aria-label="4 Experiments">4 Experiments</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><p><!-- raw HTML omitted --><strong>Look Closer to Segment Better: Boundary Patch Refinement for Instance Segmentation</strong><!-- raw HTML omitted --></p>
+<p><strong>论文简介：</strong></p>
+<ul>
+<li>作者：Chufeng Tang（https://chufengt.github.io/）</li>
+<li>CVPR 2021</li>
+<li>单位：清华大学计算机科学与技术系人工智能研究所</li>
+<li>代码：https://github.com/tinyalpha/BPR</li>
+</ul>
+<p><strong>思考：</strong></p>
+<p>（0）实例分割精度要想进一步提升，应该在哪里下功夫？</p>
+<p><img loading="lazy" src="./20220218/1.png" alt=""  />
+</p>
+<p>Table 1 显示了边界修复所带来的性能提升具有巨大的潜力。</p>
+<p>（1）由于硬件的限制，分割时一般需要 Resize 或切 Patch。那么，应该怎么切patch呢？</p>
+<ul>
+<li>
+<p>随机切固定size的patch；</p>
+</li>
+<li>
+<p>按网格切；</p>
+</li>
+<li>
+<p>按实例所在位置切；</p>
+</li>
+<li>
+<p>✅先进行一个粗分割，然后以粗分割的<strong>边界</strong>为中心，提取Patch块。</p>
+</li>
+</ul>
+<p>（2）High-level information/Low-level information？</p>
+<p>高层次语义信息用于提供定位和粗略分割实例（localize and roughly segment objects）；低层次语义信息用于对于分割局部边界细节更为关键。在单一模型中权衡两者是非常困难的。</p>
+<p>（3）本文提出的BPR作为一种后处理方案，目前已有的后处理框架是怎么做的？</p>
+<p>设计一个<strong>边界感知的分割模型</strong>是一个分割任务的研究热点。主要的有两个方向：</p>
+<ul>
+<li>集成一个额外的、专门的模块(分支)来处理边界；</li>
+<li>基于现有分割模型的结果和后处理方案来细化边界
+<ul>
+<li>PolyTransform：将实例的轮廓转换为一组多边形顶点，应用基于Transformer的网络来预测顶点向对象边界的偏移；缺点：巨大的实例patch和复杂的Transformer架构。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>注：PolyTransform(CVPR 2020)</p>
+<p><img loading="lazy" src="./20220218/2.png" alt=""  />
+</p>
+</blockquote>
+<h2 id="abstract">Abstract<a hidden class="anchor" aria-hidden="true" href="#abstract">#</a></h2>
+<p>由于特征图的空间分辨率较低，以及边界像素比例极低导致的不平衡问题，预测分割图的边界通常不精确。为了解决这个问题，本论文提出了一个概念上简单但有效的<strong>后处理改进框架</strong>，将实例分割模型的结果进行边界质量改进，称为 BPR。启发自看得更近，分割边界更好（looking closer to segment boundaries better），沿着预测的实例边界提取并细化一系列小边界 patch。通过更高分辨率的边界 patch 细化网络（BPR）。BPR 框架在 Cityspace 基准上，尤其是在边界感知指标上，比 Mask R-CNN 基线有显著改进。将 BPR 框架应用于“PolyTransform+SegFix”基线后，在 Cityspace 排行榜上取得了 SOTA。</p>
+<h2 id="1-introduction">1 Introduction<a hidden class="anchor" aria-hidden="true" href="#1-introduction">#</a></h2>
+<p>分割所面临的最重要的问题之一是实例边界分割不精确（Figure 1 Left）。校正物体边界附近的误差像素可以大大提高 Mask 质量（Table 1），对于较小的物体，在一定的欧几里德距离(1px/2px/3px)范围内的像素可以获得较大的增益（AP 为9.4/14.2/17.8）。</p>
+<p>导致低质量边界分割的关键问题有两个：</p>
+<p>（1）特征图空间分辨率的降低使得物体边界周围的细节消失，预测的边界总是粗糙和不精确的（Figure 1,4）。</p>
+<p>（2）物体边界周围的像素只占整个图像的一小部分（不到1%），而且本质上很难分类。不平衡导致了优化偏向，低估了边界像素的重要性。</p>
+<p>许多研究试图改善边界质量，但上述问题仍未得到很好的解决。</p>
+<p>考虑到人工标注行为， 标注人员通常首先对给定图像中的每个对象进行定位和分类，然后在低分辨率下显式或隐式地分割一些粗略的实例掩码。之后，为了获得高质量的模板，注释者需要反复放大局部边界区域，探索更清晰、分辨率更高的边界分割。<!-- raw HTML omitted -->直观地说，需要高级语义来定位和粗略地分割对象，而低层细节（例如颜色一致性和对比度）对于分割局部边界区域更为关键。<!-- raw HTML omitted --></p>
+<p>本文受人类分割行为的启发，提出了一种概念上简单而有效的后处理框架，通过<!-- raw HTML omitted -->crop-then-refine策略<!-- raw HTML omitted -->来提高边界质量。</p>
+<ul>
+<li>首先提取沿预测实例边界的一系列小图像块；</li>
+<li>拼接预测图像边界块后，将送入细化网络，细化粗边界。</li>
+<li>精确的小块随后被重新组装成紧凑且高质量的实例分割图。</li>
+</ul>
+<p>我们将提出的框架称为边界补丁精化（BPR，Boundary Patch Refinement）。</p>
+<p>由于我们只在对象边界附近裁剪，因此可以用比以往方法高得多的分辨率来处理 patch，从而可以更好地保留低层细节。同时，小patch中边界像素的比例自然增加，可以消除优化偏差。</p>
+<p>在本文的框架中，采用了目前流行的HRNet，它可以在整个网络中保持高分辨率的表示。提出的方法也是一种后处理方案，重点是对边界块进行细化，以提高分割图质量。</p>
+<h2 id="3-framework">3 Framework<a hidden class="anchor" aria-hidden="true" href="#3-framework">#</a></h2>
+<p>提出框架的概述如 Figure 2 所示。作为一种后处理机制，无需对预分割模型本身进行任何修改或微调。</p>
+<p><img loading="lazy" src="./20220218/3.png" alt=""  />
+</p>
+<h3 id="31-边界块提取-boundary-patch-extraction">3.1 边界块提取 Boundary Patch Extraction<a hidden class="anchor" aria-hidden="true" href="#31-边界块提取-boundary-patch-extraction">#</a></h3>
+<p>首先需要确定掩码的哪一部分应该被细化。我们提出了一种有效的滑动窗式算法来提取沿预测实例边界的一系列patch。具体地说，我们密集地分配了一组方形边界框，框的中心区域应该覆盖边界像素，如图2(B)所示。得到的方框仍然包含较大的重叠和冗余，因此我们进一步应用非最大抑制(NMS)算法过滤出patch的子集(图2c)。经验表明，重叠越大，分割性能越好，但同时也存在计算量较大的问题。我们可以调整NMS阈值来控制重叠的数量，以实现更好的速度/精度折衷。除了图像补丁（image patches）外，我们还从给定的实例掩码中提取相应的二值掩码（corresponding binary mask patches）。调整拼接image patches、mask patches后，输入到 boundary patch refinement network 中。</p>
+<h3 id="32-边界块细化-boundary-patch-refinement">3.2. 边界块细化 Boundary Patch Refinement<a hidden class="anchor" aria-hidden="true" href="#32-边界块细化-boundary-patch-refinement">#</a></h3>
+<p><strong>Mask Patch</strong></p>
+<p>提供的位置和语义信息，使得精化网络无需从头开始学习实例级语义。取而代之的是，优化网络只需要学习如何定位决策边界周围的硬像素，并将它们推到正确的一侧。这一目标可以通过探索局部和高分辨率图像patch中提供的低级别图像特性（例如，颜色一致性和对比度）来实现。相邻的实例可能共享一个相同的边界patch，而学习目标则完全不同且不确定。如果不使用mask patch，则模型很难收敛（Figure 3）。</p>
+<p><strong>Boundary Patch Refinement Network.</strong></p>
+<p>采用HRNetV2，它可以在整个网络中保持高分辨率表示。通过适当增大输入大小，可以得到比以往方法更高分辨率的边界块。</p>
+<p><strong>Reassembling.</strong></p>
+<p>将精分割的边界块替换先前的预测，对于那些边界框外没有细化的像素，预测是不变的。对于相邻patch重叠的区域，进行简单的求和取平均，应用0.5的阈值来区分前景和背景。</p>
+<h3 id="33-learning-and-inference">3.3. Learning and Inference<a hidden class="anchor" aria-hidden="true" href="#33-learning-and-inference">#</a></h3>
+<p>基于从训练图像中提取的边界块来训练细化网络。<strong>在训练过程，只从预测掩码与地面真实掩码的交集大于0.5的实例中提取边界块，而在推理过程中保留所有预测实例。<strong>使用像素级的二进制</strong>交叉熵损失</strong>，用对应的地面真实掩模对模型输出进行监督。在训练时将NMS消除阈值固定为0.25，而在推理时根据速度要求采用不同的阈值。</p>
+<h2 id="4-experiments">4 Experiments<a hidden class="anchor" aria-hidden="true" href="#4-experiments">#</a></h2>
+<p>数据集：Cityscape</p>
+<p>评价指标：COCO-style mask AP、F-score（AF：Average F-score）</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://landodo.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">论文阅读</a></li>
+      <li><a href="http://landodo.github.io/tags/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/">图像分割</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="next" href="http://landodo.github.io/posts/deep-clustering-notes/">
+    <span class="title">Next Page »</span>
+    <br>
+    <span>深度聚类 Deep Clustering</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>Landon</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

@@ -7,22 +7,49 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Landon</copyright>
-    <lastBuildDate>Tue, 02 Mar 2021 17:22:19 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 18 Feb 2022 22:21:52 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>标签1</title>
-      <link>http://landodo.github.io/tags/%E6%A0%87%E7%AD%BE1/</link>
-      <pubDate>Tue, 02 Mar 2021 17:22:19 +0800</pubDate>
+      <title>图像分割</title>
+      <link>http://landodo.github.io/tags/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/</link>
+      <pubDate>Fri, 18 Feb 2022 22:21:52 +0800</pubDate>
       
-      <guid>http://landodo.github.io/tags/%E6%A0%87%E7%AD%BE1/</guid>
+      <guid>http://landodo.github.io/tags/%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>标签2</title>
-      <link>http://landodo.github.io/tags/%E6%A0%87%E7%AD%BE2/</link>
+      <title>论文阅读</title>
+      <link>http://landodo.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/</link>
+      <pubDate>Fri, 18 Feb 2022 22:21:52 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>聚类</title>
+      <link>http://landodo.github.io/tags/%E8%81%9A%E7%B1%BB/</link>
+      <pubDate>Fri, 30 Jul 2021 17:22:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/tags/%E8%81%9A%E7%B1%BB/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Hugo</title>
+      <link>http://landodo.github.io/tags/hugo/</link>
       <pubDate>Tue, 02 Mar 2021 17:22:19 +0800</pubDate>
       
-      <guid>http://landodo.github.io/tags/%E6%A0%87%E7%AD%BE2/</guid>
+      <guid>http://landodo.github.io/tags/hugo/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>工具</title>
+      <link>http://landodo.github.io/tags/%E5%B7%A5%E5%85%B7/</link>
+      <pubDate>Tue, 02 Mar 2021 17:22:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/tags/%E5%B7%A5%E5%85%B7/</guid>
       <description></description>
     </item>
     

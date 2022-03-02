@@ -1,31 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>Landodo&#39;s NoteBook</title>
-    <link>http://landodo.github.io/</link>
-    <description>Recent content on Landodo&#39;s NoteBook</description>
+    <title>Posts on Landodo&#39;s NoteBook</title>
+    <link>http://landodo.github.io/posts/</link>
+    <description>Recent content in Posts on Landodo&#39;s NoteBook</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Landon</copyright>
-    <lastBuildDate>Fri, 18 Feb 2022 22:21:52 +0800</lastBuildDate><atom:link href="http://landodo.github.io/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Cs Zoo</title>
-      <link>http://landodo.github.io/cs-zoo/</link>
-      <pubDate>Wed, 02 Mar 2022 20:14:58 +0800</pubDate>
-      
-      <guid>http://landodo.github.io/cs-zoo/</guid>
-      <description>学习计算机的过程中，那些优秀的资料、网站。</description>
-    </item>
-    
-    <item>
-      <title>About</title>
-      <link>http://landodo.github.io/about/</link>
-      <pubDate>Wed, 02 Mar 2022 20:13:54 +0800</pubDate>
-      
-      <guid>http://landodo.github.io/about/</guid>
-      <description>关于我</description>
-    </item>
-    
+    <lastBuildDate>Fri, 18 Feb 2022 22:21:52 +0800</lastBuildDate><atom:link href="http://landodo.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Boundary Patch Refinement</title>
       <link>http://landodo.github.io/posts/boundary-patch-refinement/</link>
@@ -52,8 +34,6 @@
       <guid>http://landodo.github.io/posts/first-post/</guid>
       <description>Hi, Hugo! Hello, Hugo! 这是第一篇内容！将原来的笔记从 Jellky 全部转移至 Hugo。下面是一些关于这个新站点建立时的笔记。 Hugo 默认是使用 TOML，现在将此更改为更易阅</description>
     </item>
-    
-    
     
   </channel>
 </rss>

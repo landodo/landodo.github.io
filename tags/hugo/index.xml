@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Hugo on Landodo&#39;s NoteBook</title>
+    <link>http://landodo.github.io/tags/hugo/</link>
+    <description>Recent content in Hugo on Landodo&#39;s NoteBook</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Landon</copyright>
+    <lastBuildDate>Tue, 02 Mar 2021 17:22:19 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/hugo/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>First Post</title>
+      <link>http://landodo.github.io/posts/first-post/</link>
+      <pubDate>Tue, 02 Mar 2021 17:22:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/first-post/</guid>
+      <description>Hi, Hugo! Hello, Hugo! 这是第一篇内容！将原来的笔记从 Jellky 全部转移至 Hugo。下面是一些关于这个新站点建立时的笔记。 Hugo 默认是使用 TOML，现在将此更改为更易阅</description>
+    </item>
+    
+  </channel>
+</rss>
