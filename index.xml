@@ -9,6 +9,24 @@
     <copyright>Landon</copyright>
     <lastBuildDate>Tue, 02 Mar 2021 17:22:19 +0800</lastBuildDate><atom:link href="http://landodo.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Cs Zoo</title>
+      <link>http://landodo.github.io/cs-zoo/</link>
+      <pubDate>Wed, 02 Mar 2022 20:14:58 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/cs-zoo/</guid>
+      <description>学习计算机的过程中，那些优秀的资料、网站。</description>
+    </item>
+    
+    <item>
+      <title>About</title>
+      <link>http://landodo.github.io/about/</link>
+      <pubDate>Wed, 02 Mar 2022 20:13:54 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/about/</guid>
+      <description>关于我</description>
+    </item>
+    
+    <item>
       <title>First Post</title>
       <link>http://landodo.github.io/first-post/</link>
       <pubDate>Tue, 02 Mar 2021 17:22:19 +0800</pubDate>
