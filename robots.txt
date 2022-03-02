@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: https://landodo.github.io/sitemap.xml
