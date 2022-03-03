@@ -17,5 +17,14 @@
       <description>论文简介 论文名称：TumorCP: A Simple but Effective Object-Level Data Augmentation for Tumor Segmentation arXiv：https://arxiv.org/pdf/2107.09843.pdf 单</description>
     </item>
     
+    <item>
+      <title>20211024 Latent Space Data Augmentation</title>
+      <link>http://landodo.github.io/posts/20211024-latent-space-data-augmentation/</link>
+      <pubDate>Sun, 24 Oct 2021 09:08:38 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20211024-latent-space-data-augmentation/</guid>
+      <description>Cooperative Training and Latent Space Data Augmentation for Robust Medical Image Segmentation 论文题目：协同训练和隐空间数据增强的鲁棒性医学图像分割 https://arxiv.org/abs/2107.01079 会议：MICCAI 2021 作者：Chen CHEN 陈晨 https://sites.google.com/view/morningchen-site/home Research Assistant/PhD 伦敦帝国理工学</description>
+    </item>
+    
   </channel>
 </rss>

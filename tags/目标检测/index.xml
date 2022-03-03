@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>目标检测 on Landodo&#39;s NoteBook</title>
+    <link>http://landodo.github.io/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/</link>
+    <description>Recent content in 目标检测 on Landodo&#39;s NoteBook</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Landon</copyright>
+    <lastBuildDate>Fri, 27 Aug 2021 09:19:10 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Focal Loss for Dense Object Detection</title>
+      <link>http://landodo.github.io/posts/20210827-focal-loss/</link>
+      <pubDate>Fri, 27 Aug 2021 09:19:10 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210827-focal-loss/</guid>
+      <description>目标检测任务（1） ⛳本报告主要是针对目标检测任务中正负样本不平衡、难易样本不平衡这两个问题进行简要讨论。 论文简介 Lin, T., Goyal, P., Girshick, R.B., He, K., &amp;amp; Dollá</description>
+    </item>
+    
+  </channel>
+</rss>

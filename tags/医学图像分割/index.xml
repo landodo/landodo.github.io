@@ -26,5 +26,41 @@
       <description>论文简介 论文名称：TumorCP: A Simple but Effective Object-Level Data Augmentation for Tumor Segmentation arXiv：https://arxiv.org/pdf/2107.09843.pdf 单</description>
     </item>
     
+    <item>
+      <title>20211024 Latent Space Data Augmentation</title>
+      <link>http://landodo.github.io/posts/20211024-latent-space-data-augmentation/</link>
+      <pubDate>Sun, 24 Oct 2021 09:08:38 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20211024-latent-space-data-augmentation/</guid>
+      <description>Cooperative Training and Latent Space Data Augmentation for Robust Medical Image Segmentation 论文题目：协同训练和隐空间数据增强的鲁棒性医学图像分割 https://arxiv.org/abs/2107.01079 会议：MICCAI 2021 作者：Chen CHEN 陈晨 https://sites.google.com/view/morningchen-site/home Research Assistant/PhD 伦敦帝国理工学</description>
+    </item>
+    
+    <item>
+      <title>3D RoI-aware U-Net for Accurate and Efficient Colorectal Tumor Segmentation</title>
+      <link>http://landodo.github.io/posts/20210924-3d-roi-aware-u-net/</link>
+      <pubDate>Fri, 24 Sep 2021 09:14:09 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210924-3d-roi-aware-u-net/</guid>
+      <description>3D RoI-aware U-Net for Accurate and Efficient Colorectal Tumor Segmentation #结直肠癌分割📌 Cited by: 18 Publish Year: 2020 Published in: IEEE Transactions on Cybernetics 地址：https://ieeexplore.ieee.org/document/</description>
+    </item>
+    
+    <item>
+      <title>Rapid vessel segmentation and reconstruction of head and neck angiograms using 3D convolutional neural network.</title>
+      <link>http://landodo.github.io/posts/20210912-rapid-vessel-segmentation/</link>
+      <pubDate>Thu, 16 Sep 2021 09:17:12 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210912-rapid-vessel-segmentation/</guid>
+      <description>论文简介 基于三维卷积神经网络的头颈部血管图像快速分割与重建 Fu, F., Wei, J., Zhang, M., Yu, F., Xiao, Y., Rong, D., Shan, Y., Li, Y., Zhao, C., Liao, F., Yang, Z., Li, Y., Chen, Y., Wang, X., &amp;amp; Lu, J. (2020). Rapid vessel segmentation and reconstruction of head and neck</description>
+    </item>
+    
+    <item>
+      <title>Structure Boundary Preserving Segmentation for Medical Image with Ambiguous Boundary</title>
+      <link>http://landodo.github.io/posts/20210831-structure-boundary-preserving-segmentation/</link>
+      <pubDate>Tue, 31 Aug 2021 10:03:43 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210831-structure-boundary-preserving-segmentation/</guid>
+      <description>Structure Boundary Preserving Segmentation for Medical Image with Ambiguous Boundary 边界模糊医学图像的结构边界保持分割 简介 韩国一个大学的文章。 CVPR 2020 与医学图像分割有关 Cited by: 5 没有代码，没啥意思😭，想去看看它的</description>
+    </item>
+    
   </channel>
 </rss>

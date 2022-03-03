@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+<meta name="robots" content="index, follow">
+<title>Focal Loss for Dense Object Detection | Landodo&#39;s NoteBook</title>
+<meta name="keywords" content="论文阅读, 目标检测" />
+<meta name="description" content="目标检测任务（1） ⛳本报告主要是针对目标检测任务中正负样本不平衡、难易样本不平衡这两个问题进行简要讨论。 论文简介 Lin, T., Goyal, P., Girshick, R.B., He, K., &amp; Dollá">
+<meta name="author" content="">
+<link rel="canonical" href="http://landodo.github.io/posts/20210827-focal-loss/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://landodo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://landodo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://landodo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://landodo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://landodo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Focal Loss for Dense Object Detection" />
+<meta property="og:description" content="目标检测任务（1） ⛳本报告主要是针对目标检测任务中正负样本不平衡、难易样本不平衡这两个问题进行简要讨论。 论文简介 Lin, T., Goyal, P., Girshick, R.B., He, K., &amp; Dollá" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://landodo.github.io/posts/20210827-focal-loss/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-08-27T09:19:10&#43;08:00" />
+<meta property="article:modified_time" content="2021-08-27T09:19:10&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Focal Loss for Dense Object Detection"/>
+<meta name="twitter:description" content="目标检测任务（1） ⛳本报告主要是针对目标检测任务中正负样本不平衡、难易样本不平衡这两个问题进行简要讨论。 论文简介 Lin, T., Goyal, P., Girshick, R.B., He, K., &amp; Dollá"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://landodo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Focal Loss for Dense Object Detection",
+      "item": "http://landodo.github.io/posts/20210827-focal-loss/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Focal Loss for Dense Object Detection",
+  "name": "Focal Loss for Dense Object Detection",
+  "description": "目标检测任务（1） ⛳本报告主要是针对目标检测任务中正负样本不平衡、难易样本不平衡这两个问题进行简要讨论。 论文简介 Lin, T., Goyal, P., Girshick, R.B., He, K., \u0026amp; Dollá",
+  "keywords": [
+    "论文阅读", "目标检测"
+  ],
+  "articleBody": "目标检测任务（1） ⛳本报告主要是针对目标检测任务中正负样本不平衡、难易样本不平衡这两个问题进行简要讨论。\n论文简介  Lin, T., Goyal, P., Girshick, R.B., He, K., \u0026 Dollár, P. (2017). Focal Loss for Dense Object Detection. 2017 IEEE International Conference on Computer Vision (ICCV), 2999-3007.\n   Focal Loss\n  ICCV 2017, Best student paper.\n  https://arxiv.org/abs/1708.02002\n  1. 背景 以 2014 年为分界，目标检测的发展历程可以分为两大部分：传统目标检测时期、基于深度学习的目标检测时期。\n Zou, Z., Shi, Z., Guo, Y., \u0026 Ye, J. (2019). Object Detection in 20 Years: A Survey. ArXiv, abs/1905.05055.\n 在基于深度学习的目标检测算法中，又可以分为单阶段（One/Single-stage）和两阶段（Two-stage）两种大类。当然还有多阶段（Multi-stage），但是其速度和精度都比较低，已经被淘汰了。\n1.1 One-Stage and Two-stage One-stage 和 Two-stage 的主要区别在于受否存在 Region Proposal（可能包含待检物体的预选框）操作。以 Two-stage 方法中的代表 Faster RCNN 为例，算法会先生成候选框（Region proposals，可能包含物体的区域），然后再对每个候选框进行分类和修正位置；而 One-stage 算法会直接在网络中提取特征来预测物体分类和位置。\n两种方法都存在各自的优缺点。一般来说，One-stage 方法在速度上存在优势，但是在精度上会差于 Two-stage，主要原因可以总结为：正负样本不平衡（和难易样本不平衡）造成了 One-stage 方法在精度上的劣势。具体分析如下：\n  One-stage 网络最终学习的 Anchor 有很多，但是只有少数 Anchor 对最终网络的学习是有利的，而大部分 Anchor 对最终网络的学习都是不利的，这部分的 Anchor 很大程度上影响了整个网络的学习，拉低了整体的准确率；\n  Two-stage 网络最终学习的 Anchor 虽然不多，但是背景 Anchor 也就是对网络学习不利的 Anchor 也不会特别多，它虽然也能影响整体的准确率，但是肯定没有 One-stage 影响得那么严重，所以它的准确率比 One-stage 肯定要高。\n  对于正负样本不平衡问题，是比较好解决的，也存在不少的现有方法。Focal Loss 的提出，主要针对难易样本的不平衡问题。有了 Focal Loss，训练过程关注对象的次序为：（正/难）  （负/难）  （正/易）  （负/易）。该损失函数通过抑制那些容易分类样本的权重，将注意力集中在那些难以区分的样本上，有效控制正负样本比例，防止失衡现象。\n============================================================\n在开始介绍 Focal Loss 之前，我补充一些目标检测的基础知识，我也是才刚开始学习目标检测。\n（1）目标检测中的各种“框”\n ground truth：标注框 Anchor：人为设置的初始先验框 proposal：RPN 的输出（可能包含物体的候选框），即对 Anchor 第一次做回归得到的结果 RoI：RPN 阶段输出的 Proposal 经过排序取 topK，然后做 NMS 取一定数量的框，用于第二阶段的再次精修 bounding box：proposal 经过再次精修后的预测框，由于计算 AP，AP 指的是 bounding box AP。  （2）目标检测任务的评估指标 mAP\nhttps://www.zhihu.com/question/53405779/answer/993913699\nAP：PR 曲线下面积，先考虑计算 AP，即一个类别。\n 7 张图像（假设是一个 Batch），15 个 ground truth，24 个预测框 （1）计算预测框是 TP or FP（计算 bbox 与 Ground truth 的 IoU，根据阈值判断），如果一个 Ground Truth 有多个预测框，则 IoU 最大为 TP，其他为 FP； （2）根据置信度从大到小排序所有的预测框； （3）计算 Precision = TP / (ACC_TP + ACC_FP)、Recall = TP / (all grouth truth)；  ACC 表示累加，all ground truth 是一个固定值   （4）绘制 PR 曲线； （5）计算曲线下的面积，11 个点 [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1] 的插值进行计算（10 个矩形的面积之和） （6）所有类别的 AP 计算都分别出来，然后求取平均得到 mAP。  2. Focal Loss 先从二分类的交叉熵开始：\n $y \\in {\\pm 1}$ 代表 ground truth（真实值） $p \\in [0, 1]$ 表示模型输出标签为 1 的概率（预测值）  定义一个 $p_t$：\n则交叉熵可以写为 $CE(p, y) = CE(p_t) = -log(p_t)$\n交叉熵损失存在一个问题，如 Figure 1.，即使那些很容易 easily classified 的样本（$p_t » 0.5$），仍会造成很显著的损失值。当这些 easy example 数量庞大时，其累计起来的损失可能会远远大于（overwhelm）那些 rare class。\n 我认为这很类似于政治上的民主暴政。\n 2.1 Balanced Cross Entropy 解决正负样本不平衡的常用方法是对类别 1 引入权重因子 α∈[0,1]，对类别 -1 引入权重因子 1-α。得到 α-balanced CE loss：\n即，\n2.2 Focal Loss Easily classified negatives comprise the majority of the loss and dominate the gradient. α balances the importance of positive/negative examples, it does not differentiate between easy/hard examples.\n因此，Focal Loss 的主要目标是 down-weight easy example，使得能够 focus training on hard example。Focal Loss 定义如下：\n $(1 - p_t)^{\\gamma}$ 是 modulating factor（调节因子） $\\gamma$ 是一个可调节的超参数，focusing parameter（聚焦参数）  Focal Loss 有两个性质：\n（1）当一个样本出现了错误分类，且 $p_t$ 非常小，则 $(1 - p_t)^{\\gamma}$ 非常接近 1，Loss 不受影响；当 $p_t$ 接近于 1 时，$(1 - p_t)^{\\gamma}$ 接近 0，对于 well-classified examples 的 Loss 将会降低权重（down-weighted）。因此模型的 Loss 就集中在那些错误分类样本上了（hard example）。\n（2）Focusing parameter $\\gamma$ 用于调整简单的样本（easy examples, well-classified examples）的 Loss 降低权重（down-weighted）的速率。$\\gamma=0$ 时，FL == CE；$\\gamma = 2$ 是实验得到的最好值。\nIntuitively, the modulating factor reduces the loss contribution from easy examples and extends the range in which an example receives low loss.\n例如：\n $\\gamma = 2$，一个样本的分类结果为 $p_t = 0.9$（这就是一个 easy example），则 $(1 - 0.9)^{2} = 0.01$。Focal Loss 比 CE 小 100 倍； $p_t = 0.968$ 时，FL 比 CE 小近 1000 倍。 同理，$p_t = 0.4$ 时（hard example），则 $(1 - 0.4)^{2} = 0.36$。相当于变相给错误分类的难样本的 Loss 增加了权重。“increases the importance of correcting misclassifified examples”  为了平衡正负样本，使用 α 权重，得到最终的 Focal Loss 表达式：\nFL 更像是一种思想，其精确的定义形式并不重要。\n在 Two-stage 方法中，对于正负样本不平衡问题，主要是通过如下方法缓解：\n （1）object proposal mechanism：reduces the nearly infifinite set of possible object locations down to one or two thousand. （2） biased sampling：1:3 ratio of positive to negative examples.  同时，在模型初始化时，可以加入一下先验知识，可以缓解训练初期的不稳定现象。FL 通过直接通过损失函数解决！\nFocal Loss 的代码可以参考 MMdetection：https://github.com/open-mmlab/mmdetection/blob/master/mmdet/models/losses/focal_loss.py\n3. RetinaNet 为了验证 Focal loss 的有效性，设计了一个叫 RetinaNet 的网络进行评估。实验结果表明，RetinaNet 能够在实现保持 one-stage 速度优势的基础上，在精度上超越所有（2017 年）two-stage 的检测器（ achieves state-of-the-art accuracy and run time on the challenging COCO dataset）。\nRetinaNet 的卷积过程用的是 ResNet，上采样和侧边连接还是 FPN 结构。通过主干网络，产生了多尺度的特征金字塔。然后后面连接两个子网，分别进行分类和回归。\n4 实验结果 作者做了很多消融学习，可以总结如下：\n 作者有很多卡； $\\alpha$ 和 $\\gamma$ 这两个超参数是互相影响的； Focal loss 的威力还是很大的； $\\gamma=2, \\alpha=0.25$ 时，ResNet-101+FPN 作为 backbone 的结构有最优的性能；  下图是收敛模型中不同 γ 值的正负样本归一化损失的累积分布函数。\n改变 γ 对正样本的损失分布的影响很小。然而，对于负样本，增加 γ 会使得模型几乎所有的注意力从负样本上离开，实现了 down-weight easy example。\nFocal Loss 使得 One-stage 方法在精度上超越了 Two-stage 方法。\nFocal Loss 的缺点：在速度上还存在很大的改进空间。\n总结   One-stage 方法相比于 Two-stage 方法，在精度稍有劣势。研究发现，是正负样本不平衡和难易样本不平衡这两个问题所导致的；\n  Focal Loss 函数通过抑制那些容易分类样本的权重，将注意力集中在那些难以区分的样本上，有效控制正负样本比例，防止失衡现象。\n  Focal Loss 的主要目标是 down-weight easy example，使得模型能够 focus training on hard example。\n  具体做法是，对于难易样本不平衡问题，引入 modulating factor $(1 - p_t)^{\\gamma}$， Intuitively, the modulating factor reduces the loss contribution from easy examples and extends the range in which an example receives low loss.\n  为了验证 Focal Loss 的有效性，设计了 RetinaNet 用于实验评估。\n  RetinaNet 能够在实现保持 one-stage 速度优势的基础上，在精度上超越所有（2017 年）two-stage 的检测器（ achieves state-of-the-art accuracy and run time on the challenging COCO dataset）。\n  RetinaNet 也存在缺点，其在速度上仍有很大的改进空间。\n  扩展学习 Focal Loss 存在缺点：\n 让模型过多关注那些特别难分的样本肯定是存在问题的，样本中有离群点（outliers），可能模型已经收敛了但是这些离群点还是会被判断错误，让模型去关注这样的样本，可能对最后的结果造成不利的影响； $\\alpha$ 和 $\\gamma$ 互相影响，全凭经验得到（不同的数据集都要寻找的最佳的 $\\alpha, \\gamma$，代价昂贵）； 速度上仍存在改进空间。  （1）GHM(gradient harmonizing mechanism) 解决了上述前两个问题。Focal Loss 是从置信度 p 的角度入手衰减 Loss，而 GHM 是一定范围置信度p的样本数量的角度衰减 Loss。\n（2）Generalized Focal Loss，不会带来额外的 Cost，提升 1% 的 AP。\n",
+  "wordCount" : "3443",
+  "inLanguage": "en",
+  "datePublished": "2021-08-27T09:19:10+08:00",
+  "dateModified": "2021-08-27T09:19:10+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://landodo.github.io/posts/20210827-focal-loss/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Landodo's NoteBook",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://landodo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://landodo.github.io/" accesskey="h" title="Landodo&#39;s NoteBook (Alt + H)">Landodo&#39;s NoteBook</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://landodo.github.io/search" title="🔍Search (Alt &#43; /)" accesskey=/>
+                    <span>🔍Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/tags" title="Tag">
+                    <span>Tag</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/cs-zoo" title="CS ZOO">
+                    <span>CS ZOO</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://landodo.github.io/">Home</a>&nbsp;»&nbsp;<a href="http://landodo.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      Focal Loss for Dense Object Detection
+    </h1>
+    <div class="post-meta"><span title='2021-08-27 09:19:10 +0800 CST'>August 27, 2021</span>&nbsp;·&nbsp;7 min&nbsp;·&nbsp;3443 words
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#%e7%9b%ae%e6%a0%87%e6%a3%80%e6%b5%8b%e4%bb%bb%e5%8a%a11" aria-label="目标检测任务（1）">目标检测任务（1）</a><ul>
+                        
+                <li>
+                    <a href="#%e8%ae%ba%e6%96%87%e7%ae%80%e4%bb%8b" aria-label="论文简介">论文简介</a></li>
+                <li>
+                    <a href="#1-%e8%83%8c%e6%99%af" aria-label="1. 背景">1. 背景</a><ul>
+                        
+                <li>
+                    <a href="#11-one-stage-and-two-stage" aria-label="1.1 One-Stage and Two-stage">1.1 One-Stage and Two-stage</a></li></ul>
+                </li>
+                <li>
+                    <a href="#2-focal-loss" aria-label="2. Focal Loss">2. Focal Loss</a><ul>
+                        
+                <li>
+                    <a href="#21-balanced-cross-entropy" aria-label="2.1 Balanced Cross Entropy">2.1 Balanced Cross Entropy</a></li>
+                <li>
+                    <a href="#22-focal-loss" aria-label="2.2 Focal Loss">2.2 Focal Loss</a></li></ul>
+                </li>
+                <li>
+                    <a href="#3-retinanet" aria-label="3. RetinaNet">3. RetinaNet</a></li>
+                <li>
+                    <a href="#4-%e5%ae%9e%e9%aa%8c%e7%bb%93%e6%9e%9c" aria-label="4 实验结果">4 实验结果</a></li>
+                <li>
+                    <a href="#%e6%80%bb%e7%bb%93" aria-label="总结">总结</a></li>
+                <li>
+                    <a href="#%e6%89%a9%e5%b1%95%e5%ad%a6%e4%b9%a0" aria-label="扩展学习">扩展学习</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h1 id="目标检测任务1">目标检测任务（1）<a hidden class="anchor" aria-hidden="true" href="#目标检测任务1">#</a></h1>
+<p>⛳本报告主要是针对目标检测任务中<strong>正负样本不平衡</strong>、<strong>难易样本不平衡</strong>这两个问题进行简要讨论。</p>
+<h2 id="论文简介">论文简介<a hidden class="anchor" aria-hidden="true" href="#论文简介">#</a></h2>
+<blockquote>
+<p>Lin, T., Goyal, P., Girshick, R.B., <strong>He, K</strong>., &amp; Dollár, P. (2017). <strong>Focal Loss for Dense Object Detection</strong>. <em>2017 IEEE International Conference on Computer Vision (ICCV)</em>, 2999-3007.</p>
+</blockquote>
+<p><img loading="lazy" src="./20210827/14.png" alt=""  />
+</p>
+<ul>
+<li>
+<p>Focal Loss</p>
+</li>
+<li>
+<p>ICCV 2017, Best student paper.</p>
+</li>
+<li>
+<p><a href="https://arxiv.org/abs/1708.02002">https://arxiv.org/abs/1708.02002</a></p>
+</li>
+</ul>
+<h2 id="1-背景">1. 背景<a hidden class="anchor" aria-hidden="true" href="#1-背景">#</a></h2>
+<p>以 2014 年为分界，目标检测的发展历程可以分为两大部分：<strong>传统</strong>目标检测时期、基于<strong>深度学习</strong>的目标检测时期。</p>
+<p><img loading="lazy" src="./20210827/1.png" alt=""  />
+</p>
+<blockquote>
+<p>Zou, Z., Shi, Z., Guo, Y., &amp; Ye, J. (2019). Object Detection in 20 Years: A Survey. <em>ArXiv, abs/1905.05055</em>.</p>
+</blockquote>
+<p>在基于深度学习的目标检测算法中，又可以分为单阶段（One/Single-stage）和两阶段（Two-stage）两种大类。当然还有多阶段（Multi-stage），但是其速度和精度都比较低，已经被淘汰了。</p>
+<h3 id="11-one-stage-and-two-stage">1.1 One-Stage and Two-stage<a hidden class="anchor" aria-hidden="true" href="#11-one-stage-and-two-stage">#</a></h3>
+<p>One-stage 和 Two-stage 的<strong>主要区别</strong>在于受否存在 Region Proposal（可能包含待检物体的预选框）操作。以 Two-stage 方法中的代表 Faster RCNN 为例，算法会先生成候选框（Region proposals，可能包含物体的区域），然后再对每个候选框进行分类和修正位置；而 One-stage 算法会直接在网络中提取特征来预测物体分类和位置。</p>
+<p>两种方法都存在各自的<strong>优缺点</strong>。一般来说，One-stage 方法在速度上存在优势，但是在精度上会差于 Two-stage，主要原因可以总结为：正负样本不平衡（和难易样本不平衡）造成了 One-stage 方法在精度上的劣势。具体分析如下：</p>
+<ul>
+<li>
+<p>One-stage 网络最终学习的 Anchor 有很多，但是只有少数 Anchor 对最终网络的学习是有利的，而大部分 Anchor 对最终网络的学习都是不利的，这部分的 Anchor 很大程度上影响了整个网络的学习，拉低了整体的准确率；</p>
+</li>
+<li>
+<p>Two-stage 网络最终学习的 Anchor 虽然不多，但是背景 Anchor 也就是对网络学习不利的 Anchor 也不会特别多，它虽然也能影响整体的准确率，但是肯定没有 One-stage 影响得那么严重，所以它的准确率比 One-stage 肯定要高。</p>
+</li>
+</ul>
+<p>对于正负样本不平衡问题，是比较好解决的，也存在不少的现有方法。Focal Loss 的提出，主要针对<strong>难易样本的不平衡问题</strong>。有了 Focal Loss，训练过程关注对象的次序为：（正/难） &gt; （负/难） &gt; （正/易） &gt; （负/易）。该损失函数<strong>通过抑制那些容易分类样本的权重，将注意力集中在那些难以区分的样本上，有效控制正负样本比例，防止失衡现象。</strong></p>
+<p>============================================================</p>
+<p>在开始介绍 Focal Loss 之前，我补充一些目标检测的基础知识，我也是才刚开始学习目标检测。</p>
+<p><strong>（1）目标检测中的各种“框”</strong></p>
+<ul>
+<li>ground truth：标注框</li>
+<li>Anchor：人为设置的初始先验框</li>
+<li>proposal：RPN 的输出（可能包含物体的候选框），即对 Anchor 第一次做回归得到的结果</li>
+<li>RoI：RPN 阶段输出的 Proposal 经过排序取 topK，然后做 NMS 取一定数量的框，用于第二阶段的再次精修</li>
+<li>bounding box：proposal 经过再次精修后的预测框，由于计算 AP，AP 指的是 bounding box AP。</li>
+</ul>
+<p><strong>（2）目标检测任务的评估指标 mAP</strong></p>
+<p><a href="https://www.zhihu.com/question/53405779/answer/993913699">https://www.zhihu.com/question/53405779/answer/993913699</a></p>
+<p>AP：PR 曲线下面积，先考虑计算 AP，即一个类别。</p>
+<p><img loading="lazy" src="./20210827/2.png" alt=""  />
+</p>
+<ul>
+<li>7 张图像（假设是一个 Batch），15 个 <!-- raw HTML omitted -->ground truth<!-- raw HTML omitted -->，24 个<!-- raw HTML omitted -->预测框<!-- raw HTML omitted --></li>
+<li>（1）计算预测框是 TP or FP（计算 bbox 与 Ground truth 的 IoU，根据阈值判断），如果一个 Ground Truth 有多个预测框，则 IoU 最大为 TP，其他为 FP；</li>
+<li>（2）根据置信度从大到小排序所有的预测框；</li>
+<li>（3）计算 Precision = TP / (ACC_TP + ACC_FP)、Recall = TP / (<code>all grouth truth</code>)；
+<ul>
+<li>ACC 表示累加，<code>all ground truth</code> 是一个固定值</li>
+</ul>
+</li>
+<li>（4）绘制 PR 曲线；</li>
+<li>（5）计算曲线下的面积，11 个点 <strong>[0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]</strong> 的插值进行计算（10 个矩形的面积之和）</li>
+<li>（6）所有类别的 AP 计算都分别出来，然后求取平均得到 mAP。</li>
+</ul>
+<h2 id="2-focal-loss">2. Focal Loss<a hidden class="anchor" aria-hidden="true" href="#2-focal-loss">#</a></h2>
+<p>先从二分类的交叉熵开始：</p>
+<p><img loading="lazy" src="./20210827/3.png" alt=""  />
+</p>
+<ul>
+<li>$y \in {\pm 1}$ 代表 ground truth（真实值）</li>
+<li>$p \in [0, 1]$  表示模型输出标签为 1 的概率（预测值）</li>
+</ul>
+<p>定义一个 $p_t$：</p>
+<p><img loading="lazy" src="./20210827/4.png" alt=""  />
+</p>
+<p>则交叉熵可以写为 $CE(p, y) = CE(p_t) = -log(p_t)$</p>
+<p>交叉熵损失存在一个问题，如 Figure 1.，即使那些很容易 easily classified 的样本（$p_t &raquo; 0.5$），仍会造成很显著的损失值。当这些 easy example 数量庞大时，其累计起来的损失可能会远远大于（overwhelm）那些 rare class。</p>
+<blockquote>
+<p>我认为这很类似于政治上的民主暴政。</p>
+</blockquote>
+<p><img loading="lazy" src="./20210827/5.png" alt=""  />
+</p>
+<h3 id="21-balanced-cross-entropy">2.1 Balanced Cross Entropy<a hidden class="anchor" aria-hidden="true" href="#21-balanced-cross-entropy">#</a></h3>
+<p>解决正负样本不平衡的常用方法是对类别 1 引入权重因子 α∈[0,1]，对类别 -1 引入权重因子 1-α。得到 α-balanced CE loss：</p>
+<p><img loading="lazy" src="./20210827/6.png" alt=""  />
+</p>
+<p>即，</p>
+<p><img loading="lazy" src="./20210827/7.png" alt=""  />
+</p>
+<h3 id="22-focal-loss">2.2 Focal Loss<a hidden class="anchor" aria-hidden="true" href="#22-focal-loss">#</a></h3>
+<p>Easily classified negatives comprise the <strong>majority of the loss and dominate the gradient</strong>. α balances the importance of positive/negative examples, it does not differentiate between easy/hard examples.</p>
+<p>因此，Focal Loss 的主要目标是 down-weight easy example，使得能够 focus training on <!-- raw HTML omitted -->hard example<!-- raw HTML omitted -->。Focal Loss 定义如下：</p>
+<p><img loading="lazy" src="./20210827/8.png" alt=""  />
+</p>
+<ul>
+<li>$(1 - p_t)^{\gamma}$ 是 modulating factor（调节因子）</li>
+<li>$\gamma$ 是一个可调节的超参数，<em>focusing</em> parameter（聚焦参数）</li>
+</ul>
+<p>Focal Loss 有两个性质：</p>
+<p>（1）当一个样本出现了错误分类，且 $p_t$ 非常小，则 $(1 - p_t)^{\gamma}$ 非常接近 1，Loss 不受影响；当 $p_t$ 接近于 1 时，$(1 - p_t)^{\gamma}$ 接近 0，对于 well-classified examples 的 Loss 将会降低权重（down-weighted）。因此模型的 Loss 就集中在那些错误分类样本上了（hard example）。</p>
+<p>（2）Focusing parameter $\gamma$ 用于调整简单的样本（easy examples, well-classified examples）的 Loss 降低权重（down-weighted）的速率。$\gamma=0$ 时，FL == CE；$\gamma = 2$ 是实验得到的最好值。</p>
+<p>Intuitively, the modulating factor <strong>reduces the loss contribution from easy examples</strong> and extends the range in which an example receives low loss.</p>
+<p>例如：</p>
+<ul>
+<li>$\gamma = 2$，一个样本的分类结果为 $p_t = 0.9$（这就是一个 easy example），则 $(1 - 0.9)^{2} = 0.01$。Focal Loss 比 CE 小 100 倍；</li>
+<li>$p_t = 0.968$ 时，FL 比 CE 小近 1000 倍。</li>
+<li>同理，$p_t = 0.4$ 时（hard example），则 $(1 - 0.4)^{2} = 0.36$。相当于变相给错误分类的难样本的 Loss 增加了权重。“increases the importance of correcting misclassifified examples”</li>
+</ul>
+<p>为了平衡正负样本，使用 α 权重，得到最终的 Focal Loss 表达式：</p>
+<p><img loading="lazy" src="./20210827/9.png" alt=""  />
+</p>
+<p>FL 更像是一种思想，其精确的定义形式并不重要。</p>
+<p>在 Two-stage 方法中，对于正负样本不平衡问题，主要是通过如下方法缓解：</p>
+<ul>
+<li>（1）object proposal mechanism：reduces the nearly infifinite set of possible object locations down to one or two thousand.</li>
+<li>（2） biased sampling：1:3 ratio of positive to negative examples.</li>
+</ul>
+<p>同时，在模型初始化时，可以加入一下先验知识，可以缓解训练初期的不稳定现象。FL 通过直接通过损失函数解决！</p>
+<p>Focal Loss 的代码可以参考 MMdetection：https://github.com/open-mmlab/mmdetection/blob/master/mmdet/models/losses/focal_loss.py</p>
+<h2 id="3-retinanet">3. RetinaNet<a hidden class="anchor" aria-hidden="true" href="#3-retinanet">#</a></h2>
+<p>为了验证 Focal loss 的有效性，设计了一个叫 RetinaNet 的网络进行评估。实验结果表明，RetinaNet 能够在实现保持 one-stage 速度优势的基础上，在精度上超越所有（2017 年）two-stage 的检测器（ achieves state-of-the-art accuracy and run time on the challenging COCO dataset）。</p>
+<p>RetinaNet 的卷积过程用的是 ResNet，上采样和侧边连接还是 FPN 结构。通过主干网络，产生了多尺度的特征金字塔。然后后面连接两个子网，分别进行分类和回归。</p>
+<p><img loading="lazy" src="./20210827/10.png" alt=""  />
+</p>
+<h2 id="4-实验结果">4 实验结果<a hidden class="anchor" aria-hidden="true" href="#4-实验结果">#</a></h2>
+<p>作者做了很多消融学习，可以总结如下：</p>
+<ul>
+<li>作者有很多卡；</li>
+<li>$\alpha$ 和 $\gamma$ 这两个超参数是互相影响的；</li>
+<li>Focal loss 的威力还是很大的；</li>
+<li>$\gamma=2, \alpha=0.25$ 时，ResNet-101+FPN 作为 backbone 的结构有最优的性能；</li>
+</ul>
+<p>下图是收敛模型中不同 γ 值的正负样本归一化损失的累积分布函数。</p>
+<p><img loading="lazy" src="./20210827/11.png" alt=""  />
+</p>
+<p>改变 γ 对正样本的损失分布的影响很小。然而，对于负样本，增加 γ 会使得模型几乎所有的注意力从负样本上离开，实现了 down-weight easy example。</p>
+<p>Focal Loss 使得 One-stage 方法在精度上超越了 Two-stage 方法。</p>
+<p><img loading="lazy" src="./20210827/12.png" alt=""  />
+</p>
+<p>Focal Loss 的缺点：在速度上还存在很大的改进空间。</p>
+<p><img loading="lazy" src="./20210827/13.png" alt=""  />
+</p>
+<h2 id="总结">总结<a hidden class="anchor" aria-hidden="true" href="#总结">#</a></h2>
+<ul>
+<li>
+<p>One-stage 方法相比于 Two-stage 方法，在精度稍有劣势。研究发现，是<strong>正负样本不平衡</strong>和<strong>难易样本不平衡</strong>这两个问题所导致的；</p>
+</li>
+<li>
+<p>Focal Loss 函数<strong>通过抑制那些容易分类样本的权重，将注意力集中在那些难以区分的样本上，有效控制正负样本比例，防止失衡现象。</strong></p>
+</li>
+<li>
+<p>Focal Loss 的主要目标是 down-weight easy example，使得模型能够 focus training on <!-- raw HTML omitted -->hard example<!-- raw HTML omitted -->。</p>
+</li>
+<li>
+<p>具体做法是，对于难易样本不平衡问题，引入 modulating factor $(1 - p_t)^{\gamma}$， Intuitively, the modulating factor <strong>reduces the loss contribution from easy examples</strong> and extends the range in which an example receives low loss.</p>
+</li>
+<li>
+<p>为了验证 Focal Loss 的有效性，设计了 RetinaNet 用于实验评估。</p>
+</li>
+<li>
+<p>RetinaNet 能够在实现保持 one-stage 速度优势的基础上，在精度上超越所有（2017 年）two-stage 的检测器（ achieves state-of-the-art accuracy and run time on the challenging COCO dataset）。</p>
+</li>
+<li>
+<p>RetinaNet 也存在缺点，其在速度上仍有很大的改进空间。</p>
+</li>
+</ul>
+<h2 id="扩展学习">扩展学习<a hidden class="anchor" aria-hidden="true" href="#扩展学习">#</a></h2>
+<p>Focal Loss 存在缺点：</p>
+<ul>
+<li>让模型<strong>过多关注那些特别难分的样本</strong>肯定是存在问题的，样本中有<strong>离群点（outliers）</strong>，可能模型已经收敛了但是这些离群点还是会被判断错误，让模型去关注这样的样本，可能对最后的结果造成不利的影响；</li>
+<li>$\alpha$ 和 $\gamma$ 互相影响，全凭经验得到（不同的数据集都要寻找的最佳的 $\alpha, \gamma$，<strong>代价昂贵</strong>）；</li>
+<li>速度上仍存在改进空间。</li>
+</ul>
+<p>（1）GHM(gradient harmonizing mechanism) 解决了上述前两个问题。Focal Loss 是从<strong>置信度 p <strong>的角度入手衰减 Loss，而 GHM 是</strong>一定范围置信度p的样本数量</strong>的角度衰减 Loss。</p>
+<p>（2）Generalized Focal Loss，不会带来额外的 Cost，提升 1% 的 AP。</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://landodo.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">论文阅读</a></li>
+      <li><a href="http://landodo.github.io/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/">目标检测</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://landodo.github.io/posts/20210831-structure-boundary-preserving-segmentation/">
+    <span class="title">« Prev Page</span>
+    <br>
+    <span>Structure Boundary Preserving Segmentation for Medical Image with Ambiguous Boundary</span>
+  </a>
+  <a class="next" href="http://landodo.github.io/posts/20210806-medical-image-basic/">
+    <span class="title">Next Page »</span>
+    <br>
+    <span>医学图像基础</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>Landon</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

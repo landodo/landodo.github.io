@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+<meta name="robots" content="index, follow">
+<title>3D RoI-aware U-Net for Accurate and Efficient Colorectal Tumor Segmentation | Landodo&#39;s NoteBook</title>
+<meta name="keywords" content="论文阅读, 医学图像分割" />
+<meta name="description" content="3D RoI-aware U-Net for Accurate and Efficient Colorectal Tumor Segmentation #结直肠癌分割📌 Cited by: 18 Publish Year: 2020 Published in: IEEE Transactions on Cybernetics 地址：https://ieeexplore.ieee.org/document/">
+<meta name="author" content="">
+<link rel="canonical" href="http://landodo.github.io/posts/20210924-3d-roi-aware-u-net/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://landodo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://landodo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://landodo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://landodo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://landodo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="3D RoI-aware U-Net for Accurate and Efficient Colorectal Tumor Segmentation" />
+<meta property="og:description" content="3D RoI-aware U-Net for Accurate and Efficient Colorectal Tumor Segmentation #结直肠癌分割📌 Cited by: 18 Publish Year: 2020 Published in: IEEE Transactions on Cybernetics 地址：https://ieeexplore.ieee.org/document/" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://landodo.github.io/posts/20210924-3d-roi-aware-u-net/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-09-24T09:14:09&#43;08:00" />
+<meta property="article:modified_time" content="2021-09-24T09:14:09&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="3D RoI-aware U-Net for Accurate and Efficient Colorectal Tumor Segmentation"/>
+<meta name="twitter:description" content="3D RoI-aware U-Net for Accurate and Efficient Colorectal Tumor Segmentation #结直肠癌分割📌 Cited by: 18 Publish Year: 2020 Published in: IEEE Transactions on Cybernetics 地址：https://ieeexplore.ieee.org/document/"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://landodo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "3D RoI-aware U-Net for Accurate and Efficient Colorectal Tumor Segmentation",
+      "item": "http://landodo.github.io/posts/20210924-3d-roi-aware-u-net/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "3D RoI-aware U-Net for Accurate and Efficient Colorectal Tumor Segmentation",
+  "name": "3D RoI-aware U-Net for Accurate and Efficient Colorectal Tumor Segmentation",
+  "description": "3D RoI-aware U-Net for Accurate and Efficient Colorectal Tumor Segmentation #结直肠癌分割📌 Cited by: 18 Publish Year: 2020 Published in: IEEE Transactions on Cybernetics 地址：https://ieeexplore.ieee.org/document/",
+  "keywords": [
+    "论文阅读", "医学图像分割"
+  ],
+  "articleBody": "3D RoI-aware U-Net for Accurate and Efficient Colorectal Tumor Segmentation #结直肠癌分割📌\n  Cited by: 18\n  Publish Year: 2020\n  Published in: IEEE Transactions on Cybernetics\n  地址：https://ieeexplore.ieee.org/document/9052757\n  Code：https://github.com/huangyjhust/3D-RU-Net\n  0. Abstract 基于深度学习的方法在 3D 图像分割任务中提供了一个良好的 baseline，但是由于内存的限制，较小的 patch 限制了有效的感受野，影响分割性能。\n将 RoI 定位作为前项操作，在速度、目标完整性、减少假阳性（FN）等方面具有多重优势。本篇论文：\n  提出了一种==多任务框架（3D RoI-aware U-Net）==，用于 ROI 定位和区域分割；\n  设计了一个==基于 Dice 的损失函数（MHL）==，用于从全局（RoI 定位）到局部（区域内分割）的多任务学习过程。\n  在 64 例癌症病例上进行实验，结果表明，该方法明显优于传统的方法，具有较强的泛化性、拓展潜力，可用于医学图像的其他 3D 目标分割任务。\n1. Introduction 基于深度学习的方法在医学图像检测和分割领域处于领先地位，然而，依旧面临着许多挑战：强度特异性弱、缺乏形状特征、缺乏位置先验、类别不平衡，以及在较差的 GPU/CPU-only 上的处理时间过长。除此之外，patch 大小受限于 GPU 显存，扩大感受野和减少降采样过程细粒度丢失是一个至关重要的问题。\n✅在医学应用中，由于目标和背景高度相关，因此==全局理解==甚至更为重要。\n🚩本篇论文贡献总结如下：\n  提出一种新的联合 RoI 定位-分割框架（3D RoI-aware U-Net），具有如下优势：fast RoI localization；target completeness； large effective receptive field；easy-to-train；detail-preserving；end-to-end；volume-to-volume segmentation。\n  设计的混合损失函数（Dice formulated global-to-local multi-task hybrid loss, MHL）帮助网络既处理大体积的小目标，又专注于准确识别局部 RoI 中的边界。\n  通过实验验证了所提出的框架的有效性、通用性；\n  2. Related Work 现有的 3D 图像病变检测和分割方法一般可以分为：基于局部的模型（part based models）和 non-joint localization-segmentation based methods。\n  part based：FCN、V-Net，有效感受野有限。\n  non-joint localization-segmentation based：RoI 定位模块作为独立的部分，外部模块 Selective Search、Multiscale Combinatorial Grouping、FPN 提取候选区域；\n  上述两种方式存在的问题：使用基于 patch 的分割无法解决感受野有限的问题；使用独立的外部模块进行候选区域的提取，再独立的 FCN 进行 RoI 分割时，无法共享特征。\n联合 RoI 定位-分割模型是一种很有前景的发展，共享 backbone 来实现区域候选、区域分类和区域内分割，消除了冗余特征提取。\n  Multi-task Network Cascades\n  Mask R-CNN: FPN\n  类别不平衡问题：\n V-Net：Dice loss Deep Contour-aware Network Multilevel Contextual 3D CNNs DeepMedic …  3. Methodology 3D RU-Net 结构如上图所示。\n  将整个 image volumes 输入 ==Global Image Encoder==，进行多层次编码；\n  采用编码器专用的 ==RoI locator== 进行 RoI 定位；\n  利用 ==RoI Pyramid Layer== 从多尺度特征图中裁剪区域内特征张量，获得多尺度的 RoI 区域，图中称为 RoI Tensor Pyramid $(f^I, f^{II}, f^{III})$；\n  设计一个 ==Local Region Decoder== 来进行多级特征融合，用于高分辨率癌症病灶分割。\n  3.1 Main Modules （1）Global Image Encoder\n谨慎设计 3D backbone feature extractor 以避免 GPU 内存溢出和过拟合。构建一个紧凑的仅有编码器的网络，名为 Global Image Encoder，用于处理 whole volume images。\nResBlocks + MaxPooling 堆叠。\nResidual Block:\n 3 convolutional layer 3 Instance Normalization (batch size = 1) 3 ReLU Skip Connection  （2）RoI Locator\nRoI Locator 是一个模板，以特征图 $F^{III}$ 作为输入，得到 $Bbox^{III}$ 输出。任何采用纯编码骨干的目标检测方法都可以被采用。\n由于数量有限的训练样本的长宽比多样性，学习准确的边界框可能是困难的，建议充分利用可用的体素级掩码。为了解决前景与背景比例极不平衡的问题，采用基于 Dice 的损失来训练 ROI Locator。\n进行快速的三维连通性分析（Fast 3D connectivity analysis）计算出所需的 Bounding Box（$Bbox^{III}$）。\n📌**（3）==RoI Pyramid Layer==**\n从每个特征尺度提取一组多层次的特征张量，充分利用多尺度特征。\n为了提取检测目标的 RoI Tensor Pyramid，首先从(2) RoI Locator 计算得到的边界框（Bounding box）$Bbox^{III}=(z^3, y^3, x^3, d^3, h^3, w^3)$ ，公式(1)构建 Bounding Box Pyramid $(Bbox^{I}, Bbox^{II}, Bbox^{III})$。\n $(s_{z}^{i}, s_{y}^{i}, s_{x}^{i})$ 表示 $MaxPooling^{i}$ 的 stride；  得到了 Bounding Box Pyramid $(Bbox^{I}, Bbox^{II}, Bbox^{III})$ 后，从 $F^{I},F^{II}, F^{III}$ 中裁剪出 RoI Tensor Pyramid $(f^I, f^{II}, f^{III})$。\n（4）Local Region Decoder\n得到了 RoI Tensor Pyramid $(f^I, f^{II}, f^{III})$ 之后，构建一个名为 Local Region Decoder 的区域内分割网络，这个网络融合了多尺度的特征。\n3.2 Loss Function design 文章的另一个核心点在于 ==Dice-based Multi-task Hybrid Loss Function (MHL)== 的设计。\n上图的网络结构属于多任务学习（Localization + Segmentation），Global Image Encoder 主要面临类别不平衡问题；而 Local Region Decoder 则是目标区域的精确边界分割问题。\n（1）Dice Loss\n N voxels $p_i \\in P$ ：predicted volume $g_i \\in G$：ground truth volume $\\epsilon = 10^{-4}$ ：平滑参数  （2）Dice Loss for Global Localization\n $P_{global}$ and $G_{global}$ denotes predictions of the localization top and down-sampled annotations.  ❓这个我不太明白。我的理解是不同的检测方法，这是只是提供了一个范式。    （3）Dice-based Contour-aware Loss for Local Segmentation\n Contour 表示边轮廓。（3D 空间中轮廓标签的极端稀疏性）； 在分割的输出端增加一个额外的由 Sigmoid 激活的 1 × 1 × 1 卷积层来预测轮廓体素，并与区域分割任务并行训练； $\\lambda_c = 0.5$，辅助任务的权重，确保区域分割任务占主导地位。  === 最后得到总的损失函数，Dice-based Multi-task Hybrid Loss Function (MHL)：\n $\\beta = 10^{-4}$  3.3 多感受野模型集成 本文提出采用多感受野模型集成策略，融合结构相同但感受野设置不同的模型。如下图，将三个网络的输出取平均，生成最终的预测。\n不同感受野模型，实现的方法是控制空洞卷积的 dilation rate。下表感受野为 26 × 64 × 64 为原始的 3D R-U-Net，记为 3D RU-Net-RF-64。\n4. Experiments 4.1 数据集和预处理 64 例 MRI 图像，T2 模态。目标区域由经验丰富的放射科医生进行标注，一个 3D 图像通常有一到两个含有癌组织的 RoI。癌组织轮廓标签 contour labels were automatically generated from the region labels of one-voxel thickness using erosion and subtraction operations.\ncrop 黑边、重采样 4.0 × 2.0 × 2.0 mm、强度归一化。\n下图是归一化（intensity-normalized）的效果。\n4.2 实现细节 网络结构如 Table 1 所示。\n Optimizer: Adam batch size = 1 输入的 shape = ？ learning rate: 10e-4 L2 norm: 10e-4 先训练 RoI Locator，直到评估 Loss 不在降低； 再联合训练 RoI Locator 和分割分支。联合训练过程的 Loss 来自 RoI Locator + SegHead1 + SegHead2。  评估指标：Dice Similarity Coefficient (DSC)、Voxel-wise Recall Rate、Average Symmetric Surface Distance (ASD)。\n2 块 NVIDIA Titan(12 GB GPU memory)\n4.3 实验结果 Table 2（消融学习）、Figure 5、Figure 6\n（1）（2）5. Discussion 相比于传统的 Encoder-Decoder 在每个路径上各花费 50%，本文通过构建 Local Region Decoder，GPU 可以将其 90% 的 GPU 内存分配给 Encoder，以处理更大的输入体积，只在分割阶段花费 10% 的内存。因此，可以处理的体积大小被大大的扩大了！（有几率不用预先切 Patch 了）\n提出的方法的局限性：\n  模型经常混淆哪个切片开始或结束，这对得分的影响较大（Figure 6）\n   这个困难是与数据相关的，由于癌组织边界的对比度较弱，沿 Z 轴的分辨率较低，开始和结束切片指数的决定可能取决于观察者。\n     没有进行实例分割相关的探索  Conclusion  提出了联合 RoI localization-segmentation-based 框架（3D RoI-aware U-Net）； 强调了将 RoI 定位和区域内分割结合==全局编码特征==的重要性和有效性； 提出多任务混合损失(MHL)来平滑训练过程； 实验结果表明，该方法在速度和准确性方法具有较大优势； 原则上，此框架具有良好的可拓展性，可以用于其他医学图像分割任务。  ",
+  "wordCount" : "2963",
+  "inLanguage": "en",
+  "datePublished": "2021-09-24T09:14:09+08:00",
+  "dateModified": "2021-09-24T09:14:09+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://landodo.github.io/posts/20210924-3d-roi-aware-u-net/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Landodo's NoteBook",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://landodo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://landodo.github.io/" accesskey="h" title="Landodo&#39;s NoteBook (Alt + H)">Landodo&#39;s NoteBook</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://landodo.github.io/search" title="🔍Search (Alt &#43; /)" accesskey=/>
+                    <span>🔍Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/tags" title="Tag">
+                    <span>Tag</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/cs-zoo" title="CS ZOO">
+                    <span>CS ZOO</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://landodo.github.io/">Home</a>&nbsp;»&nbsp;<a href="http://landodo.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      3D RoI-aware U-Net for Accurate and Efficient Colorectal Tumor Segmentation
+    </h1>
+    <div class="post-meta"><span title='2021-09-24 09:14:09 +0800 CST'>September 24, 2021</span>&nbsp;·&nbsp;6 min&nbsp;·&nbsp;2963 words
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#3d-roi-aware-u-net-for-accurate-and-efficient-colorectal-tumor-segmentation" aria-label="3D RoI-aware U-Net for Accurate and Efficient Colorectal Tumor Segmentation">3D RoI-aware U-Net for Accurate and Efficient Colorectal Tumor Segmentation</a></li>
+                <li>
+                    <a href="#0-abstract" aria-label="0. Abstract">0. Abstract</a></li>
+                <li>
+                    <a href="#1-introduction" aria-label="1. Introduction">1. Introduction</a></li>
+                <li>
+                    <a href="#2-related-work" aria-label="2. Related Work">2. Related Work</a></li>
+                <li>
+                    <a href="#3-methodology" aria-label="3. Methodology">3. Methodology</a><ul>
+                        
+                <li>
+                    <a href="#31-main-modules" aria-label="3.1 Main Modules">3.1 Main Modules</a></li>
+                <li>
+                    <a href="#32-loss-function-design" aria-label="3.2 Loss Function design">3.2 Loss Function design</a></li>
+                <li>
+                    <a href="#33-%e5%a4%9a%e6%84%9f%e5%8f%97%e9%87%8e%e6%a8%a1%e5%9e%8b%e9%9b%86%e6%88%90" aria-label="3.3 多感受野模型集成">3.3 多感受野模型集成</a></li></ul>
+                </li>
+                <li>
+                    <a href="#4-experiments" aria-label="4. Experiments">4. Experiments</a><ul>
+                        
+                <li>
+                    <a href="#41-%e6%95%b0%e6%8d%ae%e9%9b%86%e5%92%8c%e9%a2%84%e5%a4%84%e7%90%86" aria-label="4.1 数据集和预处理">4.1 数据集和预处理</a></li>
+                <li>
+                    <a href="#42-%e5%ae%9e%e7%8e%b0%e7%bb%86%e8%8a%82" aria-label="4.2 实现细节">4.2 实现细节</a></li>
+                <li>
+                    <a href="#43-%e5%ae%9e%e9%aa%8c%e7%bb%93%e6%9e%9c" aria-label="4.3 实验结果">4.3 实验结果</a></li></ul>
+                </li>
+                <li>
+                    <a href="#5-discussion" aria-label="5. Discussion">5. Discussion</a></li>
+                <li>
+                    <a href="#conclusion" aria-label="Conclusion">Conclusion</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h2 id="3d-roi-aware-u-net-for-accurate-and-efficient-colorectal-tumor-segmentation">3D RoI-aware U-Net for Accurate and Efficient Colorectal Tumor Segmentation<a hidden class="anchor" aria-hidden="true" href="#3d-roi-aware-u-net-for-accurate-and-efficient-colorectal-tumor-segmentation">#</a></h2>
+<p>#结直肠癌分割📌</p>
+<ul>
+<li>
+<p><strong>Cited by:</strong> 18</p>
+</li>
+<li>
+<p><strong>Publish Year:</strong> 2020</p>
+</li>
+<li>
+<p><strong>Published in:</strong> IEEE Transactions on Cybernetics</p>
+</li>
+<li>
+<p>地址：https://ieeexplore.ieee.org/document/9052757</p>
+</li>
+<li>
+<p>Code：https://github.com/huangyjhust/3D-RU-Net</p>
+</li>
+</ul>
+<h2 id="0-abstract">0. Abstract<a hidden class="anchor" aria-hidden="true" href="#0-abstract">#</a></h2>
+<p>基于深度学习的方法在 3D 图像分割任务中提供了一个良好的 baseline，但是由于内存的限制，较小的 patch 限制了有效的感受野，影响分割性能。</p>
+<p>将 RoI 定位作为前项操作，在速度、目标完整性、减少假阳性（FN）等方面具有多重优势。本篇论文：</p>
+<ul>
+<li>
+<p>提出了一种==多任务框架（3D RoI-aware U-Net）==，用于 ROI 定位和区域分割；</p>
+</li>
+<li>
+<p>设计了一个==基于 Dice 的损失函数（MHL）==，用于从全局（RoI 定位）到局部（区域内分割）的多任务学习过程。</p>
+</li>
+</ul>
+<p>在 64 例癌症病例上进行实验，结果表明，该方法明显优于传统的方法，具有较强的泛化性、拓展潜力，可用于医学图像的其他 3D 目标分割任务。</p>
+<h2 id="1-introduction">1. Introduction<a hidden class="anchor" aria-hidden="true" href="#1-introduction">#</a></h2>
+<p>基于深度学习的方法在医学图像检测和分割领域处于领先地位，然而，依旧面临着许多挑战：强度特异性弱、缺乏形状特征、缺乏位置先验、类别不平衡，以及在较差的 GPU/CPU-only 上的处理时间过长。除此之外，patch 大小受限于 GPU 显存，扩大感受野和减少降采样过程细粒度丢失是一个至关重要的问题。</p>
+<p>✅在医学应用中，由于目标和背景高度相关，因此==全局理解==甚至更为重要。</p>
+<p>🚩本篇论文贡献总结如下：</p>
+<ol>
+<li>
+<p>提出一种新的联合 RoI 定位-分割框架（3D RoI-aware U-Net），具有如下优势：fast RoI localization；target completeness； large effective receptive field；easy-to-train；detail-preserving；end-to-end；volume-to-volume segmentation。</p>
+</li>
+<li>
+<p>设计的混合损失函数（Dice formulated global-to-local multi-task hybrid loss, MHL）帮助网络既处理大体积的小目标，又专注于准确识别局部 RoI 中的边界。</p>
+</li>
+<li>
+<p>通过实验验证了所提出的框架的有效性、通用性；</p>
+</li>
+</ol>
+<h2 id="2-related-work">2. Related Work<a hidden class="anchor" aria-hidden="true" href="#2-related-work">#</a></h2>
+<p>现有的 3D 图像病变检测和分割方法一般可以分为：基于局部的模型（part based models）和 non-joint localization-segmentation based methods。</p>
+<ul>
+<li>
+<p>part based：FCN、V-Net，有效感受野有限。</p>
+</li>
+<li>
+<p>non-joint localization-segmentation based：RoI 定位模块作为独立的部分，外部模块 Selective Search、Multiscale Combinatorial Grouping、FPN 提取候选区域；</p>
+</li>
+</ul>
+<p>上述两种方式存在的问题：使用基于 patch 的分割无法解决感受野有限的问题；使用独立的外部模块进行候选区域的提取，再独立的 FCN 进行 RoI 分割时，无法共享特征。</p>
+<p>联合 RoI 定位-分割模型是一种很有前景的发展，共享 backbone 来实现区域候选、区域分类和区域内分割，消除了冗余特征提取。</p>
+<ul>
+<li>
+<p>Multi-task Network Cascades</p>
+</li>
+<li>
+<p>Mask R-CNN: FPN</p>
+</li>
+</ul>
+<p>类别不平衡问题：</p>
+<ul>
+<li>V-Net：Dice loss</li>
+<li>Deep Contour-aware Network</li>
+<li>Multilevel Contextual 3D CNNs</li>
+<li>DeepMedic</li>
+<li>&hellip;</li>
+</ul>
+<h2 id="3-methodology">3. Methodology<a hidden class="anchor" aria-hidden="true" href="#3-methodology">#</a></h2>
+<p><img loading="lazy" src="./20210924/1.png" alt=""  />
+</p>
+<p>3D RU-Net 结构如上图所示。</p>
+<ul>
+<li>
+<p>将整个 image volumes 输入 ==Global Image Encoder==，进行多层次编码；</p>
+</li>
+<li>
+<p>采用编码器专用的 ==RoI locator== 进行 RoI 定位；</p>
+</li>
+<li>
+<p>利用 ==RoI Pyramid Layer== 从多尺度特征图中裁剪区域内特征张量，获得多尺度的 RoI 区域，图中称为 RoI Tensor Pyramid $(f^I, f^{II}, f^{III})$；</p>
+</li>
+<li>
+<p>设计一个 ==Local Region Decoder== 来进行多级特征融合，用于高分辨率癌症病灶分割。</p>
+</li>
+</ul>
+<h3 id="31-main-modules">3.1 Main Modules<a hidden class="anchor" aria-hidden="true" href="#31-main-modules">#</a></h3>
+<p><strong>（1）Global Image Encoder</strong></p>
+<p>谨慎设计 3D backbone feature extractor 以避免 GPU 内存溢出和过拟合。构建一个紧凑的仅有编码器的网络，名为 Global Image Encoder，用于处理 whole volume images。</p>
+<p>ResBlocks + MaxPooling 堆叠。</p>
+<p>Residual Block:</p>
+<ul>
+<li>3 convolutional layer</li>
+<li>3 Instance Normalization (batch size = 1)</li>
+<li>3 ReLU</li>
+<li>Skip Connection</li>
+</ul>
+<p><strong>（2）RoI Locator</strong></p>
+<p>RoI Locator 是一个模板，以特征图 $F^{III}$ 作为输入，得到 $Bbox^{III}$ 输出。任何采用纯编码骨干的目标检测方法都可以被采用。</p>
+<p>由于数量有限的训练样本的长宽比多样性，学习准确的边界框可能是困难的，建议充分利用可用的体素级掩码。为了解决前景与背景比例极不平衡的问题，采用基于 Dice 的损失来训练 ROI Locator。</p>
+<p>进行快速的三维连通性分析（Fast 3D connectivity analysis）计算出所需的 Bounding Box（$Bbox^{III}$）。</p>
+<p>📌**（3）==RoI Pyramid Layer==**</p>
+<p>从每个特征尺度提取一组多层次的特征张量，充分利用多尺度特征。</p>
+<p>为了提取检测目标的 RoI Tensor Pyramid，首先从(2) RoI Locator 计算得到的边界框（Bounding box）$Bbox^{III}=(z^3, y^3, x^3, d^3, h^3, w^3)$ ，公式(1)构建 Bounding Box Pyramid $(Bbox^{I}, Bbox^{II}, Bbox^{III})$。</p>
+<p><img loading="lazy" src="./20210924/2.png" alt=""  />
+</p>
+<ul>
+<li>$(s_{z}^{i}, s_{y}^{i}, s_{x}^{i})$ 表示 $MaxPooling^{i}$ 的 stride；</li>
+</ul>
+<p>得到了 Bounding Box Pyramid $(Bbox^{I}, Bbox^{II}, Bbox^{III})$ 后，从 $F^{I},F^{II}, F^{III}$ 中裁剪出 RoI Tensor Pyramid $(f^I, f^{II}, f^{III})$。</p>
+<p><strong>（4）Local Region Decoder</strong></p>
+<p>得到了 RoI Tensor Pyramid $(f^I, f^{II}, f^{III})$ 之后，构建一个名为 Local Region Decoder 的区域内分割网络，这个网络融合了多尺度的特征。</p>
+<h3 id="32-loss-function-design">3.2 Loss Function design<a hidden class="anchor" aria-hidden="true" href="#32-loss-function-design">#</a></h3>
+<p>文章的另一个核心点在于 ==Dice-based Multi-task Hybrid Loss Function (MHL)== 的设计。</p>
+<p>上图的网络结构属于多任务学习（Localization + Segmentation），Global Image Encoder 主要面临类别不平衡问题；而 Local Region Decoder 则是目标区域的精确边界分割问题。</p>
+<p><strong>（1）Dice Loss</strong></p>
+<p><img loading="lazy" src="./20210924/3.png" alt=""  />
+</p>
+<ul>
+<li>N voxels</li>
+<li>$p_i \in P$ ：predicted volume</li>
+<li>$g_i \in G$：ground truth volume</li>
+<li>$\epsilon = 10^{-4}$ ：平滑参数</li>
+</ul>
+<p><strong>（2）Dice Loss for Global Localization</strong></p>
+<p><img loading="lazy" src="./20210924/4.png" alt=""  />
+</p>
+<ul>
+<li>$P_{global}$ and $G_{global}$  denotes predictions of the localization top and down-sampled annotations.
+<ul>
+<li>❓这个我不太明白。我的理解是不同的检测方法，这是只是提供了一个范式。</li>
+</ul>
+</li>
+</ul>
+<p><strong>（3）Dice-based Contour-aware Loss for Local Segmentation</strong></p>
+<p><img loading="lazy" src="./20210924/5.png" alt=""  />
+</p>
+<ul>
+<li><em>Contour</em> 表示边轮廓。（3D 空间中轮廓标签的极端稀疏性）；</li>
+<li>在分割的输出端增加一个额外的由 Sigmoid 激活的 1 × 1 × 1 卷积层来预测轮廓体素，并与区域分割任务并行训练；</li>
+<li>$\lambda_c = 0.5$，辅助任务的权重，确保区域分割任务占主导地位。</li>
+</ul>
+<p>===&gt; 最后得到总的损失函数，Dice-based Multi-task Hybrid Loss Function (MHL)：</p>
+<p><img loading="lazy" src="./20210924/6.png" alt=""  />
+</p>
+<ul>
+<li>$\beta = 10^{-4}$</li>
+</ul>
+<h3 id="33-多感受野模型集成">3.3 多感受野模型集成<a hidden class="anchor" aria-hidden="true" href="#33-多感受野模型集成">#</a></h3>
+<p>本文提出采用多感受野模型集成策略，融合结构相同但感受野设置不同的模型。如下图，将三个网络的输出取平均，生成最终的预测。</p>
+<p><img loading="lazy" src="./20210924/7.png" alt=""  />
+</p>
+<p>不同感受野模型，实现的方法是控制空洞卷积的 dilation rate。下表感受野为  26 <em>×</em> 64 <em>×</em> 64 为原始的 3D R-U-Net，记为 3D RU-Net-RF-64。</p>
+<p><img loading="lazy" src="./20210924/8.png" alt=""  />
+</p>
+<h2 id="4-experiments">4. Experiments<a hidden class="anchor" aria-hidden="true" href="#4-experiments">#</a></h2>
+<h3 id="41-数据集和预处理">4.1 数据集和预处理<a hidden class="anchor" aria-hidden="true" href="#41-数据集和预处理">#</a></h3>
+<p>64 例 MRI 图像，T2 模态。目标区域由经验丰富的放射科医生进行标注，一个 3D 图像通常有一到两个含有癌组织的 RoI。癌组织轮廓标签 <code>contour labels were automatically generated from the region labels of one-voxel thickness using erosion and subtraction operations.</code></p>
+<p>crop 黑边、重采样 4.0 × 2.0 × 2.0 mm、强度归一化。</p>
+<p>下图是归一化（intensity-normalized）的效果。</p>
+<p><img loading="lazy" src="./20210924/9.png" alt=""  />
+</p>
+<h3 id="42-实现细节">4.2 实现细节<a hidden class="anchor" aria-hidden="true" href="#42-实现细节">#</a></h3>
+<p>网络结构如 Table 1 所示。</p>
+<ul>
+<li>Optimizer: Adam</li>
+<li>batch size = 1</li>
+<li>输入的 shape = ？</li>
+<li>learning rate: 10e-4</li>
+<li>L2 norm: 10e-4</li>
+<li>先训练 RoI Locator，直到评估 Loss 不在降低；</li>
+<li>再联合训练 RoI Locator 和分割分支。联合训练过程的 Loss 来自 RoI Locator + SegHead1 + SegHead2。</li>
+</ul>
+<p>评估指标：<strong>Dice Similarity Coefficient (DSC)</strong>、<strong>Voxel-wise Recall Rate</strong>、<strong>Average Symmetric Surface Distance (ASD)</strong>。</p>
+<p>2 块 NVIDIA Titan(12 GB GPU memory)</p>
+<h3 id="43-实验结果">4.3 实验结果<a hidden class="anchor" aria-hidden="true" href="#43-实验结果">#</a></h3>
+<p>Table 2（消融学习）、Figure 5、Figure 6</p>
+<p>（1）<img loading="lazy" src="./20210924/10.png" alt=""  />
+</p>
+<p>（2）<img loading="lazy" src="./20210924/11.png" alt=""  />
+</p>
+<h2 id="5-discussion">5. Discussion<a hidden class="anchor" aria-hidden="true" href="#5-discussion">#</a></h2>
+<p><img loading="lazy" src="./20210924/13.png" alt=""  />
+</p>
+<p>相比于传统的 Encoder-Decoder 在每个路径上各花费 50%，本文通过构建 Local Region Decoder，GPU 可以将其 90% 的 GPU 内存分配给 Encoder，以处理更大的输入体积，只在分割阶段花费 10% 的内存。因此，可以处理的体积大小被大大的扩大了！（有几率不用预先切 Patch 了）</p>
+<p>提出的方法的局限性：</p>
+<ol>
+<li>
+<p>模型经常混淆哪个切片开始或结束，这对得分的影响较大（Figure 6）</p>
+<ul>
+<li>
+<blockquote>
+<p>这个困难是与数据相关的，由于癌组织边界的对比度较弱，沿 Z 轴的分辨率较低，开始和结束切片指数的决定可能取决于观察者。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ol>
+<p><img loading="lazy" src="./20210924/12.png" alt=""  />
+</p>
+<ol start="2">
+<li>没有进行实例分割相关的探索</li>
+</ol>
+<h2 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h2>
+<ul>
+<li>提出了联合 RoI localization-segmentation-based 框架（3D RoI-aware U-Net）；</li>
+<li>强调了将 RoI 定位和区域内分割结合==全局编码特征==的重要性和有效性；</li>
+<li>提出多任务混合损失(MHL)来平滑训练过程；</li>
+<li>实验结果表明，该方法在速度和准确性方法具有较大优势；</li>
+<li>原则上，此框架具有良好的可拓展性，可以用于其他医学图像分割任务。</li>
+</ul>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://landodo.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">论文阅读</a></li>
+      <li><a href="http://landodo.github.io/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/">医学图像分割</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://landodo.github.io/posts/20211024-latent-space-data-augmentation/">
+    <span class="title">« Prev Page</span>
+    <br>
+    <span>20211024 Latent Space Data Augmentation</span>
+  </a>
+  <a class="next" href="http://landodo.github.io/posts/20210912-rapid-vessel-segmentation/">
+    <span class="title">Next Page »</span>
+    <br>
+    <span>Rapid vessel segmentation and reconstruction of head and neck angiograms using 3D convolutional neural network.</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>Landon</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
