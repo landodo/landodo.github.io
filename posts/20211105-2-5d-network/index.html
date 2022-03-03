@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+<meta name="robots" content="index, follow">
+<title>2.5D 2.5D methods for Volumetric Medical Image Segmentation | Landodo&#39;s NoteBook</title>
+<meta name="keywords" content="论文阅读, 语义分割" />
+<meta name="description" content="🎯Topic: 2.5D methods for Volumetric Medical Image Segmentation论文简介 （1）2.5D 医学图像分割网络综述，发表于 2020 年 10 月。 Exploring Efficient Volumetric Medical Image Segmentation Using 2.5D Method: An Empirical Study （2）">
+<meta name="author" content="">
+<link rel="canonical" href="http://landodo.github.io/posts/20211105-2-5d-network/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://landodo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://landodo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://landodo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://landodo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://landodo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="2.5D 2.5D methods for Volumetric Medical Image Segmentation" />
+<meta property="og:description" content="🎯Topic: 2.5D methods for Volumetric Medical Image Segmentation论文简介 （1）2.5D 医学图像分割网络综述，发表于 2020 年 10 月。 Exploring Efficient Volumetric Medical Image Segmentation Using 2.5D Method: An Empirical Study （2）" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://landodo.github.io/posts/20211105-2-5d-network/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-11-05T08:56:59&#43;08:00" />
+<meta property="article:modified_time" content="2021-11-05T08:56:59&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="2.5D 2.5D methods for Volumetric Medical Image Segmentation"/>
+<meta name="twitter:description" content="🎯Topic: 2.5D methods for Volumetric Medical Image Segmentation论文简介 （1）2.5D 医学图像分割网络综述，发表于 2020 年 10 月。 Exploring Efficient Volumetric Medical Image Segmentation Using 2.5D Method: An Empirical Study （2）"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://landodo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "2.5D 2.5D methods for Volumetric Medical Image Segmentation",
+      "item": "http://landodo.github.io/posts/20211105-2-5d-network/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "2.5D 2.5D methods for Volumetric Medical Image Segmentation",
+  "name": "2.5D 2.5D methods for Volumetric Medical Image Segmentation",
+  "description": "🎯Topic: 2.5D methods for Volumetric Medical Image Segmentation论文简介 （1）2.5D 医学图像分割网络综述，发表于 2020 年 10 月。 Exploring Efficient Volumetric Medical Image Segmentation Using 2.5D Method: An Empirical Study （2）",
+  "keywords": [
+    "论文阅读", "语义分割"
+  ],
+  "articleBody": "🎯Topic: 2.5D methods for Volumetric Medical Image Segmentation论文简介 （1）2.5D 医学图像分割网络综述，发表于 2020 年 10 月。\n Exploring Efficient Volumetric Medical Image Segmentation Using 2.5D Method: An Empirical Study\n （2）2.5D 分割网络实例，发表在 MICCAI 2019\n Learning shape priors for robust cardiac MR segmentation from multi-view images\n Abstract 医学图像数据（CT/MRI）大多是 3D 的，然而 3D CNN 并不一定是好的选择。更多的推理时间、计算代价、参数的增加有过拟合的风险（医学图像标注获取昂贵）。为了解决这一问题，人们提出了许多 2.5D 分割方法，以更低的计算成本利用体积空间信息。\n1. Introduction 3D 医学图像，如 CT 和 MRI 已广泛应用于临床诊断。体积图像的自动分割在生物医学应用中变得越来越重要。目前主要两种策略：（1）将三维体积切割成二维切片，并根据切片内信息训练二维 CNN 进行分割；（2）3D CNN。\n两种方法有其各自的优缺点：\n ✅ 2D CNN 更轻的计算和更高的推理速度。 ❌ 2D CNN 忽略相邻切片之间的信息，阻碍了分割精度的提高。 ✅ 3D CNN 具有对空间信息的感知能力。 ❌ 3D CNN 需要较高的计算成本，更高的推理延迟，参数越多，过拟合风险越大（尤其是小的数据集），这阻碍了进一步临床应用。  为了弥补 2D 和 3D CNN 之间的差距，提出了许多 2.5D 分割方法（也称为伪 3D 方法），通过设计新的体系结构或使用策略将体积信息融合到 2D CNN 中来实现高效的医学图像体积分割。\n本篇文章的主要贡献可以总结如下：\n 本文综述了 2.5D 医学图像分割方法的最新进展，将 2.5D 医学图像分割方法分为多视图融合（multi-view fusion）、融合层间信息（incorporating inter-slice information）和融合二维/三维特征（fusing 2D/3D features）三大类。 对这些 2.5D 方法在 3 各具有代表性的数据集（CT/MRI、心脏/前列腺/腹部）上进行了大规模的评估、比较。  2. Related Work 本节对多视图融合（multi-view fusion）、融合层间信息（incorporating inter-slice information）和融合二维/三维特征（fusing 2D/3D features）三大类 2.5D 分割方法进行综述。\n2.1 多视图融合（multi-view fusion）\n为了将体积空间信息整合到二维 CNN 中，一个简单而直观的解决方案是多视图融合（MVF）。\n多视图包括矢状面（sagittal）、冠状面（coronal）、横断面（axial）。训练 3 个2D CNN 分别从矢状面、冠状面和横断面进行分割，再将 3 个视图的结果融合在一起，可以充分利用 3D 空间信息，从而获得比 2D CNN 更好的分割结果。\n融合的方式有：多数投票、 Volumetric Fusion Net（一个浅层的 3D CNN）。\n2.2. 融合层间信息（Incorporating inter-slice information）\n三维空间的分辨率并不总是相同的，有时 x 和 y 轴的图像分辨率比 z 轴高十倍以上（直肠癌数据就是这样 shape=768x696x48）。这种情况下训练长轴（冠状面：xz 或 矢状面：yz）是不可取的。\n另一种策略将层间信息整合到二维 CNN 中，以探索空间相关性。网络不仅可以利用切片的信息，还可以利用相邻切片的信息。网络的输入是连续的切片，输出是对应中间切片的分割结果。通过整合片间信息，可以利用体积的空间相关性，同时避免了 3D 计算的沉重负担。\n不少方法都是喂入 3 张 slices，但是直接添加相邻的片作为多通道输入可能效率低下。当相邻切片混合成通道维时，输入切片的信息在第一卷积层融合，这一过程网络很难提取用于区分每个片的有用信息。\n计新的层间信息抽取体系结构成为研究的重点。\n bi-directional convolutional long short-term memory (BC-LSTM) ：3D 体的 2D 切片被视为一个时间序列，以提取切片间的上下文和特征； inter-slice attention module：利用相邻切片的信息生成 attention mask，为分割提供先验形状调节；contextual-attention block：使用片与片之间的元素减法，强制模型聚焦于边界区域。  2.3. 融合二维/三维特征（Fusing 2D/3D features）\n一些工作也集中在融合从二维和三维 CNN 提取的特征，虽然这些方法仍然使用三维卷积来提取空间信息，但是与训练纯三维 CNN 相比，总体计算成本降低了。\n#########################################################################\n2.5D 分割网络实例，MICCAI 2019\nAbstract 受经验丰富的临床医生如何通过多个标准视图（即长轴和短轴视图）评估心脏形态和功能的启发，本篇论文提出了一种新的方法，在不同的二维标准视图中学习解剖形状先验，并利用这些先验从短轴（SA） MR 图像中分割左心室 (LV) 心肌。\n提出的分割方法具有二维网络的优点，但同时结合了空间背景。在不同的短轴切片上实现了准确和稳健的心肌分割。\n1. Introduction 基于二维的分割网络，以 slice-by-slice 的方式训练，对于复杂形状的目标，小目标的情况，分割的结果不太理想。这是由于 2D 网络没有结合相邻的 short-axis(SA) 图像或 long-axis(LA) 图像的空间信息。\n对于三维的分割网络，心脏的三维空间背景可能受到潜在的层间运动伪影和低平面空间（SA）分辨率的影响，从而限制了它们的分割性能。（直肠癌使用单纯的 3D 网络，估计无法取得良好的效果）\n x轴和y轴保持的分辨率远高于z轴，3D cnn的性能优势并不明显，有时甚至不如一些2.5D方法。\n 经验丰富的临床医生能够从多个标准视图评估心脏形态和功能，即使用 SA 和 LA 图像来形成对心脏解剖的理解。直觉上，从多个标准视图学习到的表示对 SA 切片的分割任务是有益的。受此启发，论文提出了一种通过四个标准视图学习解剖学先验知识的方法，并利用该方法对二维 SA 图像进行分割。\n贡献总结：\n a) developed a novel autoencoder architecture (Shape MAE)，它从多个标准视图中学习心脏形状的潜在表示； b) developed a segmentation network (multi-view U-Net)，结合多视图图像的解剖形状先验来指导SA图像的分割； c) 与 2D/3D 方法进行评估，表明该方法具有更强的鲁棒性，且对训练数据大小的依赖性较小。  2. Methods 提出的方法包含两个新的架构：\n shape-aware multi-view autoencoder (Shape MAE)：从标准心脏采集平面（包括短轴和长轴视图）学习解剖形状先验； multi-view U-Net：通过将 Shape MAE 学习到的解剖学先验信息整合到改进的 U-Net 体系结构中，实现心脏图像分割。  Shape MAE: Shape-aware multi-view autoencoder\n通过多任务学习从标准心脏视图学习解剖形状先验。对于给定输入的原图 $X_i$，网络学习 $X_i$ 的低维表示 $z_i$，它最能重建所有 $j$ 个目标视图分割 $Y_j$。\n本论文采用 4 source views $X_i \\ (i = 1, 2, 3, 4)$，分别是 3 long-axis(LA) views，和 1 short-axis(SA) views，。\n LA: two-chamber view (LA1), three-chamber view (LA2), the four-chamber view (LA3)\nSA: mid-ventricular slice (Mid-V) from the SA view\n 网络从其中一个视图学习低维表征 $z_i$ 来重建分割图。分割图的视图 $Y_i$ 有 6 个，4 个对应源视图，另外两个为 SA lices：apical 和 basal。\n损失函数：\n 前两项为交叉熵； 最后一项是 latent representations $z_i$ 的正则化项；  该网络的原理是，不同的视图需要独立的函数将它们映射到描述全局形状特征的潜空间；而将这个潜空间转换到另一个视图或平面也需要一个特定的投影函数。根据六个目标视图而不是单一视图来预测心肌的形状，鼓励网络学习和利用不同视图之间的相关性，从而形成一个全局的、视图不变的形状表征，而不是一个特定视图的局部表征。这个框架中的所有编码器和解码器都是以多任务学习的方式联合训练的，这样做的好处是避免过度拟合，鼓励模型的泛化。\nMV U-Net: Multi-view U-Net.\nMV U-Net 相比于原始的 U-Net 卷积核更少一些（取决于当前的任务），并且结合 shape MAE 学习到的解剖形状先验信息。\nFuse Block 模块由两个卷积核 (3 × 3) 和一个残差连接组成，通过可学习权值将不同视图的形状表示结合起来。给定任意短轴图像切片 $I_p$，和它相应的 shape representation $z^{p}_1, z^{p}_2, z^{p}_3, z^{p}4$（通过 Shape MAE 获得），网络可以将先验知识提炼为网络的高级特征，使其能够通过多视图信息有效地细化分割：$S_p = f{MV\\ U-Net}(I^p, z^{p}_1, z^{p}_2, z^{p}_3, z^{p}_4; \\theta)$。\n该网络采用标准的交叉熵损失进行训练。\n3. Experiments and Results 4 Conclusion 提出了一个形状感知的多视图自动编码器，一个能够从多个标准视图学习解剖形状先验信息的多视图 U-Net，该网络是对原始 U-Net 架构的修改，合并了学习的形状先验信息，以提高心脏分割的鲁棒性。\n本论文将长轴 LA 和短轴 SA 结合起来，利用长轴图像的空间背景来指导短轴图像的分割。从 LA 视图中提取的额外解剖信息，对那些具有挑战性的切片的分割特别有利。\nMV U-Net 保持了 2D 网络的计算优势，在有限的训练数据下实现较高的分割性能。\n 什么是 LA？什么是 SA？\n✅答：即长轴和短轴数据。例如在直肠数据中，一个 .nii.gz 的 shape 为 768x696x48，那么 xy 为短轴，xz/yz 为长轴。xy 为短轴，横断面，分辨率较高。长轴分辨率低，数据模糊。\n",
+  "wordCount" : "3253",
+  "inLanguage": "en",
+  "datePublished": "2021-11-05T08:56:59+08:00",
+  "dateModified": "2021-11-05T08:56:59+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://landodo.github.io/posts/20211105-2-5d-network/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Landodo's NoteBook",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://landodo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://landodo.github.io/" accesskey="h" title="Landodo&#39;s NoteBook (Alt + H)">Landodo&#39;s NoteBook</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://landodo.github.io/search" title="🔍Search (Alt &#43; /)" accesskey=/>
+                    <span>🔍Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/tags" title="Tag">
+                    <span>Tag</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/cs-zoo" title="CS ZOO">
+                    <span>CS ZOO</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://landodo.github.io/">Home</a>&nbsp;»&nbsp;<a href="http://landodo.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      2.5D 2.5D methods for Volumetric Medical Image Segmentation
+    </h1>
+    <div class="post-meta"><span title='2021-11-05 08:56:59 +0800 CST'>November 5, 2021</span>&nbsp;·&nbsp;7 min&nbsp;·&nbsp;3253 words
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#%e8%ae%ba%e6%96%87%e7%ae%80%e4%bb%8b" aria-label="论文简介">论文简介</a></li>
+                <li>
+                    <a href="#abstract" aria-label="Abstract">Abstract</a></li>
+                <li>
+                    <a href="#1-introduction" aria-label="1. Introduction">1. Introduction</a></li>
+                <li>
+                    <a href="#2-related-work" aria-label="2. Related Work">2. Related Work</a></li>
+                <li>
+                    <a href="#abstract-1" aria-label="Abstract">Abstract</a></li>
+                <li>
+                    <a href="#1-introduction-1" aria-label="1. Introduction">1. Introduction</a></li>
+                <li>
+                    <a href="#2-methods" aria-label="2. Methods">2. Methods</a></li>
+                <li>
+                    <a href="#3-experiments-and-results" aria-label="3. Experiments and Results">3. Experiments and Results</a></li>
+                <li>
+                    <a href="#4-conclusion" aria-label="4 Conclusion">4 Conclusion</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><p>🎯Topic: <!-- raw HTML omitted -->2.5D methods for Volumetric Medical Image Segmentation<!-- raw HTML omitted --></p>
+<h2 id="论文简介">论文简介<a hidden class="anchor" aria-hidden="true" href="#论文简介">#</a></h2>
+<p>（1）2.5D 医学图像分割网络综述，发表于 2020 年 10 月。</p>
+<blockquote>
+<p>Exploring Efficient Volumetric Medical Image Segmentation Using 2.5D Method: An Empirical Study</p>
+</blockquote>
+<p>（2）2.5D 分割网络实例，发表在 MICCAI 2019</p>
+<blockquote>
+<p>Learning shape priors for robust cardiac MR segmentation from multi-view images</p>
+</blockquote>
+<h2 id="abstract">Abstract<a hidden class="anchor" aria-hidden="true" href="#abstract">#</a></h2>
+<p>医学图像数据（CT/MRI）大多是 3D 的，然而 3D CNN 并不一定是好的选择。更多的推理时间、计算代价、参数的增加有过拟合的风险（医学图像标注获取昂贵）。为了解决这一问题，人们提出了许多 2.5D 分割方法，以更低的计算成本利用体积空间信息。</p>
+<h2 id="1-introduction">1. Introduction<a hidden class="anchor" aria-hidden="true" href="#1-introduction">#</a></h2>
+<p>3D 医学图像，如 CT 和 MRI 已广泛应用于临床诊断。体积图像的自动分割在生物医学应用中变得越来越重要。目前主要两种策略：（1）将三维体积切割成二维切片，并根据切片内信息训练二维 CNN 进行分割；（2）3D CNN。</p>
+<p>两种方法有其各自的优缺点：</p>
+<ul>
+<li>✅ 2D CNN 更轻的计算和更高的推理速度。</li>
+<li>❌ 2D CNN 忽略相邻切片之间的信息，阻碍了分割精度的提高。</li>
+<li>✅ 3D CNN 具有对空间信息的感知能力。</li>
+<li>❌ 3D CNN 需要较高的计算成本，更高的推理延迟，参数越多，过拟合风险越大（尤其是小的数据集），这阻碍了进一步临床应用。</li>
+</ul>
+<p>为了弥补 2D 和 3D CNN 之间的差距，提出了许多 2.5D 分割方法（也称为伪 3D 方法），通过设计新的体系结构或使用策略将体积信息融合到 2D CNN 中来实现高效的医学图像体积分割。</p>
+<p>本篇文章的主要贡献可以总结如下：</p>
+<ul>
+<li>本文综述了 2.5D 医学图像分割方法的最新进展，将 2.5D 医学图像分割方法分为多视图融合（multi-view fusion）、融合层间信息（incorporating inter-slice information）和融合二维/三维特征（fusing 2D/3D features）三大类。</li>
+<li>对这些 2.5D 方法在 3 各具有代表性的数据集（CT/MRI、心脏/前列腺/腹部）上进行了大规模的评估、比较。</li>
+</ul>
+<h2 id="2-related-work">2. Related Work<a hidden class="anchor" aria-hidden="true" href="#2-related-work">#</a></h2>
+<p>本节对多视图融合（multi-view fusion）、融合层间信息（incorporating inter-slice information）和融合二维/三维特征（fusing 2D/3D features）三大类 2.5D 分割方法进行综述。</p>
+<p><strong>2.1 多视图融合（<em>multi-view fusion</em>）</strong></p>
+<p>为了将体积空间信息整合到二维 CNN 中，一个简单而直观的解决方案是多视图融合（MVF）。</p>
+<p><img loading="lazy" src="./20211105/1.png" alt=""  />
+</p>
+<p>多视图包括矢状面（sagittal）、冠状面（coronal）、横断面（axial）。训练 3 个2D CNN 分别从矢状面、冠状面和横断面进行分割，再将 3 个视图的结果融合在一起，可以充分利用 3D 空间信息，从而获得比 2D CNN 更好的分割结果。</p>
+<p>融合的方式有：多数投票、 Volumetric Fusion Net（一个浅层的 3D CNN）。</p>
+<p><strong>2.2. 融合层间信息（<em>Incorporating inter-slice information</em>）</strong></p>
+<p>三维空间的分辨率并不总是相同的，有时 x 和 y 轴的图像分辨率比 z 轴高十倍以上（直肠癌数据就是这样 shape=768x696x48）。这种情况下训练长轴（冠状面：xz 或 矢状面：yz）是不可取的。</p>
+<p><img loading="lazy" src="20211105/2.png" alt=""  />
+</p>
+<p>另一种策略将层间信息整合到二维 CNN 中，以探索空间相关性。网络不仅可以利用切片的信息，还可以利用<strong>相邻切片</strong>的信息。网络的输入是连续的切片，输出是对应中间切片的分割结果。通过整合片间信息，可以利用体积的空间相关性，同时避免了 3D 计算的沉重负担。</p>
+<p><img loading="lazy" src="20211105/3.png" alt=""  />
+</p>
+<p>不少方法都是喂入 3 张 slices，但是直接添加相邻的片作为多通道输入可能效率低下。当相邻切片混合成通道维时，输入切片的信息在第一卷积层融合，这一过程网络很难提取用于区分每个片的有用信息。</p>
+<p>计新的层间信息抽取体系结构成为研究的重点。</p>
+<ul>
+<li>bi-directional convolutional long short-term memory (BC-LSTM) ：3D 体的 2D 切片被视为一个时间序列，以提取切片间的上下文和特征；</li>
+<li>inter-slice attention module：利用相邻切片的信息生成 attention mask，为分割提供先验形状调节；contextual-attention block：使用片与片之间的元素减法，强制模型聚焦于边界区域。</li>
+</ul>
+<p><em><em>2.3. 融合二维/三维特征（Fusing 2D</em>/<em>3D features）</em></em></p>
+<p>一些工作也集中在融合从二维和三维 CNN 提取的特征，虽然这些方法仍然使用三维卷积来提取空间信息，但是与训练纯三维 CNN 相比，总体计算成本降低了。</p>
+<p>#########################################################################</p>
+<p>2.5D 分割网络实例，MICCAI 2019</p>
+<h2 id="abstract-1">Abstract<a hidden class="anchor" aria-hidden="true" href="#abstract-1">#</a></h2>
+<p>受经验丰富的临床医生如何通过多个标准视图（即长轴和短轴视图）评估心脏形态和功能的启发，本篇论文提出了一种新的方法，在不同的二维标准视图中学习解剖形状先验，并利用这些先验从短轴（SA） MR 图像中分割左心室 (LV) 心肌。</p>
+<p>提出的分割方法具有二维网络的优点，但同时结合了空间背景。在不同的短轴切片上实现了准确和稳健的心肌分割。</p>
+<h2 id="1-introduction-1">1. Introduction<a hidden class="anchor" aria-hidden="true" href="#1-introduction-1">#</a></h2>
+<p>基于二维的分割网络，以 slice-by-slice 的方式训练，对于复杂形状的目标，小目标的情况，分割的结果不太理想。这是由于 2D 网络没有结合相邻的 short-axis(SA) 图像或 long-axis(LA) 图像的空间信息。</p>
+<p>对于三维的分割网络，心脏的三维空间背景可能受到潜在的层间运动伪影和低平面空间（SA）分辨率的影响，从而限制了它们的分割性能。（直肠癌使用单纯的 3D 网络，估计无法取得良好的效果）</p>
+<blockquote>
+<p>x轴和y轴保持的分辨率远高于z轴，3D cnn的性能优势并不明显，有时甚至不如一些2.5D方法。</p>
+</blockquote>
+<p>经验丰富的临床医生能够从<strong>多个标准视图</strong>评估心脏形态和功能，即使用 SA 和 LA 图像来形成对心脏解剖的理解。直觉上，<!-- raw HTML omitted -->从多个标准视图学习到的表示对 SA 切片的分割任务是有益的。<!-- raw HTML omitted -->受此启发，论文提出了一种通过<strong>四个标准视图</strong>学习解剖学先验知识的方法，并利用该方法对二维 SA 图像进行分割。</p>
+<p>贡献总结：</p>
+<ul>
+<li>a) developed a novel autoencoder architecture (Shape MAE)，它从多个标准视图中学习心脏形状的潜在表示；</li>
+<li>b) developed a segmentation network (multi-view U-Net)，结合多视图图像的解剖形状先验来指导SA图像的分割；</li>
+<li>c) 与 2D/3D 方法进行评估，表明该方法具有更强的鲁棒性，且对训练数据大小的依赖性较小。</li>
+</ul>
+<h2 id="2-methods">2. Methods<a hidden class="anchor" aria-hidden="true" href="#2-methods">#</a></h2>
+<p>提出的方法包含两个新的架构：</p>
+<ul>
+<li>shape-aware multi-view autoencoder (<strong>Shape MAE</strong>)：从标准心脏采集平面（包括短轴和长轴视图）学习解剖形状先验；</li>
+<li>multi-view U-Net：通过将 Shape MAE 学习到的解剖学先验信息整合到改进的 U-Net 体系结构中，实现心脏图像分割。</li>
+</ul>
+<p><strong>Shape MAE: Shape-aware multi-view autoencoder</strong></p>
+<p>通过多任务学习从标准心脏视图学习解剖形状先验。对于给定输入的原图 $X_i$，网络学习 $X_i$ 的低维表示 $z_i$，它最能重建所有 $j$ 个目标视图分割 $Y_j$。</p>
+<p>本论文采用 4 source views $X_i \ (i = 1, 2, 3, 4)$，分别是 3 long-axis(LA) views，和 1 short-axis(SA) views，。</p>
+<blockquote>
+<p>LA: two-chamber view (LA1), three-chamber view (LA2), the four-chamber view (LA3)</p>
+<p>SA: mid-ventricular slice (Mid-V) from the SA view</p>
+</blockquote>
+<p><img loading="lazy" src="./20211105/4.png" alt=""  />
+</p>
+<p>网络从其中一个视图学习低维表征 $z_i$ 来重建分割图。分割图的视图 $Y_i$ 有 6 个，4 个对应源视图，另外两个为 SA lices：apical 和 basal。</p>
+<p>损失函数：</p>
+<p><img loading="lazy" src="./20211105/5.png" alt=""  />
+</p>
+<ul>
+<li>前两项为交叉熵；</li>
+<li>最后一项是 latent representations $z_i$ 的正则化项；</li>
+</ul>
+<p>该网络的原理是，不同的视图需要独立的函数将它们映射到描述全局形状特征的潜空间；而将这个潜空间转换到另一个视图或平面也需要一个特定的投影函数。根据六个目标视图而不是单一视图来预测心肌的形状，鼓励网络学习和利用不同视图之间的相关性，从而形成一个全局的、视图不变的形状表征，而不是一个特定视图的局部表征。这个框架中的所有编码器和解码器都是以多任务学习的方式联合训练的，这样做的好处是避免过度拟合，鼓励模型的泛化。</p>
+<p><strong>MV U-Net: Multi-view U-Net.</strong></p>
+<p>MV U-Net 相比于原始的 U-Net 卷积核更少一些（取决于当前的任务），并且结合 shape MAE 学习到的解剖形状先验信息。</p>
+<p><img loading="lazy" src="./20211105/6.png" alt=""  />
+</p>
+<p>Fuse Block 模块由两个卷积核 (3 × 3) 和一个残差连接组成，通过可学习权值将不同视图的形状表示结合起来。给定任意短轴图像切片 $I_p$，和它相应的 shape representation $z^{p}_1, z^{p}_2, z^{p}_3, z^{p}<em>4$（通过 Shape MAE 获得），网络可以<strong>将先验知识提炼为网络的高级特征，使其能够通过多视图信息有效地细化分割</strong>：$S_p = f</em>{MV\ U-Net}(I^p, z^{p}_1, z^{p}_2, z^{p}_3, z^{p}_4; \theta)$。</p>
+<p>该网络采用标准的交叉熵损失进行训练。</p>
+<h2 id="3-experiments-and-results">3. Experiments and Results<a hidden class="anchor" aria-hidden="true" href="#3-experiments-and-results">#</a></h2>
+<p><img loading="lazy" src="./20211105/7.png" alt=""  />
+</p>
+<p><img loading="lazy" src="./20211105/8.png" alt=""  />
+</p>
+<h2 id="4-conclusion">4 Conclusion<a hidden class="anchor" aria-hidden="true" href="#4-conclusion">#</a></h2>
+<p>提出了一个形状感知的多视图自动编码器，一个能够从多个标准视图学习解剖形状先验信息的多视图 U-Net，该网络是对原始 U-Net 架构的修改，合并了学习的形状先验信息，以提高心脏分割的鲁棒性。</p>
+<p>本论文将长轴 LA 和短轴 SA 结合起来，利用长轴图像的空间背景来指导短轴图像的分割。从 LA 视图中提取的额外解剖信息，对那些具有挑战性的切片的分割特别有利。</p>
+<p>MV U-Net 保持了 2D 网络的计算优势，在有限的训练数据下实现较高的分割性能。</p>
+<hr>
+<p>什么是 LA？什么是 SA？</p>
+<p>✅答：即长轴和短轴数据。例如在直肠数据中，一个 <code>.nii.gz</code> 的 shape 为 768x696x48，那么 xy 为短轴，xz/yz 为长轴。xy 为短轴，横断面，分辨率较高。长轴分辨率低，数据模糊。</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://landodo.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">论文阅读</a></li>
+      <li><a href="http://landodo.github.io/tags/%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/">语义分割</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://landodo.github.io/posts/20211119-tumorcp/">
+    <span class="title">« Prev Page</span>
+    <br>
+    <span>TumorCP: A Simple but Effective Object-Level Data Augmentation for Tumor Segmentation</span>
+  </a>
+  <a class="next" href="http://landodo.github.io/posts/deep-clustering-notes/">
+    <span class="title">Next Page »</span>
+    <br>
+    <span>深度聚类 Deep Clustering</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>Landon</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

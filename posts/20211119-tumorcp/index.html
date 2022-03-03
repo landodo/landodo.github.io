@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+<meta name="robots" content="index, follow">
+<title>TumorCP: A Simple but Effective Object-Level Data Augmentation for Tumor Segmentation | Landodo&#39;s NoteBook</title>
+<meta name="keywords" content="医学图像分割, 数据增强, 论文阅读" />
+<meta name="description" content="论文简介 论文名称：TumorCP: A Simple but Effective Object-Level Data Augmentation for Tumor Segmentation arXiv：https://arxiv.org/pdf/2107.09843.pdf 单">
+<meta name="author" content="">
+<link rel="canonical" href="http://landodo.github.io/posts/20211119-tumorcp/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://landodo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://landodo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://landodo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://landodo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://landodo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="TumorCP: A Simple but Effective Object-Level Data Augmentation for Tumor Segmentation" />
+<meta property="og:description" content="论文简介 论文名称：TumorCP: A Simple but Effective Object-Level Data Augmentation for Tumor Segmentation arXiv：https://arxiv.org/pdf/2107.09843.pdf 单" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://landodo.github.io/posts/20211119-tumorcp/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-11-19T08:52:17&#43;08:00" />
+<meta property="article:modified_time" content="2021-11-19T08:52:17&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="TumorCP: A Simple but Effective Object-Level Data Augmentation for Tumor Segmentation"/>
+<meta name="twitter:description" content="论文简介 论文名称：TumorCP: A Simple but Effective Object-Level Data Augmentation for Tumor Segmentation arXiv：https://arxiv.org/pdf/2107.09843.pdf 单"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://landodo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "TumorCP: A Simple but Effective Object-Level Data Augmentation for Tumor Segmentation",
+      "item": "http://landodo.github.io/posts/20211119-tumorcp/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "TumorCP: A Simple but Effective Object-Level Data Augmentation for Tumor Segmentation",
+  "name": "TumorCP: A Simple but Effective Object-Level Data Augmentation for Tumor Segmentation",
+  "description": "论文简介 论文名称：TumorCP: A Simple but Effective Object-Level Data Augmentation for Tumor Segmentation arXiv：https://arxiv.org/pdf/2107.09843.pdf 单",
+  "keywords": [
+    "医学图像分割", "数据增强", "论文阅读"
+  ],
+  "articleBody": "论文简介 论文名称：TumorCP: A Simple but Effective Object-Level Data Augmentation for Tumor Segmentation\n arXiv：https://arxiv.org/pdf/2107.09843.pdf 单位：（美国）加利福尼亚大学、中科院计算所 会议：MICCAI 2021 source code：https://github.com/YaoZhang93/TumorCP  Motivation：Simple Copy-Paste is a Strong Data Augmentation Method for Instance Segmentation(CVPR 2021) https://arxiv.org/abs/2012.07177，针对自然图像\nAbstract 启发自最近提出的 “Copy-Paste” 数据增强方法，本篇论文提出 TumorCP：一种简单而有效的 object-level 数据增强方法，适用于肿瘤分割。\nTumorCP 在肿瘤分割任务上， Dice 以 7.12% 的显著幅度超过了 baseline。TumorCP + image-level 增强方法，比目前的 SOTA 方法 Dice 提升了 2.32%。\n1 Introduction 高质量的带注释的数据集需要大量的工作和领域知识，这在医学领域尤为显著。为了提高数据高效学习，从不同的角度提出了几种成功的方法：\n leveraging unlabeled data for semi-supervised self-training self-supervised pre-training distilling priors from data 通过不同形态的解剖成像生成新的数据 利用适当的数据增强方法增加数据多样性  不同于复杂的 GAN，“Copy-Paste” 是一种简洁的增强方法，其在自然图像的实例分割中取得了新的突破（CVPR 2021）。但在医学图像领域中，这种方法在很大程度上是未被探索的，因为 “Copy-Paste” 中往往忽略上下文信息，这在直觉上是不可取的！\n“Copy-Paste” 增强方法通过简单地将标注实例粘贴到新的背景图像上作为额外的训练数据，从而避免了从表示空间到像素空间的昂贵生成过程。\n Copy-Paste augmentation avoids costly generation processes from representation space to pixel space by simply pasting the labeled instance onto new background images as additional training data.\n 此外，由于在 “Copy-Paste” 中上下文信息往往被忽略，因此它对医疗任务的有效性仍有待观察。例如，在肿瘤分割中，周围视觉线索，即上下文环境（Context），对肿瘤出现的重要性；医学图像固有的解剖结构使得肿瘤分割离不开上下文。\n本篇论文旨在通过检验 “Copy-Paste” 增强技术在肿瘤分割中的有效性，来填补对上下文在医学领域中作用的理解的空白。\nTumorCP 从源图像中随机选取一个肿瘤，经过一系列空间增强、对比度增强、模糊增强后，将其粘贴到目标图像中的器官上。 TumorCP randomly chooses a tumor from a source image and paste it onto the organs in the target image after a series of spatial, contrast, and blurring augmentations.\n 使用肾肿瘤分割数据集（KiTS19 dataset），nnUNet 来评估此方法。\n2 Method TumorCP 是一种用于肿瘤分割的在线随机增强过程，它的实现是简单和直接的。\n给定一组训练样本 $\\mathcal{D}$，TumorCP 有 $(1 - p_{cp})$ 的概率不执行任何操作；有 $p_{cp}$ 的概率从 $\\mathcal{D}$ 中采样出一个对图像 $(x_{src}, x_{tgt}) \\sim \\mathcal{D}$，并执行一次 “Copy-Paste”。\n令 $\\mathcal{O}{src}$ 为图像 $x{src}$ 上肿瘤集合，$\\mathcal{V}{tgt}$ 为 $x{tgt}$ 上的器官的体积坐标集合，$\\mathcal{T}$ 是一组随机数据转换，每个转换都有一个称为 $p_{trans}$ 的概率参数。\n一次 “Copy-Paste” 流程：\n TumorCP 首先采样一个肿瘤 $o \\sim \\mathcal{O}{src}$、一组数据转换 $\\tau \\sim \\mathcal{T}$ 和一个目标位置 $v \\sim \\mathcal{V}{tgt}$； 然后将 $τ(o)$ 以 $v$ 为中心，取代原始数据和标注。  为了充分利用 TumorCP 的优势，精心设计了两种肿瘤 “Copy-Paste” 模式：\n intra-patient Copy-Paste inter-patient Copy-Paste  2.1 TumorCP’s augumentation Intra-/Inter- Copy-Paste\n为了研究病人之间的差异对 TumorCP 的影响，使用两种设置：\n（1）intra-CP：源图像和目标图像来自同一病人；\n（2）inter-CP：源图像和目标图像来自不同的病人。\n从数据分布的角度来看，由于其强度与数据整体一致，所以首选 intra-CP，但这限制了数据的多样性。从数据多样性的角度来看，inter-CP 更受青睐，因为它打开了利用其他患者的新背景和前景的途径，但它也带来了分布差异。（实验表明 inter-CP 要优于 intra-CP）\n使用三个不同的 object-level 转换来对 “Copy-Paste” 进行扩展。\n Spatial transformation decouples context and improves morphology diversity.  空间转换解耦了上下文，改善了形态的多样性。image-level 的一些增强方法（镜像、旋转）仍然作为一个整体处理图像，保持前景和背景之间的耦合。因此，模型可能会寻找并倾向于过度拟合周围看似合理但实际上不相干的线索。Figure 1 是应用缩放、旋转和镜像的刚性变换和使肿瘤变形的弹性变换来增加形态的多样性。\n Gamma transformation enhances contrast and improves intensity diversity.  伽马变换增强了对比度，提高了强度的多样性。随机采样的伽玛参数增强了肿瘤的强度多样性；幂律非线性增强局部对比度，有利于肿瘤鉴别。\n Blurring transformation improves texture diversity  模糊化改造提高了纹理多样性。使用高斯滤波器作为模糊变换，聚集噪声干扰的低层次纹理可以间接增加相对高层次纹理的纹理多样性。\n整个 Pipeline 可以结合 image-level 增强方法。\n2.2 Intuitions on TumorCP’s Effectiveness TumorCP 有两个目标：i) 增加数据多样性，ii) 学习高层次和抽象肿瘤的不变表示。数据多样性随着肿瘤的新组合和周围环境的增加而增加。为了了解高层次的信息，如下讨论了 TumorCP 的三个特性来解释其有效性。 通过语境不变的预测消除背景偏差（Eliminated Background Bias by Context-Invariant Prediction）  CNN 不可避免地将周围的视觉上下文与物体本身进行卷积，可能会使得模型偏向于看似合理但实际上与肿瘤无关的线索，从而增加过度拟合的风险。\nTumorCP 则为肿瘤提供了一个更为独立的区域，从而为肿瘤周围上下文环境提供了无限的可能性。提升了模型的泛化能力、消除了背景偏差。\n 通过转换-不变预测提高泛化能力（Improved Generalizability by Transformation-Invariant Prediction）  该模型应同时捕获高级语义信息和低级边界信息，以实现成功的分割。TumorCP 可以生成不同大小、形状、颜色和纹理的肿瘤，增加了类内差异。\n它能够帮助模型从数据中捕获更好的语义信息。换句话说，它使模型的预测在不同的数据转换（可能类似于真实世界的数据）中保持不变，并提高了通用性。\n Oversampling Behavior  数据不平衡是一个普遍存在的问题，典型的解决方案通常是根据类分布重新加权损失函数或重新采样训练数据。在肾脏肿瘤分割任务中，背景、器官、肿瘤极度不平衡，TumorCP 就像一个数据重采样器，以较小的成本显著增加肿瘤的增殖程度。\n3 Experiments and Discussion 在 KiTS19 数据集（肾肿瘤的分割）上评估 TumorCP，使用 Sørensen-Dice系数 (Dice) 评分。\n消融学习\n（1）Ablation on intra-CP with different transformations.\n（2）Ablation on intra-/inter-CP\n（3）Ablation on compatibility\n  TumorCP（Object-level）和 Image-level 的图像增强是兼容的；\n  TumorCP 也改善了器官分割；\n  极低数据量的实验\n4 Conclusion  提出了 TumorCP： a simple but effective object-level data augmentation for tumor segmentation； 在肾脏肿瘤分割任务上，比目前的 SOTA 提升了 2.31% Dice； 实验验证了 TumorCP 在极低数据量情况下的潜力； TumorCP 不直接处理 Inter-CP（不同的病人）之间的分布不匹配问题，但仍然取得了惊人的性能提升。  ",
+  "wordCount" : "2701",
+  "inLanguage": "en",
+  "datePublished": "2021-11-19T08:52:17+08:00",
+  "dateModified": "2021-11-19T08:52:17+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://landodo.github.io/posts/20211119-tumorcp/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Landodo's NoteBook",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://landodo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://landodo.github.io/" accesskey="h" title="Landodo&#39;s NoteBook (Alt + H)">Landodo&#39;s NoteBook</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://landodo.github.io/search" title="🔍Search (Alt &#43; /)" accesskey=/>
+                    <span>🔍Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/tags" title="Tag">
+                    <span>Tag</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/cs-zoo" title="CS ZOO">
+                    <span>CS ZOO</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://landodo.github.io/">Home</a>&nbsp;»&nbsp;<a href="http://landodo.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      TumorCP: A Simple but Effective Object-Level Data Augmentation for Tumor Segmentation
+    </h1>
+    <div class="post-meta"><span title='2021-11-19 08:52:17 +0800 CST'>November 19, 2021</span>&nbsp;·&nbsp;6 min&nbsp;·&nbsp;2701 words
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#%e8%ae%ba%e6%96%87%e7%ae%80%e4%bb%8b" aria-label="论文简介">论文简介</a></li>
+                <li>
+                    <a href="#abstract" aria-label="Abstract">Abstract</a></li>
+                <li>
+                    <a href="#1-introduction" aria-label="1 Introduction">1 Introduction</a></li>
+                <li>
+                    <a href="#2-method" aria-label="2 Method">2 Method</a><ul>
+                        
+                <li>
+                    <a href="#21-tumorcps-augumentation" aria-label="2.1 TumorCP’s augumentation">2.1 TumorCP’s augumentation</a></li>
+                <li>
+                    <a href="#22-intuitions-on-tumorcps-effectiveness" aria-label="2.2 Intuitions on TumorCP’s Effectiveness">2.2 Intuitions on TumorCP’s Effectiveness</a></li></ul>
+                </li>
+                <li>
+                    <a href="#3-experiments-and-discussion" aria-label="3 Experiments and Discussion">3 Experiments and Discussion</a></li>
+                <li>
+                    <a href="#4-conclusion" aria-label="4 Conclusion">4 Conclusion</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h2 id="论文简介">论文简介<a hidden class="anchor" aria-hidden="true" href="#论文简介">#</a></h2>
+<p>论文名称：TumorCP: A Simple but Effective Object-Level Data Augmentation for Tumor Segmentation</p>
+<ul>
+<li>arXiv：https://arxiv.org/pdf/2107.09843.pdf</li>
+<li>单位：（美国）加利福尼亚大学、中科院计算所</li>
+<li>会议：MICCAI 2021</li>
+<li>source code：https://github.com/YaoZhang93/TumorCP</li>
+</ul>
+<p>Motivation：Simple Copy-Paste is a Strong Data Augmentation Method for Instance Segmentation(CVPR 2021) <a href="https://arxiv.org/abs/2012.07177">https://arxiv.org/abs/2012.07177</a>，针对自然图像</p>
+<h2 id="abstract">Abstract<a hidden class="anchor" aria-hidden="true" href="#abstract">#</a></h2>
+<p>启发自最近提出的 “Copy-Paste” 数据增强方法，本篇论文提出 <!-- raw HTML omitted -->TumorCP<!-- raw HTML omitted -->：一种简单而有效的 object-level 数据增强方法，适用于肿瘤分割。</p>
+<p>TumorCP 在肿瘤分割任务上， Dice 以 7.12% 的显著幅度超过了 baseline。TumorCP + image-level 增强方法，比目前的 SOTA 方法 Dice 提升了 2.32%。</p>
+<h2 id="1-introduction">1 Introduction<a hidden class="anchor" aria-hidden="true" href="#1-introduction">#</a></h2>
+<p>高质量的带注释的数据集需要大量的工作和领域知识，这在医学领域尤为显著。为了提高数据高效学习，从不同的角度提出了几种成功的方法：</p>
+<ul>
+<li>leveraging unlabeled data for semi-supervised self-training</li>
+<li>self-supervised pre-training</li>
+<li>distilling priors from data</li>
+<li>通过不同形态的解剖成像生成新的数据</li>
+<li>利用适当的数据增强方法增加数据多样性</li>
+</ul>
+<p>不同于复杂的 GAN，“Copy-Paste” 是一种简洁的增强方法，其在自然图像的实例分割中取得了新的突破（CVPR 2021）。但在医学图像领域中，这种方法在很大程度上是未被探索的，因为 “Copy-Paste” 中往往忽略上下文信息，这在直觉上是不可取的！</p>
+<p>“Copy-Paste” 增强方法通过简单地将标注实例粘贴到新的背景图像上作为额外的训练数据，从而避免了从表示空间到像素空间的昂贵生成过程。</p>
+<blockquote>
+<p>Copy-Paste augmentation avoids costly generation processes from representation space to pixel space by simply pasting the labeled instance onto new background images as additional training data.</p>
+</blockquote>
+<p>此外，由于在 “Copy-Paste” 中上下文信息往往被忽略，因此它对医疗任务的有效性仍有待观察。例如，在肿瘤分割中，周围视觉线索，即上下文环境（Context），对肿瘤出现的重要性；医学图像固有的解剖结构使得肿瘤分割离不开上下文。</p>
+<p>本篇论文旨在通过检验 “Copy-Paste” 增强技术在肿瘤分割中的有效性，来填补对上下文在医学领域中作用的理解的空白。</p>
+<p><!-- raw HTML omitted -->TumorCP 从源图像中随机选取一个肿瘤，经过一系列空间增强、对比度增强、模糊增强后，将其粘贴到目标图像中的器官上。<!-- raw HTML omitted --></p>
+<blockquote>
+<p>TumorCP randomly chooses a tumor from a source image and paste it onto the organs in the target image after a series of spatial, contrast, and blurring augmentations.</p>
+</blockquote>
+<p>使用肾肿瘤分割数据集（KiTS19 dataset），nnUNet 来评估此方法。</p>
+<h2 id="2-method">2 Method<a hidden class="anchor" aria-hidden="true" href="#2-method">#</a></h2>
+<p><img loading="lazy" src="./20211119/1.png" alt=""  />
+</p>
+<p>TumorCP 是一种用于肿瘤分割的在线随机增强过程，它的实现是简单和直接的。</p>
+<p>给定一组训练样本 $\mathcal{D}$，TumorCP 有 $(1 - p_{cp})$ 的概率不执行任何操作；有 $p_{cp}$ 的概率从 $\mathcal{D}$ 中采样出一个对图像 $(x_{src}, x_{tgt}) \sim \mathcal{D}$，并执行一次 “Copy-Paste”。</p>
+<p>令 $\mathcal{O}<em>{src}$ 为图像 $x</em>{src}$ 上肿瘤集合，$\mathcal{V}<em>{tgt}$ 为 $x</em>{tgt}$ 上的器官的体积坐标集合，$\mathcal{T}$ 是一组随机数据转换，每个转换都有一个称为 $p_{trans}$ 的概率参数。</p>
+<p>一次 “Copy-Paste” 流程：</p>
+<ul>
+<li>TumorCP 首先采样一个肿瘤 $o \sim \mathcal{O}<em>{src}$、一组数据转换 $\tau \sim \mathcal{T}$ 和一个目标位置 $v \sim \mathcal{V}</em>{tgt}$；</li>
+<li>然后将 $τ(o)$ 以 $v$ 为中心，取代原始数据和标注。</li>
+</ul>
+<p>为了充分利用 TumorCP 的优势，精心设计了两种肿瘤 “Copy-Paste” 模式：</p>
+<ol>
+<li>intra-patient Copy-Paste</li>
+<li>inter-patient Copy-Paste</li>
+</ol>
+<h3 id="21-tumorcps-augumentation">2.1 TumorCP’s augumentation<a hidden class="anchor" aria-hidden="true" href="#21-tumorcps-augumentation">#</a></h3>
+<p><strong>Intra-/Inter- Copy-Paste</strong></p>
+<p>为了研究病人之间的差异对 TumorCP 的影响，使用两种设置：</p>
+<p>（1）intra-CP：源图像和目标图像来自同一病人；</p>
+<p>（2）inter-CP：源图像和目标图像来自不同的病人。</p>
+<p>从<strong>数据分布</strong>的角度来看，由于其强度与数据整体一致，所以首选 intra-CP，但这限制了数据的多样性。从<strong>数据多样性</strong>的角度来看，inter-CP 更受青睐，因为它打开了利用其他患者的新背景和前景的途径，但它也带来了分布差异。（实验表明 inter-CP 要优于 intra-CP）</p>
+<p>使用三个不同的 object-level 转换来对 “Copy-Paste” 进行扩展。</p>
+<ul>
+<li><strong>Spatial transformation decouples context and improves morphology diversity.</strong></li>
+</ul>
+<p>空间转换解耦了上下文，改善了形态的多样性。image-level 的一些增强方法（镜像、旋转）仍然作为一个整体处理图像，保持前景和背景之间的耦合。因此，模型可能会寻找并倾向于过度拟合周围看似合理但实际上不相干的线索。Figure 1 是应用缩放、旋转和镜像的刚性变换和使肿瘤变形的弹性变换来增加形态的多样性。</p>
+<ul>
+<li><strong>Gamma transformation enhances contrast and improves intensity diversity.</strong></li>
+</ul>
+<p>伽马变换增强了对比度，提高了强度的多样性。随机采样的伽玛参数增强了肿瘤的强度多样性；幂律非线性增强局部对比度，有利于肿瘤鉴别。</p>
+<ul>
+<li><strong>Blurring transformation improves texture diversity</strong></li>
+</ul>
+<p>模糊化改造提高了纹理多样性。使用高斯滤波器作为模糊变换，聚集噪声干扰的低层次纹理可以间接增加相对高层次纹理的纹理多样性。</p>
+<p>整个 Pipeline 可以结合 image-level 增强方法。</p>
+<h3 id="22-intuitions-on-tumorcps-effectiveness">2.2 Intuitions on TumorCP’s Effectiveness<a hidden class="anchor" aria-hidden="true" href="#22-intuitions-on-tumorcps-effectiveness">#</a></h3>
+<p>TumorCP 有两个目标：i) 增加数据多样性，ii) 学习高层次和抽象肿瘤的不变表示。数据多样性随着肿瘤的新组合和周围环境的增加而增加。为了了解高层次的信息，如下讨论了 <!-- raw HTML omitted -->TumorCP 的三个特性来解释其有效性。<!-- raw HTML omitted --></p>
+<ul>
+<li><strong>通过语境不变的预测消除背景偏差（Eliminated Background Bias by Context-Invariant Prediction）</strong></li>
+</ul>
+<p>CNN 不可避免地将周围的视觉上下文与物体本身进行卷积，可能会使得模型偏向于看似合理但实际上与肿瘤无关的线索，从而增加过度拟合的风险。</p>
+<p>TumorCP 则为肿瘤提供了一个更为独立的区域，从而为肿瘤周围上下文环境提供了无限的可能性。提升了模型的泛化能力、消除了背景偏差。</p>
+<ul>
+<li><strong>通过转换-不变预测提高泛化能力（Improved Generalizability by Transformation-Invariant Prediction）</strong></li>
+</ul>
+<p>该模型应同时捕获高级语义信息和低级边界信息，以实现成功的分割。TumorCP 可以生成不同大小、形状、颜色和纹理的肿瘤，增加了类内差异。</p>
+<p>它能够帮助模型从数据中捕获更好的语义信息。换句话说，它使模型的预测在不同的数据转换（可能类似于真实世界的数据）中保持不变，并提高了通用性。</p>
+<ul>
+<li><strong>Oversampling Behavior</strong></li>
+</ul>
+<p>数据不平衡是一个普遍存在的问题，典型的解决方案通常是根据类分布重新加权损失函数或重新采样训练数据。在肾脏肿瘤分割任务中，背景、器官、肿瘤极度不平衡，TumorCP 就像一个数据重采样器，以较小的成本显著增加肿瘤的增殖程度。</p>
+<h2 id="3-experiments-and-discussion">3 Experiments and Discussion<a hidden class="anchor" aria-hidden="true" href="#3-experiments-and-discussion">#</a></h2>
+<p>在 KiTS19 数据集（肾肿瘤的分割）上评估 TumorCP，使用 Sørensen-Dice系数 (Dice) 评分。</p>
+<p>消融学习</p>
+<p>（1）Ablation on intra-CP with different transformations.</p>
+<p>（2）Ablation on intra-/inter-CP</p>
+<p><img loading="lazy" src="./20211119/2.png" alt=""  />
+</p>
+<p>（3）Ablation on compatibility</p>
+<ul>
+<li>
+<p>TumorCP（Object-level）和 Image-level 的图像增强是兼容的；</p>
+</li>
+<li>
+<p>TumorCP 也改善了器官分割；</p>
+</li>
+</ul>
+<p><img loading="lazy" src="./20211119/3.png" alt=""  />
+</p>
+<p>极低数据量的实验</p>
+<p><img loading="lazy" src="./20211119/4.png" alt=""  />
+</p>
+<h2 id="4-conclusion">4 Conclusion<a hidden class="anchor" aria-hidden="true" href="#4-conclusion">#</a></h2>
+<ul>
+<li>提出了 TumorCP： a simple but effective object-level data augmentation for tumor segmentation；</li>
+<li>在肾脏肿瘤分割任务上，比目前的 SOTA 提升了 2.31% Dice；</li>
+<li>实验验证了 TumorCP 在极低数据量情况下的潜力；</li>
+<li>TumorCP 不直接处理 Inter-CP（不同的病人）之间的分布不匹配问题，但仍然取得了惊人的性能提升。</li>
+</ul>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://landodo.github.io/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/">医学图像分割</a></li>
+      <li><a href="http://landodo.github.io/tags/%E6%95%B0%E6%8D%AE%E5%A2%9E%E5%BC%BA/">数据增强</a></li>
+      <li><a href="http://landodo.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">论文阅读</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://landodo.github.io/posts/every-annotation-counts/">
+    <span class="title">« Prev Page</span>
+    <br>
+    <span>Every Annotation Counts</span>
+  </a>
+  <a class="next" href="http://landodo.github.io/posts/20211105-2-5d-network/">
+    <span class="title">Next Page »</span>
+    <br>
+    <span>2.5D 2.5D methods for Volumetric Medical Image Segmentation</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>Landon</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

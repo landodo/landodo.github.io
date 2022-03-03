@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+<meta name="robots" content="index, follow">
+<title>SETR: Rethinking semantic segmentation from a sequence-to-sequence perspective with transformers | Landodo&#39;s NoteBook</title>
+<meta name="keywords" content="Transformer, 语义分割, 论文阅读" />
+<meta name="description" content="SETR Dosovitskiy, Alexey, et al. &ldquo;An image is worth 16x16 words: Transformers for image recognition at scale.&rdquo; arXiv preprint arXiv:2010.11929 (2020). Zheng, Sixiao, et al. &ldquo;Rethinking semantic segmentation from a sequence-to-sequence perspective with transformers.&rdquo; Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition. 2021. 论文简介 SETR：用 Transformer 从 Sequence-to-Sequence 的角度重新思考语义分割">
+<meta name="author" content="">
+<link rel="canonical" href="http://landodo.github.io/posts/20211208-setr/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://landodo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://landodo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://landodo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://landodo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://landodo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="SETR: Rethinking semantic segmentation from a sequence-to-sequence perspective with transformers" />
+<meta property="og:description" content="SETR Dosovitskiy, Alexey, et al. &ldquo;An image is worth 16x16 words: Transformers for image recognition at scale.&rdquo; arXiv preprint arXiv:2010.11929 (2020). Zheng, Sixiao, et al. &ldquo;Rethinking semantic segmentation from a sequence-to-sequence perspective with transformers.&rdquo; Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition. 2021. 论文简介 SETR：用 Transformer 从 Sequence-to-Sequence 的角度重新思考语义分割" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://landodo.github.io/posts/20211208-setr/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-12-08T08:49:45&#43;08:00" />
+<meta property="article:modified_time" content="2021-12-08T08:49:45&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="SETR: Rethinking semantic segmentation from a sequence-to-sequence perspective with transformers"/>
+<meta name="twitter:description" content="SETR Dosovitskiy, Alexey, et al. &ldquo;An image is worth 16x16 words: Transformers for image recognition at scale.&rdquo; arXiv preprint arXiv:2010.11929 (2020). Zheng, Sixiao, et al. &ldquo;Rethinking semantic segmentation from a sequence-to-sequence perspective with transformers.&rdquo; Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition. 2021. 论文简介 SETR：用 Transformer 从 Sequence-to-Sequence 的角度重新思考语义分割"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://landodo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "SETR: Rethinking semantic segmentation from a sequence-to-sequence perspective with transformers",
+      "item": "http://landodo.github.io/posts/20211208-setr/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "SETR: Rethinking semantic segmentation from a sequence-to-sequence perspective with transformers",
+  "name": "SETR: Rethinking semantic segmentation from a sequence-to-sequence perspective with transformers",
+  "description": "SETR Dosovitskiy, Alexey, et al. \u0026ldquo;An image is worth 16x16 words: Transformers for image recognition at scale.\u0026rdquo; arXiv preprint arXiv:2010.11929 (2020). Zheng, Sixiao, et al. \u0026ldquo;Rethinking semantic segmentation from a sequence-to-sequence perspective with transformers.\u0026rdquo; Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition. 2021. 论文简介 SETR：用 Transformer 从 Sequence-to-Sequence 的角度重新思考语义分割",
+  "keywords": [
+    "Transformer", "语义分割", "论文阅读"
+  ],
+  "articleBody": "SETR  Dosovitskiy, Alexey, et al. “An image is worth 16x16 words: Transformers for image recognition at scale.” arXiv preprint arXiv:2010.11929 (2020).\n  Zheng, Sixiao, et al. “Rethinking semantic segmentation from a sequence-to-sequence perspective with transformers.” Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition. 2021.\n 论文简介 SETR：用 Transformer 从 Sequence-to-Sequence 的角度重新思考语义分割。\n最早于 2020 年 12 月发布于 arXiv。\n会议：2021 CVPR\n一作单位：Fudan University \u0026 Tencent-Youtu Lab\nAbstract 语义分割大多使用空洞卷积和注意力模块来扩大感受野，提升对全局上下文的建模能力。本篇论文基于 ViT，使用一个纯 Transformer（没有卷积和分辨率降低）来将图片编码为一系列的 patch。通过在 Transformer 的每一层建模全局上下文，该编码器结合一个简单的解码器可以形成强大的分割模型，命名为 SEgmentation TRansformer(SETR)。\n实验结果，SETR 在 ADE20K (50.28% mIoU), Pascal Context (55.83% mIoU) 上取得了 SOTA。\n1 Introduction 语义分割一直被基于编码器-解码器（encoder-decoder）的架构主导，其中编码器可以说是最重要的模型组件。基于 CNN 的编码器通过卷积层的堆叠（考虑到计算成本，特征图的分辨率逐渐降低），感受野逐渐增加，学到更抽象/语义视觉信息（ abstract/semantic visual concepts）。但由于感受野的限制，学习对语义分割至关重要的远程依赖仍然具有挑战性（long-range dependency information）。\n克服如上限制提出的方法如下：\n 修改卷积操作（卷积核大小、空洞卷积、特征金字塔） 注意力机制  这些工作大多没有改变 FCN model 的本质：编码器对输入的空间分辨率进行下采样，学习到有助于区分语义类别的低分辨率特征图。解码器上采样特征图为全分辨率的分割图。\n本篇论文提出使用纯 Transformer 来替换 CNN 的编码器，称为 SEgmentation TRans- former(SETR)。这个基于 Transformer 的编码器将输入的图像视为一系列的图像块（image patchs），这些块通过可学习的 embedding 表示。然后利用全局自注意模型对序列进行变换，实现区分特征表征学习（discriminative feature representation learning.）。\n具体地，首先将图像分解成一个固定大小的网格，形成一系列地 patches。然后通过线性层得到每个图像块的特征嵌入向量（feature embedding vector），这些向量作为 Transformer 的输入。之后解码器将 Transformer 的输出恢复成原始分辨率。\n在编码器的每一层都没有降低空间分辨率，而是进行全局上下文建模，从而为语义分割问题提供了一个全新的视角。\nViT 在分类任务上有效性证明了图像特征不一定需要从局部逐渐学习到全局上下文（CNN 结构不是必要的）。SETR 将分类拓展到了分割上，提供了一个模型设计的新视角，并且在一些 benchmark 数据集上取得了 SOTA。\n主要贡献总结如下：\n（1）从 sequence-to-sequence 学习的角度，针对图像语义分割问题，提供了一个 FCN-based 模型的替代方案；\n（2）利用 Transformer 架构实现编码器；\n（3）为了验证 self-attention feature 的表现，介绍了 3 中不同复杂度的解码器设计。\n本篇论文提出的 SETR 模型，state of the art on ADE20K(50.28%), Pascal Context (55.83%)，在 Cityscapes 上取得了有竞争力的结果。\n3 Method 3.1 FCN-based semantic segmentation 回顾 FCN\n原始输入为 $H \\times W \\times 3$，后续层的输入为 $h \\times w \\times d$，$d$ 为特征图的通道数。感受野随着层的深度线性增加（取决于卷积核的大小）。FCN 中拥有大感受野的高层才可以建模远程依赖（long-range dependencies）。一味的加深层数以增加感受野带来的收益将迅速减少，上下文信息建模的感受野有限是 FCN 系列架构固有的局限性。\n将 FCN 和注意机制结合起来是一种更有效的学习远距离语境信息的策略。但是二次复杂性（特征图的像素个数）这些注意力方法通常作用于输入较少的高层。\n3.2. Segmentation transformers (SETR) Image to sequence\nSRTR 遵循与 NLP 相同的输入输出结构。\n",
+  "wordCount" : "1386",
+  "inLanguage": "en",
+  "datePublished": "2021-12-08T08:49:45+08:00",
+  "dateModified": "2021-12-08T08:49:45+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://landodo.github.io/posts/20211208-setr/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Landodo's NoteBook",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://landodo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://landodo.github.io/" accesskey="h" title="Landodo&#39;s NoteBook (Alt + H)">Landodo&#39;s NoteBook</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://landodo.github.io/search" title="🔍Search (Alt &#43; /)" accesskey=/>
+                    <span>🔍Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/tags" title="Tag">
+                    <span>Tag</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/cs-zoo" title="CS ZOO">
+                    <span>CS ZOO</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://landodo.github.io/">Home</a>&nbsp;»&nbsp;<a href="http://landodo.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      SETR: Rethinking semantic segmentation from a sequence-to-sequence perspective with transformers
+    </h1>
+    <div class="post-meta"><span title='2021-12-08 08:49:45 +0800 CST'>December 8, 2021</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;1386 words
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#setr" aria-label="SETR">SETR</a></li>
+                <li>
+                    <a href="#%e8%ae%ba%e6%96%87%e7%ae%80%e4%bb%8b" aria-label="论文简介">论文简介</a></li>
+                <li>
+                    <a href="#abstract" aria-label="Abstract">Abstract</a></li>
+                <li>
+                    <a href="#1-introduction" aria-label="1 Introduction">1 Introduction</a></li>
+                <li>
+                    <a href="#3-method" aria-label="3 Method">3 Method</a><ul>
+                        
+                <li>
+                    <a href="#31-fcn-based-semantic-segmentation" aria-label="3.1 FCN-based semantic segmentation">3.1 FCN-based semantic segmentation</a></li>
+                <li>
+                    <a href="#32-segmentation-transformers-setr" aria-label="3.2. Segmentation transformers (SETR)">3.2. Segmentation transformers (SETR)</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h2 id="setr">SETR<a hidden class="anchor" aria-hidden="true" href="#setr">#</a></h2>
+<blockquote>
+<p>Dosovitskiy, Alexey, et al. &ldquo;An image is worth 16x16 words: Transformers for image recognition at scale.&rdquo; <em>arXiv preprint arXiv:2010.11929</em> (2020).</p>
+</blockquote>
+<blockquote>
+<p>Zheng, Sixiao, et al. &ldquo;Rethinking semantic segmentation from a sequence-to-sequence perspective with transformers.&rdquo; <em>Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition</em>. 2021.</p>
+</blockquote>
+<h2 id="论文简介">论文简介<a hidden class="anchor" aria-hidden="true" href="#论文简介">#</a></h2>
+<p>SETR：用 Transformer 从 Sequence-to-Sequence 的角度重新思考语义分割。</p>
+<p>最早于 2020 年 12 月发布于 arXiv。</p>
+<p>会议：2021 CVPR</p>
+<p>一作单位：Fudan University &amp; Tencent-Youtu Lab</p>
+<h2 id="abstract">Abstract<a hidden class="anchor" aria-hidden="true" href="#abstract">#</a></h2>
+<p>语义分割大多使用空洞卷积和注意力模块来扩大感受野，提升对全局上下文的建模能力。本篇论文基于 ViT，使用一个纯 Transformer（没有卷积和分辨率降低）来将图片编码为一系列的 patch。通过在 Transformer 的每一层建模全局上下文，该编码器结合一个简单的解码器可以形成强大的分割模型，命名为 SEgmentation TRansformer(SETR)。</p>
+<p>实验结果，SETR 在 ADE20K (50.28% mIoU), Pascal Context (55.83% mIoU) 上取得了 SOTA。</p>
+<h2 id="1-introduction">1 Introduction<a hidden class="anchor" aria-hidden="true" href="#1-introduction">#</a></h2>
+<p>语义分割一直被基于<a href="">编码器-解码器</a>（encoder-decoder）的架构主导，其中编码器可以说是最重要的模型组件。基于 CNN 的编码器通过卷积层的堆叠（考虑到计算成本，特征图的分辨率逐渐降低），感受野逐渐增加，学到更<a href="">抽象/语义视觉信息</a>（ abstract/semantic visual concepts）。但由于感受野的限制，学习对语义分割至关重要的<a href="">远程依赖</a>仍然具有挑战性（long-range dependency information）。</p>
+<p>克服如上限制提出的方法如下：</p>
+<ul>
+<li>修改卷积操作（卷积核大小、空洞卷积、特征金字塔）</li>
+<li>注意力机制</li>
+</ul>
+<p>这些工作大多没有改变 FCN model 的本质：<strong>编码器</strong>对输入的空间分辨率进行下采样，学习到有助于区分语义类别的低分辨率特征图。<strong>解码器</strong>上采样特征图为全分辨率的分割图。</p>
+<p>本篇论文提出使用纯 Transformer 来替换 CNN 的编码器，称为 SEgmentation TRans-
+former(SETR)。这个基于 Transformer 的编码器将输入的图像视为一系列的<a href="">图像块</a>（image patchs），这些块通过可学习的 embedding 表示。然后利用全局自注意模型对序列进行变换，实现<a href="">区分特征表征学习</a>（discriminative feature representation learning.）。</p>
+<p>具体地，首先将图像分解成一个固定大小的网格，形成一系列地 patches。然后通过线性层得到每个图像块的<a href="">特征嵌入向量</a>（feature embedding vector），这些向量作为 Transformer 的输入。之后解码器将 Transformer 的输出恢复成原始分辨率。</p>
+<p>在编码器的每一层都没有降低空间分辨率，而是进行<strong>全局上下文建模</strong>，从而为语义分割问题提供了一个全新的视角。</p>
+<p>ViT 在分类任务上有效性证明了图像特征不一定需要从局部逐渐学习到全局上下文（CNN 结构不是必要的）。SETR 将分类拓展到了分割上，提供了一个模型设计的新视角，并且在一些 benchmark 数据集上取得了 SOTA。</p>
+<p>主要贡献总结如下：</p>
+<p>（1）从 sequence-to-sequence 学习的角度，针对图像语义分割问题，提供了一个 FCN-based 模型的替代方案；</p>
+<p>（2）利用 Transformer 架构实现编码器；</p>
+<p>（3）为了验证 self-attention feature 的表现，介绍了 3 中不同复杂度的解码器设计。</p>
+<p>本篇论文提出的 SETR 模型，state of the art on ADE20K(50.28%), Pascal Context (55.83%)，在 Cityscapes 上取得了有竞争力的结果。</p>
+<h2 id="3-method">3 Method<a hidden class="anchor" aria-hidden="true" href="#3-method">#</a></h2>
+<h3 id="31-fcn-based-semantic-segmentation">3.1 FCN-based semantic segmentation<a hidden class="anchor" aria-hidden="true" href="#31-fcn-based-semantic-segmentation">#</a></h3>
+<p><strong>回顾 FCN</strong></p>
+<p>原始输入为 $H \times W \times 3$，后续层的输入为 $h \times w \times d$，$d$ 为特征图的通道数。感受野随着层的深度线性增加（取决于卷积核的大小）。FCN 中拥有大感受野的高层才可以建模<a href="">远程依赖</a>（long-range dependencies）。一味的加深层数以增加感受野带来的收益将迅速减少，上下文信息建模的感受野有限是 FCN 系列架构固有的局限性。</p>
+<p>将 FCN 和注意机制结合起来是一种更有效的学习远距离语境信息的策略。但是二次复杂性（特征图的像素个数）这些注意力方法通常作用于输入较少的<strong>高层</strong>。</p>
+<h3 id="32-segmentation-transformers-setr">3.2. Segmentation transformers (SETR)<a hidden class="anchor" aria-hidden="true" href="#32-segmentation-transformers-setr">#</a></h3>
+<p><strong>Image to sequence</strong></p>
+<p><img loading="lazy" src="./20211208/1.png" alt=""  />
+</p>
+<p>SRTR 遵循与 NLP 相同的输入输出结构。</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://landodo.github.io/tags/transformer/">Transformer</a></li>
+      <li><a href="http://landodo.github.io/tags/%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2/">语义分割</a></li>
+      <li><a href="http://landodo.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">论文阅读</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://landodo.github.io/posts/boundary-patch-refinement/">
+    <span class="title">« Prev Page</span>
+    <br>
+    <span>Boundary Patch Refinement</span>
+  </a>
+  <a class="next" href="http://landodo.github.io/posts/every-annotation-counts/">
+    <span class="title">Next Page »</span>
+    <br>
+    <span>Every Annotation Counts</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>Landon</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

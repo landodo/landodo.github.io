@@ -17,5 +17,14 @@
       <description>Every Annotation Counts: Multi-label Deep Supervision for Medical Image Segmentation CVPR 2021 代码未开源 关键词：semi-weakly supervised、pseudo-labels、Multi-label Deep S</description>
     </item>
     
+    <item>
+      <title>TumorCP: A Simple but Effective Object-Level Data Augmentation for Tumor Segmentation</title>
+      <link>http://landodo.github.io/posts/20211119-tumorcp/</link>
+      <pubDate>Fri, 19 Nov 2021 08:52:17 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20211119-tumorcp/</guid>
+      <description>论文简介 论文名称：TumorCP: A Simple but Effective Object-Level Data Augmentation for Tumor Segmentation arXiv：https://arxiv.org/pdf/2107.09843.pdf 单</description>
+    </item>
+    
   </channel>
 </rss>
