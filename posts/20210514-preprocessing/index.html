@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+<meta name="robots" content="index, follow">
+<title>图像预处理 | Landodo&#39;s NoteBook</title>
+<meta name="keywords" content="CNN, 预处理, Python" />
+<meta name="description" content="数据预处理 import matplotlib.pyplot as plt import glob from PIL import Image import numpy as np import cv2 # 训练集图像 img_paths = glob.glob(&#39;./../data/vesselseg/DRIVE/training/images/*.tif&#39;) img_paths.sort() img_paths [&#39;./../data/vesselseg/DRIVE/training/images/21_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/22_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/23_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/24_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/25_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/26_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/27_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/28_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/29_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/30_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/31_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/32_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/33_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/34_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/35_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/36_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/37_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/38_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/39_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/40_training.tif&#39;] 查看不同通道 # 读取其中一张图像 rgb_img = Image.open(img_paths[0])">
+<meta name="author" content="">
+<link rel="canonical" href="http://landodo.github.io/posts/20210514-preprocessing/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://landodo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://landodo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://landodo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://landodo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://landodo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="图像预处理" />
+<meta property="og:description" content="数据预处理 import matplotlib.pyplot as plt import glob from PIL import Image import numpy as np import cv2 # 训练集图像 img_paths = glob.glob(&#39;./../data/vesselseg/DRIVE/training/images/*.tif&#39;) img_paths.sort() img_paths [&#39;./../data/vesselseg/DRIVE/training/images/21_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/22_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/23_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/24_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/25_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/26_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/27_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/28_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/29_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/30_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/31_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/32_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/33_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/34_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/35_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/36_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/37_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/38_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/39_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/40_training.tif&#39;] 查看不同通道 # 读取其中一张图像 rgb_img = Image.open(img_paths[0])" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://landodo.github.io/posts/20210514-preprocessing/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-05-14T10:17:29&#43;08:00" />
+<meta property="article:modified_time" content="2021-05-14T10:17:29&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="图像预处理"/>
+<meta name="twitter:description" content="数据预处理 import matplotlib.pyplot as plt import glob from PIL import Image import numpy as np import cv2 # 训练集图像 img_paths = glob.glob(&#39;./../data/vesselseg/DRIVE/training/images/*.tif&#39;) img_paths.sort() img_paths [&#39;./../data/vesselseg/DRIVE/training/images/21_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/22_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/23_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/24_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/25_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/26_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/27_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/28_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/29_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/30_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/31_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/32_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/33_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/34_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/35_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/36_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/37_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/38_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/39_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/40_training.tif&#39;] 查看不同通道 # 读取其中一张图像 rgb_img = Image.open(img_paths[0])"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://landodo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "图像预处理",
+      "item": "http://landodo.github.io/posts/20210514-preprocessing/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "图像预处理",
+  "name": "图像预处理",
+  "description": "数据预处理 import matplotlib.pyplot as plt import glob from PIL import Image import numpy as np import cv2 # 训练集图像 img_paths = glob.glob(\u0026#39;./../data/vesselseg/DRIVE/training/images/*.tif\u0026#39;) img_paths.sort() img_paths ['./../data/vesselseg/DRIVE/training/images/21_training.tif', './../data/vesselseg/DRIVE/training/images/22_training.tif', './../data/vesselseg/DRIVE/training/images/23_training.tif', './../data/vesselseg/DRIVE/training/images/24_training.tif', './../data/vesselseg/DRIVE/training/images/25_training.tif', './../data/vesselseg/DRIVE/training/images/26_training.tif', './../data/vesselseg/DRIVE/training/images/27_training.tif', './../data/vesselseg/DRIVE/training/images/28_training.tif', './../data/vesselseg/DRIVE/training/images/29_training.tif', './../data/vesselseg/DRIVE/training/images/30_training.tif', './../data/vesselseg/DRIVE/training/images/31_training.tif', './../data/vesselseg/DRIVE/training/images/32_training.tif', './../data/vesselseg/DRIVE/training/images/33_training.tif', './../data/vesselseg/DRIVE/training/images/34_training.tif', './../data/vesselseg/DRIVE/training/images/35_training.tif', './../data/vesselseg/DRIVE/training/images/36_training.tif', './../data/vesselseg/DRIVE/training/images/37_training.tif', './../data/vesselseg/DRIVE/training/images/38_training.tif', './../data/vesselseg/DRIVE/training/images/39_training.tif', './../data/vesselseg/DRIVE/training/images/40_training.tif'] 查看不同通道 # 读取其中一张图像 rgb_img = Image.open(img_paths[0])",
+  "keywords": [
+    "CNN", "预处理", "Python"
+  ],
+  "articleBody": "数据预处理 import matplotlib.pyplot as plt import glob from PIL import Image import numpy as np import cv2 # 训练集图像 img_paths = glob.glob('./../data/vesselseg/DRIVE/training/images/*.tif') img_paths.sort() img_paths ['./../data/vesselseg/DRIVE/training/images/21_training.tif', './../data/vesselseg/DRIVE/training/images/22_training.tif', './../data/vesselseg/DRIVE/training/images/23_training.tif', './../data/vesselseg/DRIVE/training/images/24_training.tif', './../data/vesselseg/DRIVE/training/images/25_training.tif', './../data/vesselseg/DRIVE/training/images/26_training.tif', './../data/vesselseg/DRIVE/training/images/27_training.tif', './../data/vesselseg/DRIVE/training/images/28_training.tif', './../data/vesselseg/DRIVE/training/images/29_training.tif', './../data/vesselseg/DRIVE/training/images/30_training.tif', './../data/vesselseg/DRIVE/training/images/31_training.tif', './../data/vesselseg/DRIVE/training/images/32_training.tif', './../data/vesselseg/DRIVE/training/images/33_training.tif', './../data/vesselseg/DRIVE/training/images/34_training.tif', './../data/vesselseg/DRIVE/training/images/35_training.tif', './../data/vesselseg/DRIVE/training/images/36_training.tif', './../data/vesselseg/DRIVE/training/images/37_training.tif', './../data/vesselseg/DRIVE/training/images/38_training.tif', './../data/vesselseg/DRIVE/training/images/39_training.tif', './../data/vesselseg/DRIVE/training/images/40_training.tif']  查看不同通道 # 读取其中一张图像 rgb_img = Image.open(img_paths[0]) rgb_img.size (565, 584)  plt.imshow(rgb_img)  ​ ​\nrgb_img = np.asarray(rgb_img) print(rgb_img.shape) (584, 565, 3)  # Blue 通道 plt.imshow(rgb_img[:,:,0], cmap=\"gray\")  ​ ​\n# Green 通道 plt.imshow(rgb_img[:,:,1], cmap=\"gray\")  ​ ​\n# Red 通道 plt.imshow(rgb_img[:,:,2], cmap=\"gray\")  ​ ​\n使用 Pillow 读取图片，并进行维度的转换 rgb_img = Image.open(img_paths[0]) print(rgb_img.size) # Convert the dimension of imgs to [N,H,W,C] rgb_img = np.expand_dims(rgb_img,0) print(rgb_img.shape) # Convert the dimension of imgs to [N,C,H,W] rgb_img = np.transpose(rgb_img,(0,3,1,2)) print(rgb_img.shape) (565, 584) (1, 584, 565, 3) (1, 3, 584, 565)  #convert RGB image in black and white def rgb2gray(rgb):  assert (len(rgb.shape)==4) #4D arrays  assert (rgb.shape[1]==3)  # 给 Green 通道对比度较高，给更大的权重  bn_imgs = rgb[:,0,:,:]*0.299 + rgb[:,1,:,:]*0.587 + rgb[:,2,:,:]*0.114  bn_imgs = np.reshape(bn_imgs,(rgb.shape[0],1,rgb.shape[2],rgb.shape[3]))  return bn_imgs gray_img = rgb2gray(rgb_img) # 明明已经是单通道了，为什么还是彩色的？ plt.imshow(gray_img[0,0,:,:])  ​ ​\nplt.imshow(gray_img[0,0,:,:], cmap=\"gray\")  ​ ​\n数据标准化 def dataset_normalized(imgs):  assert (len(imgs.shape)==4) #4D arrays  assert (imgs.shape[1]==1) #check the channel is 1  imgs_normalized = np.empty(imgs.shape)  imgs_std = np.std(imgs)  imgs_mean = np.mean(imgs)  imgs_normalized = (imgs-imgs_mean)/imgs_std  for i in range(imgs.shape[0]):  imgs_normalized[i] = ((imgs_normalized[i] - np.min(imgs_normalized[i])) / (np.max(imgs_normalized[i])-np.min(imgs_normalized[i])))*255  return imgs_normalized img_norm = dataset_normalized(gray_img) img_norm.shape (1, 1, 584, 565)  plt.imshow(img_norm[0,0,:,:], cmap=\"gray\")  ​ ​\n限制对比度直方图均衡化(CLAHE)，在抑制噪声的同时提升血管与背景的对比度 # CLAHE (Contrast Limited Adaptive Histogram Equalization) #adaptive histogram equalization is used. In this, image is divided into small blocks called \"tiles\" (tileSize is 8x8 by default in OpenCV). Then each of these blocks are histogram equalized as usual. So in a small area, histogram would confine to a small region (unless there is noise). If noise is there, it will be amplified. To avoid this, contrast limiting is applied. If any histogram bin is above the specified contrast limit (by default 40 in OpenCV), those pixels are clipped and distributed uniformly to other bins before applying histogram equalization. After equalization, to remove artifacts in tile borders, bilinear interpolation is applied def clahe_equalized(imgs):  assert (len(imgs.shape)==4) #4D arrays  assert (imgs.shape[1]==1) #check the channel is 1  #create a CLAHE object (Arguments are optional).  clahe = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8,8))  imgs_equalized = np.empty(imgs.shape)  for i in range(imgs.shape[0]):  imgs_equalized[i,0] = clahe.apply(np.array(imgs[i,0], dtype = np.uint8))  return imgs_equalized img_clahe = clahe_equalized(img_norm) img_clahe.shape (1, 1, 584, 565)  plt.imshow(img_clahe[0,0,:,:], cmap=\"gray\")  ​ ​\n经 filter 滤波对图像进行全局锐化，抑制 CLAHE 增强后图像的伪影与黄斑等噪声影响，突显血管信息 # laplacian kernle K = [[0., 1., 0.],[1., -4., 1.], [0., 1., 0.]] # Image sharpening by laplacian filter  def laplacian_sharpening(img, K_size=3):   H, W = img.shape[2], img.shape[3]  # zero padding  pad = K_size // 2  out = np.zeros((H + pad * 2, W + pad * 2), dtype=np.float)  out[pad: pad + H, pad: pad + W] = img.copy().astype(np.float)  tmp = out.copy()   # laplacian kernle  K = [[0., 1., 0.],[1., -4., 1.], [0., 1., 0.]]   # filtering and adding image - Sharpening image  for y in range(H):  for x in range(W):  # core code  out[pad + y, pad + x] = (-1) * np.sum(K * (tmp[y: y + K_size, x: x + K_size])) + tmp[pad + y, pad + x]   out = np.clip(out, 0, 255)  out = out[pad: pad + H, pad: pad + W].astype(np.uint8)   return out img_sharp = laplacian_sharpening(img_clahe) img_sharp.shape (584, 565)  plt.imshow(img_sharp[:,:], cmap='gray')  ​ ​\n利用局部自适应 Gamma 矫正 def adjust_gamma(imgs, gamma=1.0):  assert (len(imgs.shape)==4) #4D arrays  assert (imgs.shape[1]==1) #check the channel is 1  # build a lookup table mapping the pixel values [0, 255] to  # their adjusted gamma values  invGamma = 1.0 / gamma  table = np.array([((i / 255.0) ** invGamma) * 255 for i in np.arange(0, 256)]).astype(\"uint8\")  # apply gamma correction using the lookup table  new_imgs = np.empty(imgs.shape)  for i in range(imgs.shape[0]):  new_imgs[i,0] = cv2.LUT(np.array(imgs[i,0], dtype = np.uint8), table)  return new_imgs img_gamma = adjust_gamma(img_clahe) plt.imshow(img_gamma[0,0,:,:], cmap='gray')  ​ ​\n # Reading the image named 'input.jpg' input_image = cv2.imread(img_paths[0]) input_image = cv2.cvtColor(input_image, cv2.COLOR_BGR2GRAY) # Getting the kernel to be used in Top-Hat filterSize =(3, 3) kernel = cv2.getStructuringElement(cv2.MORPH_RECT,  filterSize)  # Applying the Top-Hat operation tophat_img = cv2.morphologyEx(img_gamma[0,0,:,:],  cv2.MORPH_TOPHAT,  kernel) plt.imshow(img_gamma[0,0,:,:] - tophat_img, cmap='gray')  ​ ​\n",
+  "wordCount" : "845",
+  "inLanguage": "en",
+  "datePublished": "2021-05-14T10:17:29+08:00",
+  "dateModified": "2021-05-14T10:17:29+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://landodo.github.io/posts/20210514-preprocessing/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Landodo's NoteBook",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://landodo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://landodo.github.io/" accesskey="h" title="Landodo&#39;s NoteBook (Alt + H)">Landodo&#39;s NoteBook</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://landodo.github.io/search" title="🔍Search (Alt &#43; /)" accesskey=/>
+                    <span>🔍Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/tags" title="Tag">
+                    <span>Tag</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/cs-zoo" title="CS ZOO">
+                    <span>CS ZOO</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://landodo.github.io/">Home</a>&nbsp;»&nbsp;<a href="http://landodo.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      图像预处理
+    </h1>
+    <div class="post-meta"><span title='2021-05-14 10:17:29 +0800 CST'>May 14, 2021</span>&nbsp;·&nbsp;2 min&nbsp;·&nbsp;845 words
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#%e6%95%b0%e6%8d%ae%e9%a2%84%e5%a4%84%e7%90%86" aria-label="数据预处理">数据预处理</a><ul>
+                        
+                <li>
+                    <a href="#%e6%9f%a5%e7%9c%8b%e4%b8%8d%e5%90%8c%e9%80%9a%e9%81%93" aria-label="查看不同通道">查看不同通道</a></li>
+                <li>
+                    <a href="#%e4%bd%bf%e7%94%a8-pillow-%e8%af%bb%e5%8f%96%e5%9b%be%e7%89%87%e5%b9%b6%e8%bf%9b%e8%a1%8c%e7%bb%b4%e5%ba%a6%e7%9a%84%e8%bd%ac%e6%8d%a2" aria-label="使用 Pillow 读取图片，并进行维度的转换">使用 Pillow 读取图片，并进行维度的转换</a></li>
+                <li>
+                    <a href="#%e6%95%b0%e6%8d%ae%e6%a0%87%e5%87%86%e5%8c%96" aria-label="数据标准化">数据标准化</a></li>
+                <li>
+                    <a href="#%e9%99%90%e5%88%b6%e5%af%b9%e6%af%94%e5%ba%a6%e7%9b%b4%e6%96%b9%e5%9b%be%e5%9d%87%e8%a1%a1%e5%8c%96clahe%e5%9c%a8%e6%8a%91%e5%88%b6%e5%99%aa%e5%a3%b0%e7%9a%84%e5%90%8c%e6%97%b6%e6%8f%90%e5%8d%87%e8%a1%80%e7%ae%a1%e4%b8%8e%e8%83%8c%e6%99%af%e7%9a%84%e5%af%b9%e6%af%94%e5%ba%a6" aria-label="限制对比度直方图均衡化(CLAHE)，在抑制噪声的同时提升血管与背景的对比度">限制对比度直方图均衡化(CLAHE)，在抑制噪声的同时提升血管与背景的对比度</a></li>
+                <li>
+                    <a href="#%e7%bb%8f-filter-%e6%bb%a4%e6%b3%a2%e5%af%b9%e5%9b%be%e5%83%8f%e8%bf%9b%e8%a1%8c%e5%85%a8%e5%b1%80%e9%94%90%e5%8c%96%e6%8a%91%e5%88%b6-clahe-%e5%a2%9e%e5%bc%ba%e5%90%8e%e5%9b%be%e5%83%8f%e7%9a%84%e4%bc%aa%e5%bd%b1%e4%b8%8e%e9%bb%84%e6%96%91%e7%ad%89%e5%99%aa%e5%a3%b0%e5%bd%b1%e5%93%8d%e7%aa%81%e6%98%be%e8%a1%80%e7%ae%a1%e4%bf%a1%e6%81%af" aria-label="经 filter 滤波对图像进行全局锐化，抑制 CLAHE 增强后图像的伪影与黄斑等噪声影响，突显血管信息">经 filter 滤波对图像进行全局锐化，抑制 CLAHE 增强后图像的伪影与黄斑等噪声影响，突显血管信息</a></li>
+                <li>
+                    <a href="#%e5%88%a9%e7%94%a8%e5%b1%80%e9%83%a8%e8%87%aa%e9%80%82%e5%ba%94-gamma-%e7%9f%ab%e6%ad%a3" aria-label="利用局部自适应 Gamma 矫正">利用局部自适应 Gamma 矫正</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h1 id="数据预处理">数据预处理<a hidden class="anchor" aria-hidden="true" href="#数据预处理">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> glob
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> PIL <span style="color:#f92672">import</span> Image
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> cv2
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 训练集图像</span>
+</span></span><span style="display:flex;"><span>img_paths <span style="color:#f92672">=</span> glob<span style="color:#f92672">.</span>glob(<span style="color:#e6db74">&#39;./../data/vesselseg/DRIVE/training/images/*.tif&#39;</span>)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>img_paths<span style="color:#f92672">.</span>sort()
+</span></span><span style="display:flex;"><span>img_paths
+</span></span></code></pre></div><pre><code>['./../data/vesselseg/DRIVE/training/images/21_training.tif',
+ './../data/vesselseg/DRIVE/training/images/22_training.tif',
+ './../data/vesselseg/DRIVE/training/images/23_training.tif',
+ './../data/vesselseg/DRIVE/training/images/24_training.tif',
+ './../data/vesselseg/DRIVE/training/images/25_training.tif',
+ './../data/vesselseg/DRIVE/training/images/26_training.tif',
+ './../data/vesselseg/DRIVE/training/images/27_training.tif',
+ './../data/vesselseg/DRIVE/training/images/28_training.tif',
+ './../data/vesselseg/DRIVE/training/images/29_training.tif',
+ './../data/vesselseg/DRIVE/training/images/30_training.tif',
+ './../data/vesselseg/DRIVE/training/images/31_training.tif',
+ './../data/vesselseg/DRIVE/training/images/32_training.tif',
+ './../data/vesselseg/DRIVE/training/images/33_training.tif',
+ './../data/vesselseg/DRIVE/training/images/34_training.tif',
+ './../data/vesselseg/DRIVE/training/images/35_training.tif',
+ './../data/vesselseg/DRIVE/training/images/36_training.tif',
+ './../data/vesselseg/DRIVE/training/images/37_training.tif',
+ './../data/vesselseg/DRIVE/training/images/38_training.tif',
+ './../data/vesselseg/DRIVE/training/images/39_training.tif',
+ './../data/vesselseg/DRIVE/training/images/40_training.tif']
+</code></pre>
+<h2 id="查看不同通道">查看不同通道<a hidden class="anchor" aria-hidden="true" href="#查看不同通道">#</a></h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 读取其中一张图像</span>
+</span></span><span style="display:flex;"><span>rgb_img <span style="color:#f92672">=</span> Image<span style="color:#f92672">.</span>open(img_paths[<span style="color:#ae81ff">0</span>])
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>rgb_img<span style="color:#f92672">.</span>size
+</span></span></code></pre></div><pre><code>(565, 584)
+</code></pre>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>imshow(rgb_img)
+</span></span></code></pre></div><pre><code>&lt;matplotlib.image.AxesImage at 0x7fb39515ed68&gt;
+</code></pre>
+<p>​ <br>
+<img loading="lazy" src="./20210514/output_7_1.png" alt="png"  />
+
+​</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>rgb_img <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>asarray(rgb_img)
+</span></span><span style="display:flex;"><span>print(rgb_img<span style="color:#f92672">.</span>shape)
+</span></span></code></pre></div><pre><code>(584, 565, 3)
+</code></pre>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Blue 通道</span>
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>imshow(rgb_img[:,:,<span style="color:#ae81ff">0</span>], cmap<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gray&#34;</span>)
+</span></span></code></pre></div><pre><code>&lt;matplotlib.image.AxesImage at 0x7fb392b4b438&gt;
+</code></pre>
+<p>​ <br>
+<img loading="lazy" src="./20210514/output_9_1.png" alt="png"  />
+
+​</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Green 通道</span>
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>imshow(rgb_img[:,:,<span style="color:#ae81ff">1</span>], cmap<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gray&#34;</span>)
+</span></span></code></pre></div><pre><code>&lt;matplotlib.image.AxesImage at 0x7fb392c09518&gt;
+</code></pre>
+<p>​ <br>
+<img loading="lazy" src="./20210514/output_10_1.png" alt="png"  />
+
+​</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Red 通道</span>
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>imshow(rgb_img[:,:,<span style="color:#ae81ff">2</span>], cmap<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gray&#34;</span>)
+</span></span></code></pre></div><pre><code>&lt;matplotlib.image.AxesImage at 0x7fb39578a128&gt;
+</code></pre>
+<p>​ <br>
+<img loading="lazy" src="./20210514/output_11_1.png" alt="png"  />
+
+​</p>
+<h2 id="使用-pillow-读取图片并进行维度的转换">使用 Pillow 读取图片，并进行维度的转换<a hidden class="anchor" aria-hidden="true" href="#使用-pillow-读取图片并进行维度的转换">#</a></h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>rgb_img <span style="color:#f92672">=</span> Image<span style="color:#f92672">.</span>open(img_paths[<span style="color:#ae81ff">0</span>])
+</span></span><span style="display:flex;"><span>print(rgb_img<span style="color:#f92672">.</span>size)
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Convert the dimension of imgs to [N,H,W,C]</span>
+</span></span><span style="display:flex;"><span>rgb_img <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>expand_dims(rgb_img,<span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>print(rgb_img<span style="color:#f92672">.</span>shape)
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Convert the dimension of imgs to [N,C,H,W]</span>
+</span></span><span style="display:flex;"><span>rgb_img <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>transpose(rgb_img,(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">2</span>))
+</span></span><span style="display:flex;"><span>print(rgb_img<span style="color:#f92672">.</span>shape)
+</span></span></code></pre></div><pre><code>(565, 584)
+(1, 584, 565, 3)
+(1, 3, 584, 565)
+</code></pre>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e">#convert RGB image in black and white</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">rgb2gray</span>(rgb):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">assert</span> (len(rgb<span style="color:#f92672">.</span>shape)<span style="color:#f92672">==</span><span style="color:#ae81ff">4</span>)  <span style="color:#75715e">#4D arrays</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">assert</span> (rgb<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">1</span>]<span style="color:#f92672">==</span><span style="color:#ae81ff">3</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 给 Green 通道对比度较高，给更大的权重</span>
+</span></span><span style="display:flex;"><span>    bn_imgs <span style="color:#f92672">=</span> rgb[:,<span style="color:#ae81ff">0</span>,:,:]<span style="color:#f92672">*</span><span style="color:#ae81ff">0.299</span> <span style="color:#f92672">+</span> rgb[:,<span style="color:#ae81ff">1</span>,:,:]<span style="color:#f92672">*</span><span style="color:#ae81ff">0.587</span> <span style="color:#f92672">+</span> rgb[:,<span style="color:#ae81ff">2</span>,:,:]<span style="color:#f92672">*</span><span style="color:#ae81ff">0.114</span>
+</span></span><span style="display:flex;"><span>    bn_imgs <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>reshape(bn_imgs,(rgb<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>],<span style="color:#ae81ff">1</span>,rgb<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">2</span>],rgb<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">3</span>]))
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> bn_imgs
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>gray_img <span style="color:#f92672">=</span> rgb2gray(rgb_img)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 明明已经是单通道了，为什么还是彩色的？</span>
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>imshow(gray_img[<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,:,:])
+</span></span></code></pre></div><pre><code>&lt;matplotlib.image.AxesImage at 0x7fb392c29160&gt;
+</code></pre>
+<p>​ <br>
+<img loading="lazy" src="./20210514/output_16_1.png" alt="png"  />
+
+​</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>imshow(gray_img[<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,:,:], cmap<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gray&#34;</span>)
+</span></span></code></pre></div><pre><code>&lt;matplotlib.image.AxesImage at 0x7fb395915d30&gt;
+</code></pre>
+<p>​ <br>
+<img loading="lazy" src="./20210514/output_17_1.png" alt="png"  />
+
+​</p>
+<h2 id="数据标准化">数据标准化<a hidden class="anchor" aria-hidden="true" href="#数据标准化">#</a></h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">dataset_normalized</span>(imgs):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">assert</span> (len(imgs<span style="color:#f92672">.</span>shape)<span style="color:#f92672">==</span><span style="color:#ae81ff">4</span>)  <span style="color:#75715e">#4D arrays</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">assert</span> (imgs<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">1</span>]<span style="color:#f92672">==</span><span style="color:#ae81ff">1</span>)  <span style="color:#75715e">#check the channel is 1</span>
+</span></span><span style="display:flex;"><span>    imgs_normalized <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>empty(imgs<span style="color:#f92672">.</span>shape)
+</span></span><span style="display:flex;"><span>    imgs_std <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>std(imgs)
+</span></span><span style="display:flex;"><span>    imgs_mean <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>mean(imgs)
+</span></span><span style="display:flex;"><span>    imgs_normalized <span style="color:#f92672">=</span> (imgs<span style="color:#f92672">-</span>imgs_mean)<span style="color:#f92672">/</span>imgs_std
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(imgs<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>]):
+</span></span><span style="display:flex;"><span>        imgs_normalized[i] <span style="color:#f92672">=</span> ((imgs_normalized[i] <span style="color:#f92672">-</span> np<span style="color:#f92672">.</span>min(imgs_normalized[i])) <span style="color:#f92672">/</span> (np<span style="color:#f92672">.</span>max(imgs_normalized[i])<span style="color:#f92672">-</span>np<span style="color:#f92672">.</span>min(imgs_normalized[i])))<span style="color:#f92672">*</span><span style="color:#ae81ff">255</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> imgs_normalized
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>img_norm <span style="color:#f92672">=</span> dataset_normalized(gray_img)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>img_norm<span style="color:#f92672">.</span>shape
+</span></span></code></pre></div><pre><code>(1, 1, 584, 565)
+</code></pre>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>imshow(img_norm[<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,:,:], cmap<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gray&#34;</span>)
+</span></span></code></pre></div><pre><code>&lt;matplotlib.image.AxesImage at 0x7fb397b4b2b0&gt;
+</code></pre>
+<p>​ <br>
+<img loading="lazy" src="./20210514/output_22_1.png" alt="png"  />
+
+​</p>
+<h2 id="限制对比度直方图均衡化clahe在抑制噪声的同时提升血管与背景的对比度">限制对比度直方图均衡化(CLAHE)，在抑制噪声的同时提升血管与背景的对比度<a hidden class="anchor" aria-hidden="true" href="#限制对比度直方图均衡化clahe在抑制噪声的同时提升血管与背景的对比度">#</a></h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># CLAHE (Contrast Limited Adaptive Histogram Equalization)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#adaptive histogram equalization is used. In this, image is divided into small blocks called &#34;tiles&#34; (tileSize is 8x8 by default in OpenCV). Then each of these blocks are histogram equalized as usual. So in a small area, histogram would confine to a small region (unless there is noise). If noise is there, it will be amplified. To avoid this, contrast limiting is applied. If any histogram bin is above the specified contrast limit (by default 40 in OpenCV), those pixels are clipped and distributed uniformly to other bins before applying histogram equalization. After equalization, to remove artifacts in tile borders, bilinear interpolation is applied</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">clahe_equalized</span>(imgs):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">assert</span> (len(imgs<span style="color:#f92672">.</span>shape)<span style="color:#f92672">==</span><span style="color:#ae81ff">4</span>)  <span style="color:#75715e">#4D arrays</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">assert</span> (imgs<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">1</span>]<span style="color:#f92672">==</span><span style="color:#ae81ff">1</span>)  <span style="color:#75715e">#check the channel is 1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#create a CLAHE object (Arguments are optional).</span>
+</span></span><span style="display:flex;"><span>    clahe <span style="color:#f92672">=</span> cv2<span style="color:#f92672">.</span>createCLAHE(clipLimit<span style="color:#f92672">=</span><span style="color:#ae81ff">2.0</span>, tileGridSize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">8</span>,<span style="color:#ae81ff">8</span>))
+</span></span><span style="display:flex;"><span>    imgs_equalized <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>empty(imgs<span style="color:#f92672">.</span>shape)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(imgs<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>]):
+</span></span><span style="display:flex;"><span>        imgs_equalized[i,<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> clahe<span style="color:#f92672">.</span>apply(np<span style="color:#f92672">.</span>array(imgs[i,<span style="color:#ae81ff">0</span>], dtype <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>uint8))
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> imgs_equalized
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>img_clahe <span style="color:#f92672">=</span> clahe_equalized(img_norm)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>img_clahe<span style="color:#f92672">.</span>shape
+</span></span></code></pre></div><pre><code>(1, 1, 584, 565)
+</code></pre>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>imshow(img_clahe[<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,:,:], cmap<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;gray&#34;</span>)
+</span></span></code></pre></div><pre><code>&lt;matplotlib.image.AxesImage at 0x7fb398bedf28&gt;
+</code></pre>
+<p>​ <br>
+<img loading="lazy" src="./20210514/output_27_1.png" alt="png"  />
+
+​</p>
+<h2 id="经-filter-滤波对图像进行全局锐化抑制-clahe-增强后图像的伪影与黄斑等噪声影响突显血管信息">经 filter 滤波对图像进行全局锐化，抑制 CLAHE 增强后图像的伪影与黄斑等噪声影响，突显血管信息<a hidden class="anchor" aria-hidden="true" href="#经-filter-滤波对图像进行全局锐化抑制-clahe-增强后图像的伪影与黄斑等噪声影响突显血管信息">#</a></h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># laplacian kernle</span>
+</span></span><span style="display:flex;"><span>K <span style="color:#f92672">=</span> [[<span style="color:#ae81ff">0.</span>, <span style="color:#ae81ff">1.</span>, <span style="color:#ae81ff">0.</span>],[<span style="color:#ae81ff">1.</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">4.</span>, <span style="color:#ae81ff">1.</span>], [<span style="color:#ae81ff">0.</span>, <span style="color:#ae81ff">1.</span>, <span style="color:#ae81ff">0.</span>]]
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Image sharpening by laplacian filter</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">laplacian_sharpening</span>(img, K_size<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>):
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    H, W <span style="color:#f92672">=</span> img<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">2</span>], img<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">3</span>]
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># zero padding</span>
+</span></span><span style="display:flex;"><span>    pad <span style="color:#f92672">=</span> K_size <span style="color:#f92672">//</span> <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>    out <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>zeros((H <span style="color:#f92672">+</span> pad <span style="color:#f92672">*</span> <span style="color:#ae81ff">2</span>, W <span style="color:#f92672">+</span> pad <span style="color:#f92672">*</span> <span style="color:#ae81ff">2</span>), dtype<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>float)
+</span></span><span style="display:flex;"><span>    out[pad: pad <span style="color:#f92672">+</span> H, pad: pad <span style="color:#f92672">+</span> W] <span style="color:#f92672">=</span> img<span style="color:#f92672">.</span>copy()<span style="color:#f92672">.</span>astype(np<span style="color:#f92672">.</span>float)
+</span></span><span style="display:flex;"><span>    tmp <span style="color:#f92672">=</span> out<span style="color:#f92672">.</span>copy()
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># laplacian kernle</span>
+</span></span><span style="display:flex;"><span>    K <span style="color:#f92672">=</span> [[<span style="color:#ae81ff">0.</span>, <span style="color:#ae81ff">1.</span>, <span style="color:#ae81ff">0.</span>],[<span style="color:#ae81ff">1.</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">4.</span>, <span style="color:#ae81ff">1.</span>], [<span style="color:#ae81ff">0.</span>, <span style="color:#ae81ff">1.</span>, <span style="color:#ae81ff">0.</span>]]
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># filtering and adding image -&gt; Sharpening image</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> y <span style="color:#f92672">in</span> range(H):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> x <span style="color:#f92672">in</span> range(W):
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># core code</span>
+</span></span><span style="display:flex;"><span>            out[pad <span style="color:#f92672">+</span> y, pad <span style="color:#f92672">+</span> x] <span style="color:#f92672">=</span> (<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>) <span style="color:#f92672">*</span> np<span style="color:#f92672">.</span>sum(K <span style="color:#f92672">*</span> (tmp[y: y <span style="color:#f92672">+</span> K_size, x: x <span style="color:#f92672">+</span> K_size])) <span style="color:#f92672">+</span> tmp[pad <span style="color:#f92672">+</span> y, pad <span style="color:#f92672">+</span> x]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    out <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>clip(out, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">255</span>)
+</span></span><span style="display:flex;"><span>    out <span style="color:#f92672">=</span> out[pad: pad <span style="color:#f92672">+</span> H, pad: pad <span style="color:#f92672">+</span> W]<span style="color:#f92672">.</span>astype(np<span style="color:#f92672">.</span>uint8)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> out
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>img_sharp <span style="color:#f92672">=</span> laplacian_sharpening(img_clahe)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>img_sharp<span style="color:#f92672">.</span>shape
+</span></span></code></pre></div><pre><code>(584, 565)
+</code></pre>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>imshow(img_sharp[:,:], cmap<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;gray&#39;</span>)
+</span></span></code></pre></div><pre><code>&lt;matplotlib.image.AxesImage at 0x7fb39810f9b0&gt;
+</code></pre>
+<p>​ <br>
+<img loading="lazy" src="./20210514/output_33_1.png" alt="png"  />
+
+​</p>
+<h2 id="利用局部自适应-gamma-矫正">利用局部自适应 Gamma 矫正<a hidden class="anchor" aria-hidden="true" href="#利用局部自适应-gamma-矫正">#</a></h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">adjust_gamma</span>(imgs, gamma<span style="color:#f92672">=</span><span style="color:#ae81ff">1.0</span>):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">assert</span> (len(imgs<span style="color:#f92672">.</span>shape)<span style="color:#f92672">==</span><span style="color:#ae81ff">4</span>)  <span style="color:#75715e">#4D arrays</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">assert</span> (imgs<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">1</span>]<span style="color:#f92672">==</span><span style="color:#ae81ff">1</span>)  <span style="color:#75715e">#check the channel is 1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># build a lookup table mapping the pixel values [0, 255] to</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># their adjusted gamma values</span>
+</span></span><span style="display:flex;"><span>    invGamma <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.0</span> <span style="color:#f92672">/</span> gamma
+</span></span><span style="display:flex;"><span>    table <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([((i <span style="color:#f92672">/</span> <span style="color:#ae81ff">255.0</span>) <span style="color:#f92672">**</span> invGamma) <span style="color:#f92672">*</span> <span style="color:#ae81ff">255</span> <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> np<span style="color:#f92672">.</span>arange(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">256</span>)])<span style="color:#f92672">.</span>astype(<span style="color:#e6db74">&#34;uint8&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># apply gamma correction using the lookup table</span>
+</span></span><span style="display:flex;"><span>    new_imgs <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>empty(imgs<span style="color:#f92672">.</span>shape)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(imgs<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>]):
+</span></span><span style="display:flex;"><span>        new_imgs[i,<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> cv2<span style="color:#f92672">.</span>LUT(np<span style="color:#f92672">.</span>array(imgs[i,<span style="color:#ae81ff">0</span>], dtype <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>uint8), table)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> new_imgs
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>img_gamma <span style="color:#f92672">=</span> adjust_gamma(img_clahe) 
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>imshow(img_gamma[<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,:,:], cmap<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;gray&#39;</span>)
+</span></span></code></pre></div><pre><code>&lt;matplotlib.image.AxesImage at 0x7fb39993ba20&gt;
+</code></pre>
+<p>​ <br>
+<img loading="lazy" src="./20210514/output_37_1.png" alt="png"  />
+
+​</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Reading the image named &#39;input.jpg&#39;</span>
+</span></span><span style="display:flex;"><span>input_image <span style="color:#f92672">=</span> cv2<span style="color:#f92672">.</span>imread(img_paths[<span style="color:#ae81ff">0</span>])
+</span></span><span style="display:flex;"><span>input_image <span style="color:#f92672">=</span> cv2<span style="color:#f92672">.</span>cvtColor(input_image, cv2<span style="color:#f92672">.</span>COLOR_BGR2GRAY)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Getting the kernel to be used in Top-Hat</span>
+</span></span><span style="display:flex;"><span>filterSize <span style="color:#f92672">=</span>(<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">3</span>)
+</span></span><span style="display:flex;"><span>kernel <span style="color:#f92672">=</span> cv2<span style="color:#f92672">.</span>getStructuringElement(cv2<span style="color:#f92672">.</span>MORPH_RECT, 
+</span></span><span style="display:flex;"><span>                                   filterSize)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Applying the Top-Hat operation</span>
+</span></span><span style="display:flex;"><span>tophat_img <span style="color:#f92672">=</span> cv2<span style="color:#f92672">.</span>morphologyEx(img_gamma[<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,:,:], 
+</span></span><span style="display:flex;"><span>                              cv2<span style="color:#f92672">.</span>MORPH_TOPHAT,
+</span></span><span style="display:flex;"><span>                              kernel)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>imshow(img_gamma[<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,:,:] <span style="color:#f92672">-</span> tophat_img, cmap<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;gray&#39;</span>)
+</span></span></code></pre></div><pre><code>&lt;matplotlib.image.AxesImage at 0x7fb39ba39f28&gt;
+</code></pre>
+<p>​ <br>
+<img loading="lazy" src="./20210514/output_40_1.png" alt="png"  />
+
+​</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://landodo.github.io/tags/cnn/">CNN</a></li>
+      <li><a href="http://landodo.github.io/tags/%E9%A2%84%E5%A4%84%E7%90%86/">预处理</a></li>
+      <li><a href="http://landodo.github.io/tags/python/">Python</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://landodo.github.io/posts/20210514-mnist/">
+    <span class="title">« Prev Page</span>
+    <br>
+    <span>MNIST (Mixed National Institute of Standards and Technology database)</span>
+  </a>
+  <a class="next" href="http://landodo.github.io/posts/20210418-segnet/">
+    <span class="title">Next Page »</span>
+    <br>
+    <span>SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>Landon</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

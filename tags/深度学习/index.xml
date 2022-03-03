@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>深度学习 on Landodo&#39;s NoteBook</title>
+    <link>http://landodo.github.io/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/</link>
+    <description>Recent content in 深度学习 on Landodo&#39;s NoteBook</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Landon</copyright>
+    <lastBuildDate>Mon, 01 Mar 2021 10:17:29 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Attention mechanism: SENet &amp; SKNet</title>
+      <link>http://landodo.github.io/posts/20210301-attention-mechanism/</link>
+      <pubDate>Mon, 01 Mar 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210301-attention-mechanism/</guid>
+      <description>Attention mechanism: SENet &amp;amp; SKNet 注意力机制论文阅读，第二次汇报的论文为： 下载地址：（SKNet）Selective Kernel Networks (arXiv: 1903.06586) 发表时间（e-prints posted on arXiv</description>
+    </item>
+    
+    <item>
+      <title>AlexNet 中的 LRN（Local Response Normalization） 是什么</title>
+      <link>http://landodo.github.io/posts/20210205-what-is-lrn/</link>
+      <pubDate>Mon, 15 Feb 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210205-what-is-lrn/</guid>
+      <description>AlexNet 中的 LRN（Local Response Normalization） 是什么 对我而言，LRN 是 AleNet 论文中的一个难点，今天就来更加细致的理解一下。 LRN 操作在哪一步</description>
+    </item>
+    
+    <item>
+      <title>计算图和反向传播（Computational Graphs and Backpropagation）</title>
+      <link>http://landodo.github.io/posts/20210129-computational-graphs-and-backpropagation/</link>
+      <pubDate>Fri, 29 Jan 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210129-computational-graphs-and-backpropagation/</guid>
+      <description>计算图和反向传播（Computational Graphs and Backpropagation） 学习资料 （0）《深度学习入门——基于 Python 的理论与实践》 我的读书</description>
+    </item>
+    
+    <item>
+      <title>深度学习-卷积神经网络中文综述</title>
+      <link>http://landodo.github.io/posts/202101227-cnn-xiushen-wei/</link>
+      <pubDate>Wed, 27 Jan 2021 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/202101227-cnn-xiushen-wei/</guid>
+      <description>深度学习-卷积神经网络中文综述 《解析卷积神经网络——深度学习实践手册》是南京大学博士魏秀参写的一本小册子，给很多初学者提供了很多帮助。 魏秀参</description>
+    </item>
+    
+    <item>
+      <title>Deep learning Review</title>
+      <link>http://landodo.github.io/posts/20201124-deeplearning-review/</link>
+      <pubDate>Tue, 24 Nov 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201124-deeplearning-review/</guid>
+      <description>Deep learning Review 深度学习综述 深度学习：一个含多个处理层组成的计算模型学习多层次抽象的数据表示。 应用：语音识别、视觉对象识别、对象检测以及药物发现和基因</description>
+    </item>
+    
+    <item>
+      <title>深度学习基础图书</title>
+      <link>http://landodo.github.io/posts/20210128-deep-learning-from-scrach/</link>
+      <pubDate>Tue, 18 Feb 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210128-deep-learning-from-scrach/</guid>
+      <description>深度学习基础图书 今天又花了点时间看了一本书（第二遍）——《深度学习入门——基于 Python 的理论与实践》。 全书下载地址：https://github.</description>
+    </item>
+    
+  </channel>
+</rss>

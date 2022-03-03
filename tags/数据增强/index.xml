@@ -26,5 +26,14 @@
       <description>Cooperative Training and Latent Space Data Augmentation for Robust Medical Image Segmentation 论文题目：协同训练和隐空间数据增强的鲁棒性医学图像分割 https://arxiv.org/abs/2107.01079 会议：MICCAI 2021 作者：Chen CHEN 陈晨 https://sites.google.com/view/morningchen-site/home Research Assistant/PhD 伦敦帝国理工学</description>
     </item>
     
+    <item>
+      <title>Attentive Inception Module based Convolutional Neural Network for Image Enhancement</title>
+      <link>http://landodo.github.io/posts/20210310-attentive-inception-module/</link>
+      <pubDate>Wed, 10 Mar 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210310-attentive-inception-module/</guid>
+      <description>Attentive Inception Module based Convolutional Neural Network for Image Enhancement “基于 Attentive Inception Module 的卷积神经网络在图像增强中的应用” high quality：高质量 low distortion：低失真 singleimage superresolution (SISR)：单</description>
+    </item>
+    
   </channel>
 </rss>

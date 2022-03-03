@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+<meta name="robots" content="index, follow">
+<title>Boundary loss for highly unbalanced segmentation | Landodo&#39;s NoteBook</title>
+<meta name="keywords" content="分割, CNN, 论文阅读" />
+<meta name="description" content="Boundary loss for highly unbalanced segmentation Csurka, G., Larlus, D., &amp; Perronnin, F. (2013). What is a good evaluation measure for semantic segmentation? BMVC. (218 Citations.) Kervadec, H., Bouchtiba, J., Desrosiers, C., Granger, É., Dolz, J., &amp; Ayed, I.B. (2019). Boundary loss for highly unbalanced segmentation. Medical image analysis, 67, 101851 . (95 Citations) 论文 PDF : https://openreview.net/pdf?id=S1gTA5VggE 或者（https:">
+<meta name="author" content="">
+<link rel="canonical" href="http://landodo.github.io/posts/20210530-boundary-loss/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://landodo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://landodo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://landodo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://landodo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://landodo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Boundary loss for highly unbalanced segmentation" />
+<meta property="og:description" content="Boundary loss for highly unbalanced segmentation Csurka, G., Larlus, D., &amp; Perronnin, F. (2013). What is a good evaluation measure for semantic segmentation? BMVC. (218 Citations.) Kervadec, H., Bouchtiba, J., Desrosiers, C., Granger, É., Dolz, J., &amp; Ayed, I.B. (2019). Boundary loss for highly unbalanced segmentation. Medical image analysis, 67, 101851 . (95 Citations) 论文 PDF : https://openreview.net/pdf?id=S1gTA5VggE 或者（https:" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://landodo.github.io/posts/20210530-boundary-loss/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-05-30T10:17:29&#43;08:00" />
+<meta property="article:modified_time" content="2021-05-30T10:17:29&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Boundary loss for highly unbalanced segmentation"/>
+<meta name="twitter:description" content="Boundary loss for highly unbalanced segmentation Csurka, G., Larlus, D., &amp; Perronnin, F. (2013). What is a good evaluation measure for semantic segmentation? BMVC. (218 Citations.) Kervadec, H., Bouchtiba, J., Desrosiers, C., Granger, É., Dolz, J., &amp; Ayed, I.B. (2019). Boundary loss for highly unbalanced segmentation. Medical image analysis, 67, 101851 . (95 Citations) 论文 PDF : https://openreview.net/pdf?id=S1gTA5VggE 或者（https:"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://landodo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Boundary loss for highly unbalanced segmentation",
+      "item": "http://landodo.github.io/posts/20210530-boundary-loss/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Boundary loss for highly unbalanced segmentation",
+  "name": "Boundary loss for highly unbalanced segmentation",
+  "description": "Boundary loss for highly unbalanced segmentation Csurka, G., Larlus, D., \u0026amp; Perronnin, F. (2013). What is a good evaluation measure for semantic segmentation? BMVC. (218 Citations.) Kervadec, H., Bouchtiba, J., Desrosiers, C., Granger, É., Dolz, J., \u0026amp; Ayed, I.B. (2019). Boundary loss for highly unbalanced segmentation. Medical image analysis, 67, 101851 . (95 Citations) 论文 PDF : https://openreview.net/pdf?id=S1gTA5VggE 或者（https:",
+  "keywords": [
+    "分割", "CNN", "论文阅读"
+  ],
+  "articleBody": "Boundary loss for highly unbalanced segmentation  Csurka, G., Larlus, D., \u0026 Perronnin, F. (2013). What is a good evaluation measure for semantic segmentation? BMVC.\n(218 Citations.)\n  Kervadec, H., Bouchtiba, J., Desrosiers, C., Granger, É., Dolz, J., \u0026 Ayed, I.B. (2019). Boundary loss for highly unbalanced segmentation. Medical image analysis, 67, 101851 .\n(95 Citations)\n  论文 PDF : https://openreview.net/pdf?id=S1gTA5VggE 或者（https://arxiv.org/pdf/1812.07032.pdf） 期刊：Medical Imaging with Deep Learning (MIDL 2019 Conference), best paper award at MIDL 2019. 作者的 Presentation：https://www.bilibili.com/video/BV1U4411F76a（3:29:00 开始） source code：https://github.com/LIVIAETS/boundary-loss/blob/master/losses.py  0 Abstract Dice loss 和 cross-entropy 这种区域损失在类别高度不平衡的分割任务中，会影响到训练性能和稳定性。本篇论文提出了一种边界损失（boundary loss），其形式是轮廓（或形状）空间上的距离度量，而不是区域，\n 这可以减轻在高度不平衡的分割问题中区域损失的困难； 此外，边界损失提供的信息是对区域损失的补充。  在计算时，将形状空间上的非对称 L2 距离表达为区域积分，这就产生了一个用网络的区域 softmax 概率输出表示的边界损失，它可以很容易地与标准的区域损失相结合。\n在 the ischemic stroke lesion (ISLES) and white matter hyperintensities (WMH) 这两个高度不平衡数据集上，Dice + boundary 相比于单独使用 Dice，其 Dice score 提升了 8%。\n💢TODO：眼底视网膜分割数据集（DRIVE/CHASE_DB1），或许也可以归为不平衡的数据集，使用 Dice Loss + 本篇论文的 boundary loss 或许可以在原基础之上提升最后的性能，可以简单试一下实验结果。\n##1 Introduction\nDice or cross-entropy 都基于基于区域积分（regional integrals），这对训练深度神经网络很方便。\n标准区域损失包含前景和背景项，它们的值有很大差异，通常是几个数量级，这可能会影响性能和训练的稳定性，这在医学图像分析中相当常见。\n交叉熵 在高度不平衡的问题上，标准的区域 交叉熵（CE）有众所周知的缺点：\n 它假定所有样本和类别的重要性分布是相同的； CE 通常会导致不稳定的训练，并导致决策边界偏向于大多数类别。  常见的缓解类别不平衡策略：\n re-balance class prior distributions by down-sampling frequent labels. assign weights to the different classes, inversely proportional to the frequency of the corresponding labels.  Dice  Lee Raymond Dice 命名\nVNet 应用 Dice Loss\n Dice coefficient 等同 F1 score。Dice Loss 一种能够直接作用于 F1 Score 的损失函数。\n 在处理非常小的结构时可能会遇到困难，训练不稳定； Dice 对应于精确度和召回率之间的谐波平均值，这种损失主要适合于 FP 和 FN 同样糟糕的时候。  相比于 Dice 存在的缺点，Tversky 相似度指数可以在精确度和召回率之间提供一个更好的权衡。\n✅ Dice loss 比较适用于样本极度不均的情况，一般的情况下，使用 Dice loss 会对反向传播造成不利的影响，容易使训练变得不稳定。\n论文贡献：\n In this paper, we propose a boundary loss that takes the form of a distance metric on the space of contours (or shapes), not regions.\nWe argue that a boundary loss can mitigate the issues related to regional losses in highly unbalanced segmentation problems. Rather than using unbalanced integrals over the regions, a boundary loss uses integrals over the boundary (interface) between the regions.\nFurthermore, it provides information that is complimentary to regional losses.\n 2. Formulation 对于两个区域的情况，一般形式的积分：\n$$f = -log(\\cdot)$$\n广义 Dice 损失（GDL）：\n Ω 表示具有空间域的训练图像 g 表示对图像进行二进制的 Ground Truth 分割，g(p) = 1 表示像素 p 属于目标区域 G⊂Ω（前景区域），否则为 0 Ω\\G（背景区域） $s_\\theta$ 表示分割网络的 softmax 概率输出  广泛使用的分割损失函数涉及 Ω 中每个分割区域的区域积分，它衡量网络的概率输出所定义的区域与相应的地面实况之间的一些相似性（或重叠）。\n在医学图像分析中，极不平衡的分割非常常见，例如，目标前景区域的大小比背景大小小几个数量级，如此之大的差异影响了分割的性能和训练的稳定性。\nBoundary Loss Dist($∂_G, ∂_{S_\\theta}$ )：$∂_G$ 表示区域 G 的 Ground Truth 边界，$∂_{S_θ}$表示由网络输出定义的分割区域 G 的边界。\n （1）边界损失应该能够减轻上述不平衡分割的困难：它使用区域之间的边界的积分。此外，边界损失提供的信息与区域损失不同，因此是补充性的。 （2）并不清楚如何将 $∂_{S_θ}$ 上的边界点表示为区域网络输出 sθ 的可微调函数。（我的理解是：Boundary Loss 单独使用并不 work，无法使用反向传播更新）  本篇论文提出的 Boundary Loss 启发自 discrete (graph-based) optimization techniques for computing gradient flows of curve evolution (Boykov et al., 2006). curve evolution methods 需要一个评估边界变化（或变化）的措施。\nBoundary Loss Dist($∂_G, ∂_{S_\\theta}$ )：评估两个附近边界 ∂S 和 ∂G 之间的变化（Boykov 等人，2006）。\n 💢为什么 (2) 不能直接作为 Loss 进行优化？理解了这个很重要！\n  p∈Ω 是边界 ∂G 上的一个点 y∂S(p) 表示边界 ∂S 上的相应点（法线方向交点）。  公式 (2) 不能直接作为 ∂S= ∂Sθ 的损失！！！\n✅ 很容易表明，(2) 中的微分边界变化可以用积分方法来表达 (Boykov 等人，2006)，积分方法完全避免了涉及轮廓点的局部微分计算，并将边界变化表示为一个区域积分。得到公式 (3)。\n it is easy to show that the differential boundary variation in (2) can be expressed using an integral approach (Boykov et al., 2006), which avoids completely local differential computations involving contour points and represents boundary change as a regional integral:\n 其中，∆S 表示两条轮廓线之间的区域，DG : Ω→R+ 是相对于边界 ∂G 的距离图，即 $D_G(q)$ 评估了点 q∈Ω 与轮廓 ∂G 上最近的点 $z_{∂G}(q)$ 之间的距离。\n将 instance map $2D_{G}(q)$ 在连接 ∂G 上的点 p 和 $y_{∂S}(p)$ 的法线段上积分，就可以得到：\n因此，从公式（3）来看，公式（2）中轮廓线之间的非对称 L2 距离可以表示为基于边界 ∂G 的 level set 表示的区域积分之和。\n ❓什么是 level set？\n  s : Ω→{0,1} 是区域 S 的 binary indicator function，如果 q∈S 属于目标，s(q)=1，否则为 0。 $\\phi_G$ : Ω→R 表示边界 ∂G 的 level set 表示，如果 q∈G，$\\phi_{G}(q)=-D_G(q)$，否则 $\\phi_G(q)=D_G(q)$。  approximates boundary distance Dist(∂G,∂Sθ ):\n容易与标准的区域损失相结合：\nExperiment  Dice 相似系数（Dice Similariy Coefficient,DSC），取值范围 [0, 1]，1 为最好，0 为最差。 Hausdorff Distance 豪斯多夫距离：以集合 A 中任一点，半径取 HD 画圆，可以包含集合 B 的所有点。   boundary loss term brings a DSC improvement of around 2% on the WMH dataset, it achieves 8% better DSC on the ISLES segmentation task. The same trend is observed with the HD metric, where the gain is larger on the ISLES dataset than on WMH.\n 边界损失项有助于稳定训练过程，随着网络训练的收敛，产生了一个更平滑的曲线。Boundary Loss 只涉及两个矩阵之间的元素相乘，所增加的计算复杂度几乎可以忽略不计。\n总结 •单独使用 Boundary Loss 不 work，一般进行与 Dice 组合使用。\n•理论上，边界损失的全局最优对应于一个负值，因为一个完美的重叠只对距离图的负值进行求和。\n•边界损失项有助于稳定训练过程，随着网络训练的收敛，产生了一个更平滑的曲线\n•使用 Boundary Loss 带来的计算量几乎可以忽略不计。\n•利用了 S 和 G 空间上的一些信息，带来了一定的性能提升。\n•作者做得实验太少， Boundary Loss 是否能普遍提升 performance 还需要更多的实验验证。\n",
+  "wordCount" : "2633",
+  "inLanguage": "en",
+  "datePublished": "2021-05-30T10:17:29+08:00",
+  "dateModified": "2021-05-30T10:17:29+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://landodo.github.io/posts/20210530-boundary-loss/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Landodo's NoteBook",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://landodo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://landodo.github.io/" accesskey="h" title="Landodo&#39;s NoteBook (Alt + H)">Landodo&#39;s NoteBook</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://landodo.github.io/search" title="🔍Search (Alt &#43; /)" accesskey=/>
+                    <span>🔍Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/tags" title="Tag">
+                    <span>Tag</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/cs-zoo" title="CS ZOO">
+                    <span>CS ZOO</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://landodo.github.io/">Home</a>&nbsp;»&nbsp;<a href="http://landodo.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      Boundary loss for highly unbalanced segmentation
+    </h1>
+    <div class="post-meta"><span title='2021-05-30 10:17:29 +0800 CST'>May 30, 2021</span>&nbsp;·&nbsp;6 min&nbsp;·&nbsp;2633 words
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#boundary-loss-for-highly-unbalanced-segmentation" aria-label="Boundary loss for highly unbalanced segmentation">Boundary loss for highly unbalanced segmentation</a></li>
+                <li>
+                    <a href="#0-abstract" aria-label="0 Abstract">0 Abstract</a><ul>
+                        
+                <li>
+                    <a href="#%e4%ba%a4%e5%8f%89%e7%86%b5" aria-label="交叉熵">交叉熵</a></li>
+                <li>
+                    <a href="#dice" aria-label="Dice">Dice</a></li></ul>
+                </li>
+                <li>
+                    <a href="#2-formulation" aria-label="2. Formulation">2. Formulation</a></li>
+                <li>
+                    <a href="#experiment" aria-label="Experiment">Experiment</a></li>
+                <li>
+                    <a href="#%e6%80%bb%e7%bb%93" aria-label="总结">总结</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h2 id="boundary-loss-for-highly-unbalanced-segmentation">Boundary loss for highly unbalanced segmentation<a hidden class="anchor" aria-hidden="true" href="#boundary-loss-for-highly-unbalanced-segmentation">#</a></h2>
+<blockquote>
+<p>Csurka, G., Larlus, D., &amp; Perronnin, F. (2013). What is a good evaluation measure for semantic segmentation? <em>BMVC</em>.</p>
+<p>(218 Citations.)</p>
+</blockquote>
+<blockquote>
+<p>Kervadec, H., Bouchtiba, J., Desrosiers, C., Granger, É., Dolz, J., &amp; Ayed, I.B. (2019). Boundary loss for highly unbalanced segmentation. <em>Medical image analysis, 67</em>, 101851 .</p>
+<p>(95 Citations)</p>
+</blockquote>
+<p><img loading="lazy" src="./20210530/1.png" alt=""  />
+</p>
+<ul>
+<li>论文 PDF : <a href="https://openreview.net/pdf?id=S1gTA5VggE">https://openreview.net/pdf?id=S1gTA5VggE</a> 或者（<a href="https://arxiv.org/pdf/1812.07032.pdf">https://arxiv.org/pdf/1812.07032.pdf</a>）</li>
+<li>期刊：Medical Imaging with Deep Learning (MIDL 2019 Conference),  best paper award at MIDL 2019.</li>
+<li>作者的 Presentation：<a href="https://www.bilibili.com/video/BV1U4411F76a">https://www.bilibili.com/video/BV1U4411F76a</a>（3:29:00 开始）</li>
+<li>source code：<a href="https://github.com/LIVIAETS/boundary-loss/blob/master/losses.py">https://github.com/LIVIAETS/boundary-loss/blob/master/losses.py</a></li>
+</ul>
+<h2 id="0-abstract">0 Abstract<a hidden class="anchor" aria-hidden="true" href="#0-abstract">#</a></h2>
+<p>Dice loss 和 cross-entropy 这种区域损失在类别高度不平衡的分割任务中，会影响到训练性能和稳定性。本篇论文提出了一种<!-- raw HTML omitted -->边界损失（boundary loss）<!-- raw HTML omitted -->，其形式是轮廓（或形状）空间上的距离度量，而不是区域，</p>
+<ul>
+<li>这可以减轻在高度不平衡的分割问题中区域损失的困难；</li>
+<li>此外，边界损失提供的信息是对区域损失的补充。</li>
+</ul>
+<p>在计算时，将形状空间上的非对称 L2 距离表达为区域积分，这就产生了一个用网络的区域 softmax 概率输出表示的边界损失，它可以很容易地与标准的区域损失相结合。</p>
+<p>在 the ischemic stroke lesion (ISLES) and white matter hyperintensities (WMH) 这两个高度不平衡数据集上，Dice + boundary 相比于单独使用 Dice，其 Dice score 提升了 8%。</p>
+<p>💢TODO：眼底视网膜分割数据集（DRIVE/CHASE_DB1），或许也可以归为不平衡的数据集，使用 Dice Loss + 本篇论文的 boundary loss 或许可以在原基础之上提升最后的性能，可以简单试一下实验结果。</p>
+<p>##1 Introduction</p>
+<p>Dice or cross-entropy 都基于基于区域积分（<!-- raw HTML omitted -->regional integrals<!-- raw HTML omitted -->），这对训练深度神经网络很方便。</p>
+<p>标准区域损失包含前景和背景项，它们的值有很大差异，通常是几个数量级，这可能会影响性能和训练的稳定性，这在医学图像分析中相当常见。</p>
+<p><img loading="lazy" src="./20210530/2.png" alt=""  />
+</p>
+<h3 id="交叉熵">交叉熵<a hidden class="anchor" aria-hidden="true" href="#交叉熵">#</a></h3>
+<p>在高度不平衡的问题上，标准的区域 交叉熵（CE）有众所周知的缺点：</p>
+<ul>
+<li>它假定所有样本和类别的重要性分布是相同的；</li>
+<li>CE 通常会导致不稳定的训练，并导致决策边界偏向于大多数类别。</li>
+</ul>
+<p>常见的缓解类别不平衡策略：</p>
+<ul>
+<li>re-balance class prior distributions by down-sampling frequent labels.</li>
+<li>assign weights to the different classes, inversely proportional to the frequency of the corresponding labels.</li>
+</ul>
+<h3 id="dice">Dice<a hidden class="anchor" aria-hidden="true" href="#dice">#</a></h3>
+<blockquote>
+<p>Lee Raymond Dice 命名</p>
+<p>VNet 应用 Dice Loss</p>
+</blockquote>
+<p>Dice coefficient 等同 <strong>F1 score</strong>。Dice Loss 一种能够直接作用于 F1 Score 的损失函数。</p>
+<ul>
+<li>在处理非常小的结构时可能会遇到困难，训练不稳定；</li>
+<li>Dice 对应于精确度和召回率之间的谐波平均值，这种损失主要适合于 FP 和 FN 同样糟糕的时候。</li>
+</ul>
+<p>相比于 Dice 存在的缺点，Tversky 相似度指数可以在精确度和召回率之间提供一个更好的权衡。</p>
+<p>✅ Dice loss 比较适用于样本极度不均的情况，一般的情况下，使用 Dice loss 会对反向传播造成不利的影响，容易使训练变得不稳定。</p>
+<p>论文贡献：</p>
+<blockquote>
+<p>In this paper, we propose a boundary loss that takes the form of <!-- raw HTML omitted -->a distance metric on the space of contours (or shapes), not regions<!-- raw HTML omitted -->.</p>
+<p>We argue that a boundary loss can mitigate the issues related to regional losses in highly unbalanced segmentation problems. Rather than using unbalanced integrals over the regions, a boundary loss uses integrals over the boundary (interface) between the regions.</p>
+<p>Furthermore, it provides information that is complimentary to regional losses.</p>
+</blockquote>
+<h2 id="2-formulation">2. Formulation<a hidden class="anchor" aria-hidden="true" href="#2-formulation">#</a></h2>
+<p>对于两个区域的情况，一般形式的积分：</p>
+<p><img loading="lazy" src="./20210530/4.png" alt=""  />
+</p>
+<p>$$f  = -log(\cdot)$$</p>
+<p>广义 Dice 损失（GDL）：</p>
+<p><img loading="lazy" src="./20210530/3.png" alt=""  />
+</p>
+<ul>
+<li>Ω 表示具有空间域的训练图像</li>
+<li>g 表示对图像进行二进制的 Ground Truth 分割，g(p) = 1 表示像素 p 属于目标区域 G⊂Ω（前景区域），否则为 0 Ω\G（背景区域）</li>
+<li>$s_\theta$ 表示分割网络的 softmax 概率输出</li>
+</ul>
+<p>广泛使用的分割损失函数涉及 Ω 中每个分割区域的区域积分，它衡量网络的概率输出所定义的区域与相应的地面实况之间的一些相似性（或重叠）。</p>
+<p>在医学图像分析中，极不平衡的分割非常常见，例如，目标前景区域的大小比背景大小小几个数量级，如此之大的差异影响了分割的性能和训练的稳定性。</p>
+<p>Boundary Loss Dist($∂_G, ∂_{S_\theta}$ )：$∂_G$ 表示区域 G 的 Ground Truth 边界，$∂_{S_θ}$表示由网络输出定义的分割区域 G 的边界。</p>
+<ul>
+<li>（1）边界损失应该能够减轻上述不平衡分割的困难：它使用区域之间的边界的积分。此外，边界损失提供的信息与区域损失不同，因此是补充性的。</li>
+<li>（2）并不清楚如何将 $∂_{S_θ}$ 上的边界点表示为区域网络输出 sθ 的可微调函数。（我的理解是：Boundary Loss 单独使用并不 work，无法使用反向传播更新）</li>
+</ul>
+<p>本篇论文提出的 Boundary Loss 启发自 discrete (graph-based) optimization techniques for computing gradient flows of curve evolution (Boykov et al., 2006). curve evolution methods  需要一个评估边界变化（或变化）的措施。</p>
+<p>Boundary Loss Dist($∂_G, ∂_{S_\theta}$ )：评估两个附近边界 ∂S 和 ∂G 之间的变化（Boykov 等人，2006）。</p>
+<blockquote>
+<p>💢为什么 (2) 不能直接作为 Loss 进行优化？理解了这个很重要！</p>
+</blockquote>
+<p><img loading="lazy" src="./20210530/5.png" alt=""  />
+</p>
+<ul>
+<li>p∈Ω 是边界 ∂G 上的一个点</li>
+<li>y∂S(p) 表示边界 ∂S 上的相应点（法线方向交点）。</li>
+</ul>
+<p><img loading="lazy" src="./20210530/6.png" alt=""  />
+</p>
+<p>公式 (2) 不能直接作为 ∂S= ∂Sθ 的损失！！！</p>
+<p>✅ 很容易表明，(2) 中的微分边界变化可以用积分方法来表达 (Boykov 等人，2006)，积分方法完全避免了涉及轮廓点的局部微分计算，并将边界变化表示为一个区域积分。得到公式 (3)。</p>
+<blockquote>
+<p>it is easy to show that the differential boundary variation in (2) can be expressed using an integral approach (Boykov et al., 2006), which avoids completely local differential computations involving contour points and represents boundary change as a regional integral:</p>
+</blockquote>
+<p><img loading="lazy" src="./20210530/7.png" alt=""  />
+</p>
+<p>其中，∆S 表示两条轮廓线之间的区域，DG : Ω→R+ 是相对于边界 ∂G 的距离图，即 $D_G(q)$ 评估了点 q∈Ω 与轮廓 ∂G 上最近的点 $z_{∂G}(q)$ 之间的距离。</p>
+<p>将 instance map $2D_{G}(q)$ 在连接 ∂G 上的点 p 和 $y_{∂S}(p)$ 的法线段上积分，就可以得到：</p>
+<p><img loading="lazy" src="./20210530/8.png" alt=""  />
+</p>
+<p>因此，从公式（3）来看，公式（2）中轮廓线之间的非对称 L2 距离可以表示为基于边界 ∂G 的 level set 表示的区域积分之和。</p>
+<blockquote>
+<p>❓什么是 level set？</p>
+</blockquote>
+<p><img loading="lazy" src="./20210530/9.png" alt=""  />
+</p>
+<ul>
+<li>s : Ω→{0,1} 是区域 S 的 binary indicator function，如果 q∈S 属于目标，s(q)=1，否则为 0。</li>
+<li>$\phi_G$ : Ω→R 表示边界 ∂G 的 level set 表示，如果 q∈G，$\phi_{G}(q)=-D_G(q)$，否则 $\phi_G(q)=D_G(q)$。</li>
+</ul>
+<p>approximates boundary distance Dist(∂G,∂Sθ ):</p>
+<p><img loading="lazy" src="./20210530/10.png" alt=""  />
+</p>
+<p>容易与标准的区域损失相结合：</p>
+<p><img loading="lazy" src="./20210530/11.png" alt=""  />
+</p>
+<h2 id="experiment">Experiment<a hidden class="anchor" aria-hidden="true" href="#experiment">#</a></h2>
+<p><img loading="lazy" src="./20210530/12.jpg" alt=""  />
+</p>
+<ul>
+<li>Dice 相似系数（Dice Similariy Coefficient,DSC），取值范围 [0, 1]，1 为最好，0 为最差。</li>
+<li>Hausdorff Distance 豪斯多夫距离：以集合 A 中任一点，半径取 HD 画圆，可以包含集合 B 的所有点。</li>
+</ul>
+<blockquote>
+<p>boundary loss term brings a DSC improvement of around 2% on the WMH dataset, it achieves 8% better DSC on the ISLES segmentation task.  The same trend is observed with the HD metric, where the gain is larger on the ISLES dataset than on WMH.</p>
+</blockquote>
+<p><img loading="lazy" src="./20210530/13.png" alt=""  />
+</p>
+<p>边界损失项有助于稳定训练过程，随着网络训练的收敛，产生了一个<strong>更平滑</strong>的曲线。Boundary Loss 只涉及两个矩阵之间的元素相乘，所增加的计算复杂度几乎可以忽略不计。</p>
+<p><img loading="lazy" src="./20210530/14.png" alt=""  />
+</p>
+<h2 id="总结">总结<a hidden class="anchor" aria-hidden="true" href="#总结">#</a></h2>
+<p>•单独使用 Boundary Loss 不 work，一般进行与 Dice 组合使用。</p>
+<p>•理论上，边界损失的全局最优对应于一个负值，因为一个完美的重叠只对距离图的负值进行求和。</p>
+<p>•边界损失项有助于稳定训练过程，随着网络训练的收敛，产生了一个更平滑的曲线</p>
+<p>•使用 Boundary Loss 带来的计算量几乎可以忽略不计。</p>
+<p>•利用了 S 和 G 空间上的一些信息，带来了一定的性能提升。</p>
+<p>•作者做得实验太少， Boundary Loss 是否能普遍提升 performance 还需要更多的实验验证。</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://landodo.github.io/tags/%E5%88%86%E5%89%B2/">分割</a></li>
+      <li><a href="http://landodo.github.io/tags/cnn/">CNN</a></li>
+      <li><a href="http://landodo.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">论文阅读</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://landodo.github.io/posts/20210620-deeplab-v1-v2/">
+    <span class="title">« Prev Page</span>
+    <br>
+    <span>#DeepLab# 中的空洞卷积和条件随机场</span>
+  </a>
+  <a class="next" href="http://landodo.github.io/posts/20210516-retinal-vesse-segmentation/">
+    <span class="title">Next Page »</span>
+    <br>
+    <span>视网膜血管分割 Retinal vessel segmentation</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>Landon</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

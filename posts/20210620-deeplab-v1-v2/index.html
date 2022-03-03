@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+<meta name="robots" content="index, follow">
+<title>#DeepLab# 中的空洞卷积和条件随机场 | Landodo&#39;s NoteBook</title>
+<meta name="keywords" content="CNN, 医学图像分割, 论文阅读" />
+<meta name="description" content="#DeepLab# 中的空洞卷积和条件随机场 简要总结 DeepLab V1 和 DeepLab V2，DeepLab 是语义分割的经典网络架构。其有两个核心要点： （1）空洞卷积（Atrous Con">
+<meta name="author" content="">
+<link rel="canonical" href="http://landodo.github.io/posts/20210620-deeplab-v1-v2/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://landodo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://landodo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://landodo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://landodo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://landodo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="#DeepLab# 中的空洞卷积和条件随机场" />
+<meta property="og:description" content="#DeepLab# 中的空洞卷积和条件随机场 简要总结 DeepLab V1 和 DeepLab V2，DeepLab 是语义分割的经典网络架构。其有两个核心要点： （1）空洞卷积（Atrous Con" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://landodo.github.io/posts/20210620-deeplab-v1-v2/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-06-20T10:17:29&#43;08:00" />
+<meta property="article:modified_time" content="2021-06-20T10:17:29&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="#DeepLab# 中的空洞卷积和条件随机场"/>
+<meta name="twitter:description" content="#DeepLab# 中的空洞卷积和条件随机场 简要总结 DeepLab V1 和 DeepLab V2，DeepLab 是语义分割的经典网络架构。其有两个核心要点： （1）空洞卷积（Atrous Con"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://landodo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "#DeepLab# 中的空洞卷积和条件随机场",
+      "item": "http://landodo.github.io/posts/20210620-deeplab-v1-v2/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "#DeepLab# 中的空洞卷积和条件随机场",
+  "name": "#DeepLab# 中的空洞卷积和条件随机场",
+  "description": "#DeepLab# 中的空洞卷积和条件随机场 简要总结 DeepLab V1 和 DeepLab V2，DeepLab 是语义分割的经典网络架构。其有两个核心要点： （1）空洞卷积（Atrous Con",
+  "keywords": [
+    "CNN", "医学图像分割", "论文阅读"
+  ],
+  "articleBody": "#DeepLab# 中的空洞卷积和条件随机场 简要总结 DeepLab V1 和 DeepLab V2，DeepLab 是语义分割的经典网络架构。其有两个核心要点：\n（1）空洞卷积（Atrous Convolution/‘hole’ algorithm/Dilated Convolution）\n（2）条件随机场（Fully-Connected CRF）\nDeepLab V1 的提出时间是 2014 年 12 月，基干网络选择了 2014 年 10 月份所提出 VGG-16。专为图像分类任务而设计的 VGG 在语义分割任务上的表现并不出色，这是由于：\n （1）最大池化和 “Stride”会使得分辨率降低。 （2）语义分割任务仍需要空间转换的不变性（语义分割仍是一个分类问题），这从本质上限制了 DCNN 模型的空间准确性。  这两个原因造成的。DeepLab V1 针对这两个问题使用的解决方案是：空洞卷积、CRF。\nDeepLab V2 的提出时间是 2016 年 06 月，基干网络选择了 2015 年 12 月所提出的 ResNet。在 DeepLab V1 的基础之上，V2 强调了空洞卷积 ‘Atrous Convolution’ 作为语义分割任务的一项强大工具，并提出了 atrous spatial pyramid pooling (ASPP) 提取融合多尺度信息，在多个数据集上进行了丰富的实验评估。\nDeepLab V1可以总结为以下几点：\n 基于 VGG-16，全连接层转换为 1×1 卷积层 删除了最后两个 max-pooling（或者说是最后两个池化层不改变特征图的大小） 空洞卷积“Atrous algorithm”调整感受野 使用双线性插值上采样 8× 得到原图大小 使用全连接 CRF 进行边界恢复 多尺度预测  DeepLab V2总结为以下几点：\n 使用 ResNet 作为基干网络 ASPP 模块 丰富的实验   DeepLab V1  Chen, L., Papandreou, G., Kokkinos, I., Murphy, K., \u0026 Yuille, A. (2015). Semantic Image Segmentation with Deep Convolutional Nets and Fully Connected CRFs. CoRR, abs/1412.7062.\n   期刊：ICLR 2015\n  论文地址（DeepLab V1）: https://arxiv.org/abs/1412.7062\n  作者简介：\n  http://liangchiehchen.com/   Google Research Scientist\n  摘要 DCNNs（Deep Convolutional Neural Networks）在图像分类和目标检测任务上取得了 SOTA 的成绩，但是在物体分割任务上表现得并不精确。论文的主要工作是结合 DCNNs（Deep Convolutional Neural Networks） 和概率图形模型的方法，以解决像素级分类（语义图像分割）的任务。\nDeepLab V1 在 PASCAL VOC-2012 语义图像分割任务中取得了 SOTA，在测试集中达到了 71.6% 的 IOU 准确性。\n1. Introduction 以端到端方式训练的 DCNN 取代了依靠人工精心设计的特征，如 SIFT 或 HOG。DCNN 的成功可以部分归因于其对局部图像转换的内在不变性（invariance），这也是它们学习数据的分层抽象的能力的基础。\n这种不变性有利于高层次的视觉任务（如图像分类），不利于低层次的任务（如语义分割）。在低层次的任务中，我们想要精确的定位，而不是空间细节的抽象。\n在 DCNN 应用于图像标记任务中，有两个技术障碍。 （1）最大池化和 “Stride”会使得分辨率降低。\n（2）语义分割任务仍需要空间转换的不变性（语义分割仍是一个分类问题），这从本质上限制了 DCNN 模型的空间准确性。\n本篇论文对这两个问题的解决方案分别是：\n ‘atrous’ (with holes) algorithm 全连接的条件随机场（CRF）  2. 相关工作（略） 3. 用于密集图像标记的卷积神经网络 3.1 ‘HOLE’ ALGORITHM 将 VGG-16 的全连接层转换为卷积层，作为特征图提取。5 个最大池化跳过了后两个，或者将最后两个最大池化 stride = 1，kernal = 3，这样得出的特征图大小不变。\n DeepLab V1：https://github.com/wangleihitcs/DeepLab-V1-PyTorch/blob/master/nets/vgg.py  # max pooling  nn.MaxPool2d(kernel_size=3, stride=1, padding=1), 最大池化层的改动，影响到了其后卷积层的感受野大小，通过引入 0 来修改（上采样）卷积核。 保持卷积核的完整，而对它们所应用的特征图分别使用 2 或 4 像素的输入跨度进行稀疏采样。如下图 1 所示，称为 hole algorithm（Atrous algorithm）。\n将最后的 1000-way 输出修改为 21-way，ground truth (subsampled by 8)，即最后网络的输出相对于原图像小 8 倍，然后使用双线性插值将其分辨率提高 8 倍。\n3.2 边界恢复：完全连接的 CRF 和 Muti-Scale 定位精度和分类性能之间的权衡似乎是 DCNN 所固有的：事实证明，具有多个最大池层的较深模型在分类任务中是最成功的，然而，增加的不变性和顶层节点的大感受野只能产生平滑的效果（Fig 2. 边界模糊）。\n如上图，DCNN 的 Score maps 能预测物体的存在和大致位置，但不能真正划定其边界。\n有两种方法解决这个问题： （1）利用卷积网络中的多层信息，以便更好的估计边界。 （2）采用超级像素表示法，基本上将精确定位任务委托给低级别的分割方法。\n本篇论文追求另一个方向，即把 DCNN 的识别能力和全连接 CRF 的细粒度定位精度结合起来。全连接 CRF 在解决定位挑战方面非常成功，产生了准确的语义分割结果，并在现有方法无法达到的细节水平上恢复了物体的边界。\n条件随机场（CRFs）被用来平滑嘈杂的分割图。一般来说，模型将相邻的节点结合在一起，倾向于将相同的标签分配给空间上近似的像素。\n而从 Fig 2 可以看出，DCNN 输出的 Score map 是相当平滑的，并产生同质化的分类结果。在这种情况下，我们需要恢复局部结构，而不是平滑它。\nEnergy Function：\nGaussian Kernel：\n这里见 PPT，我会从 Random Field Models，到 Filtering，再到 Dense Random Fields，依次介绍其优缺点，从宏观的角度去了解这个后处理操作。\n考虑多尺度信息能够提升最后分割的精度，与 FCN skip layer 类似，如下示意图所示。\n4. 实验结果 数据集：PASCAL VOC 2012，21 类，包含 20 个前景对象类和 1 个背景类。\n（a）\n CRF 带来 4% 的性能提升（分割效果如 Fig 7 所示） 多尺度 MSc 带来带来 1.5% 的性能提升（分割效果如 Fig 4）  采用的 “Atrous algorithm” 允许通过调整输入步幅来任意控制模型的感受野（Field-Of-View, FOV）。\n与 SOTA 方法进行比较。\n总结 DeepLab V1 可以总结为以下几点：\n 基于 VGG-16，全连接层转换为 1×1 卷积层 删除了最后两个 max-pooling（或者说是最后两个池化层不改变特征图的大小） 空洞卷积“Atrous algorithm”调整感受野 使用双线性插值上采样 8× 得到原图大小 使用全连接 CRF 进行边界恢复 多尺度预测   DeepLab V2  Chen, L., Papandreou, G., Kokkinos, I., Murphy, K., \u0026 Yuille, A. (2018). DeepLab: Semantic Image Segmentation with Deep Convolutional Nets, Atrous Convolution, and Fully Connected CRFs. IEEE Transactions on Pattern Analysis and Machine Intelligence, 40, 834-848.\n  论文地址 DeepLab V2: https://arxiv.org/abs/1606.00915 期刊：全称 IEEE Transactions on Pattern Analysis and Machine Intelligence (TPAMI)，简称为 IEEE PAMI 或者（PAMI）  摘要 论文使用深度学习解决了语义图像分割的任务，有三个主要贡献：\n（1）强调了空洞卷积 ‘Atrous Convolution’ 作为语义分割任务的一项强大工具。\n（2）提出了 atrous spatial pyramid pooling (ASPP)，考虑多尺度信息。\n（3）将最后一个 DCNN 层的响应与全连接的条件随机场（CRF）相结合来改善物体边界的定位。\n1. Introduction DCNN 在语义图像分割中应用的三个挑战：\n（1）特征分辨率的降低\n（2）多尺度物体的存在\n（3）由于DCNN的不变性而降低了定位精度\n第一个挑战分辨率的降低，这是由于 DCNNs 的最大池化层和降采样层的堆叠造成的，这个结构是为分类而设计的。特征图的空间分辨率降低对于分割任务来说是非常不利的。\n为了解决这个问题，DeepLab V2 移除了 max-pooling 层，使用升采样的卷积核（空洞卷积），最后使用双线性插值恢复到原始图像大小。与普通的卷积相比，空洞卷积在不增加额外计算量和参数量的情况下，有效增加了感受野大小。\n第二个挑战是由多个尺度的物体的存在引起的。传统的解决方案是在 DCNN 层计算输入图像的多个尺度比例的特征响应，进行汇总。受到 spatial pyramid pooling 的启发，本论文提出 “atrous spatial pyramid pooling” (ASPP)，通过使用用具有互补的感受野的多个卷积核来探测原始图像，从而在多个尺度上捕获物体和有用的图像背景。\n第三个挑战是：以物体为中心的分类器需要对空间变换保持不变，这本身就限制了 DCNN 的空间准确性。一种解决方案是使用跳跃连接（ResNet）；本论文则通过采用完全连接的条件随机场（CRF），提高了模型对精细细节的捕捉能力。Fully Connected CRF，具有计算效率高、能够捕捉到精细的边缘细节、满足长距离的依赖等优点。\nDeepLab V2 总体流程：\nDeepLab 具有如下三个优点：\n (1) Speed (2) Accuracy (3) Simplicity  与 DeepLab V1 相比，V2 有如下改变：\n（1）ASPP：在多个尺度上更好地分割物体\n（2）使用了 ResNet-101\n（3）进行了更多的实验评估\n2. Related Works（略） 3. Methods DeepLab V2 的核心有三个：空洞卷积、ASPP、全连接的 CRF。\n3.1 Atrous Convolution for Dense Feature Extraction and Field-of-View Enlargement 最大池化和卷积步幅使得特征图的分辨率降低，‘deconvolution’ 虽然可以缓解，但是需要引入额外的内存和时间消耗。\n空洞卷积最初是为小波变换开发的。空洞卷积算法使我们能够以任何理想的分辨率计算任何一层的输出，可以与预训练的模型无缝结合。\n一维的信号：x[i] 为输入的信号，w[k] 表示卷积核，y[i] 表述输出，r 扩张率，表示对输入信号进行采样的步长，r=1 表示标准的卷积。\n2-D 图像示例：\n先进行下采样，再进行卷积，最后升采样。 如果把得到的特征图植入原始图像的坐标，会发现我们只在图像的 1/4 位置获得了响应。\n如果使用空洞卷积，尽管卷积核的尺寸变大了，但是仅需要考虑非 0 值，参数的数量和每个位置的操作数保持不变。 这个方案使我们能够轻松而明确地控制神经网络特征反应的空间分辨率。\n接下来是关于空洞卷积的感受野，在不增加参数和计算量的情况下，k×k 扩大称为 k + (k-1)(r-1)。如 3×3,r=2，其感受野为 3 + (3 - 1)(2 - 1) = 5。因此，它提供了一个有效的机制来控制感受野，并在准确定位（小感受野）和上下文信息（大感受野）之间找到最佳平衡点。\n空洞卷积的实现有两种方式：\n（1） 第一种是通过插入空洞（0）来隐含地对卷积核进行升采样，或者说是对输入特征图进行稀疏采样。\n（2）第二种是对输入特征图进行子采样。\n3.2 Multiscale Image Representations using Atrous Spatial Pyramid Pooling (ASPP) 研究表明，考虑物体的尺度可以提高 DCNN 成功处理大物体和小物体的能力。有两种方法：\n（1）标准的多尺度处理 从多个重新缩放的原始图像中提取 DCNN 得分图，最后进行融合。（DeepLab V1）\n（2）ASPP 研究表明，任意尺度的区域可以通过对单一尺度提取的卷积特征进行重采样来准确有效地分类。使用了多个并行的非线性卷积层，具有不同的采样率，为每个采样率提取的特征在不同的分支中进一步处理，并融合以产生最终结果。\n3.3 全连接的 CRF 进行边界恢复 同 DeepLab V1。\n4. EXPERIMENTAL RESULTS DeepLab V2 进行了丰富的实验。\n基干网络使用 ResNet-101，数据集有 PASCAL VOC 2012, PASCAL-Context, PASCALPerson-Part, and Cityscapes。\n这里我只列出 PASCAL VOC 2012，方便与 DeepLab V1 进行比较。\nASPP\nDeepLab V2：79.7%，DeepLab V1：71.5%。\n基干网络 VGG-16 和 ResNet-101 比较：\n总结 DeepLab V2 总结为以下几点：\n 使用 ResNet 作为基干网络 ASPP 模块 丰富的实验  Reference [1] Chen, L., Papandreou, G., Kokkinos, I., Murphy, K., \u0026 Yuille, A. (2015). Semantic Image Segmentation with Deep Convolutional Nets and Fully Connected CRFs. CoRR, abs/1412.7062.\n[2] Chen, L., Papandreou, G., Kokkinos, I., Murphy, K., \u0026 Yuille, A. (2018). DeepLab: Semantic Image Segmentation with Deep Convolutional Nets, Atrous Convolution, and Fully Connected CRFs. IEEE Transactions on Pattern Analysis and Machine Intelligence, 40, 834-848.\n[3] https://www.cs.cmu.edu/~efros/courses/LBMV12/crf_deconstruction.pdf\n[4] http://vision.stanford.edu/teaching/cs231b_spring1415/slides/philipp_densecrf.pdf\n[5] https://web.cs.ucdavis.edu/~yjlee/teaching/ecs289g-winter2018/DeepLab.pdf\n",
+  "wordCount" : "4207",
+  "inLanguage": "en",
+  "datePublished": "2021-06-20T10:17:29+08:00",
+  "dateModified": "2021-06-20T10:17:29+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://landodo.github.io/posts/20210620-deeplab-v1-v2/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Landodo's NoteBook",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://landodo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://landodo.github.io/" accesskey="h" title="Landodo&#39;s NoteBook (Alt + H)">Landodo&#39;s NoteBook</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://landodo.github.io/search" title="🔍Search (Alt &#43; /)" accesskey=/>
+                    <span>🔍Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/tags" title="Tag">
+                    <span>Tag</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/cs-zoo" title="CS ZOO">
+                    <span>CS ZOO</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://landodo.github.io/">Home</a>&nbsp;»&nbsp;<a href="http://landodo.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      #DeepLab# 中的空洞卷积和条件随机场
+    </h1>
+    <div class="post-meta"><span title='2021-06-20 10:17:29 +0800 CST'>June 20, 2021</span>&nbsp;·&nbsp;9 min&nbsp;·&nbsp;4207 words
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#deeplab-%e4%b8%ad%e7%9a%84%e7%a9%ba%e6%b4%9e%e5%8d%b7%e7%a7%af%e5%92%8c%e6%9d%a1%e4%bb%b6%e9%9a%8f%e6%9c%ba%e5%9c%ba" aria-label="#DeepLab# 中的空洞卷积和条件随机场">#DeepLab# 中的空洞卷积和条件随机场</a><ul>
+                        
+                <li>
+                    <a href="#%e7%ae%80%e8%a6%81%e6%80%bb%e7%bb%93" aria-label="简要总结">简要总结</a></li></ul>
+                </li>
+                <li>
+                    <a href="#deeplab-v1" aria-label="DeepLab V1">DeepLab V1</a><ul>
+                        
+                <li>
+                    <a href="#%e6%91%98%e8%a6%81" aria-label="摘要">摘要</a></li>
+                <li>
+                    <a href="#1-introduction" aria-label="1. Introduction">1. Introduction</a></li>
+                <li>
+                    <a href="#2-%e7%9b%b8%e5%85%b3%e5%b7%a5%e4%bd%9c%e7%95%a5" aria-label="2. 相关工作（略）">2. 相关工作（略）</a></li>
+                <li>
+                    <a href="#3--%e7%94%a8%e4%ba%8e%e5%af%86%e9%9b%86%e5%9b%be%e5%83%8f%e6%a0%87%e8%ae%b0%e7%9a%84%e5%8d%b7%e7%a7%af%e7%a5%9e%e7%bb%8f%e7%bd%91%e7%bb%9c" aria-label="3.  用于密集图像标记的卷积神经网络">3.  用于密集图像标记的卷积神经网络</a><ul>
+                        
+                <li>
+                    <a href="#31--hole-algorithm" aria-label="3.1  ‘HOLE’ ALGORITHM">3.1  ‘HOLE’ ALGORITHM</a></li></ul>
+                </li>
+                <li>
+                    <a href="#32-%e8%be%b9%e7%95%8c%e6%81%a2%e5%a4%8d%e5%ae%8c%e5%85%a8%e8%bf%9e%e6%8e%a5%e7%9a%84-crf-%e5%92%8c-muti-scale" aria-label="3.2 边界恢复：完全连接的 CRF 和 Muti-Scale">3.2 边界恢复：完全连接的 CRF 和 Muti-Scale</a></li>
+                <li>
+                    <a href="#4-%e5%ae%9e%e9%aa%8c%e7%bb%93%e6%9e%9c" aria-label="4. 实验结果">4. 实验结果</a></li>
+                <li>
+                    <a href="#%e6%80%bb%e7%bb%93" aria-label="总结">总结</a></li></ul>
+                </li>
+                <li>
+                    <a href="#deeplab-v2" aria-label="DeepLab V2">DeepLab V2</a><ul>
+                        
+                <li>
+                    <a href="#%e6%91%98%e8%a6%81-1" aria-label="摘要">摘要</a></li>
+                <li>
+                    <a href="#1-introduction-1" aria-label="1. Introduction">1. Introduction</a></li>
+                <li>
+                    <a href="#2-related-works%e7%95%a5" aria-label="2. Related Works（略）">2. Related Works（略）</a></li>
+                <li>
+                    <a href="#3-methods" aria-label="3. Methods">3. Methods</a><ul>
+                        
+                <li>
+                    <a href="#31-atrous-convolution-for-dense-feature-extraction-and-field-of-view-enlargement" aria-label="3.1 Atrous Convolution for Dense Feature Extraction and Field-of-View Enlargement">3.1 Atrous Convolution for Dense Feature Extraction and Field-of-View Enlargement</a></li>
+                <li>
+                    <a href="#32-multiscale-image-representations-using-atrous-spatial-pyramid-pooling-aspp" aria-label="3.2 Multiscale Image Representations using Atrous Spatial Pyramid Pooling (ASPP)">3.2 Multiscale Image Representations using Atrous Spatial Pyramid Pooling (ASPP)</a></li></ul>
+                </li>
+                <li>
+                    <a href="#33-%e5%85%a8%e8%bf%9e%e6%8e%a5%e7%9a%84-crf-%e8%bf%9b%e8%a1%8c%e8%be%b9%e7%95%8c%e6%81%a2%e5%a4%8d" aria-label="3.3 全连接的 CRF 进行边界恢复">3.3 全连接的 CRF 进行边界恢复</a></li>
+                <li>
+                    <a href="#4-experimental-results" aria-label="4. EXPERIMENTAL RESULTS">4. EXPERIMENTAL RESULTS</a></li>
+                <li>
+                    <a href="#%e6%80%bb%e7%bb%93-1" aria-label="总结">总结</a></li>
+                <li>
+                    <a href="#reference" aria-label="Reference">Reference</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h1 id="deeplab-中的空洞卷积和条件随机场">#DeepLab# 中的空洞卷积和条件随机场<a hidden class="anchor" aria-hidden="true" href="#deeplab-中的空洞卷积和条件随机场">#</a></h1>
+<h2 id="简要总结">简要总结<a hidden class="anchor" aria-hidden="true" href="#简要总结">#</a></h2>
+<p>DeepLab V1 和 DeepLab V2，DeepLab 是语义分割的经典网络架构。其有两个核心要点：</p>
+<p>（1）空洞卷积（Atrous Convolution/‘hole’ algorithm/Dilated Convolution）</p>
+<p>（2）条件随机场（Fully-Connected CRF）</p>
+<p>DeepLab V1 的提出时间是 2014 年 12 月，基干网络选择了 2014 年 10 月份所提出 VGG-16。专为图像分类任务而设计的 VGG 在语义分割任务上的表现并不出色，这是由于：</p>
+<ul>
+<li>（1）最大池化和 “Stride”会使得分辨率降低。</li>
+<li>（2）语义分割任务仍需要空间转换的不变性（语义分割仍是一个分类问题），这从本质上限制了 DCNN 模型的空间准确性。</li>
+</ul>
+<p>这两个原因造成的。DeepLab V1 针对这两个问题使用的解决方案是：空洞卷积、CRF。</p>
+<p>DeepLab V2 的提出时间是  2016 年 06 月，基干网络选择了 2015 年 12 月所提出的 ResNet。在 DeepLab V1 的基础之上，V2 强调了空洞卷积 ‘Atrous Convolution’ 作为语义分割任务的一项强大工具，并提出了 atrous spatial pyramid pooling (ASPP) 提取融合多尺度信息，在多个数据集上进行了丰富的实验评估。</p>
+<p><!-- raw HTML omitted --><strong>DeepLab V1</strong><!-- raw HTML omitted --> 可以总结为以下几点：</p>
+<ul>
+<li>基于 VGG-16，全连接层转换为 1×1 卷积层</li>
+<li>删除了最后两个  max-pooling（或者说是最后两个池化层不改变特征图的大小）</li>
+<li>空洞卷积“Atrous algorithm”调整感受野</li>
+<li>使用双线性插值上采样 8× 得到原图大小</li>
+<li>使用全连接 CRF 进行边界恢复</li>
+<li>多尺度预测</li>
+</ul>
+<p><!-- raw HTML omitted --><strong>DeepLab V2</strong><!-- raw HTML omitted --> 总结为以下几点：</p>
+<ul>
+<li>使用 ResNet 作为基干网络</li>
+<li>ASPP 模块</li>
+<li>丰富的实验</li>
+</ul>
+<hr>
+<h1 id="deeplab-v1">DeepLab V1<a hidden class="anchor" aria-hidden="true" href="#deeplab-v1">#</a></h1>
+<blockquote>
+<p>Chen, L., Papandreou, G., Kokkinos, I., Murphy, K., &amp; Yuille, A. (2015). Semantic Image Segmentation with Deep Convolutional Nets and Fully Connected CRFs. <em>CoRR, abs/1412.7062</em>.</p>
+</blockquote>
+<ul>
+<li>
+<p>期刊：ICLR 2015</p>
+</li>
+<li>
+<p>论文地址（DeepLab V1）: <a href="https://arxiv.org/abs/1412.7062">https://arxiv.org/abs/1412.7062</a></p>
+</li>
+</ul>
+<p><img loading="lazy" src="./20210620/1.png" alt=""  />
+</p>
+<p>作者简介：</p>
+<ul>
+<li>
+<p><a href="http://liangchiehchen.com/">http://liangchiehchen.com/</a>
+<img loading="lazy" src="./20210620/jay2_1.jpg" alt=""  />
+</p>
+</li>
+<li>
+<p>Google Research Scientist</p>
+</li>
+</ul>
+<h2 id="摘要">摘要<a hidden class="anchor" aria-hidden="true" href="#摘要">#</a></h2>
+<p>DCNNs（Deep Convolutional Neural Networks）在图像分类和目标检测任务上取得了 SOTA 的成绩，但是在物体分割任务上表现得并不精确。论文的主要工作是结合 DCNNs（Deep Convolutional Neural Networks） 和概率图形模型的方法，以解决像素级分类（语义图像分割）的任务。</p>
+<p>DeepLab V1  在 PASCAL VOC-2012 语义图像分割任务中取得了 SOTA，在测试集中达到了 71.6% 的 IOU 准确性。</p>
+<h2 id="1-introduction">1. Introduction<a hidden class="anchor" aria-hidden="true" href="#1-introduction">#</a></h2>
+<p>以端到端方式训练的 DCNN 取代了依靠人工精心设计的特征，如 SIFT 或 HOG。DCNN 的成功可以部分归因于其对局部图像转换的内在不变性（invariance），这也是它们学习数据的分层抽象的能力的基础。</p>
+<p>这种不变性有利于高层次的视觉任务（如图像分类），不利于低层次的任务（如语义分割）。在低层次的任务中，我们想要精确的定位，而不是空间细节的抽象。</p>
+<p>在 DCNN 应用于图像标记任务中，有两个技术障碍。
+（1）最大池化和 “Stride”会使得分辨率降低。</p>
+<p>（2）语义分割任务仍需要空间转换的不变性（语义分割仍是一个分类问题），这从本质上限制了 DCNN 模型的空间准确性。</p>
+<p>本篇论文对这两个问题的解决方案分别是：</p>
+<ul>
+<li>‘atrous’ (with holes) algorithm</li>
+<li>全连接的条件随机场（CRF）</li>
+</ul>
+<h2 id="2-相关工作略">2. 相关工作（略）<a hidden class="anchor" aria-hidden="true" href="#2-相关工作略">#</a></h2>
+<h2 id="3--用于密集图像标记的卷积神经网络">3.  用于密集图像标记的卷积神经网络<a hidden class="anchor" aria-hidden="true" href="#3--用于密集图像标记的卷积神经网络">#</a></h2>
+<h3 id="31--hole-algorithm">3.1  ‘HOLE’ ALGORITHM<a hidden class="anchor" aria-hidden="true" href="#31--hole-algorithm">#</a></h3>
+<p>将 VGG-16 的全连接层转换为卷积层，作为特征图提取。5 个最大池化跳过了后两个，或者将最后两个最大池化 stride = 1，kernal = 3，这样得出的特征图大小不变。</p>
+<ul>
+<li>DeepLab V1：https://github.com/wangleihitcs/DeepLab-V1-PyTorch/blob/master/nets/vgg.py</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># max pooling </span>
+</span></span><span style="display:flex;"><span>nn<span style="color:#f92672">.</span>MaxPool2d(kernel_size<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>, stride<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, padding<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>),
+</span></span></code></pre></div><p>最大池化层的改动，影响到了其后卷积层的感受野大小，通过引入 0 来修改（上采样）卷积核。 保持卷积核的完整，而对它们所应用的特征图分别使用 2 或 4 像素的输入跨度进行稀疏采样。如下图 1 所示，称为 hole algorithm（Atrous algorithm）。</p>
+<p><img loading="lazy" src="./20210620/2.png" alt=""  />
+</p>
+<p>将最后的 1000-way 输出修改为 21-way，ground truth (subsampled by 8)，即最后网络的输出相对于原图像小 8 倍，然后使用双线性插值将其分辨率提高 8 倍。</p>
+<h2 id="32-边界恢复完全连接的-crf-和-muti-scale">3.2 边界恢复：完全连接的 CRF 和 Muti-Scale<a hidden class="anchor" aria-hidden="true" href="#32-边界恢复完全连接的-crf-和-muti-scale">#</a></h2>
+<p><img loading="lazy" src="./20210620/3.png" alt=""  />
+</p>
+<p>定位精度和分类性能之间的权衡似乎是 DCNN 所固有的：事实证明，具有多个最大池层的较深模型在分类任务中是最成功的，然而，增加的不变性和顶层节点的大感受野只能产生平滑的效果（Fig 2. 边界模糊）。</p>
+<p>如上图，DCNN 的 Score maps 能预测物体的存在和大致位置，但不能真正划定其边界。</p>
+<p>有两种方法解决这个问题：
+（1）利用卷积网络中的多层信息，以便更好的估计边界。
+（2）采用超级像素表示法，基本上将精确定位任务委托给低级别的分割方法。</p>
+<p>本篇论文追求另一个方向，即把 DCNN 的识别能力和全连接 CRF 的细粒度定位精度结合起来。全连接 CRF  在解决定位挑战方面非常成功，产生了准确的语义分割结果，并在现有方法无法达到的细节水平上恢复了物体的边界。</p>
+<p>条件随机场（CRFs）被用来平滑嘈杂的分割图。一般来说，模型将相邻的节点结合在一起，倾向于将相同的标签分配给空间上近似的像素。</p>
+<p>而从 Fig 2 可以看出，DCNN 输出的 Score map 是相当平滑的，并产生同质化的分类结果。在这种情况下，我们需要恢复局部结构，而不是平滑它。</p>
+<p>Energy Function：</p>
+<p><img loading="lazy" src="./20210620/5.png" alt=""  />
+</p>
+<p>Gaussian Kernel：</p>
+<p><img loading="lazy" src="./20210620/4.png" alt=""  />
+</p>
+<p>这里见 PPT，我会从 Random Field Models，到 Filtering，再到 Dense Random Fields，依次介绍其优缺点，从宏观的角度去了解这个后处理操作。</p>
+<p>考虑多尺度信息能够提升最后分割的精度，与 FCN skip layer 类似，如下示意图所示。</p>
+<p><img loading="lazy" src="./20210620/6.png" alt=""  />
+</p>
+<h2 id="4-实验结果">4. 实验结果<a hidden class="anchor" aria-hidden="true" href="#4-实验结果">#</a></h2>
+<p>数据集：PASCAL VOC 2012，21 类，包含 20 个前景对象类和 1 个背景类。</p>
+<p>（a）</p>
+<ul>
+<li>CRF 带来 4% 的性能提升（分割效果如 Fig 7 所示）</li>
+<li>多尺度  MSc 带来带来 1.5% 的性能提升（分割效果如 Fig  4）</li>
+</ul>
+<p><img loading="lazy" src="./20210620/7.png" alt=""  />
+</p>
+<p>采用的 “Atrous algorithm” 允许通过调整输入步幅来任意控制模型的感受野（Field-Of-View, FOV）。</p>
+<p><img loading="lazy" src="./20210620/8.png" alt=""  />
+</p>
+<p>与 SOTA 方法进行比较。</p>
+<p><img loading="lazy" src="./20210620/9.png" alt=""  />
+</p>
+<h2 id="总结">总结<a hidden class="anchor" aria-hidden="true" href="#总结">#</a></h2>
+<p>DeepLab V1 可以总结为以下几点：</p>
+<ul>
+<li>基于 VGG-16，全连接层转换为 1×1 卷积层</li>
+<li>删除了最后两个  max-pooling（或者说是最后两个池化层不改变特征图的大小）</li>
+<li>空洞卷积“Atrous algorithm”调整感受野</li>
+<li>使用双线性插值上采样 8× 得到原图大小</li>
+<li>使用全连接 CRF 进行边界恢复</li>
+<li>多尺度预测</li>
+</ul>
+<hr>
+<h1 id="deeplab-v2">DeepLab V2<a hidden class="anchor" aria-hidden="true" href="#deeplab-v2">#</a></h1>
+<blockquote>
+<p>Chen, L., Papandreou, G., Kokkinos, I., Murphy, K., &amp; Yuille, A. (2018). DeepLab: Semantic Image Segmentation with Deep Convolutional Nets, Atrous Convolution, and Fully Connected CRFs. <em>IEEE Transactions on Pattern Analysis and Machine Intelligence, 40</em>, 834-848.</p>
+</blockquote>
+<ul>
+<li>论文地址 DeepLab V2: <a href="https://arxiv.org/abs/1606.00915">https://arxiv.org/abs/1606.00915</a></li>
+<li>期刊：全称 IEEE Transactions on Pattern Analysis and Machine Intelligence (TPAMI)，简称为 IEEE PAMI 或者（PAMI）</li>
+</ul>
+<p><img loading="lazy" src="./20210620/10.png" alt=""  />
+</p>
+<h2 id="摘要-1">摘要<a hidden class="anchor" aria-hidden="true" href="#摘要-1">#</a></h2>
+<p>论文使用深度学习解决了语义图像分割的任务，有三个主要贡献：</p>
+<p>（1）强调了空洞卷积 ‘Atrous Convolution’ 作为语义分割任务的一项强大工具。</p>
+<p>（2）提出了 atrous spatial pyramid pooling (ASPP)，考虑多尺度信息。</p>
+<p>（3）将最后一个 DCNN 层的响应与全连接的条件随机场（CRF）相结合来改善物体边界的定位。</p>
+<h2 id="1-introduction-1">1. Introduction<a hidden class="anchor" aria-hidden="true" href="#1-introduction-1">#</a></h2>
+<p>DCNN 在语义图像分割中应用的三个挑战：</p>
+<p>（1）特征分辨率的降低</p>
+<p>（2）多尺度物体的存在</p>
+<p>（3）由于DCNN的不变性而降低了定位精度</p>
+<p>第一个挑战<!-- raw HTML omitted -->分辨率的降低<!-- raw HTML omitted -->，这是由于 DCNNs 的最大池化层和降采样层的堆叠造成的，这个结构是为分类而设计的。特征图的空间分辨率降低对于分割任务来说是非常不利的。</p>
+<p>为了解决这个问题，DeepLab V2 移除了 max-pooling 层，使用升采样的卷积核（空洞卷积），最后使用双线性插值恢复到原始图像大小。与普通的卷积相比，空洞卷积在不增加额外计算量和参数量的情况下，有效增加了感受野大小。</p>
+<p>第二个挑战是由<!-- raw HTML omitted -->多个尺度的物体的存在<!-- raw HTML omitted -->引起的。传统的解决方案是在 DCNN 层计算输入图像的多个尺度比例的特征响应，进行汇总。受到 spatial pyramid pooling 的启发，本论文提出 “atrous spatial pyramid pooling” (ASPP)，通过使用用具有互补的感受野的多个卷积核来探测原始图像，从而在多个尺度上捕获物体和有用的图像背景。</p>
+<p>第三个挑战是：以物体为中心的分类器需要对<!-- raw HTML omitted -->空间变换保持不变<!-- raw HTML omitted -->，这本身就限制了 DCNN 的空间准确性。一种解决方案是使用跳跃连接（ResNet）；本论文则通过采用完全连接的条件随机场（CRF），提高了模型对精细细节的捕捉能力。Fully Connected CRF，具有计算效率高、能够捕捉到精细的边缘细节、满足长距离的依赖等优点。</p>
+<p>DeepLab V2 总体流程：</p>
+<p><img loading="lazy" src="./20210620/11.png" alt=""  />
+</p>
+<p>DeepLab 具有如下三个优点：</p>
+<ul>
+<li>(1) Speed</li>
+<li>(2) Accuracy</li>
+<li>(3) Simplicity</li>
+</ul>
+<p>与 DeepLab V1 相比，V2 有如下改变：</p>
+<p>（1）ASPP：在多个尺度上更好地分割物体</p>
+<p>（2）使用了 ResNet-101</p>
+<p>（3）进行了更多的实验评估</p>
+<h2 id="2-related-works略">2. Related Works（略）<a hidden class="anchor" aria-hidden="true" href="#2-related-works略">#</a></h2>
+<h2 id="3-methods">3. Methods<a hidden class="anchor" aria-hidden="true" href="#3-methods">#</a></h2>
+<p>DeepLab V2 的核心有三个：空洞卷积、ASPP、全连接的 CRF。</p>
+<h3 id="31-atrous-convolution-for-dense-feature-extraction-and-field-of-view-enlargement">3.1 Atrous Convolution for Dense Feature Extraction and Field-of-View Enlargement<a hidden class="anchor" aria-hidden="true" href="#31-atrous-convolution-for-dense-feature-extraction-and-field-of-view-enlargement">#</a></h3>
+<p>最大池化和卷积步幅使得特征图的分辨率降低，‘deconvolution’ 虽然可以缓解，但是需要引入额外的内存和时间消耗。</p>
+<p>空洞卷积最初是为小波变换开发的。空洞卷积算法使我们能够以任何理想的分辨率计算任何一层的输出，可以与预训练的模型无缝结合。</p>
+<p>一维的信号：x[i] 为输入的信号，w[k] 表示卷积核，y[i] 表述输出，r 扩张率，表示对输入信号进行采样的步长，r=1 表示标准的卷积。</p>
+<p><img loading="lazy" src="./20210620/12.png" alt=""  />
+</p>
+<p><img loading="lazy" src="./20210620/13.png" alt=""  />
+</p>
+<p>2-D 图像示例：</p>
+<p><img loading="lazy" src="./20210620/14.png" alt=""  />
+</p>
+<p>先进行下采样，再进行卷积，最后升采样。 如果把得到的特征图植入原始图像的坐标，会发现我们只在图像的 1/4 位置获得了响应。</p>
+<p>如果使用空洞卷积，尽管卷积核的尺寸变大了，但是仅需要考虑非 0 值，参数的数量和每个位置的操作数保持不变。 这个方案使我们能够轻松而明确地控制神经网络特征反应的空间分辨率。</p>
+<p>接下来是关于空洞卷积的感受野，在不增加参数和计算量的情况下，k×k 扩大称为 k + (k-1)(r-1)。如 3×3,r=2，其感受野为 3 + (3 - 1)(2 - 1) = 5。因此，它提供了一个有效的机制来控制感受野，并在准确定位（小感受野）和上下文信息（大感受野）之间找到最佳平衡点。</p>
+<p>空洞卷积的实现有两种方式：</p>
+<p>（1） 第一种是通过插入空洞（0）来隐含地对卷积核进行升采样，或者说是对输入特征图进行稀疏采样。</p>
+<p>（2）第二种是对输入特征图进行子采样。</p>
+<h3 id="32-multiscale-image-representations-using-atrous-spatial-pyramid-pooling-aspp">3.2 Multiscale Image Representations using Atrous Spatial Pyramid Pooling (ASPP)<a hidden class="anchor" aria-hidden="true" href="#32-multiscale-image-representations-using-atrous-spatial-pyramid-pooling-aspp">#</a></h3>
+<p>研究表明，考虑物体的尺度可以提高 DCNN 成功处理大物体和小物体的能力。有两种方法：</p>
+<p>（1）标准的多尺度处理
+从多个重新缩放的原始图像中提取 DCNN 得分图，最后进行融合。（DeepLab V1）</p>
+<p>（2）ASPP
+研究表明，任意尺度的区域可以通过对单一尺度提取的卷积特征进行重采样来准确有效地分类。使用了多个并行的非线性卷积层，具有不同的采样率，为每个采样率提取的特征在不同的分支中进一步处理，并融合以产生最终结果。</p>
+<p><img loading="lazy" src="./20210620/15.png" alt=""  />
+</p>
+<h2 id="33-全连接的-crf-进行边界恢复">3.3 全连接的 CRF 进行边界恢复<a hidden class="anchor" aria-hidden="true" href="#33-全连接的-crf-进行边界恢复">#</a></h2>
+<p>同 DeepLab V1。</p>
+<p><img loading="lazy" src="./20210620/4.png" alt=""  />
+</p>
+<h2 id="4-experimental-results">4. EXPERIMENTAL RESULTS<a hidden class="anchor" aria-hidden="true" href="#4-experimental-results">#</a></h2>
+<p>DeepLab V2 进行了丰富的实验。</p>
+<p>基干网络使用 ResNet-101，数据集有 PASCAL VOC 2012, PASCAL-Context, PASCALPerson-Part, and Cityscapes。</p>
+<p>这里我只列出 PASCAL VOC 2012，方便与 DeepLab V1 进行比较。</p>
+<p><img loading="lazy" src="./20210620/16.png" alt=""  />
+</p>
+<p>ASPP</p>
+<p><img loading="lazy" src="./20210620/17.png" alt=""  />
+</p>
+<p>DeepLab V2：79.7%，DeepLab V1：71.5%。</p>
+<p><img loading="lazy" src="./20210620/18.png" alt=""  />
+</p>
+<p>基干网络 VGG-16 和 ResNet-101 比较：</p>
+<p><img loading="lazy" src="./20210620/19.png" alt=""  />
+</p>
+<h2 id="总结-1">总结<a hidden class="anchor" aria-hidden="true" href="#总结-1">#</a></h2>
+<p>DeepLab V2 总结为以下几点：</p>
+<ul>
+<li>使用 ResNet 作为基干网络</li>
+<li>ASPP 模块</li>
+<li>丰富的实验</li>
+</ul>
+<h2 id="reference">Reference<a hidden class="anchor" aria-hidden="true" href="#reference">#</a></h2>
+<p>[1] Chen, L., Papandreou, G., Kokkinos, I., Murphy, K., &amp; Yuille, A. (2015). Semantic Image Segmentation with Deep Convolutional Nets and Fully Connected CRFs. <em>CoRR, abs/1412.7062</em>.</p>
+<p>[2] Chen, L., Papandreou, G., Kokkinos, I., Murphy, K., &amp; Yuille, A. (2018). DeepLab: Semantic Image Segmentation with Deep Convolutional Nets, Atrous Convolution, and Fully Connected CRFs. <em>IEEE Transactions on Pattern Analysis and Machine Intelligence, 40</em>, 834-848.</p>
+<p>[3] <a href="https://www.cs.cmu.edu/~efros/courses/LBMV12/crf_deconstruction.pdf">https://www.cs.cmu.edu/~efros/courses/LBMV12/crf_deconstruction.pdf</a></p>
+<p>[4] <a href="http://vision.stanford.edu/teaching/cs231b_spring1415/slides/philipp_densecrf.pdf">http://vision.stanford.edu/teaching/cs231b_spring1415/slides/philipp_densecrf.pdf</a></p>
+<p>[5] <a href="https://web.cs.ucdavis.edu/~yjlee/teaching/ecs289g-winter2018/DeepLab.pdf">https://web.cs.ucdavis.edu/~yjlee/teaching/ecs289g-winter2018/DeepLab.pdf</a></p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://landodo.github.io/tags/cnn/">CNN</a></li>
+      <li><a href="http://landodo.github.io/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/">医学图像分割</a></li>
+      <li><a href="http://landodo.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">论文阅读</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://landodo.github.io/posts/20210711-gat/">
+    <span class="title">« Prev Page</span>
+    <br>
+    <span>Graph Attention Networks(GATs) </span>
+  </a>
+  <a class="next" href="http://landodo.github.io/posts/20210530-boundary-loss/">
+    <span class="title">Next Page »</span>
+    <br>
+    <span>Boundary loss for highly unbalanced segmentation</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>Landon</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

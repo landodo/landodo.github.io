@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+<meta name="robots" content="index, follow">
+<title>Network In Network | Landodo&#39;s NoteBook</title>
+<meta name="keywords" content="NIN, CNN, 论文阅读" />
+<meta name="description" content="Network In Network 论文阅读 ✅ 论文地址：https://arxiv.org/pdf/1312.4400.pdf ✅ 论文发表时间：2014 年 论文提出了一种名为">
+<meta name="author" content="">
+<link rel="canonical" href="http://landodo.github.io/posts/20201215-network-in-network/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://landodo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://landodo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://landodo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://landodo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://landodo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Network In Network" />
+<meta property="og:description" content="Network In Network 论文阅读 ✅ 论文地址：https://arxiv.org/pdf/1312.4400.pdf ✅ 论文发表时间：2014 年 论文提出了一种名为" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://landodo.github.io/posts/20201215-network-in-network/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-11-07T10:17:29&#43;08:00" />
+<meta property="article:modified_time" content="2020-11-07T10:17:29&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Network In Network"/>
+<meta name="twitter:description" content="Network In Network 论文阅读 ✅ 论文地址：https://arxiv.org/pdf/1312.4400.pdf ✅ 论文发表时间：2014 年 论文提出了一种名为"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://landodo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Network In Network",
+      "item": "http://landodo.github.io/posts/20201215-network-in-network/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Network In Network",
+  "name": "Network In Network",
+  "description": "Network In Network 论文阅读 ✅ 论文地址：https://arxiv.org/pdf/1312.4400.pdf ✅ 论文发表时间：2014 年 论文提出了一种名为",
+  "keywords": [
+    "NIN", "CNN", "论文阅读"
+  ],
+  "articleBody": "Network In Network 论文阅读 ✅ 论文地址：https://arxiv.org/pdf/1312.4400.pdf\n✅ 论文发表时间：2014 年\n论文提出了一种名为 “Network In Network” (NIN) 的神经网络结构。与传统 CNN 不同的是，NIN 建立了更加复杂的微神经网络来抽象感受野中的数据。\n传统 CNN 是通过滑动 Filter 来获取特征图，而 NIN 则是通过滑动一个微小的神经网络来获取，然后传递到下一层。\n通过微网络增强局部建模，能够在分类层中利用特征图上的全局平均池化，相比于传统的全连接层的表现力更强，也更不容易过拟合。\nNIN 在 CIFAR-10、CIFAR-100、SVHN 和 MNIST 数据集上都取得了不错的性能。\n1 Introduction 卷积神经网络（CNNs）由交替的卷积层和池化层组成，卷积是线性滤波器和输入的感受野的內积，在输入的每一个局部部分进行非线性激活函数。由此产生的输出称为特征图（feature maps）。\nCNN 中的卷积核是一个 generalized linear model (GLM) ，论文作者认为 GLM 的抽象能力很低，而使用更有力的非线性函数逼近器（nonlinear function approximator）代替 GLM 可以提高局部模型的抽象能力。\n GLM can achieve a good extent of abstraction when the samples of the latent concepts are linearly separable, i.e. the variants of the concepts all live on one side of the separation plane defined by the GLM. Thus conventional CNN implicitly makes the assumption that the latent concepts are linearly separable. However, the data for the same concept often live on a nonlinear manifold, therefore the representations that capture these concepts are generally highly nonlinear function of the input.\nXception 也是从 NIN 中获得了启发。\n 在 NIN 中，GLM 被替换为\"微网络\"结构，选择多层感知器作为微网络的实例，也是一个可通过反向传播进行训练的神经网络。\nNIN 中的结构称之为 mlpconv 层。\nmlpconv 使用一个多层感知器（MLP）将输入的局部 patch 映射到输出特征向量，该多层感知器由多个具有非线性激活函数的全连接层组成。\nNIN 的整体结构是多个 MLPconv 层的叠加，所以被称为 “Network In Network”（NIN）。\nNIN 没有采用传统 CNN 的全连接层进行分类，而是通过全局平均池层（global average pooling layer）直接输出上一个 mlpconv 层的特征图的空间平均值作为类别的置信度，然后将得到的向量送入 softmax 层。\n相比于全连接层，全局平均池化（GAP）更有意义和可解释性，GAP 强制要求特征图和类别之间的对应关系，这是由使用微网络的更强的局部建模所实现的。GAP 本身就是一个结构正则化器，这防止了整体结构的过拟合。\n2 Convolutional Neural Networks 良好抽象的表示通常是输入数据的高度非线性函数，如果使用传统的 CNN 结构，可能需要一系列的卷积核来提取抽象的特征。使用多个卷积核是一个很多负担。\n最近的 Maxout 网络通过在非线性特征图上的最大池化来减少特征图的数量（非线性特征图是不应用激活函数的线性卷积的直接结果），这一改进使得 Maxout 具有更高的性能。\n ✅ instances of a latent concept 这一名词反复出现，但是我不知道怎么翻译它？\n由于 instances of a latent concept，传统的 CNNs 、Maxout 都表现的不好。\n 当 instances of a latent concept 分布复杂时，Maxout 的表现就不太好。这就需要采用一个更通用的函数逼近器来计算局部 patch 的更抽象的特征。\n结构化多层感知器（Structured Multilayer Perceptron，SMLP）将一个共享的多层感知器应用于输入图像的不同 patch 上。NIN 将微观网络集成到 CNN 结构中，对各级特征进行更好的抽象。\n3 Network In Network Network In Network 结构的关键部分：MLP 卷积层和全局平均池化层（MLP convolutional layer and the global averaging pooling layer）。\n3.1 MLP Convolution Layers  Given no priors about the distributions of the latent concepts. （传统结构和 maxout 的劣势）\n 径向基网络（Radial basis network）和多层感知器（multilayer perceptron）是两个著名的通用函数逼近器。\n论文使用的是多层感知机：\n 多层感知器与卷积神经网络的结构相适应，它同样采用反向传播进行训练。 多层感知器本身可以是一个深度模型，这符合特征重用的思想。  如下图 1 是线性卷积层和 mlpconv 层的区别。\nmlpconv 层进行的计算如下：\n$n$ 是多层感知器的层数，多层感知器中使用 $ReLU$ 激活函数。\n公式 (2) 体现了级联式的跨通道参数池化结构可以实现跨通道信息的复杂和可学习的交互。\n跨通道参数池化层相当于 1x1 卷积核的卷积层（只获取通道的相关性，不考虑空间相关性。理解 NIN 的结构）。\n**与 maxout 层相比：**maxout 网络中的 maxout 层在多个非线性特征图上进行最大池化。maxout 层的特征图计算如下：\n3.2 Global Average Pooling 传统的卷积神经网络在网络的低层进行卷积。对于分类来说，最后一个卷积层的特征图被矢量化，并送入全连接层中，然后是一个 softmax 逻辑回归层（AlexNet/Maxout）。这种结构是卷积结构与传统神经网络分类器的桥梁,它将卷积层视为特征提取器，并以传统方式对产生的特征进行分类。\n全连接层容易出现过拟合，从而影响了整个网络的泛化能力。\n这篇论文提出了一种称为**全局平均池化（global average pooling）**的策略来取代 CNN 中传统的全连接层。\n其思想是在最后一个 mlpconv 层中为分类任务的每个对应类别生成一个特征图，取每个特征图的平均数，所得向量直接送入 softmax 层。\n相比于 FC，GAP 的优势：\n 通过强制执行特征图和类别之间的对应关系，更原生地融入卷积结构。因此特征图可以很容易地解释为类别置信图。 全局平均池化没有参数需要优化，因此在这一层避免了过拟合。 全局平均池化对空间信息进行求和，因此它对输入的空间转换更加稳健。  可以将全局平均池化作为一种结构正则化器，明确地将特征图强制为概念（类别）的置信图。\n3.3 Network In Network Structure NIN 的整体结构是一个 mlpconv 层的堆叠。图 2 显示了一个具有三个 mlpconv 层的 NIN。\n4 Experiments 在 CIFAR-10、CIFAR-100、SVHN 和 MNIST 数据集上进行评估。\n使用的一个正则化是 Krizhevsky 等人（AlexNet）使用的权重衰减。\n4.2 CIFAR-10 8.81% 的测试误差是当下最好的性能。\n在实验中发现，在 NIN 的 mlpconv 层之间使用 dropout 可以提高模型的泛化能力，从而提升网络的性能。\n4.3 CIFAR-100 4.4 Street View House Numbers SVHN 数据集由 630,420 张 32x32 彩色图像组成。\nNIN 在这个数据集上的测试错误率为 2.35%。\n4.5 MNIST NIN 的错误率为 0.47%，这并不是一个最好的结果。\n4.6 Global Average Pooling as a Regularizer 在探讨全局平均池化是否对传统 CNN 具有同样的正则化效果时，实例化了一个 CNN（三个卷积层和一个局部连接层组成）。\n在 CIFAR-10 数据集上进行了测试：\n 全连接层的 CNN 模型只能实现 17.56% 的错误率。 当加入 dropout 时，错误率为 15.99%。 用全局平均池化替换全连接层，得到的错误率为 16.46%。  全局平均池化比 dropout 的结果稍差。\n4.7 Visualization of NIN 从 CIFAR-10 的训练模型的最后一个 mlpconv 层提取并直接可视化特征图。\n可视化再次证明了 NIN 的有效性。它是通过使用 mlpconv 层进行更强的局部感受野建模来实现的。然后，全局平均池化强制学习类别级特征图。\n5 Conclusions Network In Network (NIN) 由输入进行卷积的 mlpconv 层和全局平均池化层组成。mlpconv 层可以更好地对局部 patch 进行建模，全局平均池化可以防止全局的过拟合。\nNIN 在 CIFAR-10、CIFAR-100 和 SVHN 数据集都取得了最好的表现。\n通过对特征图的可视化，证明了 NIN 最后一个 mlpconv 层的特征图是类别的置信度图。\n",
+  "wordCount" : "2699",
+  "inLanguage": "en",
+  "datePublished": "2020-11-07T10:17:29+08:00",
+  "dateModified": "2020-11-07T10:17:29+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://landodo.github.io/posts/20201215-network-in-network/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Landodo's NoteBook",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://landodo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://landodo.github.io/" accesskey="h" title="Landodo&#39;s NoteBook (Alt + H)">Landodo&#39;s NoteBook</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://landodo.github.io/search" title="🔍Search (Alt &#43; /)" accesskey=/>
+                    <span>🔍Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/tags" title="Tag">
+                    <span>Tag</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/cs-zoo" title="CS ZOO">
+                    <span>CS ZOO</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://landodo.github.io/">Home</a>&nbsp;»&nbsp;<a href="http://landodo.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      Network In Network
+    </h1>
+    <div class="post-meta"><span title='2020-11-07 10:17:29 +0800 CST'>November 7, 2020</span>&nbsp;·&nbsp;6 min&nbsp;·&nbsp;2699 words
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#network-in-network-%e8%ae%ba%e6%96%87%e9%98%85%e8%af%bb" aria-label="Network In Network 论文阅读">Network In Network 论文阅读</a><ul>
+                        
+                <li>
+                    <a href="#1-introduction" aria-label="1 Introduction">1 Introduction</a></li>
+                <li>
+                    <a href="#2-convolutional-neural-networks" aria-label="2 Convolutional Neural Networks">2 Convolutional Neural Networks</a></li>
+                <li>
+                    <a href="#3-network-in-network" aria-label="3 Network In Network">3 Network In Network</a><ul>
+                        
+                <li>
+                    <a href="#31-mlp-convolution-layers" aria-label="3.1 MLP Convolution Layers">3.1 MLP Convolution Layers</a></li>
+                <li>
+                    <a href="#32-global-average-pooling" aria-label="3.2 Global Average Pooling">3.2 Global Average Pooling</a></li>
+                <li>
+                    <a href="#33-network-in-network-structure" aria-label="3.3 Network In Network Structure">3.3 Network In Network Structure</a></li></ul>
+                </li>
+                <li>
+                    <a href="#4-experiments" aria-label="4 Experiments">4 Experiments</a><ul>
+                        
+                <li>
+                    <a href="#42-cifar-10" aria-label="4.2 CIFAR-10">4.2 CIFAR-10</a></li>
+                <li>
+                    <a href="#43-cifar-100" aria-label="4.3 CIFAR-100">4.3 CIFAR-100</a></li>
+                <li>
+                    <a href="#44-street-view-house-numbers" aria-label="4.4 Street View House Numbers">4.4 Street View House Numbers</a></li>
+                <li>
+                    <a href="#45-mnist" aria-label="4.5 MNIST">4.5 MNIST</a></li>
+                <li>
+                    <a href="#46-global-average-pooling-as-a-regularizer" aria-label="4.6 Global Average Pooling as a Regularizer">4.6 Global Average Pooling as a Regularizer</a></li>
+                <li>
+                    <a href="#47-visualization-of-nin" aria-label="4.7 Visualization of NIN">4.7 Visualization of NIN</a></li></ul>
+                </li>
+                <li>
+                    <a href="#5-conclusions" aria-label="5 Conclusions">5 Conclusions</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h1 id="network-in-network-论文阅读">Network In Network 论文阅读<a hidden class="anchor" aria-hidden="true" href="#network-in-network-论文阅读">#</a></h1>
+<p>✅ 论文地址：<a href="https://arxiv.org/pdf/1312.4400.pdf">https://arxiv.org/pdf/1312.4400.pdf</a></p>
+<p>✅ 论文发表时间：2014 年</p>
+<p><img loading="lazy" src="./20201215/0.png" alt=""  />
+</p>
+<p>论文提出了一种名为 “<strong>N</strong>etwork <strong>I</strong>n <strong>N</strong>etwork” (NIN) 的神经网络结构。与传统 CNN 不同的是，NIN 建立了更加复杂的微神经网络来抽象感受野中的数据。</p>
+<p>传统 CNN 是通过滑动 Filter 来获取特征图，而 NIN 则是通过滑动一个微小的神经网络来获取，然后传递到下一层。</p>
+<p>通过微网络增强局部建模，能够在分类层中利用特征图上的全局平均池化，相比于传统的全连接层的表现力更强，也更不容易过拟合。</p>
+<p>NIN 在 CIFAR-10、CIFAR-100、SVHN 和 MNIST 数据集上都取得了不错的性能。</p>
+<h2 id="1-introduction">1 Introduction<a hidden class="anchor" aria-hidden="true" href="#1-introduction">#</a></h2>
+<p>卷积神经网络（CNNs）由交替的卷积层和池化层组成，卷积是线性滤波器和输入的感受野的內积，在输入的每一个局部部分进行非线性激活函数。由此产生的输出称为<strong>特征图</strong>（feature maps）。</p>
+<p>CNN 中的卷积核是一个 generalized linear model (GLM) ，论文作者认为 GLM 的抽象能力很低，而使用更有力的非线性函数逼近器（nonlinear function approximator）代替 GLM 可以提高局部模型的抽象能力。</p>
+<blockquote>
+<p>GLM can achieve a good extent of abstraction when the samples of the latent concepts are linearly separable, i.e. the variants of the concepts all live on one side of the separation plane defined by the GLM. Thus conventional CNN implicitly makes the assumption that the <strong>latent concepts</strong> are linearly separable. However, the data for the same concept often live on a nonlinear manifold, therefore the representations that capture these concepts are generally highly nonlinear function of the input.</p>
+<p>Xception 也是从 NIN 中获得了启发。</p>
+</blockquote>
+<p>在 NIN 中，GLM 被替换为&quot;微网络&quot;结构，选择多层感知器作为微网络的实例，也是一个可通过反向传播进行训练的神经网络。</p>
+<p>NIN 中的结构称之为 mlpconv 层。</p>
+<p>mlpconv 使用一个多层感知器（MLP）将输入的局部 patch 映射到输出特征向量，该多层感知器由多个具有非线性激活函数的全连接层组成。</p>
+<p>NIN 的整体结构是多个 MLPconv 层的叠加，所以被称为 &ldquo;Network In Network&rdquo;（NIN）。</p>
+<p>NIN 没有采用传统 CNN 的全连接层进行分类，而是通过全局平均池层（global average pooling layer）直接输出上一个 mlpconv 层的特征图的空间平均值作为类别的置信度，然后将得到的向量送入 softmax 层。</p>
+<p>相比于全连接层，全局平均池化（GAP）更有意义和可解释性，GAP 强制要求特征图和类别之间的对应关系，这是由使用微网络的更强的局部建模所实现的。GAP 本身就是一个结构正则化器，这防止了整体结构的过拟合。</p>
+<h2 id="2-convolutional-neural-networks">2 Convolutional Neural Networks<a hidden class="anchor" aria-hidden="true" href="#2-convolutional-neural-networks">#</a></h2>
+<p>良好抽象的表示通常是输入数据的高度非线性函数，如果使用传统的 CNN 结构，可能需要一系列的卷积核来提取抽象的特征。使用多个卷积核是一个很多负担。</p>
+<p>最近的 Maxout 网络通过在非线性特征图上的最大池化来减少特征图的数量（非线性特征图是不应用激活函数的线性卷积的直接结果），这一改进使得 Maxout 具有更高的性能。</p>
+<blockquote>
+<p>✅ instances of a latent concept 这一名词反复出现，但是我不知道怎么翻译它？</p>
+<p>由于 instances of a latent concept，传统的 CNNs 、Maxout 都表现的不好。</p>
+</blockquote>
+<p>当 instances of a latent concept 分布复杂时，Maxout 的表现就不太好。这就需要采用一个更通用的函数逼近器来计算局部 patch 的更抽象的特征。</p>
+<p>结构化多层感知器（Structured Multilayer Perceptron，SMLP）将一个共享的多层感知器应用于输入图像的不同 patch 上。NIN 将微观网络集成到 CNN 结构中，对各级特征进行更好的抽象。</p>
+<h2 id="3-network-in-network">3 Network In Network<a hidden class="anchor" aria-hidden="true" href="#3-network-in-network">#</a></h2>
+<p>Network In Network 结构的关键部分：MLP 卷积层和全局平均池化层（MLP convolutional layer and the global averaging pooling layer）。</p>
+<h3 id="31-mlp-convolution-layers">3.1 MLP Convolution Layers<a hidden class="anchor" aria-hidden="true" href="#31-mlp-convolution-layers">#</a></h3>
+<blockquote>
+<p>Given no priors about the distributions of the <strong>latent concepts</strong>. （传统结构和 maxout 的劣势）</p>
+</blockquote>
+<p>径向基网络（Radial basis network）和多层感知器（multilayer perceptron）是两个著名的通用函数逼近器。</p>
+<p>论文使用的是多层感知机：</p>
+<ul>
+<li>多层感知器与卷积神经网络的结构相适应，它同样采用反向传播进行训练。</li>
+<li>多层感知器本身可以是一个深度模型，这符合特征重用的思想。</li>
+</ul>
+<p>如下图 1 是线性卷积层和 mlpconv 层的区别。</p>
+<p><img loading="lazy" src="./20201215/1.png" alt=""  />
+</p>
+<p>mlpconv 层进行的计算如下：</p>
+<p><img loading="lazy" src="./20201215/a.png" alt=""  />
+</p>
+<p>$n$ 是多层感知器的层数，多层感知器中使用 $ReLU$ 激活函数。</p>
+<p>公式 (2) 体现了级联式的跨通道参数池化结构可以实现跨通道信息的复杂和可学习的交互。</p>
+<p>跨通道参数池化层相当于 1x1 卷积核的卷积层（只获取通道的相关性，不考虑空间相关性。理解 NIN 的结构）。</p>
+<p>**与 maxout 层相比：**maxout 网络中的 maxout 层在多个非线性特征图上进行最大池化。maxout 层的特征图计算如下：</p>
+<p><img loading="lazy" src="./20201215/b.png" alt=""  />
+</p>
+<h3 id="32-global-average-pooling">3.2 Global Average Pooling<a hidden class="anchor" aria-hidden="true" href="#32-global-average-pooling">#</a></h3>
+<p>传统的卷积神经网络在网络的低层进行卷积。对于分类来说，最后一个卷积层的特征图被矢量化，并送入全连接层中，然后是一个 softmax 逻辑回归层（AlexNet/Maxout）。这种结构是卷积结构与传统神经网络分类器的桥梁,它将卷积层视为特征提取器，并以传统方式对产生的特征进行分类。</p>
+<p>全连接层容易出现过拟合，从而影响了整个网络的泛化能力。</p>
+<p>这篇论文提出了一种称为**全局平均池化（global average pooling）**的策略来取代 CNN 中传统的全连接层。</p>
+<p>其思想是在最后一个 mlpconv 层中为分类任务的每个对应类别生成一个特征图，取每个特征图的平均数，所得向量直接送入 softmax 层。</p>
+<p>相比于 FC，GAP 的优势：</p>
+<ul>
+<li>通过强制执行特征图和类别之间的对应关系，更原生地融入卷积结构。因此特征图可以很容易地解释为类别置信图。</li>
+<li>全局平均池化没有参数需要优化，因此在这一层避免了过拟合。</li>
+<li>全局平均池化对空间信息进行求和，因此它对输入的空间转换更加稳健。</li>
+</ul>
+<p>可以将全局平均池化作为一种结构正则化器，明确地将特征图强制为概念（类别）的置信图。</p>
+<h3 id="33-network-in-network-structure">3.3 Network In Network Structure<a hidden class="anchor" aria-hidden="true" href="#33-network-in-network-structure">#</a></h3>
+<p>NIN 的整体结构是一个 mlpconv 层的堆叠。图 2 显示了一个具有三个 mlpconv 层的 NIN。</p>
+<p><img loading="lazy" src="./20201215/2.png" alt=""  />
+</p>
+<h2 id="4-experiments">4 Experiments<a hidden class="anchor" aria-hidden="true" href="#4-experiments">#</a></h2>
+<p>在 CIFAR-10、CIFAR-100、SVHN 和 MNIST 数据集上进行评估。</p>
+<p>使用的一个正则化是 Krizhevsky 等人（AlexNet）使用的权重衰减。</p>
+<h3 id="42-cifar-10">4.2 CIFAR-10<a hidden class="anchor" aria-hidden="true" href="#42-cifar-10">#</a></h3>
+<p>8.81% 的测试误差是当下最好的性能。</p>
+<p><img loading="lazy" src="./20201215/3.png" alt=""  />
+</p>
+<p>在实验中发现，在 NIN 的 mlpconv 层之间使用 dropout 可以提高模型的泛化能力，从而提升网络的性能。</p>
+<p><img loading="lazy" src="./20201215/4.png" alt=""  />
+</p>
+<h3 id="43-cifar-100">4.3 CIFAR-100<a hidden class="anchor" aria-hidden="true" href="#43-cifar-100">#</a></h3>
+<p><img loading="lazy" src="./20201215/5.png" alt=""  />
+</p>
+<h3 id="44-street-view-house-numbers">4.4 Street View House Numbers<a hidden class="anchor" aria-hidden="true" href="#44-street-view-house-numbers">#</a></h3>
+<p>SVHN 数据集由 630,420 张 32x32 彩色图像组成。</p>
+<p>NIN 在这个数据集上的测试错误率为 2.35%。</p>
+<p><img loading="lazy" src="./20201215/9.png" alt=""  />
+</p>
+<h3 id="45-mnist">4.5 MNIST<a hidden class="anchor" aria-hidden="true" href="#45-mnist">#</a></h3>
+<p>NIN 的错误率为 0.47%，这并不是一个最好的结果。</p>
+<p><img loading="lazy" src="./20201215/6.png" alt=""  />
+</p>
+<h3 id="46-global-average-pooling-as-a-regularizer">4.6 Global Average Pooling as a Regularizer<a hidden class="anchor" aria-hidden="true" href="#46-global-average-pooling-as-a-regularizer">#</a></h3>
+<p><img loading="lazy" src="./20201215/7.png" alt=""  />
+</p>
+<p>在探讨全局平均池化是否对传统 CNN 具有同样的正则化效果时，实例化了一个 CNN（三个卷积层和一个局部连接层组成）。</p>
+<p>在 CIFAR-10 数据集上进行了测试：</p>
+<ul>
+<li>全连接层的 CNN 模型只能实现 17.56% 的错误率。</li>
+<li>当加入 dropout 时，错误率为 15.99%。</li>
+<li>用全局平均池化替换全连接层，得到的错误率为 16.46%。</li>
+</ul>
+<p>全局平均池化比 dropout 的结果稍差。</p>
+<h3 id="47-visualization-of-nin">4.7 Visualization of NIN<a hidden class="anchor" aria-hidden="true" href="#47-visualization-of-nin">#</a></h3>
+<p>从 CIFAR-10 的训练模型的最后一个 mlpconv 层提取并直接可视化特征图。</p>
+<p><img loading="lazy" src="./20201215/8.png" alt=""  />
+</p>
+<p>可视化再次证明了 NIN 的有效性。它是通过使用 mlpconv 层进行更强的局部感受野建模来实现的。然后，全局平均池化强制学习类别级特征图。</p>
+<h2 id="5-conclusions">5 Conclusions<a hidden class="anchor" aria-hidden="true" href="#5-conclusions">#</a></h2>
+<p>Network In Network (NIN) 由输入进行卷积的 mlpconv 层和全局平均池化层组成。mlpconv 层可以更好地对局部 patch 进行建模，全局平均池化可以防止全局的过拟合。</p>
+<p>NIN 在 CIFAR-10、CIFAR-100 和 SVHN 数据集都取得了最好的表现。</p>
+<p>通过对特征图的可视化，证明了 NIN 最后一个 mlpconv 层的特征图是类别的置信度图。</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://landodo.github.io/tags/nin/">NIN</a></li>
+      <li><a href="http://landodo.github.io/tags/cnn/">CNN</a></li>
+      <li><a href="http://landodo.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">论文阅读</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://landodo.github.io/posts/20201109-alexnet-code/">
+    <span class="title">« Prev Page</span>
+    <br>
+    <span>CIFAR-10、PyTorch 和 AlexNet</span>
+  </a>
+  <a class="next" href="http://landodo.github.io/posts/20201107-http-server-1/">
+    <span class="title">Next Page »</span>
+    <br>
+    <span>使用 C 语言实现一个 HTTP 服务器（1）</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>Landon</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

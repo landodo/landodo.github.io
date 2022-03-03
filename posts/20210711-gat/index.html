@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+<meta name="robots" content="index, follow">
+<title>Graph Attention Networks(GATs)  | Landodo&#39;s NoteBook</title>
+<meta name="keywords" content="注意力, 论文阅读" />
+<meta name="description" content="GAT 地址：https://arxiv.org/abs/1710.10903 期刊：International Conference on Learning Representations (ICLR) 2018 被引用次数：4116 Abstract Graph">
+<meta name="author" content="">
+<link rel="canonical" href="http://landodo.github.io/posts/20210711-gat/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://landodo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://landodo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://landodo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://landodo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://landodo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Graph Attention Networks(GATs) " />
+<meta property="og:description" content="GAT 地址：https://arxiv.org/abs/1710.10903 期刊：International Conference on Learning Representations (ICLR) 2018 被引用次数：4116 Abstract Graph" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://landodo.github.io/posts/20210711-gat/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-07-11T10:17:29&#43;08:00" />
+<meta property="article:modified_time" content="2021-07-11T10:17:29&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Graph Attention Networks(GATs) "/>
+<meta name="twitter:description" content="GAT 地址：https://arxiv.org/abs/1710.10903 期刊：International Conference on Learning Representations (ICLR) 2018 被引用次数：4116 Abstract Graph"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://landodo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Graph Attention Networks(GATs) ",
+      "item": "http://landodo.github.io/posts/20210711-gat/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Graph Attention Networks(GATs) ",
+  "name": "Graph Attention Networks(GATs) ",
+  "description": "GAT 地址：https://arxiv.org/abs/1710.10903 期刊：International Conference on Learning Representations (ICLR) 2018 被引用次数：4116 Abstract Graph",
+  "keywords": [
+    "注意力", "论文阅读"
+  ],
+  "articleBody": "GAT  地址：https://arxiv.org/abs/1710.10903 期刊：International Conference on Learning Representations (ICLR) 2018 被引用次数：4116  Abstract Graph Attention Networks(GATs) 利用 masked self-attention 为邻域中的不同节点指定不同的权重，这个操作不需要任何高成本的矩阵操作（如矩阵的逆）或取决于预先知道的图结构，解决了先前基于图卷积或其近似值的方法的缺点。\n GAT：应用注意力机制将邻居顶点的特征聚合到中心顶点上（一种 aggregate 运算），注意力系数的使用，使得顶点特征之间的相关性被更好地融入到模型中。\n GAT 很适用于 inductive 和 transductive 问题，在 Cora、Citeseer、Pubmed citation network datasets 和 an inductive protein-protein interaction dataset 上取得了 SOTA。\n1 Introduction 图像分类、语义分割或者机器翻译等任务的数据表示具有一种类似网格的结构（grid-like structure），卷积神经网络架构能够有效地重复使用参数可学习的局部卷积核，并将它们应用于所有输入位置（局部连接、参数共享）。\n对于不能用网格状的结构来表示的数据，通常表示为图结构。早期的工作有使用 RNN 来处理有向无环图的数据，图神经网络 GNNs 作为 RNN 的一种泛化，可以直接处理更普遍的图类。\n 💢TODO: 了解最初 GNN 的具体做法。\n 将卷积推广到图域，主要有两类：谱方法（spectral methods）和空间方法（spatial methods）。\n谱方法：卷积操作是在傅里叶域中通过计算图拉普拉斯的特征分解来定义的，这导致潜在的密集计算和非空间定位的过滤器。针对这两个问题：（1）Henaff 等人（2015）引入了一个具有平滑系数的光谱过滤器参数化，以使过滤器在空间上得到定位。（2）Defferrard 等人（2016）提出通过图拉普拉斯的切比雪夫展开来近似滤波器，消除了计算拉普拉斯特征向量的需要，产生了空间定位的滤波器。（3）semi-GCN 通过限制过滤器在每个节点周围的 1 步邻域内运行，进一步简化了之前的方法。\n利用谱方法学习到的滤波器取决于拉普拉斯特征基，而拉普拉斯特征基取决于图的结构。因此，一个在特定结构上训练的模型不能直接应用于不同结构的图。\n空间方法：它直接在图上定义卷积，对空间上的近邻组进行操作。这个方法的挑战是如何定义一个能够处理不同大小的邻域（可以理解为感受野）并保持 CNN 的权重共享的算子。针对这个挑战，有如下的尝试：（1）为每个节点的度学习特定的权重矩阵；（2）使用 transition matrix 来定义领域；（3）提取和规范化包含固定数量节点的邻域；（4）混合模型 CNN（MoNet）；（5）~GraphSAGE~ 通过对每个节点的固定大小的邻域进行采样，然后对其进行特定的聚合（如所有采样邻域的特征向量的平均值）。\n在许多基于序列的任务中，注意力机制几乎已经是标配。注意机制的好处之一是，它允许处理大小不一的输入，集中于输入中最相关的部分来做决定。self-attention 通常被用来计算一个单一序列的表示。\nGAT 引入了一个基于注意力的架构来进行图结构数据的节点分类。基本的想法是：通过关注其邻居节点，按照 self-attention 的策略，计算图中每个节点的隐藏表征。这个 Attention 架构的优点： （1）计算高效，并行。 （2）可以通过为邻居节点指定任意的权重来适用于具有不同度的图节点。 （3）该模型可直接适用于归纳学习问题（inductive learning problems）。\nGAT 在 four challenging benchmarks（ Cora, Citeseer, Pubmed citation networks, an inductive protein-protein interaction dataset）上取得了 SOTA。\n2 GAT 架构 2.1 Graph Convolution Layer 以 Cora 数据集为例，h 的 shape=(2708, 1433)，即有 N=2708 个节点，每个节点有 F=1433 个特征。F’ = 64 or 7，表示经过 GATConv 后节点的特征数量。\n [2708, 1433] —GATConv1— [2708, 64] —CATConv2— [2708, 7]。\n 为了获得足够的表达能力，将输入特征转化为更高层次的特征，至少需要一个可学习的线性转化。权重矩阵 W ∈ ℝ(F’ × F) 应用于每个节点。然后对节点进行 self-attention（一种共享的注意机制 a），把拼接后的高维特征映射到一个实数上，这个实数就是注意力系数： 注意力系数 e_{ij} 是一个标量，表示表示节点 𝑗 的特征对节点 𝑖 的重要性。对于一般的表示，𝑗 为图中除 𝑖 外的所有节点，这个忽略了结构信息（如邻居节点）。\n本篇论文则通过 masked-attention，只计算节点 𝑗 ∈ N𝑖 的注意力系数e_{𝑖𝑗}，其中 N𝑖 是节点 𝑖 在图中的某个邻居节点。这是一种考虑了图的结构信息的注意力机制。为了使系数在不同的节点之间容易比较，使用 softmax 函数对所有 𝑗 的选择进行归一化。 (1) 式中的 𝑎 是一个单层的前馈神经网络，由权重向量 𝑎→∈ ℝ(2F’) 参数化。然后应用 LeakyReLU 非线性，(3) 式的示意图为 Figure 1 Left。 归一化的注意力系数 𝛼𝑖𝑗 被用来计算与之对应的特征的线性组合，作为每个节点的最终输出特征。 ℎ→∈ℝ(N, F’)。 为了使 self-attention 的学习过程更加稳定，将 GAT 的 masked-attention 机制扩展到采用 multi-head attention 是有益的。  PyG 实现的 GAT，第一个 GATConv 的 head=8，即 (5) 式的 K = 8。第二个 GATConv head=1。\n 最后一层采用平均法是更好的选择。 multi-head masked-attention 的示意图如 Figure 1 Right。三种颜色的线表示 head = 3。 3 实验评估 如下是 4 个数据集的基本信息。 我只对其中的 Cora 数据集进行介绍。Cora 在图网络中的地位可以类比于 MNIST 之于图像分类任务。\nCora Dataset (https://relational.fit.cvut.cz/dataset/CORA)\n 相当于图网络中的“MNIST”。\n Cora：2708 个节点，5429 条边，1433 个特征，7 个类别（y）。训练数据集中有的有标签🏷，有的没有标签，Semi-Supervised Classification。\n下面介绍 Transductive learning 和 Inductive Learning 的区别： Transductive：以使用 Cora 数据集为例，把节点分成 train/val/test 集。在训练时，只使用来自训练集节点的标签，但是在 forward 时，根据 GNN 的工作方式，将从邻居聚合特征向量，而邻居中有一些节点可能属于 val 或 test 集。（训练和测试都基于同样的图结构）  GAT 模型学到的节点注意力权重非常接近均匀分布（换言之，所有的邻节点都获得了同等重视）。这在一定程度上解释了为什么在 Cora 上 GAT 的表现和 GCN 非常接近（在上面表格里我们可以看到两者的差距平均下来不到 2%）。由于没有显著区分节点，注意力并没有那么重要。\n Inductive：train set、val set、test set 相互独立。不会出现邻居属于 val/test set 的情况。（用完全没见过的图进行测试） 4 总结 图注意力网络 Graph Attention Networks (GATs) 直接在图结构的数据上进行操作，采用 masked self-attention，是一种新颖的卷积神经网络。\n这种注意力机制允许在处理不同大小的邻域时给邻域中的不同节点分配不同的重要性，并且不依赖于预先知道整个图结构。\n未来的研究方向，可以是利用注意力机制的优势，对模型的可解释性进行彻底分析。\n此外，将该方法扩展到图分类而不是节点分类，从应用的角度来看也很有意义。\n",
+  "wordCount" : "2658",
+  "inLanguage": "en",
+  "datePublished": "2021-07-11T10:17:29+08:00",
+  "dateModified": "2021-07-11T10:17:29+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://landodo.github.io/posts/20210711-gat/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Landodo's NoteBook",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://landodo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://landodo.github.io/" accesskey="h" title="Landodo&#39;s NoteBook (Alt + H)">Landodo&#39;s NoteBook</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://landodo.github.io/search" title="🔍Search (Alt &#43; /)" accesskey=/>
+                    <span>🔍Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/tags" title="Tag">
+                    <span>Tag</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/cs-zoo" title="CS ZOO">
+                    <span>CS ZOO</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://landodo.github.io/">Home</a>&nbsp;»&nbsp;<a href="http://landodo.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      Graph Attention Networks(GATs) 
+    </h1>
+    <div class="post-meta"><span title='2021-07-11 10:17:29 +0800 CST'>July 11, 2021</span>&nbsp;·&nbsp;6 min&nbsp;·&nbsp;2658 words
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#gat" aria-label="GAT">GAT</a><ul>
+                        
+                <li>
+                    <a href="#abstract" aria-label="Abstract">Abstract</a></li>
+                <li>
+                    <a href="#1-introduction" aria-label="1 Introduction">1 Introduction</a></li>
+                <li>
+                    <a href="#2-gat-%e6%9e%b6%e6%9e%84" aria-label="2 GAT 架构">2 GAT 架构</a><ul>
+                        
+                <li>
+                    <a href="#21-graph-convolution-layer" aria-label="2.1 Graph Convolution Layer">2.1 Graph Convolution Layer</a></li></ul>
+                </li>
+                <li>
+                    <a href="#3-%e5%ae%9e%e9%aa%8c%e8%af%84%e4%bc%b0" aria-label="3 实验评估">3 实验评估</a></li>
+                <li>
+                    <a href="#4-%e6%80%bb%e7%bb%93" aria-label="4 总结">4 总结</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h1 id="gat">GAT<a hidden class="anchor" aria-hidden="true" href="#gat">#</a></h1>
+<p><img loading="lazy" src="20210711/D5AF6469-71A1-42D7-8B52-E27423F422BA.png" alt=""  />
+</p>
+<ul>
+<li>地址：https://arxiv.org/abs/1710.10903</li>
+<li>期刊：International Conference on Learning Representations (ICLR) 2018</li>
+<li>被引用次数：4116</li>
+</ul>
+<h2 id="abstract">Abstract<a hidden class="anchor" aria-hidden="true" href="#abstract">#</a></h2>
+<p>Graph Attention Networks(GATs) 利用 masked self-attention 为邻域中的不同节点指定不同的权重，这个操作不需要任何高成本的矩阵操作（如矩阵的逆）或取决于预先知道的图结构，解决了先前基于图卷积或其近似值的方法的缺点。</p>
+<blockquote>
+<p>GAT：应用注意力机制将邻居顶点的特征聚合到中心顶点上（一种 aggregate 运算），注意力系数的使用，使得顶点特征之间的相关性被更好地融入到模型中。</p>
+</blockquote>
+<p>GAT 很适用于 inductive 和 transductive 问题，在 Cora、Citeseer、Pubmed citation network datasets 和 an inductive protein-protein interaction dataset 上取得了 SOTA。</p>
+<h2 id="1-introduction">1 Introduction<a hidden class="anchor" aria-hidden="true" href="#1-introduction">#</a></h2>
+<p>图像分类、语义分割或者机器翻译等任务的数据表示具有一种类似网格的结构（grid-like structure），卷积神经网络架构能够有效地重复使用参数可学习的局部卷积核，并将它们应用于所有输入位置（局部连接、参数共享）。</p>
+<p>对于不能用网格状的结构来表示的数据，通常表示为图结构。早期的工作有使用 RNN 来处理有向无环图的数据，图神经网络 GNNs 作为 RNN 的一种泛化，可以直接处理更普遍的图类。</p>
+<blockquote>
+<p>💢TODO: 了解最初 GNN 的具体做法。</p>
+</blockquote>
+<p>将卷积推广到图域，主要有两类：谱方法（spectral methods）和空间方法（spatial methods）。</p>
+<p><strong>谱方法</strong>：卷积操作是在傅里叶域中通过计算图拉普拉斯的特征分解来定义的，这导致潜在的密集计算和非空间定位的过滤器。针对这两个问题：（1）Henaff 等人（2015）引入了一个具有平滑系数的光谱过滤器参数化，以使过滤器在空间上得到定位。（2）Defferrard 等人（2016）提出通过图拉普拉斯的切比雪夫展开来近似滤波器，消除了计算拉普拉斯特征向量的需要，产生了空间定位的滤波器。（3）semi-GCN 通过限制过滤器在每个节点周围的 1 步邻域内运行，进一步简化了之前的方法。</p>
+<p>利用谱方法学习到的滤波器取决于拉普拉斯特征基，而拉普拉斯特征基取决于图的结构。因此，一个在特定结构上训练的模型不能直接应用于不同结构的图。</p>
+<p><strong>空间方法</strong>：它直接在图上定义卷积，对空间上的近邻组进行操作。这个方法的挑战是如何定义一个能够处理不同大小的邻域（可以理解为感受野）并保持 CNN 的权重共享的算子。针对这个挑战，有如下的尝试：（1）为每个节点的度学习特定的权重矩阵；（2）使用 transition matrix 来定义领域；（3）提取和规范化包含固定数量节点的邻域；（4）混合模型 CNN（MoNet）；（5）~GraphSAGE~ 通过对每个节点的固定大小的邻域进行采样，然后对其进行特定的聚合（如所有采样邻域的特征向量的平均值）。</p>
+<p>在许多基于序列的任务中，注意力机制几乎已经是标配。注意机制的好处之一是，它允许处理大小不一的输入，集中于输入中最相关的部分来做决定。self-attention 通常被用来计算一个单一序列的表示。</p>
+<p>GAT 引入了一个基于注意力的架构来进行图结构数据的节点分类。基本的想法是：通过关注其邻居节点，按照 self-attention 的策略，计算图中每个节点的隐藏表征。这个 Attention 架构的优点：
+（1）计算高效，并行。
+（2）可以通过为邻居节点指定任意的权重来适用于具有不同度的图节点。
+（3）该模型可直接适用于归纳学习问题（inductive learning problems）。</p>
+<p>GAT 在  four challenging benchmarks（ Cora, Citeseer, Pubmed citation networks, an inductive protein-protein interaction dataset）上取得了 SOTA。</p>
+<h2 id="2-gat-架构">2 GAT 架构<a hidden class="anchor" aria-hidden="true" href="#2-gat-架构">#</a></h2>
+<h3 id="21-graph-convolution-layer">2.1 Graph Convolution Layer<a hidden class="anchor" aria-hidden="true" href="#21-graph-convolution-layer">#</a></h3>
+<p><img loading="lazy" src="20210711/2591D287-AC14-4ED2-BF6B-7666DA1E55D4.png" alt=""  />
+</p>
+<p>以 Cora 数据集为例，h 的  shape=(2708, 1433)，即有 N=2708 个节点，每个节点有 F=1433 个特征。F’ = 64 or 7，表示经过 GATConv 后节点的特征数量。</p>
+<blockquote>
+<p>[2708, 1433] —GATConv1—&gt; [2708, 64] —CATConv2—&gt; [2708, 7]。</p>
+</blockquote>
+<p>为了获得足够的表达能力，将输入特征转化为更高层次的特征，至少需要一个可学习的线性转化。权重矩阵 W ∈ ℝ(F’ × F) 应用于每个节点。然后对节点进行 self-attention（一种共享的注意机制 a），把拼接后的高维特征映射到一个实数上，这个实数就是注意力系数：
+<img loading="lazy" src="20210711/C4418072-3EB8-4782-89E0-7227EDEF00AE.png" alt=""  />
+
+注意力系数 e_{ij} 是一个标量，表示表示节点 𝑗 的特征对节点 𝑖 的重要性。对于一般的表示，𝑗 为图中除 𝑖 外的所有节点，这个忽略了结构信息（如邻居节点）。</p>
+<p>本篇论文则通过 <em>masked-attention</em>，只计算节点 𝑗 ∈ N𝑖 的注意力系数e_{𝑖𝑗}，其中  N𝑖 是节点 𝑖 在图中的某个邻居节点。这是一种考虑了图的结构信息的注意力机制。为了使系数在不同的节点之间容易比较，使用 softmax 函数对所有 𝑗 的选择进行归一化。
+<img loading="lazy" src="20210711/1A5D7EF1-2313-4E83-9B80-CBBA2614282A.png" alt=""  />
+</p>
+<p>(1) 式中的 𝑎 是一个单层的前馈神经网络，由权重向量 𝑎→∈ ℝ(2F’) 参数化。然后应用 LeakyReLU 非线性，(3) 式的示意图为 Figure 1 Left。
+<img loading="lazy" src="20210711/27D536FD-DAA7-41FD-94A0-4285FC86AE52.png" alt=""  />
+
+<img loading="lazy" src="20210711/B6D0D9EB-C35B-4716-8AA3-E0A82A00F427.png" alt=""  />
+</p>
+<p>归一化的注意力系数 𝛼𝑖𝑗 被用来计算与之对应的特征的线性组合，作为每个节点的最终输出特征。
+<img loading="lazy" src="20210711/AF01ABE5-EDC2-4F1B-8782-C0AC308A7027.png" alt=""  />
+
+ℎ→∈ℝ(N, F’)。
+<img loading="lazy" src="20210711/FDDAB810-4152-4BA4-A5B8-F12B4C069A30.png" alt=""  />
+</p>
+<p>为了使 self-attention 的学习过程更加稳定，将 GAT  的 <em>masked-attention</em> 机制扩展到采用 <em>multi-head attention</em> 是有益的。
+<img loading="lazy" src="20210711/49EA3243-8235-4125-90CC-6454E868C4A2.png" alt=""  />
+</p>
+<blockquote>
+<p>PyG 实现的 GAT，第一个 GATConv 的 head=8，即 (5) 式的 K = 8。第二个 GATConv head=1。</p>
+</blockquote>
+<p>最后一层采用平均法是更好的选择。
+<img loading="lazy" src="20210711/CD23C125-1573-4409-835C-AEAF5C40E88E.png" alt=""  />
+</p>
+<p>multi-head masked-attention 的示意图如 Figure 1 Right。三种颜色的线表示 head = 3。
+<img loading="lazy" src="20210711/F6DD065E-BEE6-4515-ADFB-3B031D039CAA.png" alt=""  />
+</p>
+<h2 id="3-实验评估">3 实验评估<a hidden class="anchor" aria-hidden="true" href="#3-实验评估">#</a></h2>
+<p>如下是 4 个数据集的基本信息。
+<img loading="lazy" src="20210711/816C649B-1EA2-43C8-897D-010ADD4F670A.png" alt=""  />
+</p>
+<p>我只对其中的 Cora 数据集进行介绍。Cora 在图网络中的地位可以类比于 MNIST 之于图像分类任务。</p>
+<p>Cora Dataset (<a href="https://relational.fit.cvut.cz/dataset/CORA">https://relational.fit.cvut.cz/dataset/CORA</a>)</p>
+<blockquote>
+<p>相当于图网络中的“MNIST”。<br>
+<img loading="lazy" src="20210711/6A82820B-2E58-414A-BDDC-65B7626BE962.png" alt=""  />
+</p>
+</blockquote>
+<p>Cora：2708 个节点，5429 条边，1433 个特征，7 个类别（y）。训练数据集中有的有标签🏷，有的没有标签，Semi-Supervised Classification。</p>
+<p>下面介绍 Transductive learning 和 Inductive Learning 的区别：
+<strong>Transductive</strong>：以使用 Cora 数据集为例，把节点分成 train/val/test 集。在训练时，只使用来自训练集节点的标签，但是在 forward 时，根据 GNN 的工作方式，将从邻居聚合特征向量，而邻居中有一些节点可能属于  val 或 test 集。（训练和测试都基于同样的图结构）
+<img loading="lazy" src="20210711/D5C8A5A5-7C01-49D1-B2C4-6B9C5491CB24.png" alt=""  />
+</p>
+<blockquote>
+<p><img loading="lazy" src="20210711/v2-2097a45b9817361e9d2ed08120549c4e_b.jpg" alt=""  />
+</p>
+<p><strong>GAT 模型学到的节点注意力权重非常接近均匀分布</strong>（换言之，所有的邻节点都获得了同等重视）。这在一定程度上解释了为什么在 Cora 上 GAT 的表现和 GCN 非常接近（在上面表格里我们可以看到两者的差距平均下来不到 2%）。由于没有显著区分节点，注意力并没有那么重要。</p>
+</blockquote>
+<p><strong>Inductive</strong>：train set、val set、test set 相互独立。不会出现邻居属于 val/test set 的情况。（用完全没见过的图进行测试）
+<img loading="lazy" src="20210711/6EF3B67F-76FB-4FC7-BC73-EB0FCB65DF81.png" alt=""  />
+</p>
+<h2 id="4-总结">4 总结<a hidden class="anchor" aria-hidden="true" href="#4-总结">#</a></h2>
+<p>图注意力网络 Graph Attention Networks (GATs) 直接在图结构的数据上进行操作，采用 masked self-attention，是一种新颖的卷积神经网络。</p>
+<p>这种注意力机制允许在处理不同大小的邻域时给邻域中的不同节点分配不同的重要性，并且不依赖于预先知道整个图结构。</p>
+<p>未来的研究方向，可以是利用注意力机制的优势，对模型的<strong>可解释性</strong>进行彻底分析。</p>
+<p>此外，将该方法扩展到<strong>图分类</strong>而不是节点分类，从应用的角度来看也很有意义。</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://landodo.github.io/tags/%E6%B3%A8%E6%84%8F%E5%8A%9B/">注意力</a></li>
+      <li><a href="http://landodo.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">论文阅读</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://landodo.github.io/posts/deep-clustering-notes/">
+    <span class="title">« Prev Page</span>
+    <br>
+    <span>深度聚类 Deep Clustering</span>
+  </a>
+  <a class="next" href="http://landodo.github.io/posts/20210620-deeplab-v1-v2/">
+    <span class="title">Next Page »</span>
+    <br>
+    <span>#DeepLab# 中的空洞卷积和条件随机场</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>Landon</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

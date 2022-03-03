@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>AlexNet on Landodo&#39;s NoteBook</title>
+    <link>http://landodo.github.io/tags/alexnet/</link>
+    <description>Recent content in AlexNet on Landodo&#39;s NoteBook</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Landon</copyright>
+    <lastBuildDate>Mon, 09 Nov 2020 10:17:29 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/alexnet/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CIFAR-10、PyTorch 和 AlexNet</title>
+      <link>http://landodo.github.io/posts/20201109-alexnet-code/</link>
+      <pubDate>Mon, 09 Nov 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201109-alexnet-code/</guid>
+      <description>CIFAR-10、PyTorch 和 AlexNet 先在自己的电脑上走一遍，保证语法和逻辑不会错。再放到远程配置高的电脑上跑。 这些经典的神经网络结构，要熟悉</description>
+    </item>
+    
+  </channel>
+</rss>

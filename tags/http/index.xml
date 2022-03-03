@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>HTTP on Landodo&#39;s NoteBook</title>
+    <link>http://landodo.github.io/tags/http/</link>
+    <description>Recent content in HTTP on Landodo&#39;s NoteBook</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Landon</copyright>
+    <lastBuildDate>Fri, 13 Nov 2020 10:17:29 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/http/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>使用 C 语言实现一个 HTTP 服务器（2）</title>
+      <link>http://landodo.github.io/posts/20201113-http/</link>
+      <pubDate>Fri, 13 Nov 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201113-http/</guid>
+      <description>HTTP 服务器的一些截图记录 HTML 页面 服务器的 HTML 页面有两个分别是 index.html 和 README.html。这个 css 风格是我最喜欢的，因此也就应用在了这个小项目上。 README.html 是</description>
+    </item>
+    
+    <item>
+      <title>使用 C 语言实现一个 HTTP 服务器（1）</title>
+      <link>http://landodo.github.io/posts/20201107-http-server-1/</link>
+      <pubDate>Sat, 07 Nov 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201107-http-server-1/</guid>
+      <description>HTTP Server⟹HTTPS Server: 实验要求 这是网络课的一个小作业，具体要求如下： 使用 C 语言实现一个 HTTP 服务器 支持 HTTP Post/Get 方法，可以上传或下载文件 支持 HTTP 分</description>
+    </item>
+    
+  </channel>
+</rss>

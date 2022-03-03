@@ -98,5 +98,239 @@
       <description>摘要 目前的方法严重依赖于大量的有标注数据。因此，在训练过程中加入未标注的数据是很常见的，这样可以用更少的标注达到相同的结果。本片综述主要是专</description>
     </item>
     
+    <item>
+      <title>Graph Attention Networks(GATs) </title>
+      <link>http://landodo.github.io/posts/20210711-gat/</link>
+      <pubDate>Sun, 11 Jul 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210711-gat/</guid>
+      <description>GAT 地址：https://arxiv.org/abs/1710.10903 期刊：International Conference on Learning Representations (ICLR) 2018 被引用次数：4116 Abstract Graph</description>
+    </item>
+    
+    <item>
+      <title>#DeepLab# 中的空洞卷积和条件随机场</title>
+      <link>http://landodo.github.io/posts/20210620-deeplab-v1-v2/</link>
+      <pubDate>Sun, 20 Jun 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210620-deeplab-v1-v2/</guid>
+      <description>#DeepLab# 中的空洞卷积和条件随机场 简要总结 DeepLab V1 和 DeepLab V2，DeepLab 是语义分割的经典网络架构。其有两个核心要点： （1）空洞卷积（Atrous Con</description>
+    </item>
+    
+    <item>
+      <title>Boundary loss for highly unbalanced segmentation</title>
+      <link>http://landodo.github.io/posts/20210530-boundary-loss/</link>
+      <pubDate>Sun, 30 May 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210530-boundary-loss/</guid>
+      <description>Boundary loss for highly unbalanced segmentation Csurka, G., Larlus, D., &amp;amp; Perronnin, F. (2013). What is a good evaluation measure for semantic segmentation? BMVC. (218 Citations.) Kervadec, H., Bouchtiba, J., Desrosiers, C., Granger, É., Dolz, J., &amp;amp; Ayed, I.B. (2019). Boundary loss for highly unbalanced segmentation. Medical image analysis, 67, 101851 . (95 Citations) 论文 PDF : https://openreview.net/pdf?id=S1gTA5VggE 或者（https:</description>
+    </item>
+    
+    <item>
+      <title>视网膜血管分割 Retinal vessel segmentation</title>
+      <link>http://landodo.github.io/posts/20210516-retinal-vesse-segmentation/</link>
+      <pubDate>Sun, 16 May 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210516-retinal-vesse-segmentation/</guid>
+      <description>视网膜血管分割 Retinal vessel segmentation 1. 数据集（Datasets） 视网膜血管分割的公开集最常用的有 DRIVE、STARE 和 CHASE_DB。 1.1 DRIVE DRIVE: Digital Retinal Images for Vessel Extraction</description>
+    </item>
+    
+    <item>
+      <title>SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation</title>
+      <link>http://landodo.github.io/posts/20210418-segnet/</link>
+      <pubDate>Sun, 18 Apr 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210418-segnet/</guid>
+      <description>FCN：Fully Convolutional Networks for Semantic Segmentation https://arxiv.org/abs/1411.4038 U-Net：U-Net: Convolutional Networks for Biomedical Image Segmentation https://arxiv.org/abs/1505.04597 SegNet：SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation https://arxiv.org/pdf/1511.00561.pdf 概览 论文所要解决的问题： encoder</description>
+    </item>
+    
+    <item>
+      <title>SegNet</title>
+      <link>http://landodo.github.io/posts/20210413-segnet-notes/</link>
+      <pubDate>Tue, 13 Apr 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210413-segnet-notes/</guid>
+      <description>SegNet http://mi.eng.cam.ac.uk/projects/segnet/ 时间：2015 年 Max Pooling 后特征图会变小，空间分辨率的下降对于边界的勾画是不利的，在文章的论述中，作者认为需要对这种边界信息进行存储保留，比如</description>
+    </item>
+    
+    <item>
+      <title>Image Segmentation Using Deep Learning: A Survey</title>
+      <link>http://landodo.github.io/posts/20210401-image-segmentation-survey/</link>
+      <pubDate>Thu, 01 Apr 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210401-image-segmentation-survey/</guid>
+      <description>Image Segmentation Using Deep Learning: A Survey 一篇图像分割的综述。 arXiv：https://arxiv.org/abs/2001.05566 写这篇笔记时（2021.04.</description>
+    </item>
+    
+    <item>
+      <title>ResNeSt</title>
+      <link>http://landodo.github.io/posts/20210325-resnest-review/</link>
+      <pubDate>Thu, 25 Mar 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210325-resnest-review/</guid>
+      <description>arXiv: https://arxiv.org/abs/2004.08955 时间：2020 年 04 月 SENet（17.09）、SKNet（19.03） 和 ResNeSt（20.04） 可以放在一起进行阅读，这三篇都是注意</description>
+    </item>
+    
+    <item>
+      <title>Selective Kernel Network 解析</title>
+      <link>http://landodo.github.io/posts/20210315-sknet-review/</link>
+      <pubDate>Mon, 15 Mar 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210315-sknet-review/</guid>
+      <description>（SKNet）Selective Kernel Network 解析 Selective Kernel Network 是注意力机制的一篇经典文献。 其实我现在的论文阅读量不多，连基础的基干系列网络都还没看完，但是为</description>
+    </item>
+    
+    <item>
+      <title>Wide Residual Networks</title>
+      <link>http://landodo.github.io/posts/20210313-wrn/</link>
+      <pubDate>Sat, 13 Mar 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210313-wrn/</guid>
+      <description>Wide Residual Networks arXiv: 1605.07146v4 法国 Abstract 深度残差网络被证明能够扩展到数千层，不断的提高性能。 但是，精度提高的每一小部分都要增加近一倍的层数，而训练很深的残差网络有一</description>
+    </item>
+    
+    <item>
+      <title>Dual Attention Network for Scene Segmentation</title>
+      <link>http://landodo.github.io/posts/20210311-dual-attention-network/</link>
+      <pubDate>Thu, 11 Mar 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210311-dual-attention-network/</guid>
+      <description>Dual Attention Network for Scene Segmentation arXiv: 1809.02983 “用于场景分割的双注意力网络“ Abstract 针对场景分割任务，基于 self-Attention 机制捕捉丰富的上下文依赖关系。 与以往通过多尺度特征融合来捕捉上下文的</description>
+    </item>
+    
+    <item>
+      <title>Attentive Inception Module based Convolutional Neural Network for Image Enhancement</title>
+      <link>http://landodo.github.io/posts/20210310-attentive-inception-module/</link>
+      <pubDate>Wed, 10 Mar 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210310-attentive-inception-module/</guid>
+      <description>Attentive Inception Module based Convolutional Neural Network for Image Enhancement “基于 Attentive Inception Module 的卷积神经网络在图像增强中的应用” high quality：高质量 low distortion：低失真 singleimage superresolution (SISR)：单</description>
+    </item>
+    
+    <item>
+      <title>Non-local Neural Networks</title>
+      <link>http://landodo.github.io/posts/20210308-non-local-neural-networks/</link>
+      <pubDate>Mon, 08 Mar 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210308-non-local-neural-networks/</guid>
+      <description>注意力机制 Non-local Neural Networks 注意力机制的文献，arXiv:1711.07971v3 FaceBook Research Abstract 论文提出了一种非局部操作（non-local operations</description>
+    </item>
+    
+    <item>
+      <title>Selective Kernel Networks</title>
+      <link>http://landodo.github.io/posts/20210306-selective-kernel-networks/</link>
+      <pubDate>Sat, 06 Mar 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210306-selective-kernel-networks/</guid>
+      <description>论文阅读 Selective Kernel Networks 注意力机制论文阅读，第二次汇报的论文为： 下载地址：（SKNet）Selective Kernel Networks (arXiv: 1903.06586) 发表时间（e-prints posted on arX</description>
+    </item>
+    
+    <item>
+      <title>Inside-Outside Net</title>
+      <link>http://landodo.github.io/posts/20210302-inside-outside-net/</link>
+      <pubDate>Tue, 02 Mar 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210302-inside-outside-net/</guid>
+      <description>Inside-Outside Net 论文阅读笔记 Inside-Outside Net: Detecting Objects in Context with Skip Pooling and Recurrent Neural Networks 时间：2015 年 12 月 SENet——胡杰：https://www.sohu.com/a/161633</description>
+    </item>
+    
+    <item>
+      <title>Attention mechanism: SENet &amp; SKNet</title>
+      <link>http://landodo.github.io/posts/20210301-attention-mechanism/</link>
+      <pubDate>Mon, 01 Mar 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210301-attention-mechanism/</guid>
+      <description>Attention mechanism: SENet &amp;amp; SKNet 注意力机制论文阅读，第二次汇报的论文为： 下载地址：（SKNet）Selective Kernel Networks (arXiv: 1903.06586) 发表时间（e-prints posted on arXiv</description>
+    </item>
+    
+    <item>
+      <title>AlexNet 中的 LRN（Local Response Normalization） 是什么</title>
+      <link>http://landodo.github.io/posts/20210205-what-is-lrn/</link>
+      <pubDate>Mon, 15 Feb 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210205-what-is-lrn/</guid>
+      <description>AlexNet 中的 LRN（Local Response Normalization） 是什么 对我而言，LRN 是 AleNet 论文中的一个难点，今天就来更加细致的理解一下。 LRN 操作在哪一步</description>
+    </item>
+    
+    <item>
+      <title>SENet 和它的孪生兄弟 SKNet</title>
+      <link>http://landodo.github.io/posts/20210122-senet-sknet/</link>
+      <pubDate>Fri, 22 Jan 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210122-senet-sknet/</guid>
+      <description>SENet 和它的孪生兄弟 SKNet ✅ 论文地址： Squeeze-and-Excitation Networks: https://arxiv.org/pdf/1709.01507.pdf Selective Kernel Networks: https://arxiv.org/pdf/1903.06586.pdf ✅ 论文发表时间（arXiv V1） SENet：2017 年 9 月 5 日 SKNet：2019 年 3 月 15 日 相关</description>
+    </item>
+    
+    <item>
+      <title>Squeeze-and-Excitation Networks</title>
+      <link>http://landodo.github.io/posts/20210112-senet/</link>
+      <pubDate>Tue, 12 Jan 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210112-senet/</guid>
+      <description>论文题目 “Squeeze-and-Excitation Networks” ✅ 论文地址：https://arxiv.org/abs/1709.0</description>
+    </item>
+    
+    <item>
+      <title>Xception: Deep Learning with Depthwise Separable Convolutions</title>
+      <link>http://landodo.github.io/posts/20201208-xception/</link>
+      <pubDate>Tue, 08 Dec 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201208-xception/</guid>
+      <description>论文题目：Xception: Deep Learning with Depthwise Separable Convolutions ✅ 论文地址：https://arxiv.org/pdf/1610.02357.pdf ✅ 发表时间：20</description>
+    </item>
+    
+    <item>
+      <title>Deep learning Review</title>
+      <link>http://landodo.github.io/posts/20201124-deeplearning-review/</link>
+      <pubDate>Tue, 24 Nov 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201124-deeplearning-review/</guid>
+      <description>Deep learning Review 深度学习综述 深度学习：一个含多个处理层组成的计算模型学习多层次抽象的数据表示。 应用：语音识别、视觉对象识别、对象检测以及药物发现和基因</description>
+    </item>
+    
+    <item>
+      <title>VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION</title>
+      <link>http://landodo.github.io/posts/20201123-paper-vgg/</link>
+      <pubDate>Mon, 23 Nov 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201123-paper-vgg/</guid>
+      <description>VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION ✅ 论文地址：https://arxiv.org/pdf/1409.1556.pdf ✅ 发表时间：2015 年（Published</description>
+    </item>
+    
+    <item>
+      <title>CIFAR-10、PyTorch 和 AlexNet</title>
+      <link>http://landodo.github.io/posts/20201109-alexnet-code/</link>
+      <pubDate>Mon, 09 Nov 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201109-alexnet-code/</guid>
+      <description>CIFAR-10、PyTorch 和 AlexNet 先在自己的电脑上走一遍，保证语法和逻辑不会错。再放到远程配置高的电脑上跑。 这些经典的神经网络结构，要熟悉</description>
+    </item>
+    
+    <item>
+      <title>Network In Network</title>
+      <link>http://landodo.github.io/posts/20201215-network-in-network/</link>
+      <pubDate>Sat, 07 Nov 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201215-network-in-network/</guid>
+      <description>Network In Network 论文阅读 ✅ 论文地址：https://arxiv.org/pdf/1312.4400.pdf ✅ 论文发表时间：2014 年 论文提出了一种名为</description>
+    </item>
+    
+    <item>
+      <title>Array Programming with NumPy</title>
+      <link>http://landodo.github.io/posts/20201104-paper-numpy/</link>
+      <pubDate>Wed, 04 Nov 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201104-paper-numpy/</guid>
+      <description>#论文阅读-NumPy# 论文名称：Array Programming with NumPy 这是一篇关于 NumPy 的论文，最近也在学习 Python，NumPy 也是常用的一个包，可以花点时间读</description>
+    </item>
+    
+    <item>
+      <title>ImageNet Classification with Deep Convolutional Neural Networks</title>
+      <link>http://landodo.github.io/posts/20201024-paper-alexnet/</link>
+      <pubDate>Sat, 24 Oct 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201024-paper-alexnet/</guid>
+      <description>[2021.02.04] 第三层用 384 个大小为 $3\times3\times256$ 的核进行卷积。 但是每个 GPU 的前一层的特征图都是 $27\times 27 \times 128$，通道数是不同的。因此是要将两块 GPU 上的特征图进行 concat</description>
+    </item>
+    
   </channel>
 </rss>

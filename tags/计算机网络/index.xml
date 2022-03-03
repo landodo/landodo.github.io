@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>计算机网络 on Landodo&#39;s NoteBook</title>
+    <link>http://landodo.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/</link>
+    <description>Recent content in 计算机网络 on Landodo&#39;s NoteBook</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Landon</copyright>
+    <lastBuildDate>Fri, 25 Dec 2020 10:17:29 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>计算机网络基础（3）</title>
+      <link>http://landodo.github.io/posts/20201225-computer-network-review/</link>
+      <pubDate>Fri, 25 Dec 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201225-computer-network-review/</guid>
+      <description>计算机网络复习 OSI (Open Systems Interconnection) 参考模型和 TCP/IP 模型 TCP/IP 四层模型的代表协议： 网络接口层（Link Layer）：ARP 协议（IP addr &amp;mdash;ARP&amp;mdash;&amp;gt;MAC addr） IP 网络层（Int</description>
+    </item>
+    
+    <item>
+      <title>计算机网络基础（2）</title>
+      <link>http://landodo.github.io/posts/20201218-computer-network/</link>
+      <pubDate>Fri, 18 Dec 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201218-computer-network/</guid>
+      <description>计算机网络基础 第一讲主要介绍了计算机网络的体系结构、性能、安全以及挑战和机遇。并且还讲了中科院在网络方面的相关工作。 互联网不仅仅改变生活与社</description>
+    </item>
+    
+    <item>
+      <title>使用 C 语言实现一个 HTTP 服务器（2）</title>
+      <link>http://landodo.github.io/posts/20201113-http/</link>
+      <pubDate>Fri, 13 Nov 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201113-http/</guid>
+      <description>HTTP 服务器的一些截图记录 HTML 页面 服务器的 HTML 页面有两个分别是 index.html 和 README.html。这个 css 风格是我最喜欢的，因此也就应用在了这个小项目上。 README.html 是</description>
+    </item>
+    
+    <item>
+      <title>使用 C 语言实现一个 HTTP 服务器（1）</title>
+      <link>http://landodo.github.io/posts/20201107-http-server-1/</link>
+      <pubDate>Sat, 07 Nov 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201107-http-server-1/</guid>
+      <description>HTTP Server⟹HTTPS Server: 实验要求 这是网络课的一个小作业，具体要求如下： 使用 C 语言实现一个 HTTP 服务器 支持 HTTP Post/Get 方法，可以上传或下载文件 支持 HTTP 分</description>
+    </item>
+    
+  </channel>
+</rss>

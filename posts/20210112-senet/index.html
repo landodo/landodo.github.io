@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+<meta name="robots" content="index, follow">
+<title>Squeeze-and-Excitation Networks | Landodo&#39;s NoteBook</title>
+<meta name="keywords" content="CNN, 注意力, 论文阅读" />
+<meta name="description" content="论文题目 “Squeeze-and-Excitation Networks” ✅ 论文地址：https://arxiv.org/abs/1709.0">
+<meta name="author" content="">
+<link rel="canonical" href="http://landodo.github.io/posts/20210112-senet/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://landodo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://landodo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://landodo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://landodo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://landodo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Squeeze-and-Excitation Networks" />
+<meta property="og:description" content="论文题目 “Squeeze-and-Excitation Networks” ✅ 论文地址：https://arxiv.org/abs/1709.0" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://landodo.github.io/posts/20210112-senet/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-01-12T10:17:29&#43;08:00" />
+<meta property="article:modified_time" content="2021-01-12T10:17:29&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Squeeze-and-Excitation Networks"/>
+<meta name="twitter:description" content="论文题目 “Squeeze-and-Excitation Networks” ✅ 论文地址：https://arxiv.org/abs/1709.0"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://landodo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Squeeze-and-Excitation Networks",
+      "item": "http://landodo.github.io/posts/20210112-senet/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Squeeze-and-Excitation Networks",
+  "name": "Squeeze-and-Excitation Networks",
+  "description": "论文题目 “Squeeze-and-Excitation Networks” ✅ 论文地址：https://arxiv.org/abs/1709.0",
+  "keywords": [
+    "CNN", "注意力", "论文阅读"
+  ],
+  "articleBody": "论文题目 “Squeeze-and-Excitation Networks” ✅ 论文地址：https://arxiv.org/abs/1709.01507\n✅ 发表时间：2017\nABSTRACT 卷积是 CNNs 的核心，它使网络能够通过融合每层局部感受野内的空间（spatial）和通道（channel-wise）信息来构建特征。\n关于空间关系已经有了广泛的研究。\n本篇论文的重点是通道之间的关系，提出了一种称为 “SE block” 的架构单元，它通过明确模拟通道之间的相互依赖关系，自适应地重新校准通道方面的特征响应。\nSqueeze-and-Excitation (SE)：挤压和激励。\nSENet 在 2017 年的 ILSVRC 分类任务上获得了第一名，Top-5 误差降低到 2.251%。\n1 INTRODUCTION Inception 系列架构（Going deeper with convolutions. Batch Normalization: Accelerating deep network training by reducing internal covariate shift），将多尺度过程纳入网络模块，以实现性能的提升。\n这篇论文研究的是：\n 通道之间的关系（the relationship between channels）。 引入了 “SE 块”。 并提出了一种机制，允许网络执行特征重新校准。通过这种机制，网络可以学习使用全局信息，有选择地强调信息性特征，并抑制不太有用的特征。  SE 块如下图 1 所示。\n变化 $F_{tr}$ 将输入 $X$ 映射为 $U$，$U \\in ℝ^{H \\times W \\times C}$。\nU 首先通过一个叫做 squeeze 操作，之后是一个 excitation 操作。\nexcitation（激励）后并产生一个每通道调制权重的集合。这些权重被应用于特征图 U，以产生 SE 块的输出，它可以直接输入到网络的后续层。\n通过 SE 块的堆叠可以构建一个 SENets，SE 块在整个网络中不同深度所执行的角色是不同的。\nSE 块还可以应用于现有的 CNN 结构，通过使用 SE 块进行替换，可以有效地提高性能。\nSENets 在 ILSVRC 2017 分类竞赛中排名第一。最佳模型在测试集上的 top-5 误差率为 2.251%，比上一年的冠军作品（top-5 误差率 = 2.991%）相比，大约有 25% 的相对改善。\n 2016 年的 ILSVRC，Trimps-Soushen（公安部三所） 以 2.99% 的 Top-5 分类误差率和 7.71% 的定位误差率赢得了 ImageNet 分类任务的胜利。该团队使用了分类模型的集成（即 Inception、Inception-ResNet、ResNet 和宽度残差网络模块的平均结果）和基于标注的定位模型 Faster R-CNN 来完成任务。\nImageNet 历年冠军和相关 CNN 模型\n   年 网络 / 队名 val top-1 val top-5 test top-5 备注     2012 AlexNet 38.1% 16.4% 16.42% 5 CNNs   2012 AlexNet 36.7% 15.4% 15.32% 7CNNs。用了 2011 年的数据   2013 OverFeat   14.18% 7 fast models   2013 OverFeat   13.6% 赛后。7 big models   2013 ZFNet   13.51% ZFNet 论文上的结果是 14.8   2013 Clarifai   11.74%    2013 Clarifai   11.20% 用了 2011 年的数据   2014 VGG   7.32% 7 nets, dense eval   2014 VGG（亚军） 23.7% 6.8% 6.8% 赛后。2 nets   2014 GoogleNet v1   6.67% 7 nets, 144 crops    GoogleNet v2 20.1% 4.9% 4.82% 赛后。6 nets, 144 crops    GoogleNet v3 17.2% 3.58%  赛后。4 nets, 144 crops    GoogleNet v4 16.5% 3.1% 3.08% 赛后。v4+Inception-Res-v2   2015 ResNet   3.57% 6 models   2016 Trimps-Soushen   2.99% 公安三所   2016 ResNeXt（亚军）   3.03% 加州大学圣地亚哥分校   2017 SENet   2.25% Momenta 与牛津大学     2 RELATED WORK  更深的网络架构 Deeper architectures.  VGG、Inception Models、Batch Normalization (BN)、ResNets、Highway networks. 分组卷积 Grouped convolutions、多分枝卷积 multi-branch convolutions、跨通道的相关性 cross-channel correlations.   算法架构搜索 Algorithmic Architecture Search.  evolutionary methods：用进化方法进行网络拓扑结构搜索 Lamarckian inheritance、differentiable architecture search：减少了计算负担   注意力和门控机制 Attention and gating mechanisms.  注意力可以被解释为一种将可用计算资源的分配偏向于信号中信息量最大的部分的手段 提出的 SE 块包括一个轻量级的门控机制，该机制专注于通过以一种计算效率高的方式建模通道关系（channel-wise relationships）来增强网络的表示能力。    3 SQUEEZE-AND-EXCITATION BLOCKS Squeeze-and-Excitation 块是建立在输入 $X \\in \\mathbb{R}^{H’ \\times W’ \\times C’}$ 映射到特征图 $U \\in \\mathbb{R}^{H \\times W \\times C}$ 的变化 $F_{tr}$ 上的计算单元。\n$$u_c = v_c * X = \\sum_{s=1}^{C’} v_c^s * X^s \\tag{1}$$\n $F_{tr}$ 为卷积算子 $V = [v_1, v_2, …, v_C]$ 表示学习到的卷积核的集合 $U = [u_1, u_2, …, u_C]$ 为输出 $X = [x^1, x^2, …, x^{C’}]$ 为输入 $*$ 表示卷积 $v_c = [v_c^1, v_c^2, …, v_c^{C’}]$，指的是第 c 个卷积核的参数 $u_c \\in \\mathbb{R}^{H \\times W}$ $v_c^s$ 是一个二维空间核，代表 $v_c$ 的单通道，作用于 X 的相应通道。  我们期望卷积特征的学习能够通过明确地模拟通道相互依赖关系来增强，这样网络就能够提高其对信息特征的敏感性，而这些信息特征可以被后续的变换所利用。因此，希望为它提供对全局信息的访问，并在挤压 S 和激励 E 两个步骤中重新校准卷积核响应，然后再将它们输入到下一次变换中。\n3.1 Squeeze: Global Information Embedding 为了解决通道依赖性问题，考虑输出特征中对每个通道的信号。每一个学习的卷积核都是以局部的感受野来操作的，因此，变换输出 U 的每个单元都无法利用感受野之外的上下文信息。\n本论文提供通过使用全局平均池来生成通道方面的统计数据，将全局空间信息挤压到通道描述符中，进而缓解了如上问题。\n通过挤压 U 的空间维度 $H \\times W$ 生成统计量 $z_c$。\n$$z_c = F_{sq}(u_c) = \\frac{1}{H \\times W} \\sum_{i=1}^H \\sum_{j=1}^W u_c(i, j) \\tag{2}$$\n $z \\in \\mathbb{R}^{C}$  3.2 Excitation: Adaptive Recalibration Excitation 操作的目的是完全捕捉通道方面的依赖性。\n这个函数要满足两个要求：\n （1）能够学习通道之间的非线性交互 （2）ensure that multiple channels are allowed to be emphasised  $$s = F_{ex} (z, W) = \\sigma (g(z, W)) = \\sigma(W_2 \\sigma(W_{1}z)) \\tag{3}$$\n $\\sigma$ 是 ReLU 激活函数 $W_1 \\in \\mathbb{R}^{\\frac{C}{r} \\times C}$ $W_2 \\in \\mathbb{R}^{C \\times \\frac{C}{r}}$ $r$ 是一个叫做降低比的参数。后面会详细介绍  3.3 实例化 Instantiations 通过在每次卷积后的非线性之后插入 SE 块，SE 块可以被集成到标准的架构中。\n如下图 2、3，在 Inception 网络和 ResNet 加入 SE 块。\n对于 SENet 架构的具体实例，表 1 给出了 SE-ResNet-50 和 SE-ResNeXt-50 的详细描述。\n4 MODEL AND COMPUTATIONAL COMPLEXITY 对于 SENets 系列网络，需要在提高性能和增加模型复杂度之间进行的权衡。\n以 ResNet-50 和 SE-ResNet-50 为例。\n每个 SE 块在 squeeze 阶段使用一个全局平均池化操作，在 excitation 阶段使用两个 FC 层。\n将参数 $r$ 设置为 16，对于 224 *224 像素的输入图像。\n ResNet-50 一次前向传播约为 3.86 GFLOPs。 SE-ResNet-50 需要约 3.87 GFLOPs，相当于比原来的 ResNet-50 相对增加了0.26%。  SE-ResNet-50 的计算负担略微增加，但其精度却超过了 ResNet-50。实践证明，要达到与 SE-ResNet-50 相同的精度，需要更深的 ResNet-101 网络。\n对 GPU 上计算时间的基准测试：\n 对于 224*224 像素的输入图像，ResNet-50 需要 164 毫秒，而 SE-ResNet-50 则为 167 毫秒  SE 块所引入的额外参数只是两个 FC 层的权重参数：\n SE-ResNet-50 在 ResNet-50 所需的约 2500 万个参数之外，又引入了约 250 万个额外参数，相当于增加了约 10%.  5 EXPERIMENTS 5.1 Image Classification  数据集：ImageNet 2012 数据增强 优化方法：SGD，动量为 0.9，batch size = 1024。初始学习率设置为 0.6，每 30 个EPOCH 降低 10 倍 总共训练 100 EPOCH reduction ratio $r=16$  网络深度 Network depth.\n Table 2 中报告结果可以观察到，SE 块在不同深度的情况下始终如一地提高了性能。  与现代架构集成 Integration with modern architectures.\n 研究将 SE 块与另外两个最先进的架构：Inception-ResNet-v2 和 ResNeXt 整合的效果。即 Inception-ResNet-v2/ResNeXt **V.S. ** SE-Inception-ResNet-v2/SE-ResNeXt 结果如 Table 2 所示。 可以看到在这两种架构中引入 SE 块所引起的显著性能改进。 SE-ResNeXt-50 的 top-5 误差为 5.49%，优于其直接对应的 ResNeXt-50（5.90% top-5误差）以及更深的 ResNeXt-101（5.57% top-5 误差) Table 2 还对 VGG-16 和 BN-Inception 架构进行实验，结果与残差网络进行，SE 块在非残差设置上带来了性能上的改进。  图 4 中描述了 baseline 架构和各自的 SE 对应的运行的训练曲线。可以看到，引入 SE 块的网络在整个优化过程中有了稳定的改进。\nMobile setting.\n 考虑 MobileNet 和 ShuffleNet。  SE 块在计算成本增加最小的情况下，以较大的幅度提高了精度。  Additional datasets.\n CIFAR-10 和 CIFAR-100   5.2 Scene Classification 在 Places365-Challenge 数据集上进行了场景分类的实验，实验结果如 TABLE 6.\n5.3 Object Detection on COCO 5.4 ILSVRC 2017 Classification Competition 通过将 SE 块与修改后的 ResNeXt 集成，构建了一个额外的模型 SENet-154。\nTABLE 8 中使用标准裁剪（$224 \\times 224、$$320 \\times 320$）将该模型与之前在 ImageNet 验证集上的工作进行比较。\nTABLE 9 中列出了目前所知的在 ImageNet 数据集的最好结果。\n",
+  "wordCount" : "2957",
+  "inLanguage": "en",
+  "datePublished": "2021-01-12T10:17:29+08:00",
+  "dateModified": "2021-01-12T10:17:29+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://landodo.github.io/posts/20210112-senet/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Landodo's NoteBook",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://landodo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://landodo.github.io/" accesskey="h" title="Landodo&#39;s NoteBook (Alt + H)">Landodo&#39;s NoteBook</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://landodo.github.io/search" title="🔍Search (Alt &#43; /)" accesskey=/>
+                    <span>🔍Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/tags" title="Tag">
+                    <span>Tag</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/cs-zoo" title="CS ZOO">
+                    <span>CS ZOO</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://landodo.github.io/">Home</a>&nbsp;»&nbsp;<a href="http://landodo.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      Squeeze-and-Excitation Networks
+    </h1>
+    <div class="post-meta"><span title='2021-01-12 10:17:29 +0800 CST'>January 12, 2021</span>&nbsp;·&nbsp;6 min&nbsp;·&nbsp;2957 words
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#%e8%ae%ba%e6%96%87%e9%a2%98%e7%9b%ae-squeeze-and-excitation-networks" aria-label="论文题目 “Squeeze-and-Excitation Networks”">论文题目 “Squeeze-and-Excitation Networks”</a><ul>
+                        
+                <li>
+                    <a href="#abstract" aria-label="ABSTRACT">ABSTRACT</a></li>
+                <li>
+                    <a href="#1-introduction" aria-label="1 INTRODUCTION">1 INTRODUCTION</a></li>
+                <li>
+                    <a href="#2-related-work" aria-label="2 RELATED WORK">2 RELATED WORK</a></li>
+                <li>
+                    <a href="#3-squeeze-and-excitation-blocks" aria-label="3 SQUEEZE-AND-EXCITATION BLOCKS">3 SQUEEZE-AND-EXCITATION BLOCKS</a><ul>
+                        
+                <li>
+                    <a href="#31-squeeze-global-information-embedding" aria-label="3.1 Squeeze: Global Information Embedding">3.1 Squeeze: Global Information Embedding</a></li>
+                <li>
+                    <a href="#32-excitation-adaptive-recalibration" aria-label="3.2 Excitation: Adaptive Recalibration">3.2 Excitation: Adaptive Recalibration</a></li>
+                <li>
+                    <a href="#33-%e5%ae%9e%e4%be%8b%e5%8c%96-instantiations" aria-label="3.3 实例化 Instantiations">3.3 实例化 Instantiations</a></li></ul>
+                </li>
+                <li>
+                    <a href="#4-model-and-computational-complexity" aria-label="4 MODEL AND COMPUTATIONAL COMPLEXITY">4 MODEL AND COMPUTATIONAL COMPLEXITY</a></li>
+                <li>
+                    <a href="#5-experiments" aria-label="5 EXPERIMENTS">5 EXPERIMENTS</a><ul>
+                        
+                <li>
+                    <a href="#51-image-classification" aria-label="5.1 Image Classification">5.1 Image Classification</a></li>
+                <li>
+                    <a href="#52-scene-classification" aria-label="5.2 Scene Classification">5.2 Scene Classification</a></li>
+                <li>
+                    <a href="#53-object-detection-on-coco" aria-label="5.3 Object Detection on COCO">5.3 Object Detection on COCO</a></li>
+                <li>
+                    <a href="#54-ilsvrc-2017-classification-competition" aria-label="5.4 ILSVRC 2017 Classification Competition">5.4 ILSVRC 2017 Classification Competition</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h1 id="论文题目-squeeze-and-excitation-networks">论文题目 “Squeeze-and-Excitation Networks”<a hidden class="anchor" aria-hidden="true" href="#论文题目-squeeze-and-excitation-networks">#</a></h1>
+<p>✅ 论文地址：<a href="https://arxiv.org/abs/1709.01507">https://arxiv.org/abs/1709.01507</a></p>
+<p>✅ 发表时间：2017</p>
+<h2 id="abstract">ABSTRACT<a hidden class="anchor" aria-hidden="true" href="#abstract">#</a></h2>
+<p>卷积是 CNNs 的核心，它使网络能够通过融合每层局部感受野内的空间（spatial）和通道（channel-wise）信息来构建特征。</p>
+<p>关于空间关系已经有了广泛的研究。</p>
+<p>本篇论文的重点是通道之间的关系，提出了一种称为 “SE block” 的架构单元，它通过明确模拟通道之间的相互依赖关系，自适应地重新校准通道方面的特征响应。</p>
+<p>Squeeze-and-Excitation (SE)：挤压和激励。</p>
+<p>SENet 在 2017 年的 ILSVRC 分类任务上获得了第一名，Top-5 误差降低到 2.251%。</p>
+<h2 id="1-introduction">1 INTRODUCTION<a hidden class="anchor" aria-hidden="true" href="#1-introduction">#</a></h2>
+<p>Inception 系列架构（Going deeper with convolutions. Batch Normalization: Accelerating deep network training by reducing internal covariate shift），将多尺度过程纳入网络模块，以实现性能的提升。</p>
+<p>这篇论文研究的是：</p>
+<ul>
+<li>通道之间的关系（the relationship between channels）。</li>
+<li>引入了 “SE 块”。</li>
+<li>并提出了一种机制，允许网络执行特征重新校准。通过这种机制，网络可以学习使用全局信息，有选择地强调信息性特征，并抑制不太有用的特征。</li>
+</ul>
+<p>SE 块如下图 1 所示。</p>
+<p><img loading="lazy" src="./20210112/1.png" alt=""  />
+</p>
+<p>变化 $F_{tr}$ 将输入 $X$ 映射为 $U$，$U \in ℝ^{H \times W \times C}$。</p>
+<p>U 首先通过一个叫做 <em>squeeze</em> 操作，之后是一个 <em>excitation</em> 操作。</p>
+<p>excitation（激励）后并产生一个每通道调制权重的集合。这些权重被应用于特征图 U，以产生 SE 块的输出，它可以直接输入到网络的后续层。</p>
+<p>通过 SE 块的堆叠可以构建一个 SENets，SE 块在整个网络中不同深度所执行的角色是不同的。</p>
+<p>SE 块还可以应用于现有的 CNN 结构，通过使用 SE 块进行替换，可以有效地提高性能。</p>
+<p>SENets 在 ILSVRC 2017 分类竞赛中排名第一。最佳模型在测试集上的 top-5 误差率为 2.251%，比上一年的冠军作品（top-5 误差率 = 2.991%）相比，大约有 25% 的相对改善。</p>
+<blockquote>
+<p>2016 年的 ILSVRC，Trimps-Soushen（公安部三所） 以 2.99% 的 Top-5 分类误差率和 7.71% 的定位误差率赢得了 ImageNet 分类任务的胜利。该团队使用了分类模型的集成（即 Inception、Inception-ResNet、ResNet 和宽度残差网络模块的平均结果）和基于标注的定位模型 Faster R-CNN 来完成任务。</p>
+<p>ImageNet 历年冠军和相关 CNN 模型</p>
+<table>
+<thead>
+<tr>
+<th>年</th>
+<th>网络 / 队名</th>
+<th>val top-1</th>
+<th>val top-5</th>
+<th>test top-5</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2012</td>
+<td>AlexNet</td>
+<td>38.1%</td>
+<td>16.4%</td>
+<td>16.42%</td>
+<td>5 CNNs</td>
+</tr>
+<tr>
+<td>2012</td>
+<td><strong>AlexNet</strong></td>
+<td>36.7%</td>
+<td>15.4%</td>
+<td>15.32%</td>
+<td>7CNNs。用了 2011 年的数据</td>
+</tr>
+<tr>
+<td>2013</td>
+<td>OverFeat</td>
+<td></td>
+<td></td>
+<td>14.18%</td>
+<td>7 fast models</td>
+</tr>
+<tr>
+<td>2013</td>
+<td>OverFeat</td>
+<td></td>
+<td></td>
+<td>13.6%</td>
+<td>赛后。7 big models</td>
+</tr>
+<tr>
+<td>2013</td>
+<td>ZFNet</td>
+<td></td>
+<td></td>
+<td>13.51%</td>
+<td>ZFNet 论文上的结果是 14.8</td>
+</tr>
+<tr>
+<td>2013</td>
+<td>Clarifai</td>
+<td></td>
+<td></td>
+<td>11.74%</td>
+<td></td>
+</tr>
+<tr>
+<td>2013</td>
+<td><strong>Clarifai</strong></td>
+<td></td>
+<td></td>
+<td>11.20%</td>
+<td>用了 2011 年的数据</td>
+</tr>
+<tr>
+<td>2014</td>
+<td>VGG</td>
+<td></td>
+<td></td>
+<td>7.32%</td>
+<td>7 nets, dense eval</td>
+</tr>
+<tr>
+<td>2014</td>
+<td>VGG（亚军）</td>
+<td>23.7%</td>
+<td>6.8%</td>
+<td>6.8%</td>
+<td>赛后。2 nets</td>
+</tr>
+<tr>
+<td>2014</td>
+<td><strong>GoogleNet v1</strong></td>
+<td></td>
+<td></td>
+<td>6.67%</td>
+<td>7 nets, 144 crops</td>
+</tr>
+<tr>
+<td></td>
+<td>GoogleNet v2</td>
+<td>20.1%</td>
+<td>4.9%</td>
+<td>4.82%</td>
+<td>赛后。6 nets, 144 crops</td>
+</tr>
+<tr>
+<td></td>
+<td>GoogleNet v3</td>
+<td>17.2%</td>
+<td>3.58%</td>
+<td></td>
+<td>赛后。4 nets, 144 crops</td>
+</tr>
+<tr>
+<td></td>
+<td>GoogleNet v4</td>
+<td>16.5%</td>
+<td>3.1%</td>
+<td>3.08%</td>
+<td>赛后。v4+Inception-Res-v2</td>
+</tr>
+<tr>
+<td>2015</td>
+<td><strong>ResNet</strong></td>
+<td></td>
+<td></td>
+<td>3.57%</td>
+<td>6 models</td>
+</tr>
+<tr>
+<td>2016</td>
+<td><strong>Trimps-Soushen</strong></td>
+<td></td>
+<td></td>
+<td>2.99%</td>
+<td>公安三所</td>
+</tr>
+<tr>
+<td>2016</td>
+<td>ResNeXt（亚军）</td>
+<td></td>
+<td></td>
+<td>3.03%</td>
+<td>加州大学圣地亚哥分校</td>
+</tr>
+<tr>
+<td>2017</td>
+<td><strong>SENet</strong></td>
+<td></td>
+<td></td>
+<td>2.25%</td>
+<td>Momenta 与牛津大学</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<h2 id="2-related-work">2 RELATED WORK<a hidden class="anchor" aria-hidden="true" href="#2-related-work">#</a></h2>
+<ul>
+<li>更深的网络架构 <strong>Deeper architectures.</strong>
+<ul>
+<li>VGG、Inception Models、Batch Normalization (BN)、ResNets、Highway networks.</li>
+<li>分组卷积 Grouped convolutions、多分枝卷积 multi-branch convolutions、跨通道的相关性 cross-channel correlations.</li>
+</ul>
+</li>
+<li>算法架构搜索 <strong>Algorithmic Architecture Search.</strong>
+<ul>
+<li>evolutionary methods：用进化方法进行网络拓扑结构搜索</li>
+<li>Lamarckian inheritance、differentiable architecture search：减少了计算负担</li>
+</ul>
+</li>
+<li>注意力和门控机制 <strong>Attention and gating mechanisms.</strong>
+<ul>
+<li>注意力可以被解释为一种将可用计算资源的分配偏向于信号中信息量最大的部分的手段</li>
+<li>提出的 SE 块包括一个轻量级的门控机制，该机制专注于通过以一种计算效率高的方式建模通道关系（channel-wise relationships）来增强网络的表示能力。</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-squeeze-and-excitation-blocks">3 SQUEEZE-AND-EXCITATION BLOCKS<a hidden class="anchor" aria-hidden="true" href="#3-squeeze-and-excitation-blocks">#</a></h2>
+<p>Squeeze-and-Excitation 块是建立在输入 $X \in \mathbb{R}^{H&rsquo; \times W&rsquo; \times C&rsquo;}$ 映射到特征图 $U \in \mathbb{R}^{H \times W \times C}$ 的变化 $F_{tr}$ 上的计算单元。</p>
+<p>$$u_c = v_c * X = \sum_{s=1}^{C&rsquo;} v_c^s * X^s \tag{1}$$</p>
+<ul>
+<li>$F_{tr}$ 为卷积算子</li>
+<li>$V = [v_1, v_2, &hellip;, v_C]$ 表示学习到的卷积核的集合</li>
+<li>$U = [u_1, u_2, &hellip;, u_C]$ 为输出</li>
+<li>$X = [x^1, x^2, &hellip;, x^{C&rsquo;}]$ 为输入</li>
+<li>$*$ 表示卷积</li>
+<li>$v_c = [v_c^1, v_c^2, &hellip;, v_c^{C&rsquo;}]$，指的是第 c 个卷积核的参数</li>
+<li>$u_c \in \mathbb{R}^{H \times W}$</li>
+<li>$v_c^s$ 是一个二维空间核，代表 $v_c$ 的单通道，作用于 X 的相应通道。</li>
+</ul>
+<p>我们期望卷积特征的学习能够通过明确地模拟通道相互依赖关系来增强，这样网络就能够提高其对信息特征的敏感性，而这些信息特征可以被后续的变换所利用。因此，希望为它提供对全局信息的访问，并在挤压 S 和激励 E 两个步骤中重新校准卷积核响应，然后再将它们输入到下一次变换中。</p>
+<h3 id="31-squeeze-global-information-embedding">3.1 Squeeze: Global Information Embedding<a hidden class="anchor" aria-hidden="true" href="#31-squeeze-global-information-embedding">#</a></h3>
+<p>为了解决通道依赖性问题，考虑输出特征中对每个通道的信号。每一个学习的卷积核都是以局部的感受野来操作的，因此，变换输出 U 的每个单元都无法利用感受野之外的上下文信息。</p>
+<p>本论文提供通过使用全局平均池来生成通道方面的统计数据，将全局空间信息挤压到通道描述符中，进而缓解了如上问题。</p>
+<p>通过挤压 U 的空间维度 $H \times W$ 生成统计量 $z_c$。</p>
+<p>$$z_c = F_{sq}(u_c) = \frac{1}{H \times W} \sum_{i=1}^H \sum_{j=1}^W u_c(i, j) \tag{2}$$</p>
+<ul>
+<li>$z \in \mathbb{R}^{C}$</li>
+</ul>
+<h3 id="32-excitation-adaptive-recalibration">3.2 Excitation: Adaptive Recalibration<a hidden class="anchor" aria-hidden="true" href="#32-excitation-adaptive-recalibration">#</a></h3>
+<p>Excitation 操作的目的是完全捕捉通道方面的依赖性。</p>
+<p>这个函数要满足两个要求：</p>
+<ul>
+<li>（1）能够学习通道之间的非线性交互</li>
+<li>（2）ensure that multiple channels are allowed to be emphasised</li>
+</ul>
+<p>$$s = F_{ex} (z, W) = \sigma (g(z, W)) = \sigma(W_2 \sigma(W_{1}z)) \tag{3}$$</p>
+<ul>
+<li>$\sigma$ 是 ReLU 激活函数</li>
+<li>$W_1 \in \mathbb{R}^{\frac{C}{r} \times C}$</li>
+<li>$W_2 \in \mathbb{R}^{C \times \frac{C}{r}}$</li>
+<li>$r$ 是一个叫做降低比的参数。后面会详细介绍</li>
+</ul>
+<h3 id="33-实例化-instantiations">3.3 实例化 Instantiations<a hidden class="anchor" aria-hidden="true" href="#33-实例化-instantiations">#</a></h3>
+<p>通过在每次卷积后的非线性之后插入 SE 块，SE 块可以被集成到标准的架构中。</p>
+<p>如下图 2、3，在 Inception 网络和 ResNet 加入 SE 块。</p>
+<p><img loading="lazy" src="./20210112/2.png" alt=""  />
+</p>
+<p>对于 SENet 架构的具体实例，表 1 给出了 SE-ResNet-50 和 SE-ResNeXt-50 的详细描述。</p>
+<p><img loading="lazy" src="./20210112/3.png" alt=""  />
+</p>
+<h2 id="4-model-and-computational-complexity">4 MODEL AND COMPUTATIONAL COMPLEXITY<a hidden class="anchor" aria-hidden="true" href="#4-model-and-computational-complexity">#</a></h2>
+<p>对于 SENets 系列网络，需要在提高性能和增加模型复杂度之间进行的权衡。</p>
+<p>以 ResNet-50 和 SE-ResNet-50 为例。</p>
+<p>每个 SE 块在 <em>squeeze</em> 阶段使用一个全局平均池化操作，在 <em>excitation</em> 阶段使用两个 FC 层。</p>
+<p>将参数  $r$ 设置为 16，对于 224 *224 像素的输入图像。</p>
+<ul>
+<li>ResNet-50 一次前向传播约为 3.86 GFLOPs。</li>
+<li>SE-ResNet-50 需要约 3.87 GFLOPs，相当于比原来的 ResNet-50 相对增加了0.26%。</li>
+</ul>
+<p>SE-ResNet-50 的<strong>计算负担</strong>略微增加，但其精度却超过了 ResNet-50。实践证明，要达到与 SE-ResNet-50 相同的精度，需要更深的 ResNet-101 网络。</p>
+<p><img loading="lazy" src="./20210112/4.png" alt=""  />
+</p>
+<p>对 GPU 上<strong>计算时间</strong>的基准测试：</p>
+<ul>
+<li>对于 224*224 像素的输入图像，ResNet-50 需要 164 毫秒，而 SE-ResNet-50 则为 167 毫秒</li>
+</ul>
+<p>SE 块所引入的额外<strong>参数</strong>只是两个 FC 层的权重参数：</p>
+<ul>
+<li>SE-ResNet-50 在 ResNet-50 所需的约 2500 万个参数之外，又引入了约 250 万个额外参数，相当于增加了约 10%.</li>
+</ul>
+<h2 id="5-experiments">5 EXPERIMENTS<a hidden class="anchor" aria-hidden="true" href="#5-experiments">#</a></h2>
+<h3 id="51-image-classification">5.1 Image Classification<a hidden class="anchor" aria-hidden="true" href="#51-image-classification">#</a></h3>
+<ul>
+<li>数据集：ImageNet 2012</li>
+<li>数据增强</li>
+<li>优化方法：SGD，动量为 0.9，batch size = 1024。初始学习率设置为 0.6，每 30 个EPOCH 降低 10 倍</li>
+<li>总共训练 100 EPOCH</li>
+<li>reduction ratio $r=16$</li>
+</ul>
+<p><strong>网络深度 Network depth.</strong></p>
+<ul>
+<li>Table 2 中报告结果可以观察到，SE 块在不同深度的情况下始终如一地提高了性能。</li>
+</ul>
+<p><strong>与现代架构集成 Integration with modern architectures.</strong></p>
+<ul>
+<li>研究将 SE 块与另外两个最先进的架构：Inception-ResNet-v2 和 ResNeXt 整合的效果。即 Inception-ResNet-v2/ResNeXt  **V.S. ** SE-Inception-ResNet-v2/SE-ResNeXt</li>
+<li>结果如 Table 2 所示。 可以看到在这两种架构中引入 SE 块所引起的显著性能改进。</li>
+<li>SE-ResNeXt-50 的 top-5 误差为 5.49%，优于其直接对应的 ResNeXt-50（5.90% top-5误差）以及更深的 ResNeXt-101（5.57% top-5 误差)</li>
+<li>Table 2 还对 VGG-16 和 BN-Inception 架构进行实验，结果与残差网络进行，SE 块在非残差设置上带来了性能上的改进。</li>
+</ul>
+<p>图 4 中描述了 baseline 架构和各自的 SE 对应的运行的训练曲线。可以看到，引入 SE 块的网络在整个优化过程中有了稳定的改进。</p>
+<p><img loading="lazy" src="./20210112/5.png" alt=""  />
+</p>
+<p><strong>Mobile setting.</strong></p>
+<ul>
+<li>考虑 MobileNet 和 ShuffleNet。</li>
+<li><img loading="lazy" src="./20210112/6.png" alt=""  />
+</li>
+<li>SE 块在计算成本增加最小的情况下，以较大的幅度提高了精度。</li>
+</ul>
+<p><strong>Additional datasets.</strong></p>
+<ul>
+<li>CIFAR-10 和 CIFAR-100</li>
+<li><img loading="lazy" src="./20210112/7.png" alt=""  />
+</li>
+</ul>
+<h3 id="52-scene-classification">5.2 Scene Classification<a hidden class="anchor" aria-hidden="true" href="#52-scene-classification">#</a></h3>
+<p>在 Places365-Challenge 数据集上进行了场景分类的实验，实验结果如 TABLE 6.</p>
+<p><img loading="lazy" src="./20210112/8.png" alt=""  />
+</p>
+<h3 id="53-object-detection-on-coco">5.3 Object Detection on COCO<a hidden class="anchor" aria-hidden="true" href="#53-object-detection-on-coco">#</a></h3>
+<p><img loading="lazy" src="./20210112/9.png" alt=""  />
+</p>
+<h3 id="54-ilsvrc-2017-classification-competition">5.4 ILSVRC 2017 Classification Competition<a hidden class="anchor" aria-hidden="true" href="#54-ilsvrc-2017-classification-competition">#</a></h3>
+<p>通过将 SE 块与修改后的 ResNeXt 集成，构建了一个额外的模型 SENet-154。</p>
+<p>TABLE 8 中使用标准裁剪（$224 \times 224、$$320 \times 320$）将该模型与之前在 ImageNet 验证集上的工作进行比较。</p>
+<p><img loading="lazy" src="./20210112/10.png" alt=""  />
+</p>
+<p>TABLE 9 中列出了目前所知的在 ImageNet 数据集的最好结果。</p>
+<p><img loading="lazy" src="./20210112/11.png" alt=""  />
+</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://landodo.github.io/tags/cnn/">CNN</a></li>
+      <li><a href="http://landodo.github.io/tags/%E6%B3%A8%E6%84%8F%E5%8A%9B/">注意力</a></li>
+      <li><a href="http://landodo.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">论文阅读</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://landodo.github.io/posts/20210122-senet-sknet/">
+    <span class="title">« Prev Page</span>
+    <br>
+    <span>SENet 和它的孪生兄弟 SKNet</span>
+  </a>
+  <a class="next" href="http://landodo.github.io/posts/20201230-ten-classic-sorting-algorithms/">
+    <span class="title">Next Page »</span>
+    <br>
+    <span>十大经典的排序算法</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>Landon</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

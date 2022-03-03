@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+<meta name="robots" content="index, follow">
+<title>Xception: Deep Learning with Depthwise Separable Convolutions | Landodo&#39;s NoteBook</title>
+<meta name="keywords" content="CNN, Xception, 论文阅读" />
+<meta name="description" content="论文题目：Xception: Deep Learning with Depthwise Separable Convolutions ✅ 论文地址：https://arxiv.org/pdf/1610.02357.pdf ✅ 发表时间：20">
+<meta name="author" content="">
+<link rel="canonical" href="http://landodo.github.io/posts/20201208-xception/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://landodo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://landodo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://landodo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://landodo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://landodo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Xception: Deep Learning with Depthwise Separable Convolutions" />
+<meta property="og:description" content="论文题目：Xception: Deep Learning with Depthwise Separable Convolutions ✅ 论文地址：https://arxiv.org/pdf/1610.02357.pdf ✅ 发表时间：20" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://landodo.github.io/posts/20201208-xception/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-12-08T10:17:29&#43;08:00" />
+<meta property="article:modified_time" content="2020-12-08T10:17:29&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Xception: Deep Learning with Depthwise Separable Convolutions"/>
+<meta name="twitter:description" content="论文题目：Xception: Deep Learning with Depthwise Separable Convolutions ✅ 论文地址：https://arxiv.org/pdf/1610.02357.pdf ✅ 发表时间：20"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://landodo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Xception: Deep Learning with Depthwise Separable Convolutions",
+      "item": "http://landodo.github.io/posts/20201208-xception/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Xception: Deep Learning with Depthwise Separable Convolutions",
+  "name": "Xception: Deep Learning with Depthwise Separable Convolutions",
+  "description": "论文题目：Xception: Deep Learning with Depthwise Separable Convolutions ✅ 论文地址：https://arxiv.org/pdf/1610.02357.pdf ✅ 发表时间：20",
+  "keywords": [
+    "CNN", "Xception", "论文阅读"
+  ],
+  "articleBody": "论文题目：Xception: Deep Learning with Depthwise Separable Convolutions ✅ 论文地址：https://arxiv.org/pdf/1610.02357.pdf\n✅ 发表时间：2017 年\n对 Inception 模块进行了解释，它是常规卷积和可深度分离卷积（depthwise separable convolution）之间的一个步骤。\nXception 受到已被已被深度可分离卷积取代的 Inception 模块的启发。\nXception 的参数量与 Inception V3 相同，但是在 ImageNet 数据集上的表现要优于后者。\n1. Introduction 卷积神经网络的历史起源于 LeNet，它使用卷积堆叠和用于空间子采样的最大池化操作来进行特征的提取。AlexNet 继续进行优化，网络深度加深，网络可以在每个空间尺度上学习更丰富的特征。然后是 2014 年的 VGG 结构。\nSzegedy 等人在 2014 年提出 Inception 架构，也被称为 GoogLeNet（Inception V1）。 经过完善，出现了 Inception V2、Inception V3，以及 Inception-ResNet。\nInception 结构的灵感来自于 Network-In-Network 架构。\nInception 模块有几个不同的版本，与 VGG 简单的卷积-池化层堆叠不同，Inception 能够用较少的参数学习更丰富的表示。\n1.1. The Inception hypothesis 卷积层有 2 个维度：\n spatial dimensions 空间维度 channel dimension 通道维度  传统网络的卷积核是在通道和空间同时操作的。\nInception 的基本假设是：跨通道的关联性和空间相关性充分解耦。先通过一组 1x1 卷积，获取出通道的相关性，再通过常规的 3x3 或 5x5 卷积，获取空间的相关性。（Figure 1）\nFigure 1 是一个简化版本：\n在此基础上，Figure 3：1x1 卷积（通道维度 ）后，在输出通道的非重叠段上卷积（空间维度）。\n观察 Figure 3，自然而然地提出了一个问题：分区中的段数的影响是什么？假设跨通道相关性和空间相关性可以完全分开映射（即分成的段数等于 1x1 输出通道数），这是否合理？\n1.2. 卷积和可分离卷积 基于上面的假设，首先使用 1x1 卷积来映射跨通道的相关性，然后分别映射每个输出通道的空间相关性。如图 4 所示。这就是 Inception 的一个极端的结构（Extreme Inception）。这与 depthwise separable convolution 几乎相同，深度可分离卷积早在 2014 年就已经在神经网络设计中使用了。\n深度可分离卷积（depthwise separable convolution），在 TensorFlow 和 Keras 等深度学习框架中通常被称为 “可分离卷积（depthwise convolution）\"。即在输入的每个通道上独立进行空间卷积，然后进行 1x1 卷积。\nextreme Inception module 与深度可分离卷积之间的两个小区别：\n 顺序：深度可分离卷积的顺序是空间—通道，而 extreme Inception 是通道—空间（即先执行 1x1 卷积）。 ReLU：在 Inception 中，这两个操作后都有 ReLU，而后者通常没有。  作者们认为顺序区别并不重要。将 Inception 模块替换为深度可分离卷积来改进 Inception 系列架构，即通过建立深度可分离卷积的堆栈模型。基于这一思想的卷积神经网络架构（Xception）的参数数量与 Inception V3 相似。\n2. Prior work 本篇论文依赖于前人的很多努力：\n VGG-16 架构 Inception 系列架构 深度可分离卷积 Depthwise separable convolution：2013 年，Laurent Sifre 在 Google Brain 实习期间开发了深度可分离卷积，并将其用于 AlexNet 中，获得了精度的小幅提升和收敛速度的大幅提升，以及模型尺寸的大幅缩小。详细的实验结果在 Sifre 的论文 “Rigid-motion scattering for image classification”。Andrew Howard 介绍了使用深度可分离卷积的 MobileNets。 残差连接 Residual connections  3. The Xception architecture 论文基于“卷积神经网络的特征图中的跨通道相关性和空间相关性的映射平可以完全解耦”这一假设，提出了一种完全基于深度可分离卷积层的卷积神经网络架构。\n命名为 Xception，代表的意思是 “Extreme Inception”。\nXception 架构有 36 个卷积层，36 个卷积层的结构分为 14 个模块，除了第一个和最后一个模块外，所有模块周围都有线性残差连接。\n简而言之，Xception 架构是一个具有残余连接的可深度分离卷积层的线性堆叠。\n In short, the Xception architecture is a linear stack of depthwise separable convolution layers with residual connections.\n 4. Experimental evaluation Xception 和 Inception V3 的参数数量几乎相同，将 Xception 与 Inception V3 在两个图像分类任务上进行比较：\n ImageNet 数据集上的 1000 类单标签分类任务 JFT 数据集上的 17000 类多标签分类任务  4.1. The JFT dataset JFT 是 Google 内部的大规模图像分类数据集，包括超过 3.5 亿张高分辨率图像，有 17000 个类别。\n论文作者先使用的是一个辅助数据集 FastEval14k，FastEval14k 是一个由 14,000 张图像组成的数据集，其中有约 6,000 个类别。\n使用前 100 个预测的平均平均精度（MAP@100）来评估性能。\n4.2. Optimization configuration ImageNet 和 JFT 使用不同的优化配置。\n  ImageNet\n 优化器：SGD Momentum: 0.9 初始学习率：0.045 学习率衰减：decay of rate 0.94 every 2 epochs.    JFT\n 优化器：RMSprop Momentum: 0.9 初始学习率：0.001 学习率衰减：decay of rate 0.9 every 3,000,000 samples.    对于两个数据集，Xception 和 Inception V3 都使用了完全相同的优化配置。\n4.3. Regularization configuration  权重衰减 Weight decay：L2 正则化，Inception V3 为 $4e-5$，Xception 为 $1e-5$ Dropout：ImageNet 在逻辑回归层之前使用了 0.5 的 dropout 层。JFT 上没有使用 Dropout Auxiliary loss tower：不使用。它可以反向传播网络中早期的分类损失，作为一个额外的正则化机制。  4.4. Training infrastructure 网络使用 TensorFlow 框架实现。在 60 个 NVIDIA K80 GPU 上分别进行训练，ImageNet 实验每次大约需要 3 天时间，而 JFT 实验每次需要一个多月时间（完全收敛需要 3 个多月）。\n4.5. Comparison with Inception V3 4.5.1 Classification performance 在 ImageNet 上，Xception 的结果略优于 Inception V3。\n在 JFT 上，Xception 在 FastEval14k MAP@100 指标上有 4.3% 的提升。\n在 ImageNet 上，Xception 比 ResNet-50、ResNet-101 和 ResNet-50 的表现更好。\n4.5.2 Size and speed 表 3 比较了 Inception V3 和 Xception 的参数数量和迭代速度。\n4.6. Effect of the residual connections 残差连接显然是帮助收敛的。\n对于深度可分离卷积堆栈的模型，残差连接不是必须的。作者们还用非残差的 VGG 模型也获得了很好的结果。\n4.7. point-wise 卷积后的中间激活效果 在 ImageNet，表明没有任何非线性会导致更快的收敛和更好的最终性能。\n对于深层的特征空间（如 Inception 模块中的特征空间)，非线性是有帮助的，但对于浅层的特征空间（如深度可分离卷积的 1 通道深层特征空间），非线性可能会导致信息的损失。\n5. Future directions 常规卷积和深度可分离卷积之间存在着一个离散的频谱（discrete spectrum），Inception 只是其中之一。\n经验评估中表明，Inception 模块的极端（即 Inception）比常规的 Inception 模块有优势。\n但是，作者们还没有证明 Xception 是最优的。可以最优的位于常规 Inception 模块和深度可分离卷积之间，这个问题留待将来研究。\n6. Conclusions 卷积和可深度分离卷积处于两个极端，Inception 模块是介于两者之间的一个中间点。\nXception 用可深度分离的卷积代替 Inception 模块。\nXception 的参数与 Inception V3 相似。\n与 Inception V3 相比，Xception 在 ImageNet 数据集上的分类性能提升较小，而在 JFT 数据集上的分类性能提升较大。\n预计深度可分离卷积将成为未来卷积神经网络架构设计的基石，因为它们提供了与 Inception 模块类似的特性，但又像普通卷积层一样易于使用。\n",
+  "wordCount" : "2733",
+  "inLanguage": "en",
+  "datePublished": "2020-12-08T10:17:29+08:00",
+  "dateModified": "2020-12-08T10:17:29+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://landodo.github.io/posts/20201208-xception/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Landodo's NoteBook",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://landodo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://landodo.github.io/" accesskey="h" title="Landodo&#39;s NoteBook (Alt + H)">Landodo&#39;s NoteBook</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://landodo.github.io/search" title="🔍Search (Alt &#43; /)" accesskey=/>
+                    <span>🔍Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/tags" title="Tag">
+                    <span>Tag</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/cs-zoo" title="CS ZOO">
+                    <span>CS ZOO</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://landodo.github.io/">Home</a>&nbsp;»&nbsp;<a href="http://landodo.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      Xception: Deep Learning with Depthwise Separable Convolutions
+    </h1>
+    <div class="post-meta"><span title='2020-12-08 10:17:29 +0800 CST'>December 8, 2020</span>&nbsp;·&nbsp;6 min&nbsp;·&nbsp;2733 words
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#%e8%ae%ba%e6%96%87%e9%a2%98%e7%9b%aexception-deep-learning-with-depthwise-separable-convolutions" aria-label="论文题目：Xception: Deep Learning with Depthwise Separable Convolutions">论文题目：Xception: Deep Learning with Depthwise Separable Convolutions</a><ul>
+                        
+                <li>
+                    <a href="#1-introduction" aria-label="1. Introduction">1. Introduction</a><ul>
+                        
+                <li>
+                    <a href="#11-the-inception-hypothesis" aria-label="1.1. The Inception hypothesis">1.1. The Inception hypothesis</a></li>
+                <li>
+                    <a href="#12-%e5%8d%b7%e7%a7%af%e5%92%8c%e5%8f%af%e5%88%86%e7%a6%bb%e5%8d%b7%e7%a7%af" aria-label="1.2. 卷积和可分离卷积">1.2. 卷积和可分离卷积</a></li></ul>
+                </li>
+                <li>
+                    <a href="#2-prior-work" aria-label="2. Prior work">2. Prior work</a></li>
+                <li>
+                    <a href="#3-the-xception-architecture" aria-label="3. The Xception architecture">3. The Xception architecture</a></li>
+                <li>
+                    <a href="#4-experimental-evaluation" aria-label="4. Experimental evaluation">4. Experimental evaluation</a><ul>
+                        
+                <li>
+                    <a href="#41-the-jft-dataset" aria-label="4.1. The JFT dataset">4.1. The JFT dataset</a></li>
+                <li>
+                    <a href="#42-optimization-configuration" aria-label="4.2. Optimization configuration">4.2. Optimization configuration</a></li>
+                <li>
+                    <a href="#43-regularization-configuration" aria-label="4.3. Regularization configuration">4.3. Regularization configuration</a></li>
+                <li>
+                    <a href="#44-training-infrastructure" aria-label="4.4. Training infrastructure">4.4. Training infrastructure</a></li>
+                <li>
+                    <a href="#45-comparison-with-inception-v3" aria-label="4.5. Comparison with Inception V3">4.5. Comparison with Inception V3</a><ul>
+                        
+                <li>
+                    <a href="#451-classification-performance" aria-label="4.5.1 Classification performance">4.5.1 Classification performance</a></li>
+                <li>
+                    <a href="#452-size-and-speed" aria-label="4.5.2 Size and speed">4.5.2 Size and speed</a></li></ul>
+                </li></ul>
+                </li>
+                <li>
+                    <a href="#46-effect-of-the-residual-connections" aria-label="4.6. Effect of the residual connections">4.6. Effect of the residual connections</a></li>
+                <li>
+                    <a href="#47--point-wise-%e5%8d%b7%e7%a7%af%e5%90%8e%e7%9a%84%e4%b8%ad%e9%97%b4%e6%bf%80%e6%b4%bb%e6%95%88%e6%9e%9c" aria-label="4.7.  point-wise 卷积后的中间激活效果">4.7.  point-wise 卷积后的中间激活效果</a></li>
+                <li>
+                    <a href="#5-future-directions" aria-label="5. Future directions">5. Future directions</a></li>
+                <li>
+                    <a href="#6-conclusions" aria-label="6. Conclusions">6. Conclusions</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h1 id="论文题目xception-deep-learning-with-depthwise-separable-convolutions">论文题目：Xception: Deep Learning with Depthwise Separable Convolutions<a hidden class="anchor" aria-hidden="true" href="#论文题目xception-deep-learning-with-depthwise-separable-convolutions">#</a></h1>
+<p>✅ 论文地址：<a href="https://arxiv.org/pdf/1610.02357.pdf">https://arxiv.org/pdf/1610.02357.pdf</a></p>
+<p>✅ 发表时间：2017 年</p>
+<p>对 Inception 模块进行了解释，它是常规卷积和可深度分离卷积（depthwise separable
+convolution）之间的一个步骤。</p>
+<p>Xception 受到已被已被深度可分离卷积取代的 Inception 模块的启发。</p>
+<p>Xception 的参数量与 Inception V3 相同，但是在 ImageNet 数据集上的表现要优于后者。</p>
+<h2 id="1-introduction">1. Introduction<a hidden class="anchor" aria-hidden="true" href="#1-introduction">#</a></h2>
+<p>卷积神经网络的历史起源于 LeNet，它使用卷积堆叠和用于空间子采样的最大池化操作来进行特征的提取。AlexNet 继续进行优化，网络深度加深，网络可以在每个空间尺度上学习更丰富的特征。然后是 2014 年的 VGG 结构。</p>
+<p>Szegedy 等人在 2014 年提出 Inception 架构，也被称为 GoogLeNet（Inception V1）。 经过完善，出现了 Inception V2、Inception V3，以及 Inception-ResNet。</p>
+<p>Inception 结构的灵感来自于 Network-In-Network 架构。</p>
+<p>Inception 模块有几个不同的版本，与 VGG 简单的卷积-池化层堆叠不同，Inception 能够用较少的参数学习更丰富的表示。</p>
+<h3 id="11-the-inception-hypothesis">1.1. The Inception hypothesis<a hidden class="anchor" aria-hidden="true" href="#11-the-inception-hypothesis">#</a></h3>
+<p>卷积层有 2 个维度：</p>
+<ul>
+<li>spatial dimensions 空间维度</li>
+<li>channel dimension 通道维度</li>
+</ul>
+<p>传统网络的卷积核是在通道和空间同时操作的。</p>
+<p>Inception 的基本假设是：跨通道的关联性和空间相关性充分解耦。先通过一组 1x1 卷积，获取出通道的相关性，再通过常规的 3x3 或 5x5 卷积，获取空间的相关性。（Figure 1）</p>
+<p><img loading="lazy" src="./20201208/1.png" alt=""  />
+</p>
+<p>Figure 1 是一个简化版本：</p>
+<p><img loading="lazy" src="./20201208/2.png" alt=""  />
+</p>
+<p>在此基础上，Figure 3：1x1 卷积（通道维度 ）后，在输出通道的非重叠段上卷积（空间维度）。</p>
+<p><img loading="lazy" src="./20201208/3.png" alt=""  />
+</p>
+<p>观察 Figure 3，自然而然地提出了一个问题：分区中的段数的影响是什么？假设跨通道相关性和空间相关性可以完全分开映射（即分成的段数等于 1x1 输出通道数），这是否合理？</p>
+<h3 id="12-卷积和可分离卷积">1.2. 卷积和可分离卷积<a hidden class="anchor" aria-hidden="true" href="#12-卷积和可分离卷积">#</a></h3>
+<p>基于上面的假设，首先使用 1x1 卷积来映射跨通道的相关性，然后分别映射每个输出通道的空间相关性。如图 4 所示。这就是 Inception 的一个极端的结构（Extreme Inception）。这与 <em>depthwise separable convolution</em> 几乎相同，深度可分离卷积早在 2014 年就已经在神经网络设计中使用了。</p>
+<p><img loading="lazy" src="./20201208/4.png" alt=""  />
+</p>
+<p>深度可分离卷积（depthwise separable convolution），在 TensorFlow 和 Keras 等深度学习框架中通常被称为 &ldquo;可分离卷积（<em>depthwise convolution</em>）&quot;。即在输入的每个通道上独立进行空间卷积，然后进行 1x1 卷积。</p>
+<p><img loading="lazy" src="./20201208/a.png" alt=""  />
+</p>
+<p>extreme Inception module 与深度可分离卷积之间的两个小区别：</p>
+<ul>
+<li>顺序：深度可分离卷积的顺序是空间&mdash;&gt;通道，而 extreme Inception 是通道&mdash;&gt;空间（即先执行 1x1 卷积）。</li>
+<li>ReLU：在 Inception 中，这两个操作后都有 ReLU，而后者通常没有。</li>
+</ul>
+<p>作者们认为顺序区别并不重要。将 Inception 模块替换为深度可分离卷积来改进 Inception 系列架构，即通过建立深度可分离卷积的堆栈模型。基于这一思想的卷积神经网络架构（Xception）的参数数量与 Inception V3 相似。</p>
+<h2 id="2-prior-work">2. Prior work<a hidden class="anchor" aria-hidden="true" href="#2-prior-work">#</a></h2>
+<p>本篇论文依赖于前人的很多努力：</p>
+<ul>
+<li>VGG-16 架构</li>
+<li>Inception 系列架构</li>
+<li>深度可分离卷积 Depthwise separable convolution：2013 年，Laurent Sifre 在 Google Brain 实习期间开发了深度可分离卷积，并将其用于 AlexNet 中，获得了精度的小幅提升和收敛速度的大幅提升，以及模型尺寸的大幅缩小。详细的实验结果在 Sifre 的论文 “Rigid-motion scattering for image classification”。Andrew Howard 介绍了使用深度可分离卷积的 MobileNets。</li>
+<li>残差连接 Residual connections</li>
+</ul>
+<h2 id="3-the-xception-architecture">3. The Xception architecture<a hidden class="anchor" aria-hidden="true" href="#3-the-xception-architecture">#</a></h2>
+<p>论文基于“卷积神经网络的特征图中的跨通道相关性和空间相关性的映射平可以完全解耦”这一假设，提出了一种完全基于深度可分离卷积层的卷积神经网络架构。</p>
+<p>命名为 Xception，代表的意思是 &ldquo;Extreme Inception&rdquo;。</p>
+<p>Xception 架构有 36 个卷积层，36 个卷积层的结构分为 14 个模块，除了第一个和最后一个模块外，所有模块周围都有线性残差连接。</p>
+<p><img loading="lazy" src="./20201208/5.png" alt=""  />
+</p>
+<p>简而言之，Xception 架构是一个具有残余连接的可深度分离卷积层的线性堆叠。</p>
+<blockquote>
+<p>In short, the Xception architecture is a linear stack of depthwise separable convolution layers with residual connections.</p>
+</blockquote>
+<h2 id="4-experimental-evaluation">4. Experimental evaluation<a hidden class="anchor" aria-hidden="true" href="#4-experimental-evaluation">#</a></h2>
+<p>Xception 和 Inception V3 的参数数量几乎相同，将 Xception 与 Inception V3 在两个图像分类任务上进行比较：</p>
+<ul>
+<li>ImageNet 数据集上的 1000 类单标签分类任务</li>
+<li>JFT 数据集上的 17000 类多标签分类任务</li>
+</ul>
+<h3 id="41-the-jft-dataset">4.1. The JFT dataset<a hidden class="anchor" aria-hidden="true" href="#41-the-jft-dataset">#</a></h3>
+<p>JFT 是 Google 内部的大规模图像分类数据集，包括超过 3.5 亿张高分辨率图像，有 17000 个类别。</p>
+<p>论文作者先使用的是一个辅助数据集 FastEval14k，FastEval14k 是一个由 14,000 张图像组成的数据集，其中有约 6,000 个类别。</p>
+<p>使用前 100 个预测的平均平均精度（MAP@100）来评估性能。</p>
+<h3 id="42-optimization-configuration">4.2. Optimization configuration<a hidden class="anchor" aria-hidden="true" href="#42-optimization-configuration">#</a></h3>
+<p>ImageNet 和 JFT 使用不同的优化配置。</p>
+<ul>
+<li>
+<p>ImageNet</p>
+<ul>
+<li>优化器：SGD</li>
+<li>Momentum: 0.9</li>
+<li>初始学习率：0.045</li>
+<li>学习率衰减：decay of rate 0.94 every 2 epochs.</li>
+</ul>
+</li>
+<li>
+<p>JFT</p>
+<ul>
+<li>优化器：RMSprop</li>
+<li>Momentum: 0.9</li>
+<li>初始学习率：0.001</li>
+<li>学习率衰减：decay of rate 0.9 every 3,000,000 samples.</li>
+</ul>
+</li>
+</ul>
+<p>对于两个数据集，Xception 和 Inception V3 都使用了完全相同的优化配置。</p>
+<h3 id="43-regularization-configuration">4.3. Regularization configuration<a hidden class="anchor" aria-hidden="true" href="#43-regularization-configuration">#</a></h3>
+<ul>
+<li>权重衰减 Weight decay：L2 正则化，Inception V3 为 $4e-5$，Xception 为 $1e-5$</li>
+<li>Dropout：ImageNet 在逻辑回归层之前使用了 0.5 的 dropout 层。JFT 上没有使用 Dropout</li>
+<li>Auxiliary loss tower：不使用。它可以反向传播网络中早期的分类损失，作为一个额外的正则化机制。</li>
+</ul>
+<h3 id="44-training-infrastructure">4.4. Training infrastructure<a hidden class="anchor" aria-hidden="true" href="#44-training-infrastructure">#</a></h3>
+<p>网络使用 TensorFlow 框架实现。在 60 个 NVIDIA K80 GPU 上分别进行训练，ImageNet 实验每次大约需要 3 天时间，而 JFT 实验每次需要一个多月时间（完全收敛需要 3 个多月）。</p>
+<h3 id="45-comparison-with-inception-v3">4.5. Comparison with Inception V3<a hidden class="anchor" aria-hidden="true" href="#45-comparison-with-inception-v3">#</a></h3>
+<h4 id="451-classification-performance">4.5.1 Classification performance<a hidden class="anchor" aria-hidden="true" href="#451-classification-performance">#</a></h4>
+<p>在 ImageNet 上，Xception 的结果略优于 Inception V3。</p>
+<p>在 JFT 上，Xception 在 FastEval14k MAP@100 指标上有 4.3% 的提升。</p>
+<p>在 ImageNet 上，Xception 比 ResNet-50、ResNet-101 和 ResNet-50 的表现更好。</p>
+<p><img loading="lazy" src="./20201208/6.png" alt=""  />
+</p>
+<p><img loading="lazy" src="./20201208/6-1.png" alt=""  />
+</p>
+<h4 id="452-size-and-speed">4.5.2 Size and speed<a hidden class="anchor" aria-hidden="true" href="#452-size-and-speed">#</a></h4>
+<p>表 3 比较了 Inception V3 和 Xception 的参数数量和迭代速度。</p>
+<p><img loading="lazy" src="./20201208/7.png" alt=""  />
+</p>
+<h2 id="46-effect-of-the-residual-connections">4.6. Effect of the residual connections<a hidden class="anchor" aria-hidden="true" href="#46-effect-of-the-residual-connections">#</a></h2>
+<p>残差连接显然是帮助收敛的。</p>
+<p><img loading="lazy" src="./20201208/9.png" alt=""  />
+</p>
+<p>对于深度可分离卷积堆栈的模型，残差连接不是必须的。作者们还用非残差的 VGG 模型也获得了很好的结果。</p>
+<h2 id="47--point-wise-卷积后的中间激活效果">4.7.  point-wise 卷积后的中间激活效果<a hidden class="anchor" aria-hidden="true" href="#47--point-wise-卷积后的中间激活效果">#</a></h2>
+<p>在 ImageNet，表明没有任何非线性会导致更快的收敛和更好的最终性能。</p>
+<p><img loading="lazy" src="./20201208/10.png" alt=""  />
+</p>
+<p>对于深层的特征空间（如 Inception 模块中的特征空间)，非线性是有帮助的，但对于浅层的特征空间（如深度可分离卷积的 1 通道深层特征空间），非线性可能会导致信息的损失。</p>
+<h2 id="5-future-directions">5. Future directions<a hidden class="anchor" aria-hidden="true" href="#5-future-directions">#</a></h2>
+<p>常规卷积和深度可分离卷积之间存在着一个离散的频谱（discrete spectrum），Inception 只是其中之一。</p>
+<p>经验评估中表明，Inception 模块的极端（即 Inception）比常规的 Inception 模块有优势。</p>
+<p>但是，作者们还没有证明 Xception 是最优的。可以最优的位于常规 Inception 模块和深度可分离卷积之间，这个问题留待将来研究。</p>
+<h2 id="6-conclusions">6. Conclusions<a hidden class="anchor" aria-hidden="true" href="#6-conclusions">#</a></h2>
+<p>卷积和可深度分离卷积处于两个极端，Inception 模块是介于两者之间的一个中间点。</p>
+<p>Xception 用可深度分离的卷积代替 Inception 模块。</p>
+<p>Xception 的参数与 Inception V3 相似。</p>
+<p>与 Inception V3 相比，Xception 在 ImageNet 数据集上的分类性能提升较小，而在 JFT 数据集上的分类性能提升较大。</p>
+<p>预计深度可分离卷积将成为未来卷积神经网络架构设计的基石，因为它们提供了与 Inception 模块类似的特性，但又像普通卷积层一样易于使用。</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://landodo.github.io/tags/cnn/">CNN</a></li>
+      <li><a href="http://landodo.github.io/tags/xception/">Xception</a></li>
+      <li><a href="http://landodo.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">论文阅读</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://landodo.github.io/posts/20201214-shortest-path/">
+    <span class="title">« Prev Page</span>
+    <br>
+    <span>最短路径问题 Shortest Path</span>
+  </a>
+  <a class="next" href="http://landodo.github.io/posts/20201207-hackers-delight/">
+    <span class="title">Next Page »</span>
+    <br>
+    <span>Hacker’s Delight——高效算法的奥秘</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>Landon</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>机器学 on Landodo&#39;s NoteBook</title>
+    <link>http://landodo.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6/</link>
+    <description>Recent content in 机器学 on Landodo&#39;s NoteBook</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Landon</copyright>
+    <lastBuildDate>Tue, 03 Nov 2020 10:17:29 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>SVM 支持向量机推导</title>
+      <link>http://landodo.github.io/posts/20201103-svm-notes/</link>
+      <pubDate>Tue, 03 Nov 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201103-svm-notes/</guid>
+      <description>SVM 笔记 1: $\min_{w,b}\frac{1}{2}\left\Vert w \right\Vert^2_2$ 的推导 学习率应该怎样去选择？ 鲁莽司机（Bold Driver） 每轮之后在一个 dataset 上进行评价 $$\alpha_t=\frac{\al</description>
+    </item>
+    
+  </channel>
+</rss>

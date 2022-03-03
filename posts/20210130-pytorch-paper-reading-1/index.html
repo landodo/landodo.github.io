@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+<meta name="robots" content="index, follow">
+<title>PyTorch: An Imperative Style, High-Performance Deep Learning Library | Landodo&#39;s NoteBook</title>
+<meta name="keywords" content="PyTorch" />
+<meta name="description" content="PyTorch: An Imperative Style, High-Performance Deep Learning Library ✅ 论文题目：PyTorch: An Imperative Style, High-Performance Deep Learning Library 发表时间：2019 年 12 月 摘要 Abstract 深度学习框架通常无法同时兼顾可用性（usabilit">
+<meta name="author" content="">
+<link rel="canonical" href="http://landodo.github.io/posts/20210130-pytorch-paper-reading-1/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://landodo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://landodo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://landodo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://landodo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://landodo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="PyTorch: An Imperative Style, High-Performance Deep Learning Library" />
+<meta property="og:description" content="PyTorch: An Imperative Style, High-Performance Deep Learning Library ✅ 论文题目：PyTorch: An Imperative Style, High-Performance Deep Learning Library 发表时间：2019 年 12 月 摘要 Abstract 深度学习框架通常无法同时兼顾可用性（usabilit" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://landodo.github.io/posts/20210130-pytorch-paper-reading-1/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-01-30T10:17:29&#43;08:00" />
+<meta property="article:modified_time" content="2021-01-30T10:17:29&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="PyTorch: An Imperative Style, High-Performance Deep Learning Library"/>
+<meta name="twitter:description" content="PyTorch: An Imperative Style, High-Performance Deep Learning Library ✅ 论文题目：PyTorch: An Imperative Style, High-Performance Deep Learning Library 发表时间：2019 年 12 月 摘要 Abstract 深度学习框架通常无法同时兼顾可用性（usabilit"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://landodo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "PyTorch: An Imperative Style, High-Performance Deep Learning Library",
+      "item": "http://landodo.github.io/posts/20210130-pytorch-paper-reading-1/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "PyTorch: An Imperative Style, High-Performance Deep Learning Library",
+  "name": "PyTorch: An Imperative Style, High-Performance Deep Learning Library",
+  "description": "PyTorch: An Imperative Style, High-Performance Deep Learning Library ✅ 论文题目：PyTorch: An Imperative Style, High-Performance Deep Learning Library 发表时间：2019 年 12 月 摘要 Abstract 深度学习框架通常无法同时兼顾可用性（usabilit",
+  "keywords": [
+    "PyTorch"
+  ],
+  "articleBody": "PyTorch: An Imperative Style, High-Performance Deep Learning Library  ✅ 论文题目：PyTorch: An Imperative Style, High-Performance Deep Learning Library 发表时间：2019 年 12 月  摘要 Abstract 深度学习框架通常无法同时兼顾可用性（usability）和速度（speed），而 PyTorch 实现了两者兼而有之。\n PyTorch 提供了 Pythonic 编程风格，支持代码作为模型，使调试变得简单，并与其他流行的科学计算库保持一致，同时保持高效并支持 GPU 等硬件加速器。  PyTorch 的每个方面都是由用户完全控制的常规 Python 程序。本篇论文详细介绍了 PyTorch 实现的原则，以及这些原则如何体现在其架构中。\n1 介绍 Introduction 随着人们对深度学习兴趣的增加，机器学习工具出现了爆炸式的增长。许多流行的框架如 Caffe、CNTK、TensorFlow 和 Theano，构建了一个静态的数据流图（static dataflow graph）表示计算，然后重复应用于数据批次。这种方法的缺点是缺乏易用性、调试的方便性和可以表示的计算类型的灵活性。\n深度学习的 dynamic eager execution 相比静态具有更高的价值。最近的一些支持 dynamic 的框架：\n Chainer 的表达性较好，但牺牲了性能。 Torch、DyNet 的性能、速度较快，但表达性、易用性低。  PyTorch 是一个兼顾易用性和性能的 Python 库。它可以通过自动微分和 GPU 加速来执行动态张量计算的即时执行，并且在这样做的同时，还能保持与当前最快的深度学习库相当的性能。\n PyTorch, a Python library that performs immediate execution of dynamic tensor computations with automatic differentiation and GPU acceleration, and does so while maintaining performance comparable to the fastest current libraries for deep learning.\n 2 背景 Background 科学计算的四大趋势对深度学习越来越重要。\n （1）array-based programming （2）automatic differentiation （3）open-source Python ecosystem （4）hardware accelerators.  PyTorch 通过提供一个由 GPU 加速的基于数组的编程模型，并通过集成在 Python 生态系统中的自动差异化来建立这些趋势。\n3 设计原则 Design principles PyTorch 的成功源于将之前的想法编织成兼顾速度和易用性的设计。背后有四个主要原则：\n （1）Be Pythonic：PyTorch 是 Python 生态系统的一员，遵循了普遍建立的设计目标，即保持界面的简单和一致。 （2）Put researchers first：使编写模型、数据加载器和优化器的工作尽可能地简单和高效。机器学习所固有的复杂性由 PyTorch 库在内部处理，并隐藏在直观的 API 后面。 （3）Provide pragmatic performance：PyTorch 提供令人信服的性能，不以牺牲简单性和易用性为代价。 （4）Worse is better：PyTorch 内部实现简单所节省的时间可以用来实现更多的功能，适应新的情况，跟上人工智能领域快速发展的步伐。  4 以可用性为中心的设计 Usability centric design 4.1 Deep learning models are just Python programs PyTorch 放弃了 graph-metaprogramming based 方法，以保留 Python 的 imperative programming model。这种设计由 Chainer 和 Dynet 率先用于模型编写，PyTorch 将其扩展到深度学习工作流的各个方面：定义图层、组成模型、加载数据、运行优化器和并行化训练过程，都使用为通用编程开发的熟悉概念来表达。\n这种解决方案确保了任何新的潜在神经网络架构都可以通过 PyTorch 轻松实现。\n层（Layer）（在现代机器学习中，层实际上应该理解为具有隐式参数的有状态函数）通常表示为 Python 类，其构造函数创建和初始化其参数，其前向方法处理一个输入激活。模型（Model）通常被表示为组成各个层的类。Listing 1 演示了通过合成 PyTorch 提供的功能（如 2d 卷积、矩阵乘法、dropout 和 softmax）来创建整个模型，以对灰度图像进行分类。\n“everything is a just a program” 的理念不仅限于模型，也适用于优化器（optimizers）和数据加载器（data loaders）。Listing 2 演示了 PyTorch 中采用的简单设计实现非常流行的生成式对抗网络。\n4.2 互操作性和可扩展性 Interoperability and extensibility PyTorch 允许与外部库进行双向数据交换。例如，它提供了一种机制，使用 torch.from_numpy() 函数和 .numpy() 张量方法在 NumPy 数组和 PyTorch 张量之间进行转换。类似的功能也可以用来交换使用 DLPack 格式存储的数据。\n这种交换都是在没有任何数据复制的情况下发生的，无论转换的数组有多大，都需要恒定的时间。\n此外，许多关键系统都是可以进行可拓展设计。\n例如，自动微分系统（automatic differentiation system）允许用户添加对自定义可微分函数的支持。为此，用户可以定义一个新的 torch.autograd.Function 子类，实现 forward() 和 backward() 方法，指定函数及其导数。\n同样，可以通过子类torch.utils.dataset 并实现两个方法来添加新的数据集。__getitem__ (索引操作符) 和 __len__ (长度操作符)，工作方式完全由实现者决定。\nDataLoader 类处理符合这个接口的对象，并在数据上提供一个迭代器，该迭代器负责处理洗牌、批处理、并行化和管理 pinned CUDA 内存以提高吞吐量。\n用户可以自由更换 PyTorch 中不符合其项目需求或性能要求的任何组件。\n4.3 自动微分 Automatic differentiation 基于梯度的优化对深度学习至关重要。\nPyTorch 能够自动计算用户指定的模型的梯度，而这些梯度可以是任意的 Python 程序。\nPyTorch 使用了运算符重载的方法，每次执行时都会建立计算函数的表示。在目前的实现中，PyTorch 执行逆向模式自动微分（reverse-mode automatic differentiation），计算标量输出相对于多变量输入的梯度。使用正向模式自动微分（forward-mode automatic differentiation）可以更高效地执行输出多于输入的函数微分，但这种用例在机器学习应用中并不常见。PyTorch 可以很容易地扩展到使用数组级对偶数（dual numbers）来执行正向模式微分。\nPyTorch 另一个有趣且不常见的特性是，它可以通过代码对 Tensors 采用对 Tensor 进行变种来进行微分，这是命令式程序（ imperative programs）的基本构件之一。\n PyTorch 的两个特点 Imperative programming 和 Dynamic Computation Graphs.\n ✅ 5 Performance focused implementation 从 Python 解释器中高效地运行深度学习算法是众所周知的挑战：例如，全局解释器锁（global interpreter lock）有效地确保在任何给定时间内，任何数量的并发线程中只有一个在运行。基于构建静态数据流图（static data-flow graph）的深度学习框架通过将计算的评估推迟到自定义解释器来避开这个问题。\nPyTorch 则以不同的方式解决了这个问题，它仔细优化了执行的每一个方面，同时让用户能够轻松利用额外的优化策略。\n5.1 An efficient C++ core 大部分 PyTorch 是用 C++ 编写的，以实现高性能。核心 libtorch 库实现了张量数据结构、GPU 和 CPU 运算符以及基本的并行基元。它还提供了自动微分系统，包括大多数内置函数的梯度公式。这确保了由核心 PyTorch 运算符组成的函数的导数计算完全在多线程评估器（multithreaded evaluator）中执行，避开了 Python 全局解释器锁（ Python global interpreter lock）。\n这种方法的其他作用：\n 允许快速创建绑定到多个其他语言（NimTorch、hasktorch） 创建了一流的 C++ 绑定和建模库，可以在 Python 不方便的地方使用。  5.2 Separate control and data flow PyTorch 在控制流（即程序分支、循环）和数据流（即张量和对其执行的操作）之间保持严格的分离。\n控制流的解析由 Python 和在主机 CPU 上执行的优化的 C++ 代码处理。\nPyTorch 通过利用 CUDA 流机制，将 CUDA 内核调用排队到 GPU 硬件 FIFO，从而在 GPU 上异步执行运算符。这使得系统可以将 CPU 上的 Python 代码与 GPU 上的张量运算符重叠执行。由于张量运算通常需要大量的时间，这让我们可以让 GPU 饱和，即使在像 Python 这样开销相当大的解释语言中也能达到峰值性能。\n5.3 Custom caching tensor allocator 几乎每一个运算器都必须动态分配一个输出张量来保持其执行结果。因此，优化动态内存分配器的速度至关重要。PyTorch 可以依靠优化的库来处理 CPU 上的这项任务。PyTorch 实现了一个自定义分配器，它可以增量地建立CUDA 内存的缓存，并将其重新分配给以后的分配，而无需进一步使用 CUDA API。\n5.4 Multiprocessing 由于全局解释器锁（GIL），Python 的默认实现不允许并发线程并行执行。为了缓解这个问题，Python 社区建立了一个标准的多处理模块，其中包含了一些实用程序，允许用户轻松地生成子进程并实现基本的进程间通信基元。\nPyTorch 将 Python 多处理模块扩展为 torch.multiprocessing，它是对内置包的一个下拉替换，并自动将发送到其他进程的时序器数据移动到共享内存中，而不是通过通信通道发送。\n这种设计极大地提高了性能，并使进程隔离性变弱，从而形成了更接近于常规线程程序的编程模式。\n5.5 引用计数 Reference counting 用户在设计模型时，往往会在训练过程中利用所有可用的内存，而增加 batch size 是加快这一过程的常用技术。因此，为了提供出色的性能，PyTorch 必须将内存视为一种稀缺资源，需要谨慎管理。\nPyTorch 采用了一种不同的方法：它依靠**引用计数方案来跟踪每个张量的使用次数，并在次数达到零后立即释放底层内存。**请注意，PyTorch 通过与 Python 自己的引用计数机制集成，既跟踪 libtorch 库的内部引用，也跟踪用户在其 Python 代码中的外部引用。这确保了当 tensors 不再需要时，内存会准确地被释放。\n6 评估 Evaluation 将 PyTorch 与其他几个常用的深度学习库进行性能比较。\n6.1 异步数据流 Asynchronous dataflow 首先对 PyTorch 在 GPU 上异步执行数据流的能力进行量化。使用内置的剖析器来检测各种基准，并记录单个训练步骤的执行时间线。\n图 1 显示了一个 ResNet-50 模型的前几个操作的代表性执行时间线。排队工作的主机 CPU 很快就超过了 GPU 上运算符的执行速度。这使得 PyTorch 能够实现几乎完美的设备利用率。在这个例子中，GPU 执行时间是 CPU 调度时间的三倍左右。具体比例取决于主机 CPU 和 GPU 的相对性能，以及每个张量中的元素数量和要在 GPU 上执行的浮点计算的平均算术复杂性。\n6.2 Memory management 如图 2 所示，第一次迭代的行为与后续迭代的行为有很大不同。起初，对 CUDA 内存管理函数（cudaMalloc 和cudaFree）的调用会长时间阻塞 CPU 线程，从而降低 GPU 的利用率，使执行速度大大减慢。在随后的迭代中，随着 PyTorch 缓存内存分配器开始重用之前分配的区域，这种影响就会消失。\n6.3 Benchmarks（基准） 将 PyTorch 与三个流行的基于图的深度学习框架（CNTK、MXNet 和 TensorFlow）、一个定式运行框架（Chainer）和面向生产的平台（PaddlePaddle）进行对比，来全面了解 PyTorch 的单机急切模式性能。\n在所有的基准测试中，PyTorch 的性能都在最快框架的 17% 以内。\n6.4 Adoption（采用） 通过统计自 2017 年 1 月 PyTorch 首次发布以来，各种机器学习工具（包括 Caffe、Chainer、CNTK、Keras、MXNet、PyTorch、TensorFlow 和 Theano）在 arXiv 上被提及的频率，来量化机器学习社区对 PyTorch 的接受程度。\n7 Conclusion and future work PyTorch 将对可用性的关注与对性能的谨慎考虑相结合，已经成为深度学习研究界的热门工具。\n除了继续支持深度学习的最新趋势和进展外，未来还计划继续提高 PyTorch 的速度和可扩展性。\n最值得注意的是，我们正在开发 PyTorch JIT：这是一套工具，可以让 PyTorch 程序在 Python 解释器之外执行，并在那里进一步优化。我们还打算改进对分布式计算的支持，为数据并行提供高效的基元，并为基于远程过程调用的模型并行提供 Pythonic 库。\n",
+  "wordCount" : "4234",
+  "inLanguage": "en",
+  "datePublished": "2021-01-30T10:17:29+08:00",
+  "dateModified": "2021-01-30T10:17:29+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://landodo.github.io/posts/20210130-pytorch-paper-reading-1/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Landodo's NoteBook",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://landodo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://landodo.github.io/" accesskey="h" title="Landodo&#39;s NoteBook (Alt + H)">Landodo&#39;s NoteBook</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://landodo.github.io/search" title="🔍Search (Alt &#43; /)" accesskey=/>
+                    <span>🔍Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/tags" title="Tag">
+                    <span>Tag</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/cs-zoo" title="CS ZOO">
+                    <span>CS ZOO</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://landodo.github.io/">Home</a>&nbsp;»&nbsp;<a href="http://landodo.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      PyTorch: An Imperative Style, High-Performance Deep Learning Library
+    </h1>
+    <div class="post-meta"><span title='2021-01-30 10:17:29 +0800 CST'>January 30, 2021</span>&nbsp;·&nbsp;9 min&nbsp;·&nbsp;4234 words
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#pytorch-an-imperative-style-high-performance-deep-learning-library" aria-label="PyTorch: An Imperative Style, High-Performance Deep Learning Library">PyTorch: An Imperative Style, High-Performance Deep Learning Library</a><ul>
+                        
+                <li>
+                    <a href="#%e6%91%98%e8%a6%81-abstract" aria-label="摘要 Abstract">摘要 Abstract</a></li>
+                <li>
+                    <a href="#1-%e4%bb%8b%e7%bb%8d-introduction" aria-label="1 介绍 Introduction">1 介绍 Introduction</a></li>
+                <li>
+                    <a href="#2-%e8%83%8c%e6%99%af-background" aria-label="2 背景 Background">2 背景 Background</a></li>
+                <li>
+                    <a href="#3-%e8%ae%be%e8%ae%a1%e5%8e%9f%e5%88%99-design-principles" aria-label="3 设计原则 Design principles">3 设计原则 Design principles</a></li>
+                <li>
+                    <a href="#4-%e4%bb%a5%e5%8f%af%e7%94%a8%e6%80%a7%e4%b8%ba%e4%b8%ad%e5%bf%83%e7%9a%84%e8%ae%be%e8%ae%a1-usability-centric-design" aria-label="4 以可用性为中心的设计 Usability centric design">4 以可用性为中心的设计 Usability centric design</a><ul>
+                        
+                <li>
+                    <a href="#41-deep-learning-models-are-just-python-programs" aria-label="4.1 Deep learning models are just Python programs">4.1 Deep learning models are just Python programs</a></li>
+                <li>
+                    <a href="#42-%e4%ba%92%e6%93%8d%e4%bd%9c%e6%80%a7%e5%92%8c%e5%8f%af%e6%89%a9%e5%b1%95%e6%80%a7-interoperability-and-extensibility" aria-label="4.2 互操作性和可扩展性 Interoperability and extensibility">4.2 互操作性和可扩展性 Interoperability and extensibility</a></li>
+                <li>
+                    <a href="#43-%e8%87%aa%e5%8a%a8%e5%be%ae%e5%88%86-automatic-differentiation" aria-label="4.3 自动微分 Automatic differentiation">4.3 自动微分 Automatic differentiation</a></li></ul>
+                </li>
+                <li>
+                    <a href="#-5-performance-focused-implementation" aria-label="✅ 5 Performance focused implementation">✅ 5 Performance focused implementation</a><ul>
+                        
+                <li>
+                    <a href="#51-an-efficient-c-core" aria-label="5.1 An efficient C&#43;&#43; core">5.1 An efficient C++ core</a></li>
+                <li>
+                    <a href="#52-separate-control-and-data-flow" aria-label="5.2 Separate control and data flow">5.2 Separate control and data flow</a></li>
+                <li>
+                    <a href="#53-custom-caching-tensor-allocator" aria-label="5.3 Custom caching tensor allocator">5.3 Custom caching tensor allocator</a></li>
+                <li>
+                    <a href="#54-multiprocessing" aria-label="5.4 Multiprocessing">5.4 Multiprocessing</a></li>
+                <li>
+                    <a href="#55-%e5%bc%95%e7%94%a8%e8%ae%a1%e6%95%b0-reference-counting" aria-label="5.5 引用计数 Reference counting">5.5 引用计数 Reference counting</a></li></ul>
+                </li>
+                <li>
+                    <a href="#6-%e8%af%84%e4%bc%b0-evaluation" aria-label="6 评估 Evaluation">6 评估 Evaluation</a><ul>
+                        
+                <li>
+                    <a href="#61-%e5%bc%82%e6%ad%a5%e6%95%b0%e6%8d%ae%e6%b5%81-asynchronous-dataflow" aria-label="6.1 异步数据流 Asynchronous dataflow">6.1 异步数据流 Asynchronous dataflow</a></li>
+                <li>
+                    <a href="#62-memory-management" aria-label="6.2 Memory management">6.2 Memory management</a></li>
+                <li>
+                    <a href="#63-benchmarks%e5%9f%ba%e5%87%86" aria-label="6.3 Benchmarks（基准）">6.3 Benchmarks（基准）</a></li>
+                <li>
+                    <a href="#64-adoption%e9%87%87%e7%94%a8" aria-label="6.4 Adoption（采用）">6.4 Adoption（采用）</a></li></ul>
+                </li>
+                <li>
+                    <a href="#7-conclusion-and-future-work" aria-label="7 Conclusion and future work">7 Conclusion and future work</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h1 id="pytorch-an-imperative-style-high-performance-deep-learning-library">PyTorch: An Imperative Style, High-Performance Deep Learning Library<a hidden class="anchor" aria-hidden="true" href="#pytorch-an-imperative-style-high-performance-deep-learning-library">#</a></h1>
+<ul>
+<li>✅ 论文题目：PyTorch: An Imperative Style, High-Performance Deep Learning Library</li>
+<li>发表时间：2019 年 12 月</li>
+</ul>
+<h2 id="摘要-abstract">摘要 Abstract<a hidden class="anchor" aria-hidden="true" href="#摘要-abstract">#</a></h2>
+<p>深度学习框架通常无法同时兼顾可用性（usability）和速度（speed），而 PyTorch 实现了两者兼而有之。</p>
+<ul>
+<li>PyTorch 提供了 Pythonic 编程风格，支持代码作为模型，使调试变得简单，并与其他流行的科学计算库保持一致，同时保持高效并支持 GPU 等硬件加速器。</li>
+</ul>
+<p>PyTorch 的每个方面都是由用户完全控制的常规 Python 程序。本篇论文详细介绍了 PyTorch 实现的原则，以及这些原则如何体现在其架构中。</p>
+<h2 id="1-介绍-introduction">1 介绍 Introduction<a hidden class="anchor" aria-hidden="true" href="#1-介绍-introduction">#</a></h2>
+<p>随着人们对深度学习兴趣的增加，机器学习工具出现了爆炸式的增长。许多流行的框架如 Caffe、CNTK、TensorFlow 和 Theano，构建了一个<strong>静态的数据流图</strong>（static dataflow graph）表示计算，然后重复应用于数据批次。这种方法的缺点是缺乏易用性、调试的方便性和可以表示的计算类型的灵活性。</p>
+<p>深度学习的 <strong>dynamic</strong> eager execution 相比静态具有更高的价值。最近的一些支持 dynamic 的框架：</p>
+<ul>
+<li>Chainer 的表达性较好，但牺牲了性能。</li>
+<li>Torch、DyNet 的性能、速度较快，但表达性、易用性低。</li>
+</ul>
+<p>PyTorch 是一个兼顾<strong>易用性</strong>和<strong>性能</strong>的 Python 库。它可以通过自动微分和 GPU 加速来执行<strong>动态</strong>张量计算的即时执行，并且在这样做的同时，还能保持与当前最快的深度学习库相当的性能。</p>
+<blockquote>
+<p>PyTorch, a Python library that performs immediate execution of dynamic tensor computations with automatic differentiation and GPU acceleration, and does so while maintaining performance comparable to the fastest current libraries for deep learning.</p>
+</blockquote>
+<h2 id="2-背景-background">2 背景 Background<a hidden class="anchor" aria-hidden="true" href="#2-背景-background">#</a></h2>
+<p>科学计算的四大趋势对深度学习越来越重要。</p>
+<ul>
+<li>（1）array-based programming</li>
+<li>（2）automatic differentiation</li>
+<li>（3）open-source Python ecosystem</li>
+<li>（4）hardware accelerators.</li>
+</ul>
+<p>PyTorch 通过提供一个由 GPU 加速的基于数组的编程模型，并通过集成在 Python 生态系统中的自动差异化来建立这些趋势。</p>
+<h2 id="3-设计原则-design-principles">3 设计原则 Design principles<a hidden class="anchor" aria-hidden="true" href="#3-设计原则-design-principles">#</a></h2>
+<p>PyTorch 的成功源于将之前的想法编织成兼顾<strong>速度</strong>和<strong>易用性</strong>的设计。背后有四个主要原则：</p>
+<ul>
+<li>（1）Be Pythonic：PyTorch 是 Python 生态系统的一员，遵循了普遍建立的设计目标，即保持界面的简单和一致。</li>
+<li>（2）Put researchers first：使编写模型、数据加载器和优化器的工作尽可能地简单和高效。机器学习所固有的复杂性由 PyTorch 库在内部处理，并隐藏在直观的 API 后面。</li>
+<li>（3）Provide pragmatic performance：PyTorch 提供令人信服的性能，不以牺牲简单性和易用性为代价。</li>
+<li>（4）Worse is better：PyTorch 内部实现简单所节省的时间可以用来实现更多的功能，适应新的情况，跟上人工智能领域快速发展的步伐。</li>
+</ul>
+<h2 id="4-以可用性为中心的设计-usability-centric-design">4 以可用性为中心的设计 Usability centric design<a hidden class="anchor" aria-hidden="true" href="#4-以可用性为中心的设计-usability-centric-design">#</a></h2>
+<h3 id="41-deep-learning-models-are-just-python-programs">4.1 Deep learning models are just Python programs<a hidden class="anchor" aria-hidden="true" href="#41-deep-learning-models-are-just-python-programs">#</a></h3>
+<p>PyTorch 放弃了 graph-metaprogramming based 方法，以保留 Python 的 imperative programming model。这种设计由 Chainer 和 Dynet 率先用于模型编写，PyTorch 将其扩展到深度学习工作流的各个方面：定义图层、组成模型、加载数据、运行优化器和并行化训练过程，都使用为通用编程开发的熟悉概念来表达。</p>
+<p>这种解决方案确保了任何新的潜在神经网络架构都可以通过 PyTorch 轻松实现。</p>
+<p>层（Layer）（在现代机器学习中，层实际上应该理解为具有隐式参数的有状态函数）通常表示为 Python 类，其构造函数创建和初始化其参数，其前向方法处理一个输入激活。模型（Model）通常被表示为组成各个层的类。Listing 1 演示了通过合成 PyTorch 提供的功能（如 2d 卷积、矩阵乘法、dropout 和 softmax）来创建整个模型，以对灰度图像进行分类。</p>
+<p><img loading="lazy" src="./20210130/1.png" alt=""  />
+</p>
+<p>“everything is a just a program” 的理念不仅限于模型，也适用于优化器（optimizers）和数据加载器（data loaders）。Listing 2 演示了 PyTorch 中采用的简单设计实现非常流行的生成式对抗网络。</p>
+<p><img loading="lazy" src="./20210130/2.png" alt=""  />
+</p>
+<h3 id="42-互操作性和可扩展性-interoperability-and-extensibility">4.2 互操作性和可扩展性 Interoperability and extensibility<a hidden class="anchor" aria-hidden="true" href="#42-互操作性和可扩展性-interoperability-and-extensibility">#</a></h3>
+<p>PyTorch 允许与外部库进行双向数据交换。例如，它提供了一种机制，使用 <code>torch.from_numpy()</code> 函数和 <code>.numpy()</code> 张量方法在 NumPy 数组和 PyTorch 张量之间进行转换。类似的功能也可以用来交换使用 DLPack 格式存储的数据。</p>
+<p>这种交换都是在<strong>没有任何数据复制</strong>的情况下发生的，无论转换的数组有多大，都需要恒定的时间。</p>
+<p>此外，许多关键系统都是可以进行可拓展设计。</p>
+<p>例如，自动微分系统（automatic differentiation system）允许用户添加对自定义可微分函数的支持。为此，用户可以定义一个新的 <code>torch.autograd.Function</code> 子类，实现 <code>forward()</code> 和 <code>backward()</code> 方法，指定函数及其导数。</p>
+<p>同样，可以通过子类<code>torch.utils.dataset</code> 并实现两个方法来添加新的数据集。<code>__getitem__</code> (索引操作符) 和 <code>__len__</code> (长度操作符)，工作方式完全由实现者决定。</p>
+<p><code>DataLoader</code> 类处理符合这个接口的对象，并在数据上提供一个迭代器，该迭代器负责处理洗牌、批处理、并行化和管理 pinned CUDA 内存以提高吞吐量。</p>
+<p>用户可以自由更换 PyTorch 中不符合其项目需求或性能要求的任何组件。</p>
+<h3 id="43-自动微分-automatic-differentiation">4.3 自动微分 Automatic differentiation<a hidden class="anchor" aria-hidden="true" href="#43-自动微分-automatic-differentiation">#</a></h3>
+<p>基于梯度的优化对深度学习至关重要。</p>
+<p>PyTorch 能够自动计算用户指定的模型的梯度，而这些梯度可以是任意的 Python 程序。</p>
+<p>PyTorch 使用了运算符重载的方法，每次执行时都会建立计算函数的表示。在目前的实现中，PyTorch 执行逆向模式自动微分（reverse-mode automatic differentiation），计算标量输出相对于多变量输入的梯度。使用正向模式自动微分（forward-mode automatic differentiation）可以更高效地执行输出多于输入的函数微分，但这种用例在机器学习应用中并不常见。PyTorch 可以很容易地扩展到使用数组级对偶数（dual numbers）来执行正向模式微分。</p>
+<p>PyTorch 另一个有趣且不常见的特性是，它可以通过代码对 Tensors 采用对 Tensor 进行变种来进行微分，这是命令式程序（ imperative programs）的基本构件之一。</p>
+<blockquote>
+<p>PyTorch 的两个特点 Imperative programming 和 Dynamic Computation Graphs.</p>
+</blockquote>
+<h2 id="-5-performance-focused-implementation">✅ 5 Performance focused implementation<a hidden class="anchor" aria-hidden="true" href="#-5-performance-focused-implementation">#</a></h2>
+<p>从 Python 解释器中高效地运行深度学习算法是众所周知的挑战：例如，全局解释器锁（global interpreter lock）有效地确保在任何给定时间内，<strong>任何数量的并发线程中只有一个在运行</strong>。基于构建<strong>静态数据流图</strong>（static
+data-flow graph）的深度学习框架通过将计算的评估推迟到自定义解释器来避开这个问题。</p>
+<p>PyTorch 则以<strong>不同的方式</strong>解决了这个问题，它仔细优化了执行的每一个方面，同时让用户能够轻松利用额外的优化策略。</p>
+<h3 id="51-an-efficient-c-core">5.1 An efficient C++ core<a hidden class="anchor" aria-hidden="true" href="#51-an-efficient-c-core">#</a></h3>
+<p>大部分 PyTorch 是用 C++ 编写的，以实现高性能。核心 libtorch 库实现了张量数据结构、GPU 和 CPU 运算符以及基本的并行基元。它还提供了自动微分系统，包括大多数内置函数的梯度公式。这确保了由核心 PyTorch 运算符组成的函数的导数计算完全在<strong>多线程评估器</strong>（multithreaded evaluator）中执行，避开了 Python 全局解释器锁（ Python global interpreter lock）。</p>
+<p>这种方法的其他作用：</p>
+<ul>
+<li>允许快速创建绑定到多个其他语言（NimTorch、hasktorch）</li>
+<li>创建了一流的 C++ 绑定和建模库，可以在 Python 不方便的地方使用。</li>
+</ul>
+<h3 id="52-separate-control-and-data-flow">5.2 Separate control and data flow<a hidden class="anchor" aria-hidden="true" href="#52-separate-control-and-data-flow">#</a></h3>
+<p>PyTorch 在<strong>控制流</strong>（即程序分支、循环）和<strong>数据流</strong>（即张量和对其执行的操作）之间保持严格的分离。</p>
+<p>控制流的解析由 Python 和在主机 CPU 上执行的优化的 C++ 代码处理。</p>
+<p>PyTorch 通过利用 CUDA 流机制，将 CUDA 内核调用排队到 GPU 硬件 FIFO，从而在 GPU 上异步执行运算符。这使得系统可以<strong>将 CPU 上的 Python 代码与 GPU 上的张量运算符重叠执行</strong>。由于张量运算通常需要大量的时间，这让我们可以让 GPU 饱和，即使在像 Python 这样开销相当大的解释语言中也能达到峰值性能。</p>
+<h3 id="53-custom-caching-tensor-allocator">5.3 Custom caching tensor allocator<a hidden class="anchor" aria-hidden="true" href="#53-custom-caching-tensor-allocator">#</a></h3>
+<p>几乎每一个运算器都必须动态分配一个输出张量来保持其执行结果。因此，优化动态内存分配器的速度至关重要。PyTorch 可以依靠优化的库来处理 CPU 上的这项任务。<strong>PyTorch 实现了一个自定义分配器</strong>，它可以增量地建立CUDA 内存的缓存，并将其重新分配给以后的分配，而无需进一步使用 CUDA API。</p>
+<h3 id="54-multiprocessing">5.4 Multiprocessing<a hidden class="anchor" aria-hidden="true" href="#54-multiprocessing">#</a></h3>
+<p>由于全局解释器锁（GIL），Python 的默认实现不允许并发线程并行执行。为了缓解这个问题，Python 社区建立了一个标准的多处理模块，其中包含了一些实用程序，允许用户轻松地生成子进程并实现基本的进程间通信基元。</p>
+<p>PyTorch 将 Python 多处理模块扩展为 torch.multiprocessing，它是对内置包的一个下拉替换，并自动将发送到其他进程的时序器数据移动到共享内存中，而不是通过通信通道发送。</p>
+<p>这种设计极大地提高了性能，并使进程隔离性变弱，从而形成了更接近于常规线程程序的编程模式。</p>
+<h3 id="55-引用计数-reference-counting">5.5 引用计数 Reference counting<a hidden class="anchor" aria-hidden="true" href="#55-引用计数-reference-counting">#</a></h3>
+<p>用户在设计模型时，往往会在训练过程中利用所有可用的内存，而增加 batch size 是加快这一过程的常用技术。因此，为了提供出色的性能，PyTorch 必须将内存视为一种稀缺资源，需要谨慎管理。</p>
+<p>PyTorch 采用了一种不同的方法：它依靠**引用计数方案来跟踪每个张量的使用次数，并在次数达到零后立即释放底层内存。**请注意，PyTorch 通过与 Python 自己的引用计数机制集成，既跟踪 libtorch 库的内部引用，也跟踪用户在其 Python 代码中的外部引用。这确保了当 tensors 不再需要时，内存会准确地被释放。</p>
+<h2 id="6-评估-evaluation">6 评估 Evaluation<a hidden class="anchor" aria-hidden="true" href="#6-评估-evaluation">#</a></h2>
+<p>将 PyTorch 与其他几个常用的深度学习库进行性能比较。</p>
+<h3 id="61-异步数据流-asynchronous-dataflow">6.1 异步数据流 Asynchronous dataflow<a hidden class="anchor" aria-hidden="true" href="#61-异步数据流-asynchronous-dataflow">#</a></h3>
+<p>首先对 PyTorch 在 GPU 上异步执行数据流的能力进行量化。使用内置的剖析器来检测各种基准，并记录单个训练步骤的执行时间线。</p>
+<p>图 1 显示了一个 ResNet-50 模型的前几个操作的代表性执行时间线。排队工作的主机 CPU 很快就超过了 GPU 上运算符的执行速度。这使得 PyTorch 能够实现几乎完美的设备利用率。在这个例子中，GPU 执行时间是 CPU 调度时间的三倍左右。具体比例取决于主机 CPU 和 GPU 的相对性能，以及每个张量中的元素数量和要在 GPU 上执行的浮点计算的平均算术复杂性。</p>
+<p><img loading="lazy" src="./20210130/3.png" alt=""  />
+</p>
+<h3 id="62-memory-management">6.2 Memory management<a hidden class="anchor" aria-hidden="true" href="#62-memory-management">#</a></h3>
+<p>如图 2 所示，第一次迭代的行为与后续迭代的行为有很大不同。起初，对 CUDA 内存管理函数（cudaMalloc 和cudaFree）的调用会长时间阻塞 CPU 线程，从而降低 GPU 的利用率，使执行速度大大减慢。在随后的迭代中，随着 PyTorch 缓存内存分配器开始重用之前分配的区域，这种影响就会消失。</p>
+<p><img loading="lazy" src="./20210130/4.png" alt=""  />
+</p>
+<h3 id="63-benchmarks基准">6.3 Benchmarks（基准）<a hidden class="anchor" aria-hidden="true" href="#63-benchmarks基准">#</a></h3>
+<p>将 PyTorch 与三个流行的基于图的深度学习框架（CNTK、MXNet 和 TensorFlow）、一个定式运行框架（Chainer）和面向生产的平台（PaddlePaddle）进行对比，来全面了解 PyTorch 的单机急切模式性能。</p>
+<p>在所有的基准测试中，PyTorch 的性能都在最快框架的 17% 以内。</p>
+<p><img loading="lazy" src="./20210130/5.png" alt=""  />
+</p>
+<h3 id="64-adoption采用">6.4 Adoption（采用）<a hidden class="anchor" aria-hidden="true" href="#64-adoption采用">#</a></h3>
+<p>通过统计自 2017 年 1 月 PyTorch 首次发布以来，各种机器学习工具（包括 Caffe、Chainer、CNTK、Keras、MXNet、PyTorch、TensorFlow 和 Theano）在 arXiv 上被提及的频率，来量化机器学习社区对 PyTorch 的接受程度。</p>
+<p><img loading="lazy" src="./20210130/6.png" alt=""  />
+</p>
+<h2 id="7-conclusion-and-future-work">7 Conclusion and future work<a hidden class="anchor" aria-hidden="true" href="#7-conclusion-and-future-work">#</a></h2>
+<p>PyTorch 将对可用性的关注与对性能的谨慎考虑相结合，已经成为深度学习研究界的热门工具。</p>
+<p>除了继续支持深度学习的最新趋势和进展外，未来还计划继续提高 PyTorch 的<strong>速度</strong>和<strong>可扩展性</strong>。</p>
+<p>最值得注意的是，我们正在开发 PyTorch JIT：这是一套工具，可以让 PyTorch 程序在 Python 解释器之外执行，并在那里进一步优化。我们还打算改进对分布式计算的支持，为数据并行提供高效的基元，并为基于远程过程调用的模型并行提供 Pythonic 库。</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://landodo.github.io/tags/pytorch/">PyTorch</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://landodo.github.io/posts/20210205-what-is-lrn/">
+    <span class="title">« Prev Page</span>
+    <br>
+    <span>AlexNet 中的 LRN（Local Response Normalization） 是什么</span>
+  </a>
+  <a class="next" href="http://landodo.github.io/posts/20210129-computational-graphs-and-backpropagation/">
+    <span class="title">Next Page »</span>
+    <br>
+    <span>计算图和反向传播（Computational Graphs and Backpropagation）</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>Landon</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

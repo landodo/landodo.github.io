@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>综述 on Landodo&#39;s NoteBook</title>
+    <link>http://landodo.github.io/tags/%E7%BB%BC%E8%BF%B0/</link>
+    <description>Recent content in 综述 on Landodo&#39;s NoteBook</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Landon</copyright>
+    <lastBuildDate>Wed, 27 Jan 2021 22:53:19 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/%E7%BB%BC%E8%BF%B0/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>深度学习-卷积神经网络中文综述</title>
+      <link>http://landodo.github.io/posts/202101227-cnn-xiushen-wei/</link>
+      <pubDate>Wed, 27 Jan 2021 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/202101227-cnn-xiushen-wei/</guid>
+      <description>深度学习-卷积神经网络中文综述 《解析卷积神经网络——深度学习实践手册》是南京大学博士魏秀参写的一本小册子，给很多初学者提供了很多帮助。 魏秀参</description>
+    </item>
+    
+  </channel>
+</rss>

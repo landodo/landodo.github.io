@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>NIN on Landodo&#39;s NoteBook</title>
+    <link>http://landodo.github.io/tags/nin/</link>
+    <description>Recent content in NIN on Landodo&#39;s NoteBook</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Landon</copyright>
+    <lastBuildDate>Sat, 07 Nov 2020 10:17:29 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/nin/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Network In Network</title>
+      <link>http://landodo.github.io/posts/20201215-network-in-network/</link>
+      <pubDate>Sat, 07 Nov 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201215-network-in-network/</guid>
+      <description>Network In Network 论文阅读 ✅ 论文地址：https://arxiv.org/pdf/1312.4400.pdf ✅ 论文发表时间：2014 年 论文提出了一种名为</description>
+    </item>
+    
+  </channel>
+</rss>

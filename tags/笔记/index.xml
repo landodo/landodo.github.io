@@ -26,5 +26,23 @@
       <description>医学影像基础 现行医学影像设备所得到的医学影像在许多方面还存在不尽如人意之处。例如，某些影像的==空间分辨率不够高==，某些影像的==信噪比不</description>
     </item>
     
+    <item>
+      <title>计算图和反向传播（Computational Graphs and Backpropagation）</title>
+      <link>http://landodo.github.io/posts/20210129-computational-graphs-and-backpropagation/</link>
+      <pubDate>Fri, 29 Jan 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210129-computational-graphs-and-backpropagation/</guid>
+      <description>计算图和反向传播（Computational Graphs and Backpropagation） 学习资料 （0）《深度学习入门——基于 Python 的理论与实践》 我的读书</description>
+    </item>
+    
+    <item>
+      <title>深度学习基础图书</title>
+      <link>http://landodo.github.io/posts/20210128-deep-learning-from-scrach/</link>
+      <pubDate>Tue, 18 Feb 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210128-deep-learning-from-scrach/</guid>
+      <description>深度学习基础图书 今天又花了点时间看了一本书（第二遍）——《深度学习入门——基于 Python 的理论与实践》。 全书下载地址：https://github.</description>
+    </item>
+    
   </channel>
 </rss>

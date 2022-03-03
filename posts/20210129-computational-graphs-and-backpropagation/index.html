@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+<meta name="robots" content="index, follow">
+<title>计算图和反向传播（Computational Graphs and Backpropagation） | Landodo&#39;s NoteBook</title>
+<meta name="keywords" content="深度学习, 笔记" />
+<meta name="description" content="计算图和反向传播（Computational Graphs and Backpropagation） 学习资料 （0）《深度学习入门——基于 Python 的理论与实践》 我的读书">
+<meta name="author" content="">
+<link rel="canonical" href="http://landodo.github.io/posts/20210129-computational-graphs-and-backpropagation/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://landodo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://landodo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://landodo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://landodo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://landodo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="计算图和反向传播（Computational Graphs and Backpropagation）" />
+<meta property="og:description" content="计算图和反向传播（Computational Graphs and Backpropagation） 学习资料 （0）《深度学习入门——基于 Python 的理论与实践》 我的读书" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://landodo.github.io/posts/20210129-computational-graphs-and-backpropagation/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-01-29T10:17:29&#43;08:00" />
+<meta property="article:modified_time" content="2021-01-29T10:17:29&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="计算图和反向传播（Computational Graphs and Backpropagation）"/>
+<meta name="twitter:description" content="计算图和反向传播（Computational Graphs and Backpropagation） 学习资料 （0）《深度学习入门——基于 Python 的理论与实践》 我的读书"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://landodo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "计算图和反向传播（Computational Graphs and Backpropagation）",
+      "item": "http://landodo.github.io/posts/20210129-computational-graphs-and-backpropagation/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "计算图和反向传播（Computational Graphs and Backpropagation）",
+  "name": "计算图和反向传播（Computational Graphs and Backpropagation）",
+  "description": "计算图和反向传播（Computational Graphs and Backpropagation） 学习资料 （0）《深度学习入门——基于 Python 的理论与实践》 我的读书",
+  "keywords": [
+    "深度学习", "笔记"
+  ],
+  "articleBody": "计算图和反向传播（Computational Graphs and Backpropagation） 学习资料  （0）《深度学习入门——基于 Python 的理论与实践》  我的读书笔记：2021.01.28 和看小说一样流畅的深度学习基础图书\n （1）Hacker’s guide to Neural Networks: http://karpathy.github.io/neuralnets/   （2）Computational graphs: Backpropagation: https://kharshit.github.io/blog/2018/03/09/computational-graphs-backpropagation   （3）(CS231n) Backpropagation: Intuitionschain rule interpretation, real-valued circuits, patterns in gradient flow: https://cs231n.github.io/optimization-2/    （4）Computing Gradient Hung-yi Lee 李宏毅: http://speech.ee.ntu.edu.tw/~tlkagk/courses/MLDS_2018/Lecture/Graph.pdf\n  （5）CS231n: Convolutional Neural Networks for Visual Recognition https://cs231n.github.io/\n  ",
+  "wordCount" : "200",
+  "inLanguage": "en",
+  "datePublished": "2021-01-29T10:17:29+08:00",
+  "dateModified": "2021-01-29T10:17:29+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://landodo.github.io/posts/20210129-computational-graphs-and-backpropagation/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Landodo's NoteBook",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://landodo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://landodo.github.io/" accesskey="h" title="Landodo&#39;s NoteBook (Alt + H)">Landodo&#39;s NoteBook</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://landodo.github.io/search" title="🔍Search (Alt &#43; /)" accesskey=/>
+                    <span>🔍Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/tags" title="Tag">
+                    <span>Tag</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/cs-zoo" title="CS ZOO">
+                    <span>CS ZOO</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://landodo.github.io/">Home</a>&nbsp;»&nbsp;<a href="http://landodo.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      计算图和反向传播（Computational Graphs and Backpropagation）
+    </h1>
+    <div class="post-meta"><span title='2021-01-29 10:17:29 +0800 CST'>January 29, 2021</span>&nbsp;·&nbsp;1 min&nbsp;·&nbsp;200 words
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#%e8%ae%a1%e7%ae%97%e5%9b%be%e5%92%8c%e5%8f%8d%e5%90%91%e4%bc%a0%e6%92%adcomputational-graphs-and-backpropagation" aria-label="计算图和反向传播（Computational Graphs and Backpropagation）">计算图和反向传播（Computational Graphs and Backpropagation）</a><ul>
+                        
+                <li>
+                    <a href="#%e5%ad%a6%e4%b9%a0%e8%b5%84%e6%96%99" aria-label="学习资料">学习资料</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h1 id="计算图和反向传播computational-graphs-and-backpropagation">计算图和反向传播（Computational Graphs and Backpropagation）<a hidden class="anchor" aria-hidden="true" href="#计算图和反向传播computational-graphs-and-backpropagation">#</a></h1>
+<h2 id="学习资料">学习资料<a hidden class="anchor" aria-hidden="true" href="#学习资料">#</a></h2>
+<ul>
+<li>（0）《深度学习入门——基于 Python 的理论与实践》</li>
+</ul>
+<p>我的读书笔记：<a href="https://landodo.github.io/posts/20210128-Deep-Learning-from-Scrach">2021.01.28 和看小说一样流畅的深度学习基础图书</a></p>
+<ul>
+<li>（1）Hacker&rsquo;s guide to Neural Networks: <a href="http://karpathy.github.io/neuralnets/">http://karpathy.github.io/neuralnets/</a></li>
+</ul>
+<p><img loading="lazy" src="./20210129/2.png" alt=""  />
+</p>
+<ul>
+<li>（2）Computational graphs: Backpropagation: <a href="https://kharshit.github.io/blog/2018/03/09/computational-graphs-backpropagation">https://kharshit.github.io/blog/2018/03/09/computational-graphs-backpropagation</a></li>
+</ul>
+<p><img loading="lazy" src="./20210129/3.png" alt=""  />
+</p>
+<ul>
+<li>（3）(CS231n) Backpropagation: Intuitionschain rule interpretation, real-valued circuits, patterns in gradient flow: <a href="https://cs231n.github.io/optimization-2/">https://cs231n.github.io/optimization-2/</a></li>
+</ul>
+<p><img loading="lazy" src="./20210129/4.png" alt=""  />
+</p>
+<ul>
+<li>
+<p>（4）Computing Gradient Hung-yi Lee 李宏毅:  <a href="http://speech.ee.ntu.edu.tw/~tlkagk/courses/MLDS_2018/Lecture/Graph.pdf">http://speech.ee.ntu.edu.tw/~tlkagk/courses/MLDS_2018/Lecture/Graph.pdf</a></p>
+</li>
+<li>
+<p>（5）CS231n: Convolutional Neural Networks for Visual Recognition <a href="./%3Chttps://cs231n.github.io/%3E">https://cs231n.github.io/</a></p>
+</li>
+</ul>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://landodo.github.io/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li>
+      <li><a href="http://landodo.github.io/tags/%E7%AC%94%E8%AE%B0/">笔记</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://landodo.github.io/posts/20210130-pytorch-paper-reading-1/">
+    <span class="title">« Prev Page</span>
+    <br>
+    <span>PyTorch: An Imperative Style, High-Performance Deep Learning Library</span>
+  </a>
+  <a class="next" href="http://landodo.github.io/posts/202101227-cnn-xiushen-wei/">
+    <span class="title">Next Page »</span>
+    <br>
+    <span>深度学习-卷积神经网络中文综述</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>Landon</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

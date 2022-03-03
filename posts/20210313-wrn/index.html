@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+<meta name="robots" content="index, follow">
+<title>Wide Residual Networks | Landodo&#39;s NoteBook</title>
+<meta name="keywords" content="CNN, 论文阅读" />
+<meta name="description" content="Wide Residual Networks arXiv: 1605.07146v4 法国 Abstract 深度残差网络被证明能够扩展到数千层，不断的提高性能。 但是，精度提高的每一小部分都要增加近一倍的层数，而训练很深的残差网络有一">
+<meta name="author" content="">
+<link rel="canonical" href="http://landodo.github.io/posts/20210313-wrn/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://landodo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://landodo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://landodo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://landodo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://landodo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Wide Residual Networks" />
+<meta property="og:description" content="Wide Residual Networks arXiv: 1605.07146v4 法国 Abstract 深度残差网络被证明能够扩展到数千层，不断的提高性能。 但是，精度提高的每一小部分都要增加近一倍的层数，而训练很深的残差网络有一" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://landodo.github.io/posts/20210313-wrn/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-03-13T10:17:29&#43;08:00" />
+<meta property="article:modified_time" content="2021-03-13T10:17:29&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Wide Residual Networks"/>
+<meta name="twitter:description" content="Wide Residual Networks arXiv: 1605.07146v4 法国 Abstract 深度残差网络被证明能够扩展到数千层，不断的提高性能。 但是，精度提高的每一小部分都要增加近一倍的层数，而训练很深的残差网络有一"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://landodo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Wide Residual Networks",
+      "item": "http://landodo.github.io/posts/20210313-wrn/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Wide Residual Networks",
+  "name": "Wide Residual Networks",
+  "description": "Wide Residual Networks arXiv: 1605.07146v4 法国 Abstract 深度残差网络被证明能够扩展到数千层，不断的提高性能。 但是，精度提高的每一小部分都要增加近一倍的层数，而训练很深的残差网络有一",
+  "keywords": [
+    "CNN", "论文阅读"
+  ],
+  "articleBody": "Wide Residual Networks arXiv: 1605.07146v4\n法国\nAbstract 深度残差网络被证明能够扩展到数千层，不断的提高性能。\n但是，精度提高的每一小部分都要增加近一倍的层数，而训练很深的残差网络有一个特征重用递减（diminishing feature reuse）的问题，这使得这些网络的训练速度非常慢。\n为了解决这些问题，本文对 ResNet block 的架构进行了详细的实验研究，在此基础上，提出了一种新型的架构，即减少深度，增加残差网络的宽度（ decrease depth and increase width of residual networks. ）。\n本篇论文提出的网络被称为 wide residual networks (WRNs)，实验证明，一个简单的 16 层深的 WRN，精度和效率上优于以前所有的深残差网络，包括千层深网络。\nWRN 在 CIFAR、SVHN、COCO 数据集上取得 SOTA。\n1 Introduction 卷积神经网络在过去几年中，层数逐渐增加：AlexNet，VGG，Inception，ResNet。\n训练深度神经网络存在几个困难，包括梯度爆炸/消失和网络退化（exploding/vanishing gradients and degradation.）。训练深层的神经网络有如下技巧：\n well-designed initialization strategies better optimizers skip connections knowledge transfer layer-wise training  最近的 ResNet 在 ImageNet、CIFAR、PASCAL VOC、MS COCO 上取得了 SOTA。与 Inception 架构相比，ResNet 表现出了更好的泛化能力，这意味着特征可以在迁移学习中被利用，效率更高。\n研究表明，残差连接加快了网络的收敛。\nHighway Network 在 ResNet 之前被提出，Highway Network 中的残差链路是门控的，这些门的权重是可学习的。\n到目前为止，对残差网络的研究主要集中在 ResNet 块内的激活顺序和残差网络的深度上。本篇论文的的工作是探索一套更丰富的 ResNet 块的网络架构，并彻底研究除了激活顺序之外的其他几个不同方面如何影响性能。\nWidth vs depth in residual networks.（残差网络的宽度与深度）\n残差网络的作者试图将网络尽可能地做得更薄，而倾向于增加其深度和更少的参数，甚至引入了一个”瓶颈“块（«bottleneck» block），使得 ResNet 块更薄。\n作者们注意到，带有恒等映射（identity mapping）的残差块可以训练非常深的网络，这这是残差网络的优点，同时也是一个弱点。由于梯度流经网络时，没有什么东西可以强迫它通过残差块权重，它可以避免在训练过程中学习任何东西，所以有可能只有少数几个块可以学习到有用的表征，或者很多块共享的信息非常少，对最终目标的贡献很小。这个问题被称为递减特征重用（diminishing feature reuse），（Deep networks with stochastic depth）试图用在训练过程中随机禁用残差块的想法来解决这个问题。\n这篇论文建立在 “Identity mappings in deep residual networks” 之上，试图回答深度残差网络应该有多宽的问题，并解决训练中存在的问题。\n实验表明，与增加残差网络的深度相比，拓宽 ResNet 块提供了一种更有效的方法来提高残差网络的性能。wider deep residual networks 比 ResNet 有显著的性能提升，层数减少了 50 倍，速度快了 2 倍以上。\nwide 16-layer deep network 与 1000-layer thin deep network 的精度相同，参数数量也相当，不过前者训练速度要快几倍。这暗示了深度残差网络的主要力量在残差块，深度的影响是辅助性的。\n**Use of dropout in ResNet blocks. **\nDropout 较多应用于参数较多的顶层，以防止特征共适应和过拟合。\n后来，dropout 被 Batch normalization 代替，BN 的网络比有 dropout 的网络能达到更好的精度。（Batch normalization: Accelerating deep network training by reducing internal covariate shift.）\nkaiming He 研究表明，在 ResNet 中引入 dropout 会产生负面的作用。在宽残差网络（WRN）上的实验结果表明，引入 dropout 后，在一些数据集上取得了 SOTA。\n本篇论文的贡献总结如下：\n 对残差网络架构进行了详细的实验研究，彻底研究了 ResNet 块结构的几个重要方面。 提出了一种 widened architecture for ResNet blocks，使残余网络的性能得到显著提高。 提出了一种在深度残差网络中利用 dropout 的新方法。 WRN 在几个数据集上取得 SOTA。  2 Wide residual networks 恒等映射的残差块表示如下：\n 其中 $x_{l+1}$ 和 $x_l$ 为网络中第 $l$ 个单元的输入和输出，$F$ 为残差函数，$W_l$ 为块的参数。残差网络由依次叠加的残差块组成。  残差网络由两种类型的块组成：\n（1）basic：用两个连续的 3×3 卷积与批量归一化、ReLU 前面的卷积：conv3×3-conv3×3 图 1(a)\n（2）bottleneck：有一个 3×3 卷积，前后有降维和扩展的 1×1 卷积层：conv1×1-conv3×3-conv1×1 图1(b)\n与原架构（Deep residual learning for image recognition）相比，在（Identity mappings in deep residual networks）中，将 batch normalization、activation、convolution 的顺序由 conv-BN-ReLU 改为 BN-ReLU- conv。后者被证明训练速度更快，取得了更好的效果。\n所谓的 ”bottleneck block“ 最初是用来使 block 的计算成本降低，以增加层数。由于本篇论文要研究加宽的效果，而 ”bottleneck block“ 是用来让网络变薄的，所以不考虑它，而是关注 ”basic block“ 的残差架构。\n有三种简单的方法可以提高残差块的表示力。\n to add more convolutional layers per block ✅ to widen the convolutional layers by adding more feature planes to increase filter sizes in convolutional layers  引入两个参数：\n deepening factor l：l 表示一个区块中的卷积数。 widening factor k：k 倍的特征数量（特征图的片数，即卷积核的个数）  因此，ResNet baseline 中的 ”basic block“ 对应的是 l＝2，k＝1。图 1(a) 和图 1(c) 分别显示了 «basic» 和 «basic-wide» blocks。\nWRN 结构如 Table 1 所示：\n它由一个初始卷积层 conv1 组成，之后是 3 组（每组大小为 N）残差块 conv2、conv3 和 conv4，然后是平均池和最终分类层。\n在所有的实验中，conv1 的大小都是固定的，而引入的加宽因子 k 则对 3 组 conv2-4 中的残差块的宽度进行了缩放（例如，原来的 ”basic“ 架构相当于 k=1）。\n2.1 Type of convolutions in residual block 让 B(M) 表示残差块结构，其中 M 是一个列表，其中有块中卷积层的核大小。\n例如，B(3, 1) 表示具有 3×3 和 1×1 卷积层的残差块。请注意，由于我们不考虑前面解释的 “瓶颈 “块，所以在整个块中，特征平面的数量始终保持不变（所有 block 中，使用卷积核的数量相同）。\n论文想要研究的是，”basic block“ 残差架构的 3×3 卷积层中的每一个层的重要程度，是否可以用计算成本较低的 1×1 层，甚至是 1×1 和 3×3 卷积层的组合来代替。例如，B(1,3) 或 B(1,3)。这可以增加或减少块的表示能力。\n因此，试验了以下组合（注意，最后一个组合，即 B(3,1,1) 与Network in Network 架构相似）。\n2.2 Number of convolutional layers per residual block 还对区块加深因子 l 进行实验，看看它对性能的影响。比较必须在参数数量相同的网络中进行，所以在这种情况下，需要在确保网络复杂度保持大致不变的情况下，构建不同 l 和 d（其中 d 表示块的总数量）的网络。例如，这意味着只要 l 增加，d 就应该减少。\n2.3 Width of residual blocks  While the number of parameters increases linearly with l (the deepening factor) and d (the number of ResNet blocks), number of parameters and computational complexity are quadratic in k.\n 参数量随着 l（加深因子）和 d（ResNet 块数）的增加而线性增加，但参数量和计算复杂度是 k 的平方。\n关于更宽的残差网络的一个论点是，在残差网络之前，几乎所有的架构，包括最成功的 Inception 和 VGG，与 ResNet 相比都要宽很多。例如，残差网络 WRN-22-8 和 WRN-16-10 在宽度、深度和参数数量上与 VGG 架构非常相似。\n WRN-n-k：n 为总的卷积层数；k 为widening factor。\nfor example, network with 40 layers and k = 2 times wider than original would be denoted as WRN-40-2.\n 2.4 Dropout in residual blocks BN 虽然有正则化的效果，但是其需要大量的数据增强。\n图 1(d) 所示，在每个残差块之间的卷积和 ReLU 之后增加一个 dropout 层，以扰动下一个残差块中的批归一化，防止其过拟合。在很深的残差网络中，应该有助于处理在不同残差块中强制学习的递减特征重用问题。\n3 Experimental results （1）Type of convolutions in a block\nB(3,3) 是最好的，B(3,1) 和 B(3,1,3) 在精度上非常接近 B(3,3)，因为参数少，层数少。B(3,1,3) 比其他的快一点。\n（2）Number of convolutions per block\nB(3,3 )结果最好，而 B(3,3,3) 和 B(3,3,3,3) 的性能最差。\nB(3,3) 在每个块的卷积数方面是最优的，因此，在接下来的实验中，只考虑 B(3,3) 类型的块的 WRN。\n（3）Width of residual blocks\n当试图增加加宽参数 k 时，就必须减少总层数。为了找到一个最佳比例，在 k 从 2~12，深度从 16~40 的情况下进行了试验。结果如 Table 4 所示。\nK = 8 时，depth 分别是 16、22、40，错误率 4.56%、4.38%、4.66%，有一个先下降，再上升的过程。\ncompare thin and wide residual networks.\nWRN-28-10 在 CIFAR-10 上的表现比 ResNet-1001 要好 0.92%，在 CIFAR-100 上的表现比 ResNet-1001 要好 3.46%，层数少了 36 倍。\nWRN-28-10 和 WRN-40-10 的参数分别是 ResNet-1001 的 3.6 倍和 5 倍，分类错误率明显低于 ResNet-1001。\n（4）Dropout in residual blocks\n略，实验结果直接看论文效果更好。\n笔记只记录背景和原理就好。\n",
+  "wordCount" : "3385",
+  "inLanguage": "en",
+  "datePublished": "2021-03-13T10:17:29+08:00",
+  "dateModified": "2021-03-13T10:17:29+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://landodo.github.io/posts/20210313-wrn/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Landodo's NoteBook",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://landodo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://landodo.github.io/" accesskey="h" title="Landodo&#39;s NoteBook (Alt + H)">Landodo&#39;s NoteBook</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://landodo.github.io/search" title="🔍Search (Alt &#43; /)" accesskey=/>
+                    <span>🔍Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/tags" title="Tag">
+                    <span>Tag</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/cs-zoo" title="CS ZOO">
+                    <span>CS ZOO</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://landodo.github.io/">Home</a>&nbsp;»&nbsp;<a href="http://landodo.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      Wide Residual Networks
+    </h1>
+    <div class="post-meta"><span title='2021-03-13 10:17:29 +0800 CST'>March 13, 2021</span>&nbsp;·&nbsp;7 min&nbsp;·&nbsp;3385 words
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#wide-residual-networks" aria-label="Wide Residual Networks">Wide Residual Networks</a><ul>
+                        
+                <li>
+                    <a href="#abstract" aria-label="Abstract">Abstract</a></li>
+                <li>
+                    <a href="#1-introduction" aria-label="1 Introduction">1 Introduction</a></li>
+                <li>
+                    <a href="#2-wide-residual-networks" aria-label="2 Wide residual networks">2 Wide residual networks</a><ul>
+                        
+                <li>
+                    <a href="#21-type-of-convolutions-in-residual-block" aria-label="2.1 Type of convolutions in residual block">2.1 Type of convolutions in residual block</a></li>
+                <li>
+                    <a href="#22-number-of-convolutional-layers-per-residual-block" aria-label="2.2 Number of convolutional layers per residual block">2.2 Number of convolutional layers per residual block</a></li>
+                <li>
+                    <a href="#23-width-of-residual-blocks" aria-label="2.3 Width of residual blocks">2.3 Width of residual blocks</a></li>
+                <li>
+                    <a href="#24-dropout-in-residual-blocks" aria-label="2.4 Dropout in residual blocks">2.4 Dropout in residual blocks</a></li></ul>
+                </li>
+                <li>
+                    <a href="#3-experimental-results" aria-label="3 Experimental results">3 Experimental results</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h1 id="wide-residual-networks">Wide Residual Networks<a hidden class="anchor" aria-hidden="true" href="#wide-residual-networks">#</a></h1>
+<p>arXiv: 1605.07146v4</p>
+<p>法国</p>
+<h2 id="abstract">Abstract<a hidden class="anchor" aria-hidden="true" href="#abstract">#</a></h2>
+<p>深度残差网络被证明能够扩展到数千层，不断的提高性能。</p>
+<p>但是，精度提高的每一小部分都要增加近一倍的层数，而训练很深的残差网络有一个特征重用递减（diminishing feature reuse）的问题，这使得这些网络的训练速度非常慢。</p>
+<p>为了解决这些问题，本文对 ResNet block 的架构进行了详细的实验研究，在此基础上，提出了一种新型的架构，即<strong>减少深度，增加残差网络的宽度（ decrease depth and increase width of residual networks. ）。</strong></p>
+<p>本篇论文提出的网络被称为 wide residual networks (WRNs)，实验证明，一个简单的 16 层深的 WRN，精度和效率上优于以前所有的深残差网络，包括千层深网络。</p>
+<p>WRN 在 CIFAR、SVHN、COCO 数据集上取得 SOTA。</p>
+<h2 id="1-introduction">1 Introduction<a hidden class="anchor" aria-hidden="true" href="#1-introduction">#</a></h2>
+<p>卷积神经网络在过去几年中，层数逐渐增加：AlexNet，VGG，Inception，ResNet。</p>
+<p>训练深度神经网络存在几个困难，包括梯度爆炸/消失和网络退化（exploding/vanishing gradients and degradation.）。训练深层的神经网络有如下技巧：</p>
+<ul>
+<li>well-designed initialization strategies</li>
+<li>better optimizers</li>
+<li>skip connections</li>
+<li>knowledge transfer</li>
+<li>layer-wise training</li>
+</ul>
+<p>最近的 ResNet 在 ImageNet、CIFAR、PASCAL VOC、MS COCO 上取得了 SOTA。与 Inception 架构相比，ResNet 表现出了更好的泛化能力，这意味着特征可以在迁移学习中被利用，效率更高。</p>
+<p>研究表明，残差连接加快了网络的收敛。</p>
+<p>Highway Network 在 ResNet 之前被提出，Highway Network 中的残差链路是门控的，这些门的权重是可学习的。</p>
+<p>到目前为止，对残差网络的研究主要集中在 ResNet 块内的激活顺序和残差网络的深度上。本篇论文的的工作是探索一套更丰富的 ResNet 块的网络架构，并彻底研究除了激活顺序之外的其他几个不同方面如何影响性能。</p>
+<p><strong>Width vs depth in residual networks.</strong>（残差网络的宽度与深度）</p>
+<p>残差网络的作者试图将网络尽可能地做得更薄，而倾向于增加其深度和更少的参数，甚至引入了一个”瓶颈“块（«bottleneck» block），使得 ResNet 块更薄。</p>
+<p>作者们注意到，带有恒等映射（identity mapping）的残差块可以训练非常深的网络，这这是残差网络的优点，同时也是一个弱点。由于梯度流经网络时，没有什么东西可以强迫它通过残差块权重，它可以避免在训练过程中学习任何东西，所以有可能只有少数几个块可以学习到有用的表征，或者很多块共享的信息非常少，对最终目标的贡献很小。这个问题被称为<strong>递减特征重用（diminishing feature reuse）</strong>，（Deep networks with stochastic depth）试图用在训练过程中随机禁用残差块的想法来解决这个问题。</p>
+<p>这篇论文建立在 “Identity mappings in deep residual networks” 之上，试图回答深度残差网络应该有多宽的问题，并解决训练中存在的问题。</p>
+<p>实验表明，与增加残差网络的深度相比，拓宽 ResNet 块提供了一种更有效的方法来提高残差网络的性能。wider deep residual networks 比 ResNet 有显著的性能提升，层数减少了 50 倍，速度快了 2 倍以上。</p>
+<p>wide 16-layer deep network 与 1000-layer thin deep network 的精度相同，参数数量也相当，不过前者训练速度要快几倍。这暗示了深度残差网络的主要力量在残差块，深度的影响是辅助性的。</p>
+<p>**Use of dropout in ResNet blocks. **</p>
+<p>Dropout 较多应用于参数较多的顶层，以防止特征共适应和过拟合。</p>
+<p>后来，dropout 被 Batch normalization 代替，BN 的网络比有 dropout 的网络能达到更好的精度。（Batch normalization: Accelerating deep network training by reducing internal covariate shift.）</p>
+<p>kaiming He 研究表明，在 ResNet 中引入 dropout 会产生负面的作用。在宽残差网络（WRN）上的实验结果表明，引入 dropout 后，在一些数据集上取得了 SOTA。</p>
+<p>本篇论文的贡献总结如下：</p>
+<ul>
+<li>对残差网络架构进行了详细的实验研究，彻底研究了 ResNet 块结构的几个重要方面。</li>
+<li>提出了一种 <em>widened</em> architecture for ResNet blocks，使残余网络的性能得到显著提高。</li>
+<li>提出了一种在深度残差网络中利用 dropout 的新方法。</li>
+<li>WRN 在几个数据集上取得 SOTA。</li>
+</ul>
+<h2 id="2-wide-residual-networks">2 Wide residual networks<a hidden class="anchor" aria-hidden="true" href="#2-wide-residual-networks">#</a></h2>
+<p>恒等映射的残差块表示如下：</p>
+<p><img loading="lazy" src="./20210313/1.png" alt=""  />
+</p>
+<ul>
+<li>其中 $x_{l+1}$ 和 $x_l$ 为网络中第 $l$ 个单元的输入和输出，$F$ 为残差函数，$W_l$ 为块的参数。残差网络由依次叠加的残差块组成。</li>
+</ul>
+<p>残差网络由两种类型的块组成：</p>
+<p>（1）basic：用两个连续的 3×3 卷积与批量归一化、ReLU 前面的卷积：conv3×3-conv3×3  图 1(a)</p>
+<p>（2）bottleneck：有一个 3×3 卷积，前后有降维和扩展的 1×1 卷积层：conv1×1-conv3×3-conv1×1 图1(b)</p>
+<p><img loading="lazy" src="./20210313/2.png" alt=""  />
+</p>
+<p>与原架构（Deep residual learning for image recognition）相比，在（Identity mappings in deep residual networks）中，将 batch normalization、activation、convolution 的顺序由 conv-BN-ReLU 改为 BN-ReLU- conv。后者被证明训练速度更快，取得了更好的效果。</p>
+<p>所谓的 ”bottleneck block“ 最初是用来使 block 的计算成本降低，以增加层数。由于本篇论文要研究加宽的效果，而 ”bottleneck block“ 是用来让网络变薄的，所以不考虑它，而是关注 ”basic block“ 的残差架构。</p>
+<p>有三种简单的方法可以提高残差块的表示力。</p>
+<ul>
+<li>to add more convolutional layers per block</li>
+<li>✅ <strong>to widen the convolutional layers by adding more feature planes</strong></li>
+<li>to increase filter sizes in convolutional layers</li>
+</ul>
+<p>引入两个参数：</p>
+<ul>
+<li>deepening factor l：l 表示一个区块中的卷积数。</li>
+<li>widening factor k：k 倍的特征数量（特征图的片数，即卷积核的个数）</li>
+</ul>
+<p>因此，ResNet baseline 中的 ”basic block“ 对应的是 l＝2，k＝1。图 1(a) 和图 1(c) 分别显示了 «basic» 和 «basic-wide» blocks。</p>
+<p><img loading="lazy" src="./20210313/3.png" alt=""  />
+</p>
+<p>WRN 结构如 Table 1 所示：</p>
+<p><img loading="lazy" src="./20210313/4.png" alt=""  />
+</p>
+<p>它由一个初始卷积层 conv1 组成，之后是 3 组（每组大小为 N）残差块 conv2、conv3 和 conv4，然后是平均池和最终分类层。</p>
+<p>在所有的实验中，conv1 的大小都是固定的，而引入的加宽因子 k 则对 3 组 conv2-4 中的残差块的宽度进行了缩放（例如，原来的 ”basic“ 架构相当于 k=1）。</p>
+<h3 id="21-type-of-convolutions-in-residual-block">2.1 Type of convolutions in residual block<a hidden class="anchor" aria-hidden="true" href="#21-type-of-convolutions-in-residual-block">#</a></h3>
+<p>让 B(M) 表示残差块结构，其中 M 是一个列表，其中有块中卷积层的核大小。</p>
+<p>例如，B(3, 1) 表示具有 3×3 和 1×1 卷积层的残差块。请注意，由于我们不考虑前面解释的 &ldquo;瓶颈 &ldquo;块，所以在整个块中，特征平面的数量始终保持不变（所有 block 中，使用卷积核的数量相同）。</p>
+<p>论文想要研究的是，”basic block“ 残差架构的 3×3 卷积层中的每一个层的重要程度，是否可以用计算成本较低的 1×1 层，甚至是 1×1 和 3×3 卷积层的组合来代替。例如，B(1,3) 或 B(1,3)。这可以增加或减少块的表示能力。</p>
+<p>因此，试验了以下组合（注意，最后一个组合，即 B(3,1,1) 与Network in Network 架构相似）。</p>
+<p><img loading="lazy" src="./20210313/5.png" alt=""  />
+</p>
+<h3 id="22-number-of-convolutional-layers-per-residual-block">2.2 Number of convolutional layers per residual block<a hidden class="anchor" aria-hidden="true" href="#22-number-of-convolutional-layers-per-residual-block">#</a></h3>
+<p>还对区块加深因子 l 进行实验，看看它对性能的影响。比较必须在参数数量相同的网络中进行，所以在这种情况下，需要在确保<strong>网络复杂度保持大致不变</strong>的情况下，构建不同 l 和 d（其中 d 表示块的总数量）的网络。例如，这意味着只要 l 增加，d 就应该减少。</p>
+<h3 id="23-width-of-residual-blocks">2.3 Width of residual blocks<a hidden class="anchor" aria-hidden="true" href="#23-width-of-residual-blocks">#</a></h3>
+<blockquote>
+<p>While the number of parameters increases linearly with l (the deepening factor) and d
+(the number of ResNet blocks), number of parameters and computational complexity are
+quadratic in k.</p>
+</blockquote>
+<p>参数量随着 l（加深因子）和 d（ResNet 块数）的增加而线性增加，但参数量和计算复杂度是 k 的平方。</p>
+<p>关于更宽的残差网络的一个论点是，在残差网络之前，几乎所有的架构，包括最成功的 Inception 和 VGG，与 ResNet 相比都要宽很多。例如，残差网络 WRN-22-8 和 WRN-16-10 在宽度、深度和参数数量上与 VGG 架构非常相似。</p>
+<blockquote>
+<p>WRN-n-k：n 为总的卷积层数；k 为widening factor。</p>
+<p>for example, network with 40 layers and k = 2 times wider than original would be denoted as WRN-40-2.</p>
+</blockquote>
+<h3 id="24-dropout-in-residual-blocks">2.4 Dropout in residual blocks<a hidden class="anchor" aria-hidden="true" href="#24-dropout-in-residual-blocks">#</a></h3>
+<p>BN 虽然有正则化的效果，但是其需要大量的数据增强。</p>
+<p>图 1(d) 所示，在每个残差块之间的卷积和 ReLU 之后增加一个 dropout 层，以扰动下一个残差块中的批归一化，防止其过拟合。在很深的残差网络中，应该有助于处理在不同残差块中强制学习的递减特征重用问题。</p>
+<p><img loading="lazy" src="./20210313/6.png" alt=""  />
+</p>
+<h2 id="3-experimental-results">3 Experimental results<a hidden class="anchor" aria-hidden="true" href="#3-experimental-results">#</a></h2>
+<p>（1）Type of convolutions in a block</p>
+<p><img loading="lazy" src="./20210313/7.png" alt=""  />
+</p>
+<p>B(3,3) 是最好的，B(3,1) 和 B(3,1,3) 在精度上非常接近 B(3,3)，因为参数少，层数少。B(3,1,3) 比其他的快一点。</p>
+<p><strong>（2）Number of convolutions per block</strong></p>
+<p><img loading="lazy" src="./20210313/8.png" alt=""  />
+</p>
+<p>B(3,3 )结果最好，而 B(3,3,3) 和 B(3,3,3,3) 的性能最差。</p>
+<p>B(3,3) 在每个块的卷积数方面是最优的，因此，在接下来的实验中，只考虑 B(3,3) 类型的块的 WRN。</p>
+<p><strong>（3）Width of residual blocks</strong></p>
+<p><img loading="lazy" src="./20210313/9.png" alt=""  />
+</p>
+<p>当试图增加加宽参数 k 时，就必须减少总层数。为了找到一个最佳比例，在 k 从 2~12，深度从 16~40 的情况下进行了试验。结果如 Table 4 所示。</p>
+<p>K = 8 时，depth 分别是 16、22、40，错误率 4.56%、4.38%、4.66%，有一个先下降，再上升的过程。</p>
+<p><strong>compare thin and wide residual networks.</strong></p>
+<p><img loading="lazy" src="./20210313/10.png" alt=""  />
+</p>
+<p>WRN-28-10 在 CIFAR-10 上的表现比 ResNet-1001 要好 0.92%，在 CIFAR-100 上的表现比 ResNet-1001 要好 3.46%，层数少了 36 倍。</p>
+<p>WRN-28-10 和 WRN-40-10 的参数分别是 ResNet-1001 的 3.6 倍和 5 倍，分类错误率明显低于 ResNet-1001。</p>
+<p><img loading="lazy" src="./20210313/11.png" alt=""  />
+</p>
+<p><strong>（4）Dropout in residual blocks</strong></p>
+<p><img loading="lazy" src="./20210313/12.png" alt=""  />
+</p>
+<p>略，实验结果直接看论文效果更好。</p>
+<p>笔记只记录背景和原理就好。</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://landodo.github.io/tags/cnn/">CNN</a></li>
+      <li><a href="http://landodo.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">论文阅读</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://landodo.github.io/posts/20210315-sknet-review/">
+    <span class="title">« Prev Page</span>
+    <br>
+    <span>Selective Kernel Network 解析</span>
+  </a>
+  <a class="next" href="http://landodo.github.io/posts/20210311-dual-attention-network/">
+    <span class="title">Next Page »</span>
+    <br>
+    <span>Dual Attention Network for Scene Segmentation</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>Landon</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

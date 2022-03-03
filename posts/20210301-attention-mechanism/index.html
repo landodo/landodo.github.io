@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+<meta name="robots" content="index, follow">
+<title>Attention mechanism: SENet &amp; SKNet | Landodo&#39;s NoteBook</title>
+<meta name="keywords" content="CNN, 注意力, 深度学习, 论文阅读" />
+<meta name="description" content="Attention mechanism: SENet &amp; SKNet 注意力机制论文阅读，第二次汇报的论文为： 下载地址：（SKNet）Selective Kernel Networks (arXiv: 1903.06586) 发表时间（e-prints posted on arXiv">
+<meta name="author" content="">
+<link rel="canonical" href="http://landodo.github.io/posts/20210301-attention-mechanism/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://landodo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://landodo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://landodo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://landodo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://landodo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Attention mechanism: SENet &amp; SKNet" />
+<meta property="og:description" content="Attention mechanism: SENet &amp; SKNet 注意力机制论文阅读，第二次汇报的论文为： 下载地址：（SKNet）Selective Kernel Networks (arXiv: 1903.06586) 发表时间（e-prints posted on arXiv" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://landodo.github.io/posts/20210301-attention-mechanism/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-03-01T10:17:29&#43;08:00" />
+<meta property="article:modified_time" content="2021-03-01T10:17:29&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Attention mechanism: SENet &amp; SKNet"/>
+<meta name="twitter:description" content="Attention mechanism: SENet &amp; SKNet 注意力机制论文阅读，第二次汇报的论文为： 下载地址：（SKNet）Selective Kernel Networks (arXiv: 1903.06586) 发表时间（e-prints posted on arXiv"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://landodo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Attention mechanism: SENet \u0026 SKNet",
+      "item": "http://landodo.github.io/posts/20210301-attention-mechanism/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Attention mechanism: SENet \u0026 SKNet",
+  "name": "Attention mechanism: SENet \u0026 SKNet",
+  "description": "Attention mechanism: SENet \u0026amp; SKNet 注意力机制论文阅读，第二次汇报的论文为： 下载地址：（SKNet）Selective Kernel Networks (arXiv: 1903.06586) 发表时间（e-prints posted on arXiv",
+  "keywords": [
+    "CNN", "注意力", "深度学习", "论文阅读"
+  ],
+  "articleBody": "Attention mechanism: SENet \u0026 SKNet 注意力机制论文阅读，第二次汇报的论文为：\n 下载地址：（SKNet）Selective Kernel Networks (arXiv: 1903.06586) 发表时间（e-prints posted on arXiv）：2019 年 03 月.  0. 论文列表（已读一遍）   Inside-Outside Net: Detecting Objects in Context with Skip Pooling and Recurrent Neural Networks (arXiv: 1512.04143)\n  Spatial Transformer Networks (arXiv: 1506.02025)\n  Residual Attention Network for Image Classification (arXiv: 1704.06904)\n  ✅ （SENet）Squeeze-and-Excitation Networks (arXiv: 1709.01507)\n   SENet brings an effective, lightweight gating mechanism to self-recalibrate the feature map via channel-wise importances.——SKNet 论文中对 SENet 的描述。\n     Concurrent Spatial and Channel ‘Squeeze \u0026 Excitation’ in Fully Convolutional Networks (arXiv: 1803.02579)\n   three variants of SE modules for image segmentation.\n     CBAM: Convolutional Block Attention Module (arXiv: 1807.06521)\n   Beyond channel, BAM [32] and CBAM [45] introduce spatial attention in a similar way.\n——SKNet 论文中的描述。\n     ✅ （SKNet）Selective Kernel Networks (arXiv: 1903.06586)\n   1. 解析 Selective Kernel Convolution  SKNet：用 multiple scale feature 汇总的 information 来 channel-wise 地指导如何分配侧重使用哪个 kernel 的表征。\n adaptively adjust their RF sizes. 自适应的调整其感受野的大小。   SK 模块所做的工作是：输入的特征图为 $X \\in \\mathbb{R}^{H’ \\times W’ \\times C’}$，经过 SK Convolution 后，得到输出的特征图为 $V \\in \\mathbb{R}^{H \\times W \\times C}$。SK 卷积有 3 个步骤：Split, Fuse and Select.\n1.1 SK Convolution: Split(1/3) 对于输入的特征图 $X \\in \\mathbb{R}^{H’ \\times W’ \\times C’}$，默认情况下进行两次转换：\n（1）$\\tilde{F}: X \\rightarrow \\tilde{U} \\in \\mathbb{R}^{H \\times W \\times C}$\n卷积核的大小为 $3 \\times 3$。\n（2）$\\hat{F}: X \\rightarrow \\hat{U} \\in \\mathbb{R}^{H \\times W \\times C}$\n卷积核的大小为 $5\\times 5$。为了进一步提高效率，$5 \\times 5$ 的卷积使用空洞大小为 2 的 $3 \\times 3$ 的卷积来替代。\n1.2 SK Convolution: Fuse(2/3) Fuse 操作和 Squeeze and Excitation block 一样。\n（1）integrate information from all branches.\n将分支进行 element-wise 的求和，得到 $U \\in \\mathbb{R}^{H \\times W \\times C}$。\n（2）global average pooling.\n得到 $s \\in \\mathbb{R}^{C \\times 1}$，s 是一个有 C 个元素的列向量。\n（3）compact feature by simple fully connected (fc) layer.\n使用全连接层，即 $s \\in \\mathbb{R}^{C \\times 1} \\rightarrow z \\in \\mathbb{R}^{d \\times 1}$，其中 $d  $\\delta$ 使用 ReLU 函数， $B$ 表示 Batch Normalization， $W \\in \\mathbb{R}^{d \\times C}$，权重矩阵。   reduction ratio $r$ 是一个超参数， 一般设置 L = 32。  1.3 SK Convolution: Select(3/3) 这一步是 SK Block 的核心操作。\n A soft attention across channels is used to adaptively select different spatial scales of information, which is guided by the compact feature descriptor z.\n （1）Soft attention across channels.\n $A, B \\in \\mathbb{R}^{C \\times d}$，这两个矩阵也是端到端训练出来的。如果只有两个分支，那么矩阵 B 是冗余的，因为 Softmax 的输出 $a_c + b_c = 1$，可以通过 1 减去另一个得到。 $z \\in \\mathbb{R}^{d \\times 1}$，经过 softmax 操作后，得到的 $a \\in \\mathbb{R}^{C \\times 1}$.  z 被称为 compact feature descriptor. a 被称为 soft attention vector.    （2）The final feature map $V$ is obtained through the attention weights on various kernels.\n $\\tilde{U}, \\hat{U} \\in \\mathbb{R}^{H \\times W \\times C}$ $a, b \\in \\mathbb{R}^{C \\times 1}$ 执行的操作是 element-wise product. $a_c \\cdot \\tilde{U}_c$ 表示第 c 个通道的特征图上的每个点，都乘以数 $a_c$。  综上，就是 SK Convolution 的内部原理细节。\n3. 实验 SK Convolution $\\rightarrow$ SK unit $\\rightarrow$ ==SK Networks==.\n2.1 Selective Kernel (SK) Convolution (1/3) 2.2 Selective Kernel (SK) unit (2/3) 2.3 Selective Kernel (SK) Networks (3/3) 2.4 CIFAR-10 在 CIFAR 数据集上，作者实现的细节：\n 把第二条分支的 5×5 卷积核替换成 1×1，第一条分支保持不变。还是上不去 90%，过拟合严重。   论文中提到，设置 SK[2, 16, 32]，还是上不去 90%。  依旧是过拟合非常严重。进行一定的数据增强（Resize 32×32 为 64×64）后，精度能够上 90%。\n如果获取 EAT？——根绝每个 epoch 的时间，估计总的训练时间。\n3. Notes SK Block 在检测问题中没有显著效果。\n",
+  "wordCount" : "1212",
+  "inLanguage": "en",
+  "datePublished": "2021-03-01T10:17:29+08:00",
+  "dateModified": "2021-03-01T10:17:29+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://landodo.github.io/posts/20210301-attention-mechanism/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Landodo's NoteBook",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://landodo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://landodo.github.io/" accesskey="h" title="Landodo&#39;s NoteBook (Alt + H)">Landodo&#39;s NoteBook</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://landodo.github.io/search" title="🔍Search (Alt &#43; /)" accesskey=/>
+                    <span>🔍Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/tags" title="Tag">
+                    <span>Tag</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/cs-zoo" title="CS ZOO">
+                    <span>CS ZOO</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://landodo.github.io/">Home</a>&nbsp;»&nbsp;<a href="http://landodo.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      Attention mechanism: SENet &amp; SKNet
+    </h1>
+    <div class="post-meta"><span title='2021-03-01 10:17:29 +0800 CST'>March 1, 2021</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;1212 words
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#attention-mechanism-senet--sknet" aria-label="Attention mechanism: SENet &amp;amp; SKNet">Attention mechanism: SENet &amp; SKNet</a><ul>
+                        
+                <li>
+                    <a href="#0-%e8%ae%ba%e6%96%87%e5%88%97%e8%a1%a8%e5%b7%b2%e8%af%bb%e4%b8%80%e9%81%8d" aria-label="0. 论文列表（已读一遍）">0. 论文列表（已读一遍）</a></li>
+                <li>
+                    <a href="#1-%e8%a7%a3%e6%9e%90-selective-kernel-convolution" aria-label="1. 解析 Selective Kernel Convolution">1. 解析 Selective Kernel Convolution</a><ul>
+                        
+                <li>
+                    <a href="#11-sk-convolution-font-colorredsplitfont-13" aria-label="1.1 SK Convolution: Split(1/3)">1.1 SK Convolution: <!-- raw HTML omitted --><em>Split</em><!-- raw HTML omitted --> (1/3)</a></li>
+                <li>
+                    <a href="#12-sk-convolution-font-colorredfusefont-23" aria-label="1.2 SK Convolution: Fuse(2/3)">1.2 SK Convolution: <!-- raw HTML omitted --><em>Fuse</em><!-- raw HTML omitted --> (2/3)</a></li>
+                <li>
+                    <a href="#13-sk-convolution-font-colorredselectfont-33" aria-label="1.3 SK Convolution: Select(3/3)">1.3 SK Convolution: <!-- raw HTML omitted --><em>Select</em><!-- raw HTML omitted --> (3/3)</a></li></ul>
+                </li>
+                <li>
+                    <a href="#3-%e5%ae%9e%e9%aa%8c" aria-label="3. 实验">3. 实验</a><ul>
+                        
+                <li>
+                    <a href="#21-selective-kernel-sk-convolution-13" aria-label="2.1 Selective Kernel (SK) Convolution (1/3)">2.1 <em>Selective Kernel (SK) Convolution</em> (1/3)</a></li>
+                <li>
+                    <a href="#22-selective-kernel-sk-unit-23" aria-label="2.2 Selective Kernel (SK) unit (2/3)">2.2 <em>Selective Kernel (SK) unit</em> (2/3)</a></li>
+                <li>
+                    <a href="#23-selective-kernel-sk-networks-33" aria-label="2.3 Selective Kernel (SK) Networks (3/3)">2.3 <em>Selective Kernel (SK) Networks</em> (3/3)</a></li>
+                <li>
+                    <a href="#24-cifar-10" aria-label="2.4 CIFAR-10">2.4 CIFAR-10</a></li></ul>
+                </li>
+                <li>
+                    <a href="#3-notes" aria-label="3. Notes">3. Notes</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h1 id="attention-mechanism-senet--sknet">Attention mechanism: SENet &amp; SKNet<a hidden class="anchor" aria-hidden="true" href="#attention-mechanism-senet--sknet">#</a></h1>
+<p>注意力机制论文阅读，第二次汇报的论文为：</p>
+<ul>
+<li>下载地址：<a href="https://arxiv.org/pdf/1903.06586.pdf">（<strong>SKNet</strong>）Selective Kernel Networks (arXiv: 1903.06586)</a></li>
+<li>发表时间（e-prints posted on arXiv）：2019 年 03 月.</li>
+</ul>
+<h2 id="0-论文列表已读一遍">0. 论文列表（已读一遍）<a hidden class="anchor" aria-hidden="true" href="#0-论文列表已读一遍">#</a></h2>
+<ul>
+<li>
+<p>Inside-Outside Net: Detecting Objects in Context with Skip Pooling and Recurrent Neural Networks (arXiv: 1512.04143)</p>
+</li>
+<li>
+<p>Spatial Transformer Networks (arXiv: 1506.02025)</p>
+</li>
+<li>
+<p>Residual Attention Network for Image Classification (arXiv: 1704.06904)</p>
+</li>
+<li>
+<p>✅ （<strong>SENet</strong>）Squeeze-and-Excitation Networks (arXiv: 1709.01507)</p>
+<ul>
+<li>
+<blockquote>
+<p>SENet brings an effective, lightweight gating mechanism to self-recalibrate the feature map via channel-wise importances.——SKNet 论文中对 SENet 的描述。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li>
+<p>Concurrent Spatial and Channel ‘Squeeze &amp; Excitation’ in Fully Convolutional Networks (arXiv: 1803.02579)</p>
+<ul>
+<li>
+<blockquote>
+<p>three variants of SE modules for image segmentation.</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li>
+<p>CBAM: Convolutional Block Attention Module (arXiv: 1807.06521)</p>
+<ul>
+<li>
+<blockquote>
+<p>Beyond channel, BAM [32] and CBAM [45] introduce <strong>spatial attention</strong> in a similar way.</p>
+<p>——SKNet 论文中的描述。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li>
+<p>✅ （<strong>SKNet</strong>）Selective Kernel Networks (arXiv: 1903.06586)</p>
+</li>
+</ul>
+<hr>
+<h2 id="1-解析-selective-kernel-convolution">1. 解析 Selective Kernel Convolution<a hidden class="anchor" aria-hidden="true" href="#1-解析-selective-kernel-convolution">#</a></h2>
+<blockquote>
+<p>SKNet：用 multiple scale feature 汇总的 information 来 channel-wise 地指导如何分配侧重使用哪个 kernel 的表征。</p>
+<ul>
+<li>adaptively adjust their RF sizes. 自适应的调整其感受野的大小。</li>
+</ul>
+</blockquote>
+<p><strong>SK 模块所做的工作</strong>是：输入的特征图为 $X \in \mathbb{R}^{H&rsquo; \times W&rsquo; \times C&rsquo;}$，<strong>经过 SK Convolution</strong> 后，得到输出的特征图为 $V \in \mathbb{R}^{H \times W \times C}$。SK 卷积有 3 个步骤：<em><strong>Split, Fuse and Select</strong></em>.</p>
+<p><img loading="lazy" src="./20210301/sknet.jpeg" alt=""  />
+</p>
+<h3 id="11-sk-convolution-font-colorredsplitfont-13">1.1 SK Convolution: <!-- raw HTML omitted --><em>Split</em><!-- raw HTML omitted --> (1/3)<a hidden class="anchor" aria-hidden="true" href="#11-sk-convolution-font-colorredsplitfont-13">#</a></h3>
+<p>对于输入的特征图 $X \in \mathbb{R}^{H&rsquo; \times W&rsquo; \times C&rsquo;}$，默认情况下进行两次转换：</p>
+<p><strong>（1）$\tilde{F}: X \rightarrow \tilde{U} \in \mathbb{R}^{H \times W \times C}$</strong></p>
+<p>卷积核的大小为 $3 \times 3$。</p>
+<p><strong>（2）$\hat{F}: X \rightarrow \hat{U} \in \mathbb{R}^{H \times W \times C}$</strong></p>
+<p>卷积核的大小为 $5\times 5$。为了进一步提高效率，$5 \times 5$ 的卷积使用空洞大小为 2 的 $3 \times 3$ 的卷积来替代。</p>
+<h3 id="12-sk-convolution-font-colorredfusefont-23">1.2 SK Convolution: <!-- raw HTML omitted --><em>Fuse</em><!-- raw HTML omitted --> (2/3)<a hidden class="anchor" aria-hidden="true" href="#12-sk-convolution-font-colorredfusefont-23">#</a></h3>
+<p>Fuse 操作和 Squeeze and Excitation block 一样。</p>
+<p><img loading="lazy" src="./20210301/senet.jpeg" alt=""  />
+</p>
+<p><strong>（1）integrate information from all branches.</strong></p>
+<p>将分支进行 element-wise 的求和，得到 $U \in \mathbb{R}^{H \times W \times C}$。</p>
+<p><img loading="lazy" src="./20210301/1.jpeg" alt=""  />
+</p>
+<p><strong>（2）global average pooling.</strong></p>
+<p>得到 $s \in \mathbb{R}^{C \times 1}$，s 是一个有 C 个元素的列向量。</p>
+<p><img loading="lazy" src="./20210301/2.jpeg" alt=""  />
+</p>
+<p><strong>（3）compact feature by simple fully connected (fc) layer.</strong></p>
+<p>使用全连接层，即 $s \in \mathbb{R}^{C \times 1} \rightarrow z \in \mathbb{R}^{d \times 1}$，其中 $d &lt; C$。</p>
+<p><img loading="lazy" src="./20210301/3.jpeg" alt=""  />
+</p>
+<ul>
+<li>$\delta$ 使用 ReLU 函数，</li>
+<li>$B$ 表示 Batch Normalization，</li>
+<li>$W \in \mathbb{R}^{d \times C}$，权重矩阵。</li>
+</ul>
+<p><img loading="lazy" src="./20210301/4.jpeg" alt=""  />
+</p>
+<ul>
+<li>reduction ratio $r$ 是一个超参数，</li>
+<li>一般设置 L = 32。</li>
+</ul>
+<h3 id="13-sk-convolution-font-colorredselectfont-33">1.3 SK Convolution: <!-- raw HTML omitted --><em>Select</em><!-- raw HTML omitted --> (3/3)<a hidden class="anchor" aria-hidden="true" href="#13-sk-convolution-font-colorredselectfont-33">#</a></h3>
+<p>这一步是 SK Block 的核心操作。</p>
+<blockquote>
+<p>A <strong>soft attention across channels</strong> is used to adaptively select different spatial scales of information, which is guided by the compact feature descriptor z.</p>
+</blockquote>
+<p>（1）Soft attention across channels.</p>
+<p><img loading="lazy" src="./20210301/5.jpeg" alt=""  />
+</p>
+<ul>
+<li>$A, B \in \mathbb{R}^{C \times d}$，这两个矩阵也是端到端训练出来的。如果只有<!-- raw HTML omitted -->两个分支<!-- raw HTML omitted -->，那么矩阵 B 是冗余的，因为 Softmax 的输出 $a_c + b_c = 1$，可以通过 1 减去另一个得到。</li>
+<li>$z \in \mathbb{R}^{d \times 1}$，经过 softmax 操作后，得到的 $a \in \mathbb{R}^{C \times 1}$.
+<ul>
+<li>z 被称为 compact feature descriptor.</li>
+<li>a 被称为 soft attention vector.</li>
+</ul>
+</li>
+</ul>
+<p>（2）The final feature map $V$ is obtained through the <strong>attention weights</strong> on various kernels.</p>
+<p><img loading="lazy" src="./20210301/6.jpeg" alt=""  />
+</p>
+<ul>
+<li>$\tilde{U}, \hat{U} \in \mathbb{R}^{H \times W \times C}$</li>
+<li>$a, b \in \mathbb{R}^{C \times 1}$</li>
+<li>执行的操作是 element-wise product.  $a_c \cdot \tilde{U}_c$ 表示第 c 个通道的特征图上的每个点，都乘以数 $a_c$。</li>
+</ul>
+<p>综上，就是 SK Convolution 的内部原理细节。</p>
+<h2 id="3-实验">3. 实验<a hidden class="anchor" aria-hidden="true" href="#3-实验">#</a></h2>
+<p>SK Convolution $\rightarrow$ SK unit $\rightarrow$ ==SK Networks==.</p>
+<p><img loading="lazy" src="./20210301/7.jpeg" alt=""  />
+</p>
+<h3 id="21-selective-kernel-sk-convolution-13">2.1 <em>Selective Kernel (SK) Convolution</em> (1/3)<a hidden class="anchor" aria-hidden="true" href="#21-selective-kernel-sk-convolution-13">#</a></h3>
+<h3 id="22-selective-kernel-sk-unit-23">2.2 <em>Selective Kernel (SK) unit</em> (2/3)<a hidden class="anchor" aria-hidden="true" href="#22-selective-kernel-sk-unit-23">#</a></h3>
+<h3 id="23-selective-kernel-sk-networks-33">2.3 <em>Selective Kernel (SK) Networks</em> (3/3)<a hidden class="anchor" aria-hidden="true" href="#23-selective-kernel-sk-networks-33">#</a></h3>
+<h3 id="24-cifar-10">2.4 CIFAR-10<a hidden class="anchor" aria-hidden="true" href="#24-cifar-10">#</a></h3>
+<p><img loading="lazy" src="./20210301/9.png" alt=""  />
+</p>
+<p>在 CIFAR 数据集上，作者实现的细节：</p>
+<p><img loading="lazy" src="./20210301/10.jpeg" alt=""  />
+</p>
+<ul>
+<li>把第二条分支的 5×5 卷积核替换成 1×1，第一条分支保持不变。还是上不去 90%，过拟合严重。</li>
+</ul>
+<p><img loading="lazy" src="./20210302/5.png" alt=""  />
+</p>
+<ul>
+<li>论文中提到，设置 SK[2, 16, 32]，还是上不去 90%。</li>
+</ul>
+<p>依旧是过拟合非常严重。进行一定的数据增强（Resize 32×32 为 64×64）后，精度能够上 90%。</p>
+<p>如果获取 EAT？——根绝每个 epoch 的时间，估计总的训练时间。</p>
+<h2 id="3-notes">3. Notes<a hidden class="anchor" aria-hidden="true" href="#3-notes">#</a></h2>
+<p>SK Block 在检测问题中没有显著效果。</p>
+<p><img loading="lazy" src="./20210301/8.png" alt=""  />
+</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://landodo.github.io/tags/cnn/">CNN</a></li>
+      <li><a href="http://landodo.github.io/tags/%E6%B3%A8%E6%84%8F%E5%8A%9B/">注意力</a></li>
+      <li><a href="http://landodo.github.io/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li>
+      <li><a href="http://landodo.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">论文阅读</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://landodo.github.io/posts/20210302-inside-outside-net/">
+    <span class="title">« Prev Page</span>
+    <br>
+    <span>Inside-Outside Net</span>
+  </a>
+  <a class="next" href="http://landodo.github.io/posts/20210205-what-is-lrn/">
+    <span class="title">Next Page »</span>
+    <br>
+    <span>AlexNet 中的 LRN（Local Response Normalization） 是什么</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>Landon</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

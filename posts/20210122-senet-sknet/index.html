@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+<meta name="robots" content="index, follow">
+<title>SENet 和它的孪生兄弟 SKNet | Landodo&#39;s NoteBook</title>
+<meta name="keywords" content="CNN, 注意力, 论文阅读" />
+<meta name="description" content="SENet 和它的孪生兄弟 SKNet ✅ 论文地址： Squeeze-and-Excitation Networks: https://arxiv.org/pdf/1709.01507.pdf Selective Kernel Networks: https://arxiv.org/pdf/1903.06586.pdf ✅ 论文发表时间（arXiv V1） SENet：2017 年 9 月 5 日 SKNet：2019 年 3 月 15 日 相关">
+<meta name="author" content="">
+<link rel="canonical" href="http://landodo.github.io/posts/20210122-senet-sknet/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://landodo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://landodo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://landodo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://landodo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://landodo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="SENet 和它的孪生兄弟 SKNet" />
+<meta property="og:description" content="SENet 和它的孪生兄弟 SKNet ✅ 论文地址： Squeeze-and-Excitation Networks: https://arxiv.org/pdf/1709.01507.pdf Selective Kernel Networks: https://arxiv.org/pdf/1903.06586.pdf ✅ 论文发表时间（arXiv V1） SENet：2017 年 9 月 5 日 SKNet：2019 年 3 月 15 日 相关" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://landodo.github.io/posts/20210122-senet-sknet/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-01-22T10:17:29&#43;08:00" />
+<meta property="article:modified_time" content="2021-01-22T10:17:29&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="SENet 和它的孪生兄弟 SKNet"/>
+<meta name="twitter:description" content="SENet 和它的孪生兄弟 SKNet ✅ 论文地址： Squeeze-and-Excitation Networks: https://arxiv.org/pdf/1709.01507.pdf Selective Kernel Networks: https://arxiv.org/pdf/1903.06586.pdf ✅ 论文发表时间（arXiv V1） SENet：2017 年 9 月 5 日 SKNet：2019 年 3 月 15 日 相关"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://landodo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "SENet 和它的孪生兄弟 SKNet",
+      "item": "http://landodo.github.io/posts/20210122-senet-sknet/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "SENet 和它的孪生兄弟 SKNet",
+  "name": "SENet 和它的孪生兄弟 SKNet",
+  "description": "SENet 和它的孪生兄弟 SKNet ✅ 论文地址： Squeeze-and-Excitation Networks: https://arxiv.org/pdf/1709.01507.pdf Selective Kernel Networks: https://arxiv.org/pdf/1903.06586.pdf ✅ 论文发表时间（arXiv V1） SENet：2017 年 9 月 5 日 SKNet：2019 年 3 月 15 日 相关",
+  "keywords": [
+    "CNN", "注意力", "论文阅读"
+  ],
+  "articleBody": "SENet 和它的孪生兄弟 SKNet ✅ 论文地址：\n Squeeze-and-Excitation Networks: https://arxiv.org/pdf/1709.01507.pdf Selective Kernel Networks: https://arxiv.org/pdf/1903.06586.pdf  ✅ 论文发表时间（arXiv V1）\n SENet：2017 年 9 月 5 日 SKNet：2019 年 3 月 15 日  相关的论文 （1）Inception 系列（2014 年~2016 年）：Inception 结构中嵌入了多尺度信息，聚合多种不同感受野上的特征来获得性能增益。\n Inception V1 (GoogLeNet): 11 Sep 2014 Inception V2 (Batch Normalization): 11 Feb 2015 Inception V3: 2 Dec 2015 Inception V4: 23 Feb 2016 Xception: 7 Oct 2016  （2）ResNet （10 Dec 2015）\n（3）ResNeXt（16 Nov 2016）\n（4）Inside-Outside Network（14 Dec 2015）：网络中考虑了空间中的上下文信息。\n（5）Spatial Transform Network（5 Jun 2015）：Attention 机制引入到空间维度。\n   Dynamic Capacity Network（24 Nov 2015）    （6）💢 SENet（5 Sep 2017）：通道注意力\n（7）CBAM（17 Jul 2018）：空间注意力+通道注意力相结合\n（8）💢SKNet（15 Mar 2019）\nSENet  一作：胡杰，关于 SENet 中文介绍：\n Momenta 详解 ImageNet 2017 夺冠架构 SENet https://www.sohu.com/a/161633191_465975   🌀通道间的特征都是平等的吗？SENet 给出了这个问题的答案。\n论文的主要工作是：考虑特征通道之间的关系，提出了 Squeeze-and-Excitation Networks（简称 SENet）。显式地建模特征通道之间的相互依赖关系，通过学习的方式来自动获取到每个特征通道的重要程度，然后依照这个重要程度去提升有用的特征并抑制对当前任务用处不大的特征。\nSE block 如下 Fig. 1 所示。\nSQUEEZE-AND-EXCITATION BLOCKS Squeeze 和 Excitation 是两个非常关键的操作。\n给定一个输入 $X$，$X \\in \\mathbb{R}^{C’ \\times H’ \\times W’}$，通过一系列卷积等一般变换 $F_{tr}$ 后，得到一个 $U \\in \\mathbb{R}^{C \\times H \\times W}$ 的特征图。\n接下来通过一个 Squeeze and Excitation block ，三个操作来重标定前面得到的特征。\n（1）Squeeze: $F_{sq}(\\cdot)$\n首先是 Squeeze 操作，顺着空间维度来进行特征压缩，将每个二维的特征通道变成一个实数，这个实数某种程度上具有全局的感受野，并且输出的维度和输入的特征通道数相匹配。\n即：对 $C \\times H \\times W$ 的特征图进行 global average pooling，得到 $1 \\times 1 \\times C$ 的特征图。\n$$z_c = F_{sq}(u_c) = \\frac{1}{H \\times W} \\sum_{i=1}^{H} \\sum_{j=1}^{W} u_c{(i, j)}$$\n（2）Excitation: $F_{ex}(\\cdot , W)$\n通过参数 W 来为每个特征通道生成权重，其中参数 W 被学习用来显式地建模特征通道间的相关性。\n即：使用一个全连接层神经网络，对 Squeeze 之后的结果进行一个非线性变换。\n$$s = F_{ex}(z, W) = \\sigma(g(z, W)) = \\sigma(W_2 \\delta(W_1 z)) $$\n（3）Scale\n最后是一个 Reweight 的操作，将 Excitation 的输出的权重看做是进过特征选择后的每个特征通道的重要性，然后通过乘法逐通道加权到先前的特征上，完成在通道维度上的对原始特征的重标定。\n$$\\tilde{x} = F_{scale}(u_c, s_c) = s_c u_c$$\nSE Block 实现细节 使用 global average pooling 作为 Squeeze 操作；\n紧接着两个 Fully Connected 层组成一个 Bottleneck 结构去建模通道间的相关性，并输出和输入特征同样数目的权重。\n首先将特征维度降低到输入的 1/16，（降低计算量，16 是实践得到的较好的超参数）\n然后经过 ReLu 激活后再通过一个 Fully Connected 层升回到原来的维度。（增加非线性）\n通过一个 Sigmoid 函数获得 0~1 之间归一化的权重。\n最后通过一个 Scale 的操作来将归一化后的权重加权到每个通道的特征上。\nSE Block 可以嵌入到现在几乎所有的网络结构中。\n实例 Instantiations 通过在原始网络结构的 building block 单元中嵌入 SE 模块，可以获得不同种类的 SENet。如 SE-BN-Inception、SE-ResNet、SE-ReNeXt、SE-Inception-ResNet-v2 等等。\nSENet 的参数量和计算量情况 SENet 额外的模型参数都存在于 Bottleneck 设计的两个 Fully Connected 中。\n以 SE-ResNet-50 和 ResNet-50 为例，从理论上，SE Block 增长的额外计算量仅仅不到 1%。\nSENet 的表现 ResNet-50、ResNet-101、ResNet-152 和嵌入 SE 模型的结果。SE-ResNets 在各种深度上都远远超过了其对应的没有 SE 的结构版本的精度，这说明无论网络的深度如何，SE 模块都能够给网络带来性能上的增益。\nSE 模块嵌入到 ResNeXt、BN-Inception、Inception-ResNet-v2 上均获得了不菲的增益效果，加入了 SE 模块的网络收敛到更低的错误率上。\n其他（CIFAR-10、CIFAR-100、Places365、COCO、ImageNet）：\n最后，在 ILSVRC 2017 竞赛中，SENet 在测试集上获得了 2.251% Top-5 错误率。对比于去年第一名的结果 2.991%，获得了将近 25% 的精度提升。\n 2012~2017： ILSVRC 2017 竞赛冠军🏆：\n 2012，AlexNet：top-5: 15.32% 2013，Clarifai，top-5: 11.20% 2014，GoogleNet v1，top-5: 6.67% 2015，ResNet，top-5: 3.57% 2016，Trimps-Soushen（公安三所），top-5: 2.99% 2017，SENet，top-5: 2.25%   ❌ SKNet  一作：李翔，在知乎谈 SKNet：\n 「SKNet——SENet 孪生兄弟篇」：https://zhuanlan.zhihu.com/p/59690223   SKNet 我留下周进行汇报（1 月 29 日）。\n实验 对 ResNet50、SENet50 和 SKNet 50 进行简单的比较。\n数据集采用 CIFAR-10。\n除了 model 不同，三者其他训练时的参数都是一致的。\n训练时保存 checkpoint，这样调参就不用每次都从 0 开始训练。有一个经过预训练的模型能减少训练需要的时间。\nif args.resume:  # Load checkpoint.  print('== Resuming from checkpoint..')  assert os.path.isdir('checkpoint'), 'Error: no checkpoint directory found!'  checkpoint = torch.load('./checkpoint/ckpt.pth')  net.load_state_dict(checkpoint['net'])  best_acc = checkpoint['acc']  start_epoch = checkpoint['epoch'] 总训练 200 epoch，每两个 epoch 保存一次 checkpoint，使用 matplotlib 绘制 rain_acc 和 test_acc 曲线。\nResNet50 训练 200 个 Epoch。下图为 ResNet50 训练结束，Test Acc 达到 95.41%。\n每 2 个 epoch 保存一次 checkpoint，用于绘图。（忘记修改了，其实不需要保存 net.state_dict 的，非常耗空间。）\n 我把 loss 忘记保存了🌚，loss 曲线也很重要。我只保存了 acc 和 epoch。\n 不保存 state_dict ，只保存 loss、epoch 和 acc。\n1. ResNet50   参考代码链接：https://github.com/kuangliu/pytorch-cifar   '''ResNet in PyTorch. For Pre-activation ResNet, see 'preact_resnet.py'. Reference: [1] Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun Deep Residual Learning for Image Recognition. arXiv:1512.03385 ''' import torch import torch.nn as nn import torch.nn.functional as F   class BasicBlock(nn.Module):  expansion = 1   def __init__(self, in_planes, planes, stride=1):  super(BasicBlock, self).__init__()  self.conv1 = nn.Conv2d(  in_planes, planes, kernel_size=3, stride=stride, padding=1, bias=False)  self.bn1 = nn.BatchNorm2d(planes)  self.conv2 = nn.Conv2d(planes, planes, kernel_size=3,  stride=1, padding=1, bias=False)  self.bn2 = nn.BatchNorm2d(planes)   self.shortcut = nn.Sequential()  if stride != 1 or in_planes != self.expansion*planes:  self.shortcut = nn.Sequential(  nn.Conv2d(in_planes, self.expansion*planes,  kernel_size=1, stride=stride, bias=False),  nn.BatchNorm2d(self.expansion*planes)  )   def forward(self, x):  out = F.relu(self.bn1(self.conv1(x)))  out = self.bn2(self.conv2(out))  out += self.shortcut(x)  out = F.relu(out)  return out   class Bottleneck(nn.Module):  expansion = 4   def __init__(self, in_planes, planes, stride=1):  super(Bottleneck, self).__init__()  self.conv1 = nn.Conv2d(in_planes, planes, kernel_size=1, bias=False)  self.bn1 = nn.BatchNorm2d(planes)  self.conv2 = nn.Conv2d(planes, planes, kernel_size=3,  stride=stride, padding=1, bias=False)  self.bn2 = nn.BatchNorm2d(planes)  self.conv3 = nn.Conv2d(planes, self.expansion *  planes, kernel_size=1, bias=False)  self.bn3 = nn.BatchNorm2d(self.expansion*planes)   self.shortcut = nn.Sequential()  if stride != 1 or in_planes != self.expansion*planes:  self.shortcut = nn.Sequential(  nn.Conv2d(in_planes, self.expansion*planes,  kernel_size=1, stride=stride, bias=False),  nn.BatchNorm2d(self.expansion*planes)  )   def forward(self, x):  out = F.relu(self.bn1(self.conv1(x)))  out = F.relu(self.bn2(self.conv2(out)))  out = self.bn3(self.conv3(out))  out += self.shortcut(x)  out = F.relu(out)  return out   class ResNet(nn.Module):  def __init__(self, block, num_blocks, num_classes=10):  super(ResNet, self).__init__()  self.in_planes = 64   self.conv1 = nn.Conv2d(3, 64, kernel_size=3,  stride=1, padding=1, bias=False)  self.bn1 = nn.BatchNorm2d(64)  self.layer1 = self._make_layer(block, 64, num_blocks[0], stride=1)  self.layer2 = self._make_layer(block, 128, num_blocks[1], stride=2)  self.layer3 = self._make_layer(block, 256, num_blocks[2], stride=2)  self.layer4 = self._make_layer(block, 512, num_blocks[3], stride=2)  self.linear = nn.Linear(512*block.expansion, num_classes)   def _make_layer(self, block, planes, num_blocks, stride):  strides = [stride] + [1]*(num_blocks-1)  layers = []  for stride in strides:  layers.append(block(self.in_planes, planes, stride))  self.in_planes = planes * block.expansion  return nn.Sequential(*layers)   def forward(self, x):  out = F.relu(self.bn1(self.conv1(x)))  out = self.layer1(out)  out = self.layer2(out)  out = self.layer3(out)  out = self.layer4(out)  out = F.avg_pool2d(out, 4)  out = out.view(out.size(0), -1)  out = self.linear(out)  return out   def ResNet18():  return ResNet(BasicBlock, [2, 2, 2, 2])  def ResNet34():  return ResNet(BasicBlock, [3, 4, 6, 3])  def ResNet50():  return ResNet(Bottleneck, [3, 4, 6, 3])  def ResNet101():  return ResNet(Bottleneck, [3, 4, 23, 3])  def ResNet152():  return ResNet(Bottleneck, [3, 8, 36, 3]) 2. SENet50 基于 ResNet50，加入 SE block 就得到了 SENet50。\nimport torch import torch.nn as nn import torch.nn.functional as F   class BasicBlock(nn.Module):   expansion = 4   def __init__(self, in_planes, planes, stride=1):  super(BasicBlock, self).__init__()  self.conv1 = nn.Conv2d(in_planes, planes, kernel_size=1, bias=False)  self.bn1 = nn.BatchNorm2d(planes)  self.conv2 = nn.Conv2d(planes, planes, kernel_size=3,stride=stride, padding=1, bias=False)  self.bn2 = nn.BatchNorm2d(planes)  self.conv3 = nn.Conv2d(planes, self.expansion * planes, kernel_size=1, bias=False)  self.bn3 = nn.BatchNorm2d(self.expansion*planes)   self.shortcut = nn.Sequential()  if stride != 1 or in_planes != self.expansion*planes:  self.shortcut = nn.Sequential(  nn.Conv2d(in_planes, self.expansion*planes,  kernel_size=1, stride=stride, bias=False),  nn.BatchNorm2d(self.expansion*planes)  )   # SE layers  self.fc1 = nn.Conv2d(self.expansion*planes, self.expansion*planes//16, kernel_size=1) # Use nn.Conv2d instead of nn.Linear  self.fc2 = nn.Conv2d(self.expansion*planes//16, self.expansion*planes, kernel_size=1)   def forward(self, x):  out = F.relu(self.bn1(self.conv1(x)))  out = self.bn2(self.conv2(out))  out = self.bn3(self.conv3(out))   # Squeeze  w = F.avg_pool2d(out, out.size(2))  w = F.relu(self.fc1(w))  w = F.sigmoid(self.fc2(w))  # Excitation  out = out * w # New broadcasting feature from v0.2!   out += self.shortcut(x)  out = F.relu(out)  return out  class SENet(nn.Module):  def __init__(self, block, num_blocks, num_classes=10):  super(SENet, self).__init__()  self.in_planes = 64   self.conv1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1, bias=False)  self.bn1 = nn.BatchNorm2d(64)  self.layer1 = self._make_layer(block, 64, num_blocks[0], stride=1)  self.layer2 = self._make_layer(block, 128, num_blocks[1], stride=2)  self.layer3 = self._make_layer(block, 256, num_blocks[2], stride=2)  self.layer4 = self._make_layer(block, 512, num_blocks[3], stride=2)  self.linear = nn.Linear(512*block.expansion, num_classes)   def _make_layer(self, block, planes, num_blocks, stride):  strides = [stride] + [1]*(num_blocks-1)  layers = []  for stride in strides:  layers.append(block(self.in_planes, planes, stride))  self.in_planes = planes * block.expansion  return nn.Sequential(*layers)   def forward(self, x):  out = F.relu(self.bn1(self.conv1(x)))  out = self.layer1(out)  out = self.layer2(out)  out = self.layer3(out)  out = self.layer4(out)  out = F.avg_pool2d(out, 4)  out = out.view(out.size(0), -1)  out = self.linear(out)  return out   def SENet50():  return SENet(BasicBlock, [3,4,6,3]) SENet50 相比于 ResNet50，理论上计算量增加不到 1%，但是我实际训练时，耗时加倍（ ≈ 一天一夜）。\n3. SKNet50  SKNet 的实现参考：https://github.com/developer0hye/SKNet-PyTorch/blob/master/sknet.py\n 绘制 ResNet50、SENet50、SKNet50 的 Acc 曲线 四个网络，各 200 各 Epoch 真的很耗时间。\n# 获取 acc 随 epoch 增加的值 total_epoch = 200  resnet_test_acc = [] resnet_train_acc = [] for i in range(0, total_epoch, 2):  checkpoint = torch.load(resnet_path+\"\\\\train_ckpt_epoch_%s.pth\" % str(i))  acc = checkpoint['acc_train']  resnet_train_acc.append(acc)   checkpoint = torch.load(resnet_path+\"\\\\test_ckpt_epoch_%s.pth\" % str(i))  acc = checkpoint['acc_test']  resnet_test_acc.append(acc) （1）ResNet50：Acc 随 epoch 变换曲线\nResNet 表现得那么好，倒是让我感觉很奇怪。ResNet 论文中，在 CIFAR-10 数据集上，测试得到 ResNet44 的表现为 92.83%，ReNet56 的表现为 93.03%。\n如上实现的 ResNet50 在测试集上的表现竟然达到了 95.45%。\n（2）SENet50\n SENet18  （3）SKNet50\n整合到一张图片上，方便直观的进行比较。\n从理论上分析，各网络的表现情况应该是：\nResNet50 但是我复现的实践结果为： ResNet50(95.45%)  SENet50(95.05%)  SKNet50(89.81)。\n问题出现在哪里？\n参数调优 进行一系列的参数调优，目标是实现 ResNet50 待解决的问题：\n （1）ResNet50 表现得那么好，有问题吗？ （2）SENet18 竟然优于 SENet50，这个很有问题！   （3）SKNet50 竟然没有上 90%，这个很有问题！下周再解决吧。  ",
+  "wordCount" : "3471",
+  "inLanguage": "en",
+  "datePublished": "2021-01-22T10:17:29+08:00",
+  "dateModified": "2021-01-22T10:17:29+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://landodo.github.io/posts/20210122-senet-sknet/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Landodo's NoteBook",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://landodo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://landodo.github.io/" accesskey="h" title="Landodo&#39;s NoteBook (Alt + H)">Landodo&#39;s NoteBook</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://landodo.github.io/search" title="🔍Search (Alt &#43; /)" accesskey=/>
+                    <span>🔍Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/tags" title="Tag">
+                    <span>Tag</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/cs-zoo" title="CS ZOO">
+                    <span>CS ZOO</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://landodo.github.io/">Home</a>&nbsp;»&nbsp;<a href="http://landodo.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      SENet 和它的孪生兄弟 SKNet
+    </h1>
+    <div class="post-meta"><span title='2021-01-22 10:17:29 +0800 CST'>January 22, 2021</span>&nbsp;·&nbsp;7 min&nbsp;·&nbsp;3471 words
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#senet-%e5%92%8c%e5%ae%83%e7%9a%84%e5%ad%aa%e7%94%9f%e5%85%84%e5%bc%9f-sknet" aria-label="SENet 和它的孪生兄弟 SKNet">SENet 和它的孪生兄弟 SKNet</a><ul>
+                        
+                <li>
+                    <a href="#%e7%9b%b8%e5%85%b3%e7%9a%84%e8%ae%ba%e6%96%87" aria-label="相关的论文">相关的论文</a></li>
+                <li>
+                    <a href="#senet" aria-label="SENet">SENet</a><ul>
+                        
+                <li>
+                    <a href="#squeeze-and-excitation-blocks" aria-label="SQUEEZE-AND-EXCITATION BLOCKS">SQUEEZE-AND-EXCITATION BLOCKS</a></li>
+                <li>
+                    <a href="#se-block-%e5%ae%9e%e7%8e%b0%e7%bb%86%e8%8a%82" aria-label="SE Block 实现细节">SE Block 实现细节</a></li>
+                <li>
+                    <a href="#%e5%ae%9e%e4%be%8b-instantiations" aria-label="实例 Instantiations">实例 Instantiations</a></li>
+                <li>
+                    <a href="#senet-%e7%9a%84%e5%8f%82%e6%95%b0%e9%87%8f%e5%92%8c%e8%ae%a1%e7%ae%97%e9%87%8f%e6%83%85%e5%86%b5" aria-label="SENet 的参数量和计算量情况">SENet 的参数量和计算量情况</a></li></ul>
+                </li>
+                <li>
+                    <a href="#senet-%e7%9a%84%e8%a1%a8%e7%8e%b0" aria-label="SENet 的表现">SENet 的表现</a></li>
+                <li>
+                    <a href="#-sknet" aria-label="❌ SKNet">❌ SKNet</a></li>
+                <li>
+                    <a href="#%e5%ae%9e%e9%aa%8c" aria-label="实验">实验</a><ul>
+                        
+                <li>
+                    <a href="#1-resnet50" aria-label="1. ResNet50">1. ResNet50</a></li>
+                <li>
+                    <a href="#2-senet50" aria-label="2. SENet50">2. SENet50</a></li>
+                <li>
+                    <a href="#3-sknet50" aria-label="3. SKNet50">3. SKNet50</a></li>
+                <li>
+                    <a href="#%e7%bb%98%e5%88%b6-resnet50senet50sknet50-%e7%9a%84-acc-%e6%9b%b2%e7%ba%bf" aria-label="绘制 ResNet50、SENet50、SKNet50 的 Acc 曲线">绘制 ResNet50、SENet50、SKNet50 的 Acc 曲线</a></li></ul>
+                </li>
+                <li>
+                    <a href="#%e5%8f%82%e6%95%b0%e8%b0%83%e4%bc%98" aria-label="参数调优">参数调优</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h1 id="senet-和它的孪生兄弟-sknet">SENet 和它的孪生兄弟 SKNet<a hidden class="anchor" aria-hidden="true" href="#senet-和它的孪生兄弟-sknet">#</a></h1>
+<p>✅ 论文地址：</p>
+<ul>
+<li>Squeeze-and-Excitation Networks: <a href="https://arxiv.org/pdf/1709.01507.pdf">https://arxiv.org/pdf/1709.01507.pdf</a></li>
+<li>Selective Kernel Networks: <a href="https://arxiv.org/pdf/1903.06586.pdf">https://arxiv.org/pdf/1903.06586.pdf</a></li>
+</ul>
+<p>✅ 论文发表时间（arXiv V1）</p>
+<ul>
+<li>SENet：2017 年 9 月 5 日</li>
+<li>SKNet：2019 年 3 月 15 日</li>
+</ul>
+<h2 id="相关的论文">相关的论文<a hidden class="anchor" aria-hidden="true" href="#相关的论文">#</a></h2>
+<p>（1）Inception 系列（2014 年~2016 年）：Inception 结构中嵌入了多尺度信息，聚合多种不同感受野上的特征来获得性能增益。</p>
+<ul>
+<li>Inception V1 (GoogLeNet): 11 Sep 2014</li>
+<li>Inception V2 (Batch Normalization): 11 Feb 2015</li>
+<li>Inception V3: 2 Dec 2015</li>
+<li>Inception V4: 23 Feb 2016</li>
+<li>Xception: 7 Oct 2016</li>
+</ul>
+<p>（2）ResNet （10 Dec 2015）</p>
+<p>（3）ResNeXt（16 Nov 2016）</p>
+<p>（4）Inside-Outside Network（14 Dec 2015）：网络中考虑了空间中的上下文信息。</p>
+<p>（5）Spatial Transform Network（5 Jun 2015）：Attention 机制引入到空间维度。</p>
+<ul>
+<li>
+<ul>
+<li>Dynamic Capacity Network（24 Nov 2015）</li>
+</ul>
+</li>
+</ul>
+<p><strong>（6）💢 SENet（5 Sep 2017）：通道注意力</strong></p>
+<p>（7）CBAM（17 Jul 2018）：空间注意力+通道注意力相结合</p>
+<p><strong>（8）💢SKNet（15 Mar 2019）</strong></p>
+<h2 id="senet">SENet<a hidden class="anchor" aria-hidden="true" href="#senet">#</a></h2>
+<blockquote>
+<p>一作：胡杰，关于 SENet 中文介绍：</p>
+<ul>
+<li>Momenta 详解 ImageNet 2017 夺冠架构 SENet  <a href="https://www.sohu.com/a/161633191_465975">https://www.sohu.com/a/161633191_465975</a></li>
+</ul>
+</blockquote>
+<p><img loading="lazy" src="./20210122/1.png" alt=""  />
+</p>
+<p>🌀通道间的特征都是平等的吗？SENet 给出了这个问题的答案。</p>
+<p>论文的主要工作是：考虑特征通道之间的关系，提出了 Squeeze-and-Excitation Networks（简称 SENet）。显式地建模特征通道之间的相互依赖关系，通过学习的方式来自动获取到每个特征通道的重要程度，然后依照这个重要程度去提升有用的特征并抑制对当前任务用处不大的特征。</p>
+<p>SE block 如下 Fig. 1 所示。</p>
+<p><img loading="lazy" src="./20210122/2.PNG" alt=""  />
+</p>
+<h3 id="squeeze-and-excitation-blocks">SQUEEZE-AND-EXCITATION BLOCKS<a hidden class="anchor" aria-hidden="true" href="#squeeze-and-excitation-blocks">#</a></h3>
+<p>Squeeze 和 Excitation 是两个非常关键的操作。</p>
+<p>给定一个输入 $X$，$X \in  \mathbb{R}^{C&rsquo; \times H&rsquo; \times W&rsquo;}$，通过一系列卷积等一般变换 $F_{tr}$ 后，得到一个 $U \in \mathbb{R}^{C \times H \times W}$ 的特征图。</p>
+<p>接下来通过一个 Squeeze and Excitation block ，三个操作来重标定前面得到的特征。</p>
+<p>（1）Squeeze: $F_{sq}(\cdot)$</p>
+<p>首先是 Squeeze 操作，顺着空间维度来进行特征压缩，将每个二维的特征通道变成一个实数，这个实数某种程度上具有全局的感受野，并且输出的维度和输入的特征通道数相匹配。</p>
+<p>即：对 $C \times H \times W$ 的特征图进行 global average pooling，得到 $1 \times 1 \times C$ 的特征图。</p>
+<p>$$z_c = F_{sq}(u_c) = \frac{1}{H \times W} \sum_{i=1}^{H} \sum_{j=1}^{W} u_c{(i, j)}$$</p>
+<p>（2）Excitation: $F_{ex}(\cdot , W)$</p>
+<p>通过参数 W 来为每个特征通道生成权重，其中参数 W 被学习用来显式地建模特征通道间的相关性。</p>
+<p>即：使用一个全连接层神经网络，对 Squeeze 之后的结果进行一个非线性变换。</p>
+<p>$$s = F_{ex}(z, W) = \sigma(g(z, W)) = \sigma(W_2 \delta(W_1 z)) $$</p>
+<p>（3）Scale</p>
+<p>最后是一个 Reweight 的操作，将 Excitation 的输出的权重看做是进过特征选择后的每个特征通道的重要性，然后通过乘法逐通道加权到先前的特征上，完成在通道维度上的对原始特征的重标定。</p>
+<p>$$\tilde{x} = F_{scale}(u_c, s_c) = s_c u_c$$</p>
+<h3 id="se-block-实现细节">SE Block 实现细节<a hidden class="anchor" aria-hidden="true" href="#se-block-实现细节">#</a></h3>
+<p>使用 global average pooling 作为 Squeeze 操作；</p>
+<p>紧接着两个 Fully Connected 层组成一个 Bottleneck 结构去建模通道间的相关性，并输出和输入特征同样数目的权重。</p>
+<p>首先将特征维度降低到输入的 1/16，（降低计算量，16 是实践得到的较好的超参数）</p>
+<p>然后经过 ReLu 激活后再通过一个 Fully Connected 层升回到原来的维度。（增加非线性）</p>
+<p>通过一个 Sigmoid 函数获得 0~1 之间归一化的权重。</p>
+<p>最后通过一个 Scale 的操作来将归一化后的权重加权到每个通道的特征上。</p>
+<p>SE Block 可以嵌入到现在几乎所有的网络结构中。</p>
+<h3 id="实例-instantiations">实例 Instantiations<a hidden class="anchor" aria-hidden="true" href="#实例-instantiations">#</a></h3>
+<p>通过在原始网络结构的 building block 单元中嵌入 SE 模块，可以获得不同种类的 SENet。如 SE-BN-Inception、SE-ResNet、SE-ReNeXt、SE-Inception-ResNet-v2 等等。</p>
+<p><img loading="lazy" src="./20210122/3.png" alt=""  />
+</p>
+<h3 id="senet-的参数量和计算量情况">SENet 的参数量和计算量情况<a hidden class="anchor" aria-hidden="true" href="#senet-的参数量和计算量情况">#</a></h3>
+<p>SENet 额外的模型参数都存在于 Bottleneck 设计的两个 Fully Connected 中。</p>
+<p>以  SE-ResNet-50 和 ResNet-50 为例，从理论上，SE Block 增长的额外计算量仅仅不到 1%。</p>
+<p><img loading="lazy" src="./20210122/4.png" alt=""  />
+</p>
+<h2 id="senet-的表现">SENet 的表现<a hidden class="anchor" aria-hidden="true" href="#senet-的表现">#</a></h2>
+<p>ResNet-50、ResNet-101、ResNet-152 和嵌入 SE 模型的结果。SE-ResNets 在各种深度上都远远超过了其对应的没有 SE 的结构版本的精度，这说明无论网络的深度如何，SE 模块都能够给网络带来性能上的增益。</p>
+<p><img loading="lazy" src="./20210122/9.jpg" alt=""  />
+</p>
+<p>SE 模块嵌入到 ResNeXt、BN-Inception、Inception-ResNet-v2 上均获得了不菲的增益效果，加入了 SE 模块的网络收敛到更低的错误率上。</p>
+<p><img loading="lazy" src="./20210122/5.png" alt=""  />
+</p>
+<p>其他（CIFAR-10、CIFAR-100、Places365、COCO、ImageNet）：</p>
+<p><img loading="lazy" src="./20210122/6.png" alt=""  />
+</p>
+<p><img loading="lazy" src="./20210122/7.png" alt=""  />
+</p>
+<p><img loading="lazy" src="./20210122/8.png" alt=""  />
+</p>
+<p>最后，在 ILSVRC 2017 竞赛中，SENet 在测试集上获得了 2.251% Top-5 错误率。对比于去年第一名的结果 2.991%，获得了将近 25% 的精度提升。</p>
+<blockquote>
+<p>2012~2017： ILSVRC 2017 竞赛冠军🏆：</p>
+<ul>
+<li>2012，AlexNet：top-5: 15.32%</li>
+<li>2013，Clarifai，top-5: 11.20%</li>
+<li>2014，GoogleNet v1，top-5: 6.67%</li>
+<li>2015，ResNet，top-5: 3.57%</li>
+<li>2016，Trimps-Soushen（公安三所），top-5: 2.99%</li>
+<li>2017，<strong>SENet</strong>，top-5: 2.25%</li>
+</ul>
+</blockquote>
+<h2 id="-sknet">❌ SKNet<a hidden class="anchor" aria-hidden="true" href="#-sknet">#</a></h2>
+<blockquote>
+<p>一作：李翔，在知乎谈 SKNet：</p>
+<ul>
+<li>「SKNet——SENet 孪生兄弟篇」：<a href="https://zhuanlan.zhihu.com/p/59690223">https://zhuanlan.zhihu.com/p/59690223</a></li>
+</ul>
+</blockquote>
+<p><img loading="lazy" src="./20210122/10.png" alt=""  />
+</p>
+<p>SKNet 我留下周进行汇报（1 月 29 日）。</p>
+<h2 id="实验">实验<a hidden class="anchor" aria-hidden="true" href="#实验">#</a></h2>
+<p>对 ResNet50、SENet50 和 SKNet 50 进行简单的比较。</p>
+<p>数据集采用 CIFAR-10。</p>
+<p>除了 model 不同，三者其他训练时的参数都是一致的。</p>
+<p>训练时保存 checkpoint，这样调参就不用每次都从 0 开始训练。有一个经过预训练的模型能减少训练需要的时间。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> args<span style="color:#f92672">.</span>resume:
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Load checkpoint.</span>
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">&#39;==&gt; Resuming from checkpoint..&#39;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">assert</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>isdir(<span style="color:#e6db74">&#39;checkpoint&#39;</span>), <span style="color:#e6db74">&#39;Error: no checkpoint directory found!&#39;</span>
+</span></span><span style="display:flex;"><span>    checkpoint <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>load(<span style="color:#e6db74">&#39;./checkpoint/ckpt.pth&#39;</span>)
+</span></span><span style="display:flex;"><span>    net<span style="color:#f92672">.</span>load_state_dict(checkpoint[<span style="color:#e6db74">&#39;net&#39;</span>])
+</span></span><span style="display:flex;"><span>    best_acc <span style="color:#f92672">=</span> checkpoint[<span style="color:#e6db74">&#39;acc&#39;</span>]
+</span></span><span style="display:flex;"><span>    start_epoch <span style="color:#f92672">=</span> checkpoint[<span style="color:#e6db74">&#39;epoch&#39;</span>]
+</span></span></code></pre></div><p>总训练 <strong>200 epoch</strong>，每两个 epoch 保存一次 checkpoint，使用 matplotlib 绘制 rain_acc 和 test_acc 曲线。</p>
+<p>ResNet50 训练 200 个 Epoch。下图为 ResNet50 训练结束，Test Acc 达到 95.41%。</p>
+<p><img loading="lazy" src="./20210122/11.png" alt=""  />
+</p>
+<p>每 2 个 epoch 保存一次 checkpoint，用于绘图。（忘记修改了，其实不需要保存 net.state_dict 的，非常耗空间。）</p>
+<blockquote>
+<p>我把 loss 忘记保存了🌚，loss 曲线也很重要。我只保存了 acc 和 epoch。</p>
+</blockquote>
+<p><img loading="lazy" src="./20210122/12.png" alt=""  />
+</p>
+<p>不保存 <code>state_dict</code> ，只保存 loss、epoch 和 acc。</p>
+<p><img loading="lazy" src="./20210122/13.png" alt=""  />
+</p>
+<h3 id="1-resnet50">1. ResNet50<a hidden class="anchor" aria-hidden="true" href="#1-resnet50">#</a></h3>
+<blockquote>
+<ul>
+<li>参考代码链接：<a href="https://github.com/kuangliu/pytorch-cifar">https://github.com/kuangliu/pytorch-cifar</a></li>
+</ul>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#e6db74">&#39;&#39;&#39;ResNet in PyTorch.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">For Pre-activation ResNet, see &#39;preact_resnet.py&#39;.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Reference:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">[1] Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    Deep Residual Learning for Image Recognition. arXiv:1512.03385
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;&#39;&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> torch
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> torch.nn <span style="color:#66d9ef">as</span> nn
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> torch.nn.functional <span style="color:#66d9ef">as</span> F
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">BasicBlock</span>(nn<span style="color:#f92672">.</span>Module):
+</span></span><span style="display:flex;"><span>    expansion <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(self, in_planes, planes, stride<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>):
+</span></span><span style="display:flex;"><span>        super(BasicBlock, self)<span style="color:#f92672">.</span>__init__()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>conv1 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Conv2d(
+</span></span><span style="display:flex;"><span>            in_planes, planes, kernel_size<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>, stride<span style="color:#f92672">=</span>stride, padding<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, bias<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>bn1 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>BatchNorm2d(planes)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>conv2 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Conv2d(planes, planes, kernel_size<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>,
+</span></span><span style="display:flex;"><span>                               stride<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, padding<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, bias<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>bn2 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>BatchNorm2d(planes)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>shortcut <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Sequential()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> stride <span style="color:#f92672">!=</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">or</span> in_planes <span style="color:#f92672">!=</span> self<span style="color:#f92672">.</span>expansion<span style="color:#f92672">*</span>planes:
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>shortcut <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Sequential(
+</span></span><span style="display:flex;"><span>                nn<span style="color:#f92672">.</span>Conv2d(in_planes, self<span style="color:#f92672">.</span>expansion<span style="color:#f92672">*</span>planes,
+</span></span><span style="display:flex;"><span>                          kernel_size<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, stride<span style="color:#f92672">=</span>stride, bias<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>),
+</span></span><span style="display:flex;"><span>                nn<span style="color:#f92672">.</span>BatchNorm2d(self<span style="color:#f92672">.</span>expansion<span style="color:#f92672">*</span>planes)
+</span></span><span style="display:flex;"><span>            )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, x):
+</span></span><span style="display:flex;"><span>        out <span style="color:#f92672">=</span> F<span style="color:#f92672">.</span>relu(self<span style="color:#f92672">.</span>bn1(self<span style="color:#f92672">.</span>conv1(x)))
+</span></span><span style="display:flex;"><span>        out <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>bn2(self<span style="color:#f92672">.</span>conv2(out))
+</span></span><span style="display:flex;"><span>        out <span style="color:#f92672">+=</span> self<span style="color:#f92672">.</span>shortcut(x)
+</span></span><span style="display:flex;"><span>        out <span style="color:#f92672">=</span> F<span style="color:#f92672">.</span>relu(out)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> out
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Bottleneck</span>(nn<span style="color:#f92672">.</span>Module):
+</span></span><span style="display:flex;"><span>    expansion <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(self, in_planes, planes, stride<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>):
+</span></span><span style="display:flex;"><span>        super(Bottleneck, self)<span style="color:#f92672">.</span>__init__()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>conv1 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Conv2d(in_planes, planes, kernel_size<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, bias<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>bn1 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>BatchNorm2d(planes)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>conv2 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Conv2d(planes, planes, kernel_size<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>,
+</span></span><span style="display:flex;"><span>                               stride<span style="color:#f92672">=</span>stride, padding<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, bias<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>bn2 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>BatchNorm2d(planes)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>conv3 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Conv2d(planes, self<span style="color:#f92672">.</span>expansion <span style="color:#f92672">*</span>
+</span></span><span style="display:flex;"><span>                               planes, kernel_size<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, bias<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>bn3 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>BatchNorm2d(self<span style="color:#f92672">.</span>expansion<span style="color:#f92672">*</span>planes)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>shortcut <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Sequential()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> stride <span style="color:#f92672">!=</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">or</span> in_planes <span style="color:#f92672">!=</span> self<span style="color:#f92672">.</span>expansion<span style="color:#f92672">*</span>planes:
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>shortcut <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Sequential(
+</span></span><span style="display:flex;"><span>                nn<span style="color:#f92672">.</span>Conv2d(in_planes, self<span style="color:#f92672">.</span>expansion<span style="color:#f92672">*</span>planes,
+</span></span><span style="display:flex;"><span>                          kernel_size<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, stride<span style="color:#f92672">=</span>stride, bias<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>),
+</span></span><span style="display:flex;"><span>                nn<span style="color:#f92672">.</span>BatchNorm2d(self<span style="color:#f92672">.</span>expansion<span style="color:#f92672">*</span>planes)
+</span></span><span style="display:flex;"><span>            )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, x):
+</span></span><span style="display:flex;"><span>        out <span style="color:#f92672">=</span> F<span style="color:#f92672">.</span>relu(self<span style="color:#f92672">.</span>bn1(self<span style="color:#f92672">.</span>conv1(x)))
+</span></span><span style="display:flex;"><span>        out <span style="color:#f92672">=</span> F<span style="color:#f92672">.</span>relu(self<span style="color:#f92672">.</span>bn2(self<span style="color:#f92672">.</span>conv2(out)))
+</span></span><span style="display:flex;"><span>        out <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>bn3(self<span style="color:#f92672">.</span>conv3(out))
+</span></span><span style="display:flex;"><span>        out <span style="color:#f92672">+=</span> self<span style="color:#f92672">.</span>shortcut(x)
+</span></span><span style="display:flex;"><span>        out <span style="color:#f92672">=</span> F<span style="color:#f92672">.</span>relu(out)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> out
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ResNet</span>(nn<span style="color:#f92672">.</span>Module):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(self, block, num_blocks, num_classes<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>):
+</span></span><span style="display:flex;"><span>        super(ResNet, self)<span style="color:#f92672">.</span>__init__()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>in_planes <span style="color:#f92672">=</span> <span style="color:#ae81ff">64</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>conv1 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Conv2d(<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">64</span>, kernel_size<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>,
+</span></span><span style="display:flex;"><span>                               stride<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, padding<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, bias<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>bn1 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>BatchNorm2d(<span style="color:#ae81ff">64</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>layer1 <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_make_layer(block, <span style="color:#ae81ff">64</span>, num_blocks[<span style="color:#ae81ff">0</span>], stride<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>layer2 <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_make_layer(block, <span style="color:#ae81ff">128</span>, num_blocks[<span style="color:#ae81ff">1</span>], stride<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>layer3 <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_make_layer(block, <span style="color:#ae81ff">256</span>, num_blocks[<span style="color:#ae81ff">2</span>], stride<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>layer4 <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_make_layer(block, <span style="color:#ae81ff">512</span>, num_blocks[<span style="color:#ae81ff">3</span>], stride<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>linear <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">512</span><span style="color:#f92672">*</span>block<span style="color:#f92672">.</span>expansion, num_classes)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_make_layer</span>(self, block, planes, num_blocks, stride):
+</span></span><span style="display:flex;"><span>        strides <span style="color:#f92672">=</span> [stride] <span style="color:#f92672">+</span> [<span style="color:#ae81ff">1</span>]<span style="color:#f92672">*</span>(num_blocks<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        layers <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> stride <span style="color:#f92672">in</span> strides:
+</span></span><span style="display:flex;"><span>            layers<span style="color:#f92672">.</span>append(block(self<span style="color:#f92672">.</span>in_planes, planes, stride))
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>in_planes <span style="color:#f92672">=</span> planes <span style="color:#f92672">*</span> block<span style="color:#f92672">.</span>expansion
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> nn<span style="color:#f92672">.</span>Sequential(<span style="color:#f92672">*</span>layers)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, x):
+</span></span><span style="display:flex;"><span>        out <span style="color:#f92672">=</span> F<span style="color:#f92672">.</span>relu(self<span style="color:#f92672">.</span>bn1(self<span style="color:#f92672">.</span>conv1(x)))
+</span></span><span style="display:flex;"><span>        out <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>layer1(out)
+</span></span><span style="display:flex;"><span>        out <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>layer2(out)
+</span></span><span style="display:flex;"><span>        out <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>layer3(out)
+</span></span><span style="display:flex;"><span>        out <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>layer4(out)
+</span></span><span style="display:flex;"><span>        out <span style="color:#f92672">=</span> F<span style="color:#f92672">.</span>avg_pool2d(out, <span style="color:#ae81ff">4</span>)
+</span></span><span style="display:flex;"><span>        out <span style="color:#f92672">=</span> out<span style="color:#f92672">.</span>view(out<span style="color:#f92672">.</span>size(<span style="color:#ae81ff">0</span>), <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        out <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>linear(out)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> out
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">ResNet18</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> ResNet(BasicBlock, [<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">ResNet34</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> ResNet(BasicBlock, [<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">3</span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">ResNet50</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> ResNet(Bottleneck, [<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">3</span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">ResNet101</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> ResNet(Bottleneck, [<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">23</span>, <span style="color:#ae81ff">3</span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">ResNet152</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> ResNet(Bottleneck, [<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">36</span>, <span style="color:#ae81ff">3</span>])
+</span></span></code></pre></div><h3 id="2-senet50">2. SENet50<a hidden class="anchor" aria-hidden="true" href="#2-senet50">#</a></h3>
+<p>基于 ResNet50，加入 SE block 就得到了 SENet50。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> torch
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> torch.nn <span style="color:#66d9ef">as</span> nn
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> torch.nn.functional <span style="color:#66d9ef">as</span> F
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">BasicBlock</span>(nn<span style="color:#f92672">.</span>Module):
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    expansion <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(self, in_planes, planes, stride<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>):
+</span></span><span style="display:flex;"><span>        super(BasicBlock, self)<span style="color:#f92672">.</span>__init__()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>conv1 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Conv2d(in_planes, planes, kernel_size<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, bias<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>bn1 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>BatchNorm2d(planes)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>conv2 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Conv2d(planes, planes, kernel_size<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>,stride<span style="color:#f92672">=</span>stride, padding<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, bias<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>bn2 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>BatchNorm2d(planes)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>conv3 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Conv2d(planes, self<span style="color:#f92672">.</span>expansion <span style="color:#f92672">*</span> planes, kernel_size<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, bias<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>bn3 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>BatchNorm2d(self<span style="color:#f92672">.</span>expansion<span style="color:#f92672">*</span>planes)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>shortcut <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Sequential()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> stride <span style="color:#f92672">!=</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">or</span> in_planes <span style="color:#f92672">!=</span> self<span style="color:#f92672">.</span>expansion<span style="color:#f92672">*</span>planes:
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>shortcut <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Sequential(
+</span></span><span style="display:flex;"><span>                nn<span style="color:#f92672">.</span>Conv2d(in_planes, self<span style="color:#f92672">.</span>expansion<span style="color:#f92672">*</span>planes,
+</span></span><span style="display:flex;"><span>                          kernel_size<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, stride<span style="color:#f92672">=</span>stride, bias<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>),
+</span></span><span style="display:flex;"><span>                nn<span style="color:#f92672">.</span>BatchNorm2d(self<span style="color:#f92672">.</span>expansion<span style="color:#f92672">*</span>planes)
+</span></span><span style="display:flex;"><span>            )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># SE layers</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>fc1 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Conv2d(self<span style="color:#f92672">.</span>expansion<span style="color:#f92672">*</span>planes, self<span style="color:#f92672">.</span>expansion<span style="color:#f92672">*</span>planes<span style="color:#f92672">//</span><span style="color:#ae81ff">16</span>, kernel_size<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)  <span style="color:#75715e"># Use nn.Conv2d instead of nn.Linear</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>fc2 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Conv2d(self<span style="color:#f92672">.</span>expansion<span style="color:#f92672">*</span>planes<span style="color:#f92672">//</span><span style="color:#ae81ff">16</span>, self<span style="color:#f92672">.</span>expansion<span style="color:#f92672">*</span>planes, kernel_size<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, x):
+</span></span><span style="display:flex;"><span>        out <span style="color:#f92672">=</span> F<span style="color:#f92672">.</span>relu(self<span style="color:#f92672">.</span>bn1(self<span style="color:#f92672">.</span>conv1(x)))
+</span></span><span style="display:flex;"><span>        out <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>bn2(self<span style="color:#f92672">.</span>conv2(out))
+</span></span><span style="display:flex;"><span>        out <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>bn3(self<span style="color:#f92672">.</span>conv3(out))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Squeeze</span>
+</span></span><span style="display:flex;"><span>        w <span style="color:#f92672">=</span> F<span style="color:#f92672">.</span>avg_pool2d(out, out<span style="color:#f92672">.</span>size(<span style="color:#ae81ff">2</span>))
+</span></span><span style="display:flex;"><span>        w <span style="color:#f92672">=</span> F<span style="color:#f92672">.</span>relu(self<span style="color:#f92672">.</span>fc1(w))
+</span></span><span style="display:flex;"><span>        w <span style="color:#f92672">=</span> F<span style="color:#f92672">.</span>sigmoid(self<span style="color:#f92672">.</span>fc2(w))
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Excitation</span>
+</span></span><span style="display:flex;"><span>        out <span style="color:#f92672">=</span> out <span style="color:#f92672">*</span> w  <span style="color:#75715e"># New broadcasting feature from v0.2!</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        out <span style="color:#f92672">+=</span> self<span style="color:#f92672">.</span>shortcut(x)
+</span></span><span style="display:flex;"><span>        out <span style="color:#f92672">=</span> F<span style="color:#f92672">.</span>relu(out)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> out
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SENet</span>(nn<span style="color:#f92672">.</span>Module):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> __init__(self, block, num_blocks, num_classes<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>):
+</span></span><span style="display:flex;"><span>        super(SENet, self)<span style="color:#f92672">.</span>__init__()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>in_planes <span style="color:#f92672">=</span> <span style="color:#ae81ff">64</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>conv1 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Conv2d(<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">64</span>, kernel_size<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>, stride<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, padding<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, bias<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>bn1 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>BatchNorm2d(<span style="color:#ae81ff">64</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>layer1 <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_make_layer(block,  <span style="color:#ae81ff">64</span>, num_blocks[<span style="color:#ae81ff">0</span>], stride<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>layer2 <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_make_layer(block, <span style="color:#ae81ff">128</span>, num_blocks[<span style="color:#ae81ff">1</span>], stride<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>layer3 <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_make_layer(block, <span style="color:#ae81ff">256</span>, num_blocks[<span style="color:#ae81ff">2</span>], stride<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>layer4 <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_make_layer(block, <span style="color:#ae81ff">512</span>, num_blocks[<span style="color:#ae81ff">3</span>], stride<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>linear <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">512</span><span style="color:#f92672">*</span>block<span style="color:#f92672">.</span>expansion, num_classes)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_make_layer</span>(self, block, planes, num_blocks, stride):
+</span></span><span style="display:flex;"><span>        strides <span style="color:#f92672">=</span> [stride] <span style="color:#f92672">+</span> [<span style="color:#ae81ff">1</span>]<span style="color:#f92672">*</span>(num_blocks<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        layers <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> stride <span style="color:#f92672">in</span> strides:
+</span></span><span style="display:flex;"><span>            layers<span style="color:#f92672">.</span>append(block(self<span style="color:#f92672">.</span>in_planes, planes, stride))
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>in_planes <span style="color:#f92672">=</span> planes <span style="color:#f92672">*</span> block<span style="color:#f92672">.</span>expansion
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> nn<span style="color:#f92672">.</span>Sequential(<span style="color:#f92672">*</span>layers)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, x):
+</span></span><span style="display:flex;"><span>        out <span style="color:#f92672">=</span> F<span style="color:#f92672">.</span>relu(self<span style="color:#f92672">.</span>bn1(self<span style="color:#f92672">.</span>conv1(x)))
+</span></span><span style="display:flex;"><span>        out <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>layer1(out)
+</span></span><span style="display:flex;"><span>        out <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>layer2(out)
+</span></span><span style="display:flex;"><span>        out <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>layer3(out)
+</span></span><span style="display:flex;"><span>        out <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>layer4(out)
+</span></span><span style="display:flex;"><span>        out <span style="color:#f92672">=</span> F<span style="color:#f92672">.</span>avg_pool2d(out, <span style="color:#ae81ff">4</span>)
+</span></span><span style="display:flex;"><span>        out <span style="color:#f92672">=</span> out<span style="color:#f92672">.</span>view(out<span style="color:#f92672">.</span>size(<span style="color:#ae81ff">0</span>), <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        out <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>linear(out)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> out
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">SENet50</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> SENet(BasicBlock, [<span style="color:#ae81ff">3</span>,<span style="color:#ae81ff">4</span>,<span style="color:#ae81ff">6</span>,<span style="color:#ae81ff">3</span>])
+</span></span></code></pre></div><p>SENet50 相比于 ResNet50，理论上计算量增加不到 1%，但是我实际训练时，耗时加倍（ ≈ 一天一夜）。</p>
+<h3 id="3-sknet50">3. SKNet50<a hidden class="anchor" aria-hidden="true" href="#3-sknet50">#</a></h3>
+<blockquote>
+<p>SKNet 的实现参考：<a href="https://github.com/developer0hye/SKNet-PyTorch/blob/master/sknet.py">https://github.com/developer0hye/SKNet-PyTorch/blob/master/sknet.py</a></p>
+</blockquote>
+<h3 id="绘制-resnet50senet50sknet50-的-acc-曲线">绘制 ResNet50、SENet50、SKNet50 的 Acc 曲线<a hidden class="anchor" aria-hidden="true" href="#绘制-resnet50senet50sknet50-的-acc-曲线">#</a></h3>
+<p>四个网络，各 200 各 Epoch 真的很耗时间。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 获取 acc 随 epoch 增加的值</span>
+</span></span><span style="display:flex;"><span>total_epoch <span style="color:#f92672">=</span> <span style="color:#ae81ff">200</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>resnet_test_acc <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>resnet_train_acc <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">0</span>, total_epoch, <span style="color:#ae81ff">2</span>):
+</span></span><span style="display:flex;"><span>    checkpoint <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>load(resnet_path<span style="color:#f92672">+</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">train_ckpt_epoch_</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">.pth&#34;</span> <span style="color:#f92672">%</span> str(i))
+</span></span><span style="display:flex;"><span>    acc <span style="color:#f92672">=</span> checkpoint[<span style="color:#e6db74">&#39;acc_train&#39;</span>]
+</span></span><span style="display:flex;"><span>    resnet_train_acc<span style="color:#f92672">.</span>append(acc)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    checkpoint <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>load(resnet_path<span style="color:#f92672">+</span><span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\\</span><span style="color:#e6db74">test_ckpt_epoch_</span><span style="color:#e6db74">%s</span><span style="color:#e6db74">.pth&#34;</span> <span style="color:#f92672">%</span> str(i))
+</span></span><span style="display:flex;"><span>    acc <span style="color:#f92672">=</span> checkpoint[<span style="color:#e6db74">&#39;acc_test&#39;</span>]
+</span></span><span style="display:flex;"><span>    resnet_test_acc<span style="color:#f92672">.</span>append(acc)
+</span></span></code></pre></div><p>（1）ResNet50：Acc 随 epoch 变换曲线</p>
+<p><img loading="lazy" src="./20210122/resnet50-acc-curve.png" alt=""  />
+</p>
+<p>ResNet 表现得那么好，倒是让我感觉很奇怪。ResNet 论文中，在 CIFAR-10 数据集上，测试得到 ResNet44 的表现为 92.83%，ReNet56 的表现为 93.03%。</p>
+<p>如上实现的 ResNet50 在测试集上的表现竟然达到了 95.45%。</p>
+<p>（2）SENet50</p>
+<p><img loading="lazy" src="./20210122/senet50-acc-curve.png" alt=""  />
+</p>
+<ul>
+<li>SENet18</li>
+</ul>
+<p><img loading="lazy" src="./20210122/senet18-acc-curve.png" alt=""  />
+</p>
+<p>（3）SKNet50</p>
+<p><img loading="lazy" src="./20210122/sknet50-acc-curve.png" alt=""  />
+</p>
+<p>整合到一张图片上，方便直观的进行比较。</p>
+<p><img loading="lazy" src="./20210122/integration.png" alt=""  />
+</p>
+<p>从理论上分析，各网络的表现情况应该是：</p>
+<p>ResNet50 &lt; SENet50 &lt; SKNet50.</p>
+<p>但是我复现的实践结果为： ResNet50(95.45%) &gt; SENet50(95.05%) &gt; SKNet50(89.81)。</p>
+<p>问题出现在哪里？</p>
+<h2 id="参数调优">参数调优<a hidden class="anchor" aria-hidden="true" href="#参数调优">#</a></h2>
+<p>进行一系列的参数调优，目标是实现 ResNet50 &lt; SENet50 &lt; SKNet50.</p>
+<p>待解决的问题：</p>
+<ul>
+<li>（1）ResNet50 表现得那么好，有问题吗？</li>
+<li>（2）SENet18 竟然优于 SENet50，这个很有问题！</li>
+</ul>
+<p><img loading="lazy" src="./20210122/senet50-and-senet18.png" alt=""  />
+</p>
+<ul>
+<li>（3）SKNet50 竟然没有上 90%，这个很有问题！下周再解决吧。</li>
+</ul>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://landodo.github.io/tags/cnn/">CNN</a></li>
+      <li><a href="http://landodo.github.io/tags/%E6%B3%A8%E6%84%8F%E5%8A%9B/">注意力</a></li>
+      <li><a href="http://landodo.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">论文阅读</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://landodo.github.io/posts/202101227-cnn-xiushen-wei/">
+    <span class="title">« Prev Page</span>
+    <br>
+    <span>深度学习-卷积神经网络中文综述</span>
+  </a>
+  <a class="next" href="http://landodo.github.io/posts/20210112-senet/">
+    <span class="title">Next Page »</span>
+    <br>
+    <span>Squeeze-and-Excitation Networks</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>Landon</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

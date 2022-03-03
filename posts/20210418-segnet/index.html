@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+<meta name="robots" content="index, follow">
+<title>SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation | Landodo&#39;s NoteBook</title>
+<meta name="keywords" content="CNN, 分割, 论文阅读" />
+<meta name="description" content="FCN：Fully Convolutional Networks for Semantic Segmentation https://arxiv.org/abs/1411.4038 U-Net：U-Net: Convolutional Networks for Biomedical Image Segmentation https://arxiv.org/abs/1505.04597 SegNet：SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation https://arxiv.org/pdf/1511.00561.pdf 概览 论文所要解决的问题： encoder">
+<meta name="author" content="">
+<link rel="canonical" href="http://landodo.github.io/posts/20210418-segnet/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://landodo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://landodo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://landodo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://landodo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://landodo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation" />
+<meta property="og:description" content="FCN：Fully Convolutional Networks for Semantic Segmentation https://arxiv.org/abs/1411.4038 U-Net：U-Net: Convolutional Networks for Biomedical Image Segmentation https://arxiv.org/abs/1505.04597 SegNet：SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation https://arxiv.org/pdf/1511.00561.pdf 概览 论文所要解决的问题： encoder" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://landodo.github.io/posts/20210418-segnet/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-04-18T10:17:29&#43;08:00" />
+<meta property="article:modified_time" content="2021-04-18T10:17:29&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation"/>
+<meta name="twitter:description" content="FCN：Fully Convolutional Networks for Semantic Segmentation https://arxiv.org/abs/1411.4038 U-Net：U-Net: Convolutional Networks for Biomedical Image Segmentation https://arxiv.org/abs/1505.04597 SegNet：SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation https://arxiv.org/pdf/1511.00561.pdf 概览 论文所要解决的问题： encoder"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://landodo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation",
+      "item": "http://landodo.github.io/posts/20210418-segnet/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation",
+  "name": "SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation",
+  "description": "FCN：Fully Convolutional Networks for Semantic Segmentation https://arxiv.org/abs/1411.4038 U-Net：U-Net: Convolutional Networks for Biomedical Image Segmentation https://arxiv.org/abs/1505.04597 SegNet：SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation https://arxiv.org/pdf/1511.00561.pdf 概览 论文所要解决的问题： encoder",
+  "keywords": [
+    "CNN", "分割", "论文阅读"
+  ],
+  "articleBody": " FCN：Fully Convolutional Networks for Semantic Segmentation\n https://arxiv.org/abs/1411.4038  U-Net：U-Net: Convolutional Networks for Biomedical Image Segmentation\n https://arxiv.org/abs/1505.04597  SegNet：SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation\n https://arxiv.org/pdf/1511.00561.pdf   概览 论文所要解决的问题：\nencoder layer 的最大池化和子采样可以实现更多的平移不变性（translation invariance），以实现鲁棒分类，但相应地也存在特征图的空间分辨率的损失。随着最大池化和子采样层的堆叠，边界细节丢失的有损特征图（空间分辨率损失），对边界划分至关重要的分割任务来说是不利的。因此，解决方案是：在 encoder 中进行降采样之前，先捕获并存储特征图中的一些信息。如果前向传播过程中的内存不受限制，那么可以存储所有的 encoder 每次降采样之间的所有特征图，这些特征图将用于指导升采样。\nFCN、U-Net 采用的是将 encoder 每次降采样前的特征图全部存储，在 decoder layer 进行浅层特征和深层特征合并时，U-Net 使用的是拼接方法（Concatenation），而 FCN 使用的是求和。\n由于内存的限制，本文提出了一种更有效的方式来存储这些信息。 它只存储最大池化索引（max-pooling indices），即为每个编码器特征图记忆每个池化窗口中最大特征值的位置索引。\n   encoder 和 decoder：\nSegNet 将网络前面提取特征的部分称为编码器（Encoder），后面上采样的部分称为解码器（Decoder）。从这篇文献开始，encoder-decoder 开始广泛使用在分割任务中。（可能）\nencoder-decoder Hinton 2006 年 提出。\nhttps://www.cs.toronto.edu/~hinton/science.pdf\n   decoder 与encoder 相对应。\n  SegNet 的 decoder 使用从相应 encoder 保存下来的最大池化索引（max-pooling indices），用这个来指导输入的特征图进行非线性上采样。\n  max-pooling indices 的优势：\n (i) it improves boundary delineation. (ii) it reduces the number of parameters enabling end-to-end training.（我表示怀疑！） (iii) this form of upsampling can be incorporated into any encoder-decoder architecture with only a little modification.    SegNet Architecture SegNet 由 3 个主要组件：\n（1）encoder network\n（2）decoder network\n（3）pixel-wise classification layer\n去掉全连接的 VGG16 有 13 个卷积层。可以用在大数据集预训练好的参数进行初始化。VGG16 的参数量是 134M，去掉全连接层后的参数量为 14.7M。\n'vgg16': [64, 64, 'M', 128, 128, 'M', 256, 256, 256, 'M', 512, 512, 512, 'M', 512, 512, 512, 'M'], 每个编码器层都有相应的解码层，因此解码网络也有 13 层。最后的解码器的输出被送入 multi-class soft-max classififier 为每个像素独立产生类概率。\nmax-pooling indices 由于内存的限制，本文提出了一种更有效的方式来存储 encoder 降采样前的特征图信息。 它只存储最大池化索引（max-pooling indices）：每个池化窗口中最大值的位置索引。\n对于输入的特征图，decoder 使用其相对应的 encoder 存储下来的 max-pooling indices 进行上采样。\n上采样后得到稀疏的特征图，然后将这些特征图与可训练的 decoder 卷积核进行卷积，以产生密集的特征图。卷积之后是 Batch Normalization。\n需要注意：对应于第一个 encoder（最接近输入图像）对应的 decoder 会产生一个多通道特征图（最后一个 decoder），尽管其 encoder 输入有 3 个通道（RGB）。网络中的其他 decoder 产生的特征图与其 encoder 输入的大小和通道数相同。\n1 Boundary F1-measure (BF) mIoU 倾向于区域平滑性，而不评价边界精度，这一点 FCN 的作者最近也提到了。\nBoundary F1-measure (BF)：衡量边界轮廓的指标。对所有的 ground-truth 和 prediction 的轮廓（contour）点进行比较，计算准确率和召回率，得到 F1-score。轮廓不会完全精准，因此这里的准确指的是在一定容忍范围内的相等（tolerance distance）。\n The key idea in computing a semantic contour score is to evaluate the F1-measure [59] which involves computing the precision and recall values between the predicted and ground truth class boundary given a pixel tolerance distance. We used a value of 0.75% of the image diagonal as the tolerance distance. The F1-measure for each class that is present in the ground truth test image is averaged to produce an image F1-measure. Then we compute the whole test set average, denoted the boundary F1-measure (BF) by average the image F1 measures.\nCsurka, G., D. Larlus, and F. Perronnin. “What is a good evaluation measure for semantic segmentation?” Proceedings of the British Machine Vision Conference, 2013, pp. 32.1-32.11.\n     $B_{gt}^{c}$ ：be the boundary map of the binarized ground truth segmentation map for class c.\n  $B_{ps}^{c}$：is the contour map for the binarized predicted segmentation map $S_{ps}^{c}$.\n  θ is the distance error tolerance\n   IoU = TP / (TP + FP + FN)\nP = TP / (TP + FP)\nR = TP / (TP + FN)\n BF 的实现：http://mi.eng.cam.ac.uk/projects/segnet/computeBFmeasure.m\nExperiment Decoder Variant\n（1）SegNet-Basic：4 encoder，4 decoder。\n（2）SegNet-SingleChannelDecoder：卷积核只有一个通道，大大减少了可训练参数的数量和推理时间（分组卷积）。\n（3）FCN-Basic：FCN-Basic 是与 SegNet-Basic 对应的 FCN 版本，共享相同的 Encoder 网络，而 Decoder 网络采用 FCN 所提出的结构。最后一个 encoder 将通道数降为 K。\n（4）FCN-Basic-NoAddition：一个 FCN-Basic 模型的变体，它摒弃 encoder 特征图添加步骤，只学习上采样核。因此，不需要存储 encoder 的特征图。 TABLE 1 中的 n/a 表示：“表格中本栏目(对我)不适用”。\n（5）Bilinear-Interpolation：使用固定的双线性插值权重来研究上采样，因此上采样不需要学习。（不太了解这个）\n（6）SegNet-BasicEncoderAddition：在每一层将 64 个 encoder 特征图添加到 SegNet decoder 的相应输出特征图中，以创建一个内存消耗更大的 SegNet 变体。（仿照 FCN，因为值存 64 个，因此通道数要少于 FCN，后面卷积时，卷积核的通道数也少一些，因此参数量少。1.425M V.S. 1.625M）\n（7）FCN-Basic-NoDimReduction：一个更耗费内存的 FCN-Basic 变体，对 encoder 特征图不进行维度减少。\nTABLE 1 的出的结论：\n",
+  "wordCount" : "2109",
+  "inLanguage": "en",
+  "datePublished": "2021-04-18T10:17:29+08:00",
+  "dateModified": "2021-04-18T10:17:29+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://landodo.github.io/posts/20210418-segnet/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Landodo's NoteBook",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://landodo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://landodo.github.io/" accesskey="h" title="Landodo&#39;s NoteBook (Alt + H)">Landodo&#39;s NoteBook</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://landodo.github.io/search" title="🔍Search (Alt &#43; /)" accesskey=/>
+                    <span>🔍Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/tags" title="Tag">
+                    <span>Tag</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/cs-zoo" title="CS ZOO">
+                    <span>CS ZOO</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://landodo.github.io/">Home</a>&nbsp;»&nbsp;<a href="http://landodo.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation
+    </h1>
+    <div class="post-meta"><span title='2021-04-18 10:17:29 +0800 CST'>April 18, 2021</span>&nbsp;·&nbsp;5 min&nbsp;·&nbsp;2109 words
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#%e6%a6%82%e8%a7%88" aria-label="概览">概览</a></li>
+                <li>
+                    <a href="#segnet-architecture" aria-label="SegNet Architecture">SegNet Architecture</a></li>
+                <li>
+                    <a href="#max-pooling-indices" aria-label="max-pooling indices">max-pooling indices</a><ul>
+                        
+                <li>
+                    <a href="#1-boundary-f1-measure-bf" aria-label="1 Boundary F1-measure (BF)">1 Boundary F1-measure (BF)</a></li></ul>
+                </li>
+                <li>
+                    <a href="#experiment" aria-label="Experiment">Experiment</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><p><img loading="lazy" src="./20210418/1.png" alt=""  />
+</p>
+<hr>
+<p>FCN：Fully Convolutional Networks for Semantic Segmentation</p>
+<ul>
+<li><a href="https://arxiv.org/abs/1411.4038">https://arxiv.org/abs/1411.4038</a></li>
+</ul>
+<p>U-Net：U-Net: Convolutional Networks for Biomedical Image Segmentation</p>
+<ul>
+<li><a href="https://arxiv.org/abs/1505.04597">https://arxiv.org/abs/1505.04597</a></li>
+</ul>
+<p>SegNet：SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation</p>
+<ul>
+<li><a href="https://arxiv.org/pdf/1511.00561.pdf">https://arxiv.org/pdf/1511.00561.pdf</a></li>
+</ul>
+<hr>
+<h2 id="概览">概览<a hidden class="anchor" aria-hidden="true" href="#概览">#</a></h2>
+<p>论文所要解决的问题：</p>
+<p><!-- raw HTML omitted --> encoder layer 的最大池化和子采样可以实现更多的平移不变性（translation invariance），以实现鲁棒分类，但相应地也存在特征图的<strong>空间分辨率的损失</strong>。<!-- raw HTML omitted --></p>
+<p><!-- raw HTML omitted -->随着最大池化和子采样层的堆叠，边界细节丢失的有损特征图（空间分辨率损失），对边界划分至关重要的分割任务来说是不利的。<!-- raw HTML omitted --></p>
+<p>因此，解决方案是：在 encoder 中进行降采样之前，先捕获并存储特征图中的一些信息。如果前向传播过程中的内存不受限制，那么可以存储所有的 encoder 每次降采样之间的所有特征图，这些特征图将用于指导升采样。</p>
+<p>FCN、U-Net 采用的是将 encoder 每次降采样前的特征图全部存储，在 decoder layer 进行浅层特征和深层特征合并时，U-Net 使用的是拼接方法（Concatenation），而 FCN 使用的是求和。</p>
+<p>由于内存的限制，本文提出了一种更有效的方式来存储这些信息。 它只存储最大池化索引（<!-- raw HTML omitted -->max-pooling indices<!-- raw HTML omitted -->），即为每个编码器特征图记忆每个池化窗口中最大特征值的<strong>位置索引</strong>。</p>
+<ul>
+<li>
+<blockquote>
+<p>encoder 和 decoder：</p>
+<p>SegNet 将网络前面提取特征的部分称为编码器（Encoder），后面上采样的部分称为解码器（Decoder）。从这篇文献开始，encoder-decoder 开始广泛使用在分割任务中。（<!-- raw HTML omitted -->可能<!-- raw HTML omitted -->）</p>
+<p>encoder-decoder Hinton  2006 年 提出。</p>
+<p><a href="https://www.cs.toronto.edu/~hinton/science.pdf">https://www.cs.toronto.edu/~hinton/science.pdf</a></p>
+</blockquote>
+</li>
+<li>
+<p>decoder 与encoder 相对应。</p>
+</li>
+<li>
+<p>SegNet 的 decoder 使用从相应 encoder 保存下来的最大池化索引（max-pooling indices），用这个来指导输入的特征图进行非线性上采样。</p>
+</li>
+<li>
+<p>max-pooling indices 的优势：</p>
+<ul>
+<li>(i) it improves boundary delineation.</li>
+<li>(ii) it reduces the number of parameters enabling end-to-end training.（我表示怀疑！）</li>
+<li>(iii) this form of upsampling can be incorporated into any encoder-decoder architecture with only a little modification.</li>
+</ul>
+</li>
+</ul>
+<h2 id="segnet-architecture">SegNet Architecture<a hidden class="anchor" aria-hidden="true" href="#segnet-architecture">#</a></h2>
+<p><img loading="lazy" src="./20210418/segnet.png" alt=""  />
+</p>
+<p>SegNet 由 3 个主要组件：</p>
+<p>（1）encoder network</p>
+<p>（2）decoder network</p>
+<p>（3）pixel-wise classification layer</p>
+<p>去掉全连接的 VGG16 有 13 个卷积层。可以用在大数据集预训练好的参数进行初始化。VGG16 的参数量是 134M，去掉全连接层后的参数量为 14.7M。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#e6db74">&#39;vgg16&#39;</span>: [<span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">64</span>, <span style="color:#e6db74">&#39;M&#39;</span>, <span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">128</span>, <span style="color:#e6db74">&#39;M&#39;</span>, <span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">256</span>, <span style="color:#e6db74">&#39;M&#39;</span>, <span style="color:#ae81ff">512</span>, <span style="color:#ae81ff">512</span>, <span style="color:#ae81ff">512</span>, <span style="color:#e6db74">&#39;M&#39;</span>, <span style="color:#ae81ff">512</span>, <span style="color:#ae81ff">512</span>, <span style="color:#ae81ff">512</span>, <span style="color:#e6db74">&#39;M&#39;</span>],
+</span></span></code></pre></div><p>每个编码器层都有相应的解码层，因此解码网络也有 13 层。最后的解码器的输出被送入 multi-class soft-max classififier 为每个像素独立产生类概率。</p>
+<h2 id="max-pooling-indices">max-pooling indices<a hidden class="anchor" aria-hidden="true" href="#max-pooling-indices">#</a></h2>
+<p>由于内存的限制，本文提出了一种更有效的方式来存储 encoder 降采样前的特征图信息。 它只存储最大池化索引（<!-- raw HTML omitted -->max-pooling indices<!-- raw HTML omitted -->）：每个池化窗口中最大值的<strong>位置索引</strong>。</p>
+<p><img loading="lazy" src="./20210418/4.png" alt=""  />
+</p>
+<p>对于输入的特征图，decoder 使用其相对应的 encoder 存储下来的 max-pooling indices 进行上采样。</p>
+<p>上采样后得到稀疏的特征图，然后将这些特征图与可训练的 decoder 卷积核进行卷积，以产生密集的特征图。卷积之后是 Batch Normalization。</p>
+<p>需要注意：对应于第一个 encoder（最接近输入图像）对应的 decoder 会产生一个多通道特征图（最后一个 decoder），尽管其 encoder 输入有 3 个通道（RGB）。网络中的其他 decoder 产生的特征图与其 encoder 输入的大小和通道数相同。</p>
+<h3 id="1-boundary-f1-measure-bf">1 Boundary F1-measure (BF)<a hidden class="anchor" aria-hidden="true" href="#1-boundary-f1-measure-bf">#</a></h3>
+<p>mIoU 倾向于区域平滑性，而<strong>不评价边界精度</strong>，这一点 FCN 的作者最近也提到了。</p>
+<p>Boundary F1-measure (BF)：衡量边界轮廓的指标。对所有的 ground-truth 和 prediction 的轮廓（contour）点进行比较，计算准确率和召回率，得到 F1-score。轮廓不会完全精准，因此这里的准确指的是在一定容忍范围内的相等（tolerance distance）。</p>
+<blockquote>
+<p>The key idea in computing a semantic contour score is to evaluate the F1-measure [59] which involves computing the precision and recall values between the predicted and ground truth class boundary given a <strong>pixel tolerance distance</strong>. We used a value of 0.75% of the image diagonal as the tolerance distance. The F1-measure for each class that is present in the ground truth test image is averaged to produce an image F1-measure. Then we compute the whole test set average, denoted the boundary F1-measure (BF) by average the image F1 measures.</p>
+<p>Csurka, G., D. Larlus, and F. Perronnin. &ldquo;What is a good evaluation measure for semantic segmentation?&rdquo; Proceedings of the British Machine Vision Conference, 2013, pp. 32.1-32.11.</p>
+</blockquote>
+<blockquote>
+<p><img loading="lazy" src="./20210418/2.png" alt=""  />
+</p>
+</blockquote>
+<ul>
+<li>
+<p>$B_{gt}^{c}$ ：be the boundary map of the binarized ground truth  segmentation map for class c.</p>
+</li>
+<li>
+<p>$B_{ps}^{c}$：is the contour map for the  binarized predicted segmentation map $S_{ps}^{c}$.</p>
+</li>
+<li>
+<p>θ is the distance error tolerance</p>
+</li>
+</ul>
+<blockquote>
+<p>IoU = TP / (TP + FP + FN)</p>
+<p>P = TP / (TP + FP)</p>
+<p>R = TP / (TP + FN)</p>
+</blockquote>
+<p><img loading="lazy" src="./20210418/3.jpg" alt=""  />
+</p>
+<p>BF 的实现：<a href="http://mi.eng.cam.ac.uk/projects/segnet/computeBFmeasure.m">http://mi.eng.cam.ac.uk/projects/segnet/computeBFmeasure.m</a></p>
+<h2 id="experiment">Experiment<a hidden class="anchor" aria-hidden="true" href="#experiment">#</a></h2>
+<p><img loading="lazy" src="./20210418/5.png" alt=""  />
+</p>
+<p>Decoder Variant</p>
+<p>（1）<!-- raw HTML omitted -->SegNet-Basic<!-- raw HTML omitted -->：4 encoder，4 decoder。</p>
+<p>（2）<!-- raw HTML omitted -->SegNet-SingleChannelDecoder<!-- raw HTML omitted -->：卷积核只有一个通道，大大减少了可训练参数的数量和推理时间（分组卷积）。</p>
+<p>（3）<!-- raw HTML omitted -->FCN-Basic<!-- raw HTML omitted -->：FCN-Basic 是与 SegNet-Basic 对应的 FCN 版本，共享相同的 Encoder 网络，而 Decoder 网络采用 FCN 所提出的结构。最后一个 encoder 将通道数降为 K。</p>
+<p>（4）<!-- raw HTML omitted -->FCN-Basic-NoAddition<!-- raw HTML omitted -->：一个 FCN-Basic 模型的变体，它摒弃 encoder 特征图添加步骤，只学习上采样核。因此，不需要存储 encoder 的特征图。 TABLE 1 中的 <code>n/a</code> 表示：“表格中本栏目(对我)不适用”。</p>
+<p>（5）<!-- raw HTML omitted -->Bilinear-Interpolation<!-- raw HTML omitted -->：使用固定的双线性插值权重来研究上采样，因此上采样不需要学习。（不太了解这个）</p>
+<p>（6）<!-- raw HTML omitted -->SegNet-BasicEncoderAddition<!-- raw HTML omitted -->：在每一层将 64 个 encoder 特征图添加到 SegNet decoder 的相应输出特征图中，以创建一个内存消耗更大的 SegNet 变体。（仿照 FCN，因为值存 64 个，因此通道数要少于 FCN，后面卷积时，卷积核的通道数也少一些，因此参数量少。1.425M  V.S. 1.625M）</p>
+<p>（7）<!-- raw HTML omitted -->FCN-Basic-NoDimReduction<!-- raw HTML omitted -->：一个更耗费内存的 FCN-Basic 变体，对 encoder 特征图不进行维度减少。</p>
+<p>TABLE 1 的出的结论：</p>
+<p><img loading="lazy" src="./20210418/6.png" alt=""  />
+</p>
+<p><img loading="lazy" src="./20210418/7.png" alt=""  />
+</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://landodo.github.io/tags/cnn/">CNN</a></li>
+      <li><a href="http://landodo.github.io/tags/%E5%88%86%E5%89%B2/">分割</a></li>
+      <li><a href="http://landodo.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">论文阅读</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://landodo.github.io/posts/20210514-preprocessing/">
+    <span class="title">« Prev Page</span>
+    <br>
+    <span>图像预处理</span>
+  </a>
+  <a class="next" href="http://landodo.github.io/posts/20210413-segnet-notes/">
+    <span class="title">Next Page »</span>
+    <br>
+    <span>SegNet</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>Landon</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

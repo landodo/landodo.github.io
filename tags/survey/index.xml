@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Survey on Landodo&#39;s NoteBook</title>
+    <link>http://landodo.github.io/tags/survey/</link>
+    <description>Recent content in Survey on Landodo&#39;s NoteBook</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Landon</copyright>
+    <lastBuildDate>Thu, 01 Apr 2021 10:17:29 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/survey/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Image Segmentation Using Deep Learning: A Survey</title>
+      <link>http://landodo.github.io/posts/20210401-image-segmentation-survey/</link>
+      <pubDate>Thu, 01 Apr 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210401-image-segmentation-survey/</guid>
+      <description>Image Segmentation Using Deep Learning: A Survey 一篇图像分割的综述。 arXiv：https://arxiv.org/abs/2001.05566 写这篇笔记时（2021.04.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>PyTorch on Landodo&#39;s NoteBook</title>
+    <link>http://landodo.github.io/tags/pytorch/</link>
+    <description>Recent content in PyTorch on Landodo&#39;s NoteBook</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Landon</copyright>
+    <lastBuildDate>Sat, 30 Jan 2021 10:17:29 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/pytorch/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>PyTorch: An Imperative Style, High-Performance Deep Learning Library</title>
+      <link>http://landodo.github.io/posts/20210130-pytorch-paper-reading-1/</link>
+      <pubDate>Sat, 30 Jan 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210130-pytorch-paper-reading-1/</guid>
+      <description>PyTorch: An Imperative Style, High-Performance Deep Learning Library ✅ 论文题目：PyTorch: An Imperative Style, High-Performance Deep Learning Library 发表时间：2019 年 12 月 摘要 Abstract 深度学习框架通常无法同时兼顾可用性（usabilit</description>
+    </item>
+    
+    <item>
+      <title>CIFAR-10、PyTorch 和 AlexNet</title>
+      <link>http://landodo.github.io/posts/20201109-alexnet-code/</link>
+      <pubDate>Mon, 09 Nov 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201109-alexnet-code/</guid>
+      <description>CIFAR-10、PyTorch 和 AlexNet 先在自己的电脑上走一遍，保证语法和逻辑不会错。再放到远程配置高的电脑上跑。 这些经典的神经网络结构，要熟悉</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+<meta name="robots" content="index, follow">
+<title>Non-local Neural Networks | Landodo&#39;s NoteBook</title>
+<meta name="keywords" content="CNN, 注意力, 论文阅读" />
+<meta name="description" content="注意力机制 Non-local Neural Networks 注意力机制的文献，arXiv:1711.07971v3 FaceBook Research Abstract 论文提出了一种非局部操作（non-local operations">
+<meta name="author" content="">
+<link rel="canonical" href="http://landodo.github.io/posts/20210308-non-local-neural-networks/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://landodo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://landodo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://landodo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://landodo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://landodo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Non-local Neural Networks" />
+<meta property="og:description" content="注意力机制 Non-local Neural Networks 注意力机制的文献，arXiv:1711.07971v3 FaceBook Research Abstract 论文提出了一种非局部操作（non-local operations" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://landodo.github.io/posts/20210308-non-local-neural-networks/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-03-08T10:17:29&#43;08:00" />
+<meta property="article:modified_time" content="2021-03-08T10:17:29&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Non-local Neural Networks"/>
+<meta name="twitter:description" content="注意力机制 Non-local Neural Networks 注意力机制的文献，arXiv:1711.07971v3 FaceBook Research Abstract 论文提出了一种非局部操作（non-local operations"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://landodo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Non-local Neural Networks",
+      "item": "http://landodo.github.io/posts/20210308-non-local-neural-networks/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Non-local Neural Networks",
+  "name": "Non-local Neural Networks",
+  "description": "注意力机制 Non-local Neural Networks 注意力机制的文献，arXiv:1711.07971v3 FaceBook Research Abstract 论文提出了一种非局部操作（non-local operations",
+  "keywords": [
+    "CNN", "注意力", "论文阅读"
+  ],
+  "articleBody": "注意力机制 Non-local Neural Networks 注意力机制的文献，arXiv:1711.07971v3\nFaceBook Research\nAbstract 论文提出了一种非局部操作（non-local operations）来捕获长范围的依赖性。非局部操作将某一位置的响应计算为所有位置特征的加权和。\nnon-local 模型在 Kinetics 和 Charades 数据集取得了很好的成绩（compete or outperform current competition winners）。\n1. Introduction 对于序列数据，递归操作（recurrent operations）是长程依赖性建模的主流解决方案。对于图像数据，长距离的依赖性是由卷积运算深度堆叠形成的大感受野来建模的。\n卷积运算和递归运算都是在空间或时间上处理局部邻域。因此，只有当这些操作被反复应用，在数据中逐步传播信号时，才能捕捉到长程依赖性。反复应用这些局部操作存在如下的局限性。\n（1）计算效率低\n（2）优化困难\n（3）当消息需要长距离的来回传递时，这种依赖性建模变得困难\n本篇论文提出的 non-local operation，用于捕捉深度神经网络的长范围依赖性，这个操作是一个高效、简单、通用的组件。非局域操作是计算机视觉中经典的非局域平均操作（non-local mean operation）的泛化。\n 非局域操作将某一位置的响应计算为所有位置的特征的加权和。位置可以是空间、时间或时空，适用于图像、序列和视频问题。  Figure 1：一个位置 $x_i$ 的响应是由所有位置 $x_j$ 的特征的加权平均值计算出来的。\n非局部操作的优点：\n（1）通过计算任意两个位置之间的相互作用，直接捕捉长程依赖性，而不管它们的位置距离如何；\n（2）高效，即使网络只有几层也能取得很好的效果；\n（3）非局域运算保持了可变的输入大小，并且可以很容易地与其他运算相结合。\n2. Related Work  Non-local image processing. Graphical models. Feedforward modeling for sequences. Self-attention. Interaction networks. Video classification architectures.:  3. Non-local Neural Networks 3.1. Formulation  i是一个输出位置（在空间、时间或时空）的索引 j 是列举所有可能位置的索引 x​ 是输入信号（图像、序列、视频；通常是它们的特征） y 是与 x 大小相同的输出信号 配对函数 f 计算 i 和所有 j 之间的关系，结果是一个标量 一元函数 g 计算输入信号在位置 j 的表示 响应由系数 C(x) 归一化。  3.2 Instantiations （1）Gaussian\n（2）Embedded Gaussian\n（3）Dot product.\n（4）Concatenation.\n3.3. Non-local Block Figure 2 是一个 Non-local block 的例子。\n4. Video Classification Models 2D ConvNet baseline (C2D)\n通过“膨胀”内核（“inflating” the kernels），将 Table 1 中的 C2D 模型变成一个 3D 卷积对应模型。\nInflated 3D ConvNet (I3D).\n one can turn the C2D model in Table 1 into a 3D convolutional counterpart by “inflating” the kernels.  Non-localnetwork.\n insert non-local blocks into C2D or I3D to turn them into non-local nets.  4.1. Implementation Details   Training.\n  Inference.\n  5. Experiments on Video Classification Figure 1、Figure 3 直观地展示了 Non-local 模型计算的非本地块行为的几个例子。网络可以学习寻找有意义的关系线索，而不考虑空间和时间的距离。\n 箭头的起点表示 $x_i$，终点表示 $x_j$。每个 $xi$ 的 20 个最高权重的箭头被可视化。 输入的 Video 有 32 帧，以步幅为 8，取其中的 4 帧进行可视化显示模型如何找到相关线索来支持其预测。  5.1. Experiments on Kinetics  (a) Instantiations (b) Which stage to add non-local blocks? (c) Going deeper with non-local blocks. (d) Non-local in spacetime. (e) Non-localnetvs.3DConvNet. (f) Non-local 3D ConvNet. (g) Longer sequences.  Figure 4 显示了 ResNet-50 C2D baseline 与带有 5 个块 Non-local C2D 的训练过程的曲线。\nComparisons with state-of-the-art results.\n5.2. Experiments on Charades 6. Extension: Experiments on COCO COCO: object detection/segmentation and human pose estimation (keypoint detection).\n(1) Object detection and instance segmentation.\n(2) keypoint detection.\n7. Conclusion 本篇论文提出了一类新的神经网络，它通过非局部操作来捕捉长程依赖性。\nNon-local Block 可以与现有的网络架构相结合，non-local modeling 在 video classification, object detection and segmentation, and pose estimation 任务中具有重要的意义。\n在如上所有的任务中，为 baseline 添加 Non-local Block 后，都能在 baseline 的基础之上提升模型性能。\n",
+  "wordCount" : "1346",
+  "inLanguage": "en",
+  "datePublished": "2021-03-08T10:17:29+08:00",
+  "dateModified": "2021-03-08T10:17:29+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://landodo.github.io/posts/20210308-non-local-neural-networks/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Landodo's NoteBook",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://landodo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://landodo.github.io/" accesskey="h" title="Landodo&#39;s NoteBook (Alt + H)">Landodo&#39;s NoteBook</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://landodo.github.io/search" title="🔍Search (Alt &#43; /)" accesskey=/>
+                    <span>🔍Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/tags" title="Tag">
+                    <span>Tag</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/cs-zoo" title="CS ZOO">
+                    <span>CS ZOO</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://landodo.github.io/">Home</a>&nbsp;»&nbsp;<a href="http://landodo.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      Non-local Neural Networks
+    </h1>
+    <div class="post-meta"><span title='2021-03-08 10:17:29 +0800 CST'>March 8, 2021</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;1346 words
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#%e6%b3%a8%e6%84%8f%e5%8a%9b%e6%9c%ba%e5%88%b6-non-local-neural-networks" aria-label="注意力机制 Non-local Neural Networks">注意力机制 Non-local Neural Networks</a><ul>
+                        
+                <li>
+                    <a href="#abstract" aria-label="Abstract">Abstract</a></li>
+                <li>
+                    <a href="#1-introduction" aria-label="1. Introduction">1. Introduction</a></li>
+                <li>
+                    <a href="#2-related-work" aria-label="2. Related Work">2. Related Work</a></li>
+                <li>
+                    <a href="#3-non-local-neural-networks" aria-label="3. Non-local Neural Networks">3. Non-local Neural Networks</a><ul>
+                        
+                <li>
+                    <a href="#31-formulation" aria-label="3.1. Formulation">3.1. Formulation</a></li>
+                <li>
+                    <a href="#32-instantiations" aria-label="3.2 Instantiations">3.2 Instantiations</a></li>
+                <li>
+                    <a href="#33-non-local-block" aria-label="3.3. Non-local Block">3.3. Non-local Block</a></li></ul>
+                </li>
+                <li>
+                    <a href="#4-video-classification-models" aria-label="4. Video Classification Models">4. Video Classification Models</a><ul>
+                        
+                <li>
+                    <a href="#41-implementation-details" aria-label="4.1. Implementation Details">4.1. Implementation Details</a></li></ul>
+                </li>
+                <li>
+                    <a href="#5-experiments-on-video-classification" aria-label="5. Experiments on Video Classification">5. Experiments on Video Classification</a><ul>
+                        
+                <li>
+                    <a href="#51-experiments-on-kinetics" aria-label="5.1. Experiments on Kinetics">5.1. Experiments on Kinetics</a></li>
+                <li>
+                    <a href="#52-experiments-on-charades" aria-label="5.2. Experiments on Charades">5.2. Experiments on Charades</a></li></ul>
+                </li>
+                <li>
+                    <a href="#6-extension-experiments-on-coco" aria-label="6. Extension: Experiments on COCO">6. Extension: Experiments on COCO</a></li>
+                <li>
+                    <a href="#7-conclusion" aria-label="7. Conclusion">7. Conclusion</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h1 id="注意力机制-non-local-neural-networks">注意力机制 Non-local Neural Networks<a hidden class="anchor" aria-hidden="true" href="#注意力机制-non-local-neural-networks">#</a></h1>
+<p>注意力机制的文献，arXiv:1711.07971v3</p>
+<p>FaceBook Research</p>
+<h2 id="abstract">Abstract<a hidden class="anchor" aria-hidden="true" href="#abstract">#</a></h2>
+<p>论文提出了一种非局部操作（non-local operations）来捕获长范围的依赖性。非局部操作将某一位置的响应计算为所有位置特征的加权和。</p>
+<p>non-local 模型在 Kinetics 和 Charades 数据集取得了很好的成绩（compete or outperform current competition winners）。</p>
+<h2 id="1-introduction">1. Introduction<a hidden class="anchor" aria-hidden="true" href="#1-introduction">#</a></h2>
+<p>对于序列数据，递归操作（recurrent operations）是长程依赖性建模的主流解决方案。对于图像数据，长距离的依赖性是由卷积运算深度堆叠形成的大感受野来建模的。</p>
+<p>卷积运算和递归运算都是在空间或时间上处理局部邻域。因此，只有当这些操作被反复应用，在数据中逐步传播信号时，才能捕捉到长程依赖性。反复应用这些局部操作存在如下的局限性。</p>
+<p>（1）计算效率低</p>
+<p>（2）优化困难</p>
+<p>（3）当消息需要长距离的来回传递时，这种依赖性建模变得困难</p>
+<p>本篇论文提出的 non-local operation，用于捕捉深度神经网络的长范围依赖性，这个操作是一个高效、简单、通用的组件。非局域操作是计算机视觉中经典的非局域平均操作（non-local mean operation）的泛化。</p>
+<ul>
+<li>非局域操作将某一位置的响应计算为所有位置的特征的加权和。位置可以是空间、时间或时空，适用于图像、序列和视频问题。</li>
+</ul>
+<p>Figure 1：一个位置 $x_i$ 的响应是由所有位置 $x_j$ 的特征的加权平均值计算出来的。</p>
+<p><img loading="lazy" src="./20210308/1.png" alt=""  />
+</p>
+<p>非局部操作的优点：</p>
+<p>（1）通过计算任意两个位置之间的相互作用，直接捕捉长程依赖性，而不管它们的位置距离如何；</p>
+<p>（2）高效，即使网络只有几层也能取得很好的效果；</p>
+<p>（3）非局域运算保持了可变的输入大小，并且可以很容易地与其他运算相结合。</p>
+<h2 id="2-related-work">2. Related Work<a hidden class="anchor" aria-hidden="true" href="#2-related-work">#</a></h2>
+<ul>
+<li>Non-local image processing.</li>
+<li>Graphical models.</li>
+<li>Feedforward modeling for sequences.</li>
+<li>Self-attention.</li>
+<li>Interaction networks.</li>
+<li>Video classification architectures.:</li>
+</ul>
+<h2 id="3-non-local-neural-networks">3. Non-local Neural Networks<a hidden class="anchor" aria-hidden="true" href="#3-non-local-neural-networks">#</a></h2>
+<h3 id="31-formulation">3.1. Formulation<a hidden class="anchor" aria-hidden="true" href="#31-formulation">#</a></h3>
+<p><img loading="lazy" src="./20210308/2.png" alt=""  />
+</p>
+<ul>
+<li>i是一个输出位置（在空间、时间或时空）的索引</li>
+<li>j 是列举所有可能位置的索引</li>
+<li>x​ 是输入信号（图像、序列、视频；通常是它们的特征）</li>
+<li>y 是与 x 大小相同的输出信号</li>
+<li>配对函数 f 计算 i 和所有 j 之间的关系，结果是一个标量</li>
+<li>一元函数 g 计算输入信号在位置 j 的表示</li>
+<li>响应由系数 C(x) 归一化。</li>
+</ul>
+<h3 id="32-instantiations">3.2 Instantiations<a hidden class="anchor" aria-hidden="true" href="#32-instantiations">#</a></h3>
+<p>（1）Gaussian</p>
+<p><img loading="lazy" src="./20210308/3.png" alt=""  />
+</p>
+<p>（2）Embedded Gaussian</p>
+<p><img loading="lazy" src="./20210308/4.png" alt=""  />
+</p>
+<p>（3）Dot product.</p>
+<p><img loading="lazy" src="./20210308/5.png" alt=""  />
+</p>
+<p>（4）Concatenation.</p>
+<p><img loading="lazy" src="./20210308/6.png" alt=""  />
+</p>
+<h3 id="33-non-local-block">3.3. Non-local Block<a hidden class="anchor" aria-hidden="true" href="#33-non-local-block">#</a></h3>
+<p><img loading="lazy" src="./20210308/8.png" alt=""  />
+</p>
+<p>Figure 2 是一个 Non-local block 的例子。</p>
+<p><img loading="lazy" src="./20210308/7.png" alt=""  />
+</p>
+<h2 id="4-video-classification-models">4. Video Classification Models<a hidden class="anchor" aria-hidden="true" href="#4-video-classification-models">#</a></h2>
+<p><strong>2D ConvNet baseline (C2D)</strong></p>
+<p><img loading="lazy" src="./20210308/9.png" alt=""  />
+</p>
+<p>通过“膨胀”内核（“inflating” the kernels），将 Table 1 中的 C2D 模型变成一个 3D 卷积对应模型。</p>
+<p><strong>Inflated 3D ConvNet (I3D).</strong></p>
+<ul>
+<li>one can turn the C2D model in Table 1 into a 3D convolutional counterpart by “inflating” the kernels.</li>
+</ul>
+<p><strong>Non-localnetwork.</strong></p>
+<ul>
+<li>insert non-local blocks into C2D or I3D to turn them into non-local nets.</li>
+</ul>
+<h3 id="41-implementation-details">4.1. Implementation Details<a hidden class="anchor" aria-hidden="true" href="#41-implementation-details">#</a></h3>
+<ul>
+<li>
+<p>Training.</p>
+</li>
+<li>
+<p>Inference.</p>
+</li>
+</ul>
+<h2 id="5-experiments-on-video-classification">5. Experiments on Video Classification<a hidden class="anchor" aria-hidden="true" href="#5-experiments-on-video-classification">#</a></h2>
+<p>Figure 1、Figure 3 直观地展示了 Non-local 模型计算的非本地块行为的几个例子。网络可以学习寻找有意义的关系线索，而不考虑空间和时间的距离。</p>
+<ul>
+<li>箭头的起点表示 $x_i$，终点表示 $x_j$。每个 $xi$ 的 20 个最高权重的箭头被可视化。</li>
+<li>输入的 Video 有 32 帧，以步幅为 8，取其中的 4 帧进行可视化显示模型如何找到相关线索来支持其预测。</li>
+</ul>
+<p><img loading="lazy" src="./20210308/16.png" alt=""  />
+</p>
+<h3 id="51-experiments-on-kinetics">5.1. Experiments on Kinetics<a hidden class="anchor" aria-hidden="true" href="#51-experiments-on-kinetics">#</a></h3>
+<ul>
+<li>(a) Instantiations</li>
+<li>(b) Which stage to add non-local blocks?</li>
+<li>(c) Going deeper with non-local blocks.</li>
+<li>(d) Non-local in spacetime.</li>
+<li>(e) Non-localnetvs.3DConvNet.</li>
+<li>(f) Non-local 3D ConvNet.</li>
+<li>(g) Longer sequences.</li>
+</ul>
+<p><img loading="lazy" src="./20210308/10.png" alt=""  />
+</p>
+<p>Figure 4 显示了 ResNet-50 C2D baseline 与带有 5 个块 Non-local C2D 的训练过程的曲线。</p>
+<p><img loading="lazy" src="./20210308/11.png" alt=""  />
+</p>
+<p>Comparisons with state-of-the-art results.</p>
+<p><img loading="lazy" src="./20210308/12.png" alt=""  />
+</p>
+<h3 id="52-experiments-on-charades">5.2. Experiments on Charades<a hidden class="anchor" aria-hidden="true" href="#52-experiments-on-charades">#</a></h3>
+<p><img loading="lazy" src="./20210308/13.png" alt=""  />
+</p>
+<h2 id="6-extension-experiments-on-coco">6. Extension: Experiments on COCO<a hidden class="anchor" aria-hidden="true" href="#6-extension-experiments-on-coco">#</a></h2>
+<p>COCO: object detection/segmentation and human pose estimation (keypoint detection).</p>
+<p>(1) Object detection and instance segmentation.</p>
+<p><img loading="lazy" src="./20210308/14.png" alt=""  />
+</p>
+<p>(2) keypoint detection.</p>
+<p><img loading="lazy" src="./20210308/15.png" alt=""  />
+</p>
+<h2 id="7-conclusion">7. Conclusion<a hidden class="anchor" aria-hidden="true" href="#7-conclusion">#</a></h2>
+<p>本篇论文提出了一类新的神经网络，它通过非局部操作来捕捉长程依赖性。</p>
+<p>Non-local Block 可以与现有的网络架构相结合，non-local modeling 在 video classification, object detection and segmentation, and pose estimation 任务中具有重要的意义。</p>
+<p>在如上所有的任务中，为 baseline 添加 Non-local Block 后，都能在 baseline 的基础之上提升模型性能。</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://landodo.github.io/tags/cnn/">CNN</a></li>
+      <li><a href="http://landodo.github.io/tags/%E6%B3%A8%E6%84%8F%E5%8A%9B/">注意力</a></li>
+      <li><a href="http://landodo.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">论文阅读</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://landodo.github.io/posts/20210310-attentive-inception-module/">
+    <span class="title">« Prev Page</span>
+    <br>
+    <span>Attentive Inception Module based Convolutional Neural Network for Image Enhancement</span>
+  </a>
+  <a class="next" href="http://landodo.github.io/posts/20210306-selective-kernel-networks/">
+    <span class="title">Next Page »</span>
+    <br>
+    <span>Selective Kernel Networks</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>Landon</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Python on Landodo&#39;s NoteBook</title>
+    <link>http://landodo.github.io/tags/python/</link>
+    <description>Recent content in Python on Landodo&#39;s NoteBook</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Landon</copyright>
+    <lastBuildDate>Fri, 14 May 2021 22:53:19 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/python/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>绘制频率直方图</title>
+      <link>http://landodo.github.io/posts/20210514-histogram-and-roi/</link>
+      <pubDate>Fri, 14 May 2021 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210514-histogram-and-roi/</guid>
+      <description>!ls Histogram and RoI.ipynb axon02.tif test.jpg Question 2.1 .ipynb cell_nucleus.tif axon01.tif roi.tif from PIL import Image import numpy as np from PIL import ImageOps import matplotlib.pyplot as plt # 打开图片并转换成灰度图 im = Image.open(&amp;#39;axon01.tif&amp;#39;).convert(&amp;#39;L&amp;#39;) # 反转颜色 im = ImageOps.invert(im) # display in macOS /Applications/Preview.app # im.show() # display in Jupyter Notebook im ​ ​ # 将灰度</description>
+    </item>
+    
+    <item>
+      <title>图像预处理</title>
+      <link>http://landodo.github.io/posts/20210514-preprocessing/</link>
+      <pubDate>Fri, 14 May 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210514-preprocessing/</guid>
+      <description>数据预处理 import matplotlib.pyplot as plt import glob from PIL import Image import numpy as np import cv2 # 训练集图像 img_paths = glob.glob(&amp;#39;./../data/vesselseg/DRIVE/training/images/*.tif&amp;#39;) img_paths.sort() img_paths [&#39;./../data/vesselseg/DRIVE/training/images/21_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/22_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/23_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/24_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/25_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/26_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/27_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/28_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/29_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/30_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/31_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/32_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/33_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/34_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/35_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/36_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/37_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/38_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/39_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/40_training.tif&#39;] 查看不同通道 # 读取其中一张图像 rgb_img = Image.open(img_paths[0])</description>
+    </item>
+    
+  </channel>
+</rss>

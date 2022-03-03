@@ -62,5 +62,23 @@
       <description>Structure Boundary Preserving Segmentation for Medical Image with Ambiguous Boundary 边界模糊医学图像的结构边界保持分割 简介 韩国一个大学的文章。 CVPR 2020 与医学图像分割有关 Cited by: 5 没有代码，没啥意思😭，想去看看它的</description>
     </item>
     
+    <item>
+      <title>#DeepLab# 中的空洞卷积和条件随机场</title>
+      <link>http://landodo.github.io/posts/20210620-deeplab-v1-v2/</link>
+      <pubDate>Sun, 20 Jun 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210620-deeplab-v1-v2/</guid>
+      <description>#DeepLab# 中的空洞卷积和条件随机场 简要总结 DeepLab V1 和 DeepLab V2，DeepLab 是语义分割的经典网络架构。其有两个核心要点： （1）空洞卷积（Atrous Con</description>
+    </item>
+    
+    <item>
+      <title>视网膜血管分割 Retinal vessel segmentation</title>
+      <link>http://landodo.github.io/posts/20210516-retinal-vesse-segmentation/</link>
+      <pubDate>Sun, 16 May 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210516-retinal-vesse-segmentation/</guid>
+      <description>视网膜血管分割 Retinal vessel segmentation 1. 数据集（Datasets） 视网膜血管分割的公开集最常用的有 DRIVE、STARE 和 CHASE_DB。 1.1 DRIVE DRIVE: Digital Retinal Images for Vessel Extraction</description>
+    </item>
+    
   </channel>
 </rss>

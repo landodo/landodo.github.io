@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+<meta name="robots" content="index, follow">
+<title>ImageNet Classification with Deep Convolutional Neural Networks | Landodo&#39;s NoteBook</title>
+<meta name="keywords" content="论文阅读, CNN, Classification" />
+<meta name="description" content="[2021.02.04] 第三层用 384 个大小为 $3\times3\times256$ 的核进行卷积。 但是每个 GPU 的前一层的特征图都是 $27\times 27 \times 128$，通道数是不同的。因此是要将两块 GPU 上的特征图进行 concat">
+<meta name="author" content="">
+<link rel="canonical" href="http://landodo.github.io/posts/20201024-paper-alexnet/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://landodo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://landodo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://landodo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://landodo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://landodo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="ImageNet Classification with Deep Convolutional Neural Networks" />
+<meta property="og:description" content="[2021.02.04] 第三层用 384 个大小为 $3\times3\times256$ 的核进行卷积。 但是每个 GPU 的前一层的特征图都是 $27\times 27 \times 128$，通道数是不同的。因此是要将两块 GPU 上的特征图进行 concat" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://landodo.github.io/posts/20201024-paper-alexnet/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-10-24T10:17:29&#43;08:00" />
+<meta property="article:modified_time" content="2020-10-24T10:17:29&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="ImageNet Classification with Deep Convolutional Neural Networks"/>
+<meta name="twitter:description" content="[2021.02.04] 第三层用 384 个大小为 $3\times3\times256$ 的核进行卷积。 但是每个 GPU 的前一层的特征图都是 $27\times 27 \times 128$，通道数是不同的。因此是要将两块 GPU 上的特征图进行 concat"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://landodo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "ImageNet Classification with Deep Convolutional Neural Networks",
+      "item": "http://landodo.github.io/posts/20201024-paper-alexnet/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "ImageNet Classification with Deep Convolutional Neural Networks",
+  "name": "ImageNet Classification with Deep Convolutional Neural Networks",
+  "description": "[2021.02.04] 第三层用 384 个大小为 $3\\times3\\times256$ 的核进行卷积。 但是每个 GPU 的前一层的特征图都是 $27\\times 27 \\times 128$，通道数是不同的。因此是要将两块 GPU 上的特征图进行 concat",
+  "keywords": [
+    "论文阅读", "CNN", "Classification"
+  ],
+  "articleBody": "[2021.02.04] 第三层用 384 个大小为 $3\\times3\\times256$ 的核进行卷积。\n但是每个 GPU 的前一层的特征图都是 $27\\times 27 \\times 128$，通道数是不同的。因此是要将两块 GPU 上的特征图进行 concat，得到通道数为 256，之后正常进行卷积，每块 GPU 使用 384/2 = 192 个卷积核。\n2021.01.19 AlexNet 把 feature map 分给 2 块 GPU 分别进行训练，分组卷积（Group Convolution）的最早出现。我的疑问是：输入的图片（特征图）为 $224 \\times 224 \\times 3$，3 个通道，怎么分呢？是一块 GPU 处理两片特征图，另一块处理 1 片吗？\n The kernels of the second, fourth, and fifth convolutional layers are connected only to those kernel maps in the previous layer which reside on the same GPU.\n  本次阅读的论文是《基于深度卷积神经网络的图像网络分类》（ImageNet Classification with Deep Convolutional Neural Networks [1]）。\n这篇论文的第一作者名字叫做 Alex，所以论文中提出的模型也经常被称为 AlexNet。Alex Krizhevsky 发表这篇论文的时候，他正在多伦多大学计算机系攻读博士学位。\n ImageNet Classification with Deep Convolutional Neural Networks AlexNet\n✅ 论文地址：http://www.cs.toronto.edu/~hinton/absps/imagenet.pdf\n✅ 发表时间：2012 年\n论文的结构  Abstract\n  Introduction\n  The Dataset\n  The Architecture\n  Reducing Overfitting\n  Details of learning\n  Results\n  Discussion\n  数据集 ImageNet 是一个包含超过 1500 万张已标记的高分辨率图像数据集，大约有 22000 个类别。\nImageNet 大规模视觉识别挑战赛（ILSVRC）使用的数据集是 ImageNet 的一个子集，共有 1000 个类别，每个类别中大约包含 1000 张图像。 总共大约有 120 万张训练图像，5 万张验证图像和 15 万张测试图像。\n本论文的网络模型参加了 ILSVRC-2012 的比赛，论文的最后列出了模型在比赛的数据集上的表现情况。\n这里有两个衡量指标：top-1 和 top-5。\n其中 top-5 错误率指的是正确标签不在模型认为的最有可能的五个标签中的测试集比例。\n the top-5 error rate is the fraction of test images for which the correct label is not among the five labels considered most probable by the model.\n 模型要求输入的维度是固定的，因此需要对 ImageNet 中的可变分辨率图像进行一个采样，使其分辨率固定为 $256\\times256$。\n网络结构 网络包含 5 个卷积层和 3 个全连接层。\nReLU 激活函数：\n$$tanh(x) = \\frac{e^{x} - e^{-x}}{e^x + e^{-x}}$$\n$$sigmoid(x) = (1 + e^{-x})^{-1}$$\n$$ReLU(x) = max(0, x)$$\nReLU（ Rectified Linear Units）：修正线性单元。使用 ReLU 激活函数的深度卷积神经网络的训练速度比使用 tanh 要更快。\n下图显示了网络在 CIFAR-10 数据集上达到 25% 的训练误差所需要的迭代次数。使用了 ReLU 的四层卷积神经网络（实线）在 CIFAR-10 上达到 25% 的训练错误率，比使用 tanh 的等效网络（虚线）快 6 倍。\n在多块 GPU 上进行训练 通过实践发现，网络规模过大的情况，只用一块 GPU 可能装不下。这篇论文将网络分散在两个 GPU 上。目前的 GPU 能够直接从对方的内存中读取和写入，因此特别适合跨 GPU 并行化工作。另外，这两块 GPU 只在某些层中进行通信。\n与在一个 GPU 上训练的每个卷积层有一半数量的内核的网络相比，两块 GPU 的 top-1 和 top-5 错误率分别降低了 1.7% 和 1.2%。\n This scheme reduces our top-1 and top-5 error rates by 1.7% and 1.2%, respectively, as compared with a net with half as many kernels in each convolutional layer trained on one GPU.\n 双 GPU 网络的训练时间比单 GPU 网络略少。\n局部响应归一化（LRN） 网络使用了一种叫做 Local Response Normalization 的策略来提升模型的泛化能力。\n响应归一化使得网络的 top-1 和 top-5 错误率分别降低了 1.4% 和 1.2%。在 CIFAR-10 数据集上：一个四层的 CNN 在不进行归一化的情况下，测试错误率为 13%，而在进行归一化后，测试错误率为 11% 。\n池化 非重叠池化：对于卷积核 $z\\times z$，则步幅 $s == z$；重叠池化：卷积核 $z\\times z$，步幅 $s 本篇论文使用重叠池化，最后得出：采用重叠池的模型能一定程度上避免过拟合。\n相比与非重叠池化，重叠池化能将 top-1 和 top-5 的错误率分别降低 0.4% 和 0.3%。\n网络结构 如图所示，网络有 8 层，前 5 个卷积层，其余的是全连接层。一块 GPU 负责图像的上部分图层，另一块 GPU 负责下部分图层。网络的输入为 $150528=(224\\times224\\times3)$ 维的向量。\n最后一个全连接层的输出被输入到一个有 1000 类的 Softmax。\n第 2、4 和 5 层卷积层的卷积核只与前一层中驻留在同一个 GPU 上的卷积核映射相连接。\n The kernels of the second, fourth, and fifth convolutional layers are connected only to those kernel maps in the previous layer which reside on the same GPU.\n 第 3 层卷积层两块 GPU 发生数据通信。\n全连接层的神经元与前一层的所有神经元相连。\n响应归一化层（LRN）在第 1 和第 2 卷积层之后。\n最大池化层只在响应归一化层以及第 5 卷积层之后。\nReLU 非线性激活函数应用于每个卷积层和全连接层的输出。\n第一层用 96 个大小为 $11\\times11\\times3$ 的卷积核对 $224\\times224\\times3$ 的输入图像进行卷积，步幅为 4 像素。\n第二层用 256 个大小为 $5\\times5\\times48$ 的核进行卷积。\n第三层用 384 个大小为 $3\\times3\\times256$ 的核进行卷积。\n第四层用 384 个大小为 $3\\times3\\times192$ 的核进行卷积。\n第五层用 256 个大小为 $3\\times3\\times192$ 的核进行卷积。\n全连接层每层有 4096 个神经元。\n2020.11.09：论文好像没有提到 Padding，给一个吴恩达老师的版本吧。我看很多不同的代码，它们第一层有的 Padding 了，并且使用的是 64 个 $$3\\times3$$ 的卷积核，不知道结果是否是相同的。\n减少过拟合 神经网络模型有 6000 万个参数，ImageNet 的 1000 个类别数据集学习这么多的参数仍会产生过拟合。\n数据增强 减少图像数据过拟合的最简单也是最常见的方法是人为的放大数据集。通过原始图像产生转换图像，转换过程只涉及很少的计算量，转换后的图像是在 CPU 上用代码生成的，不需要存储在磁盘。\n数据增强的第一种方式是：生成图像转换（image translations）和水平反射（horizontal reflections）。\n通过从 $256\\times256$ 的图像上随机的提取 $224\\times224$ 的区域块，再水平翻转，这使得训练集的大小增加了 $$2048 = (256-224)^2\\times2$$ 倍。\n第二种数据增强的方式是：改变训练图像中 RGB 通道的强度。\n通过对整个 ImageNet 训练集的 RGB 像素集进行 PCA 后，对于每张图片，添加一个均值为 0 ，标准差为 0.1 的高斯。这种方案近似地抓住了自然图像的一个重要特性，即物体标识对照明强度和颜色的变化是不变的。这种方案可以将 top-1 的错误率降低 1% 以上。\nDropout 将每个隐藏神经元的输出乘以 0.5 的概率设置为 0（随机失活），丢弃一些神经元，这种方法丢弃的神经元不再参与前向传播和反向传播。\n因此，对于每次输入，神经网络都会是不同的网络结构，但仍然共享参数。\n这种策略减少了神经元之间复杂的共同适用性（complex co-adaptations ），一个神经元不能过度依赖于特定的其他神经元，因为每个神经元可能被丢弃。每个神经元会学到更加健壮的特征。\n以 0.5 的概率随机失活是一个合理的近似值。\nDropout 在训练过程中只需要花费大约 2 倍的成本，会使收敛所需的迭代次数增加约一倍。\n学习的细节 本篇论文使用随机梯度下降法训练模型，其中的一些超参数设置如下：Batch 的大小为 128，momentum 设置为 0.9，权重衰减为 0.0005。\n权重衰减不仅仅是一个正则化：它降低了模型的训练误差。权重 w 的更新规则是：\n$i$ 是迭代次数，$v$ 是动量变量，$\\epsilon$ 是学习率，\n$$\\langle \\frac{\\partial L}{\\partial w}|{w_i}\\rangle{D_i}$$\n是目标对于 $w$ 的导数在第 $i$ 个批次 $D_i$ 上的平均值，评价为 $w_i$ （is the average over the $i$ th batch $D_i$ of the derivative of the objective with respect to $w$, evaluated at $w_i$. ）\n权重初始化 以标准差为 0.01、均值为 0 的高斯分布初始化每层的权重。第 2、4、5 层以及全连接层的偏置初始化为 1，其余的神经元偏置初始化为 0。这种初始化通过为 ReLU 提供正输入来加速学习的早期阶段。\n学习率 所有层使用了相同的学习率，在整个训练过程中进行手动调整。遵循的启发式方法是：当验证误差率在当前学习率下停止改善时，将学习率除以 10。\n学习率初始化为 0.01，并在终止前降低三次。通过 120 万张图像的训练集对网络进行了大约 90 个周期的训练，在两颗 NVIDIA GTX 580 3GB GPU 上花了 5 到 6 天时间。\n结果 在 ILSVRC-2010 上的结果如表 1 所示。\nILSVRC-2012 比赛结果如表 2。\n最后，在 2009 年秋季版 ImageNet 上的错误率，共有 10184 个类别和 890 万张图片。\n使用一半的图像进行训练，一半的图像进行测试。由于没有既定的测试集，这种的拆分必然与前人使用的拆分不同，但这并不会明显影响结果。\n在这一数据集上的 top-1 和 top-5 错误率分别为 67.4% 和 40.9%。\n如果在最后一个池化层上增加第六个卷积层，则在这个数据集上的最佳结果是 78.1% 和 60.9%。\n定性评估 Figure 3 显示了网络的两个数据连接层学习到的卷积核。这个网络已经学习了各种频率和方向选择的核。\n这两块 GPU 表现出了不同分工。\nFigure 4：（左）八张 ILSVRC-2010 测试图像和模型认为最有可能的五个标签。正确的标签写在每张图像下面，分配给正确标签的概率也用红条显示（如果它恰好在前5名）。\n右）第一列是五张 ILSVRC-2010 测试图像。其余的几列显示了在最后一个隐藏层中产生特征向量的六张训练图像，这些图像与测试图像的特征向量的欧氏距离最小。\n在图 4 的左图中，通过计算其在 8 张测试图像上的前 5 名预测结果，定性评估网络已经学到了什么。\n右上角的螨虫（mite）虽然偏离图像的中心，但是仍可以被网络正确识别分类。\n大多数前 5 名的标签都显得很合理。少数情况，例如：马达加斯加的猫被认为是猴子、在某些情况下（格栅、樱桃），照片的预期焦点确实会影响分类结果。\n探究网络视觉知识的另一种方法是考虑图像在最后的一个 4096 维向量。如果两幅图像产生的特征激活向量具有较小的欧式距离，则可以认为它们是相似的。\nFigure 4 (left) 显示了来自测试集的五幅图像和来自训练集的六幅图像，根据欧式距离的衡量标准，它们各自的相似度最高。\n Notice that at the pixel level, the retrieved training images are generally not close in L2 to the query images in the first column. For example, the retrieved dogs and elephants appear in a variety of poses. We present the results for many more test images in the supplementary material.\n 使用两个 4096 维实值向量来计算欧式距离是低效的。可以通过训练自动编码器将这些向量压缩成短二进制代码来提高效率。\n总结 结果表明，一个大型的深度卷积神经网络能够在一个高度挑战的数据集上使用纯监督学习实现破纪录的结果。\n如果去掉一个卷积层，此网络性能就会下降。例如，去掉任何一个中间层会导致网络的 top-1 性能损失约 2%。所以深度对于实现的结果确实很重要。\n为了简化，本实验没有使用任何无监督的预训练。\n",
+  "wordCount" : "3751",
+  "inLanguage": "en",
+  "datePublished": "2020-10-24T10:17:29+08:00",
+  "dateModified": "2020-10-24T10:17:29+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://landodo.github.io/posts/20201024-paper-alexnet/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Landodo's NoteBook",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://landodo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://landodo.github.io/" accesskey="h" title="Landodo&#39;s NoteBook (Alt + H)">Landodo&#39;s NoteBook</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://landodo.github.io/search" title="🔍Search (Alt &#43; /)" accesskey=/>
+                    <span>🔍Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/tags" title="Tag">
+                    <span>Tag</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/cs-zoo" title="CS ZOO">
+                    <span>CS ZOO</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://landodo.github.io/">Home</a>&nbsp;»&nbsp;<a href="http://landodo.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      ImageNet Classification with Deep Convolutional Neural Networks
+    </h1>
+    <div class="post-meta"><span title='2020-10-24 10:17:29 +0800 CST'>October 24, 2020</span>&nbsp;·&nbsp;8 min&nbsp;·&nbsp;3751 words
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul><ul>
+                <li>
+                    <a href="#20210204" aria-label="[2021.02.04]">[2021.02.04]</a></li>
+                <li>
+                    <a href="#20210119" aria-label="2021.01.19">2021.01.19</a></li></ul>
+                    
+                <li>
+                    <a href="#imagenet-classification-with-deep-convolutional-neural-networks" aria-label="ImageNet Classification with Deep Convolutional Neural Networks">ImageNet Classification with Deep Convolutional Neural Networks</a><ul>
+                        
+                <li>
+                    <a href="#%e8%ae%ba%e6%96%87%e7%9a%84%e7%bb%93%e6%9e%84" aria-label="论文的结构">论文的结构</a></li>
+                <li>
+                    <a href="#%e6%95%b0%e6%8d%ae%e9%9b%86" aria-label="数据集">数据集</a></li>
+                <li>
+                    <a href="#%e7%bd%91%e7%bb%9c%e7%bb%93%e6%9e%84" aria-label="网络结构">网络结构</a><ul>
+                        
+                <li>
+                    <a href="#relu" aria-label="ReLU">ReLU</a></li>
+                <li>
+                    <a href="#%e5%9c%a8%e5%a4%9a%e5%9d%97-gpu-%e4%b8%8a%e8%bf%9b%e8%a1%8c%e8%ae%ad%e7%bb%83" aria-label="在多块 GPU 上进行训练">在多块 GPU 上进行训练</a></li>
+                <li>
+                    <a href="#%e5%b1%80%e9%83%a8%e5%93%8d%e5%ba%94%e5%bd%92%e4%b8%80%e5%8c%96lrn" aria-label="局部响应归一化（LRN）">局部响应归一化（LRN）</a></li>
+                <li>
+                    <a href="#%e6%b1%a0%e5%8c%96" aria-label="池化">池化</a></li>
+                <li>
+                    <a href="#%e7%bd%91%e7%bb%9c%e7%bb%93%e6%9e%84-1" aria-label="网络结构">网络结构</a></li></ul>
+                </li>
+                <li>
+                    <a href="#%e5%87%8f%e5%b0%91%e8%bf%87%e6%8b%9f%e5%90%88" aria-label="减少过拟合">减少过拟合</a><ul>
+                        
+                <li>
+                    <a href="#%e6%95%b0%e6%8d%ae%e5%a2%9e%e5%bc%ba" aria-label="数据增强">数据增强</a></li>
+                <li>
+                    <a href="#dropout" aria-label="Dropout">Dropout</a></li></ul>
+                </li>
+                <li>
+                    <a href="#%e5%ad%a6%e4%b9%a0%e7%9a%84%e7%bb%86%e8%8a%82" aria-label="学习的细节">学习的细节</a><ul>
+                        
+                <li>
+                    <a href="#%e6%9d%83%e9%87%8d%e5%88%9d%e5%a7%8b%e5%8c%96" aria-label="权重初始化">权重初始化</a></li>
+                <li>
+                    <a href="#%e5%ad%a6%e4%b9%a0%e7%8e%87" aria-label="学习率">学习率</a></li></ul>
+                </li>
+                <li>
+                    <a href="#%e7%bb%93%e6%9e%9c" aria-label="结果">结果</a><ul>
+                        
+                <li>
+                    <a href="#%e5%ae%9a%e6%80%a7%e8%af%84%e4%bc%b0" aria-label="定性评估">定性评估</a></li></ul>
+                </li>
+                <li>
+                    <a href="#%e6%80%bb%e7%bb%93" aria-label="总结">总结</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h2 id="20210204">[2021.02.04]<a hidden class="anchor" aria-hidden="true" href="#20210204">#</a></h2>
+<p>第三层用 384 个大小为 $3\times3\times256$ 的核进行卷积。</p>
+<p>但是每个 GPU 的前一层的特征图都是 $27\times 27 \times 128$，通道数是不同的。因此是要将两块 GPU 上的特征图进行 concat，得到通道数为 256，之后正常进行卷积，每块 GPU 使用 384/2 = 192 个卷积核。</p>
+<p><img loading="lazy" src="./20201024/AlexNet.png" alt=""  />
+</p>
+<h2 id="20210119">2021.01.19<a hidden class="anchor" aria-hidden="true" href="#20210119">#</a></h2>
+<p>AlexNet 把 feature map 分给 2 块 GPU 分别进行训练，分组卷积（Group Convolution）的最早出现。我的疑问是：输入的图片（特征图）为 $224 \times 224 \times 3$，3 个通道，怎么分呢？是一块 GPU 处理两片特征图，另一块处理 1 片吗？</p>
+<p><img loading="lazy" src="./20201024/1.png" alt=""  />
+</p>
+<blockquote>
+<p>The kernels of the second, fourth, and fifth convolutional layers are connected only to those kernel maps in the previous layer which reside on the same GPU.</p>
+</blockquote>
+<hr>
+<p>本次阅读的论文是《基于深度卷积神经网络的图像网络分类》（ImageNet Classification with Deep Convolutional Neural Networks [1]）。</p>
+<p>这篇论文的第一作者名字叫做 Alex，所以论文中提出的模型也经常被称为 AlexNet。Alex Krizhevsky 发表这篇论文的时候，他正在多伦多大学计算机系攻读博士学位。</p>
+<hr>
+<h1 id="imagenet-classification-with-deep-convolutional-neural-networks">ImageNet Classification with Deep Convolutional Neural Networks<a hidden class="anchor" aria-hidden="true" href="#imagenet-classification-with-deep-convolutional-neural-networks">#</a></h1>
+<p>AlexNet</p>
+<p>✅ 论文地址：<a href="http://www.cs.toronto.edu/~hinton/absps/imagenet.pdf">http://www.cs.toronto.edu/~hinton/absps/imagenet.pdf</a></p>
+<p>✅ 发表时间：2012 年</p>
+<h2 id="论文的结构">论文的结构<a hidden class="anchor" aria-hidden="true" href="#论文的结构">#</a></h2>
+<ol start="0">
+<li>
+<p>Abstract</p>
+</li>
+<li>
+<p>Introduction</p>
+</li>
+<li>
+<p>The Dataset</p>
+</li>
+<li>
+<p>The Architecture</p>
+</li>
+<li>
+<p>Reducing Overfitting</p>
+</li>
+<li>
+<p>Details of learning</p>
+</li>
+<li>
+<p>Results</p>
+</li>
+<li>
+<p>Discussion</p>
+</li>
+</ol>
+<h2 id="数据集">数据集<a hidden class="anchor" aria-hidden="true" href="#数据集">#</a></h2>
+<p>ImageNet 是一个包含超过 1500 万张已标记的高分辨率图像数据集，大约有 22000 个类别。</p>
+<p>ImageNet 大规模视觉识别挑战赛（ILSVRC）使用的数据集是 ImageNet 的一个子集，共有 1000 个类别，每个类别中大约包含 1000 张图像。 总共大约有 120 万张训练图像，5 万张验证图像和 15 万张测试图像。</p>
+<p>本论文的网络模型参加了 ILSVRC-2012 的比赛，论文的最后列出了模型在比赛的数据集上的表现情况。</p>
+<p>这里有两个衡量指标：top-1 和 top-5。</p>
+<p>其中 top-5 错误率指的是正确标签不在模型认为的最有可能的五个标签中的测试集比例。</p>
+<blockquote>
+<p>the top-5 error rate is the fraction of test images for which the correct label is not among the five labels considered most probable by the model.</p>
+</blockquote>
+<p>模型要求输入的维度是固定的，因此需要对 ImageNet 中的可变分辨率图像进行一个采样，使其分辨率固定为 $256\times256$。</p>
+<h2 id="网络结构">网络结构<a hidden class="anchor" aria-hidden="true" href="#网络结构">#</a></h2>
+<p>网络包含 5 个卷积层和 3 个全连接层。</p>
+<h3 id="relu">ReLU<a hidden class="anchor" aria-hidden="true" href="#relu">#</a></h3>
+<p>激活函数：</p>
+<p>$$tanh(x) = \frac{e^{x} - e^{-x}}{e^x + e^{-x}}$$</p>
+<p>$$sigmoid(x) = (1 + e^{-x})^{-1}$$</p>
+<p>$$ReLU(x) = max(0, x)$$</p>
+<p>ReLU（ Rectified Linear Units）：修正线性单元。使用 ReLU 激活函数的深度卷积神经网络的训练速度比使用 tanh 要更快。</p>
+<p>下图显示了网络在 CIFAR-10 数据集上达到 25% 的训练误差所需要的迭代次数。使用了 ReLU 的四层卷积神经网络（实线）在 CIFAR-10 上达到 25% 的训练错误率，比使用 tanh 的等效网络（虚线）快 6 倍。</p>
+<p><img loading="lazy" src="./20201024/2.png" alt=""  />
+</p>
+<h3 id="在多块-gpu-上进行训练">在多块 GPU 上进行训练<a hidden class="anchor" aria-hidden="true" href="#在多块-gpu-上进行训练">#</a></h3>
+<p>通过实践发现，网络规模过大的情况，只用一块 GPU 可能装不下。这篇论文将网络分散在两个 GPU 上。目前的 GPU 能够直接从对方的内存中读取和写入，因此特别适合跨 GPU 并行化工作。另外，这两块 GPU 只在某些层中进行通信。</p>
+<p>与在一个 GPU 上训练的每个卷积层有一半数量的内核的网络相比，两块 GPU 的 top-1 和 top-5 错误率分别降低了 1.7% 和 1.2%。</p>
+<blockquote>
+<p>This scheme reduces our top-1 and top-5 error rates by 1.7% and 1.2%, respectively, as compared with a net with half as many kernels in each convolutional layer trained on one GPU.</p>
+</blockquote>
+<p>双 GPU 网络的训练时间比单 GPU 网络略少。</p>
+<h3 id="局部响应归一化lrn">局部响应归一化（LRN）<a hidden class="anchor" aria-hidden="true" href="#局部响应归一化lrn">#</a></h3>
+<p>网络使用了一种叫做 Local Response Normalization 的策略来提升模型的泛化能力。</p>
+<p>响应归一化使得网络的 top-1 和 top-5 错误率分别降低了 1.4% 和 1.2%。在 CIFAR-10 数据集上：一个四层的 CNN 在不进行归一化的情况下，测试错误率为 13%，而在进行归一化后，测试错误率为 11% 。</p>
+<h3 id="池化">池化<a hidden class="anchor" aria-hidden="true" href="#池化">#</a></h3>
+<p>非重叠池化：对于卷积核 $z\times z$，则步幅 $s == z$；重叠池化：卷积核 $z\times z$，步幅 $s &lt; z$。</p>
+<p>本篇论文使用重叠池化，最后得出：采用重叠池的模型能一定程度上避免过拟合。</p>
+<p>相比与非重叠池化，重叠池化能将 top-1 和 top-5 的错误率分别降低 0.4% 和 0.3%。</p>
+<h3 id="网络结构-1">网络结构<a hidden class="anchor" aria-hidden="true" href="#网络结构-1">#</a></h3>
+<p><img loading="lazy" src="./20201024/1.png" alt=""  />
+</p>
+<p>如图所示，网络有 8 层，前 5 个卷积层，其余的是全连接层。一块 GPU 负责图像的上部分图层，另一块 GPU 负责下部分图层。网络的输入为 $150528=(224\times224\times3)$ 维的向量。</p>
+<p>最后一个全连接层的输出被输入到一个有 1000 类的 Softmax。</p>
+<p>第 2、4 和 5 层卷积层的卷积核只与前一层中驻留在<strong>同一个 GPU</strong> 上的卷积核映射相连接。</p>
+<blockquote>
+<p>The kernels of the second, fourth, and fifth convolutional layers are connected only to those kernel maps in the previous layer which reside on the same GPU.</p>
+</blockquote>
+<p>第 3 层卷积层两块 GPU 发生数据通信。</p>
+<p>全连接层的神经元与前一层的所有神经元相连。</p>
+<p>响应归一化层（LRN）在第 1 和第 2 卷积层之后。</p>
+<p>最大池化层只在响应归一化层以及第 5 卷积层之后。</p>
+<p>ReLU 非线性激活函数应用于每个卷积层和全连接层的输出。</p>
+<p>第一层用 96 个大小为 $11\times11\times3$ 的卷积核对 $224\times224\times3$ 的输入图像进行卷积，步幅为 4 像素。</p>
+<p>第二层用 256 个大小为 $5\times5\times48$ 的核进行卷积。</p>
+<p>第三层用 384 个大小为 $3\times3\times256$ 的核进行卷积。</p>
+<p>第四层用 384 个大小为 $3\times3\times192$ 的核进行卷积。</p>
+<p>第五层用 256 个大小为 $3\times3\times192$ 的核进行卷积。</p>
+<p>全连接层每层有 4096 个神经元。</p>
+<p>2020.11.09：论文好像没有提到 Padding，给一个吴恩达老师的版本吧。我看很多不同的代码，它们第一层有的 Padding 了，并且使用的是 64 个 $$3\times3$$ 的卷积核，不知道结果是否是相同的。</p>
+<p><img loading="lazy" src="./20201024/4.jpg" alt=""  />
+</p>
+<p><img loading="lazy" src="./20201024/3.png" alt=""  />
+</p>
+<h2 id="减少过拟合">减少过拟合<a hidden class="anchor" aria-hidden="true" href="#减少过拟合">#</a></h2>
+<p>神经网络模型有 6000 万个参数，ImageNet 的 1000 个类别数据集学习这么多的参数仍会产生过拟合。</p>
+<h3 id="数据增强">数据增强<a hidden class="anchor" aria-hidden="true" href="#数据增强">#</a></h3>
+<p>减少图像数据过拟合的最简单也是最常见的方法是人为的放大数据集。通过原始图像产生转换图像，转换过程只涉及很少的计算量，转换后的图像是在 CPU 上用代码生成的，不需要存储在磁盘。</p>
+<p>数据增强的第一种方式是：生成图像转换（image translations）和水平反射（horizontal reflections）。</p>
+<p>通过从 $256\times256$ 的图像上随机的提取 $224\times224$ 的区域块，再水平翻转，这使得训练集的大小增加了 $$2048 = (256-224)^2\times2$$ 倍。</p>
+<p>第二种数据增强的方式是：改变训练图像中 RGB 通道的强度。</p>
+<p>通过对整个 ImageNet 训练集的 RGB 像素集进行 PCA 后，对于每张图片，添加一个均值为 0 ，标准差为 0.1 的高斯。这种方案近似地抓住了自然图像的一个重要特性，即物体标识对照明强度和颜色的变化是不变的。这种方案可以将 top-1 的错误率降低 1% 以上。</p>
+<h3 id="dropout">Dropout<a hidden class="anchor" aria-hidden="true" href="#dropout">#</a></h3>
+<p>将每个隐藏神经元的输出乘以 0.5 的概率设置为 0（随机失活），丢弃一些神经元，这种方法丢弃的神经元不再参与前向传播和反向传播。</p>
+<p>因此，对于每次输入，神经网络都会是不同的网络结构，但仍然共享参数。</p>
+<p>这种策略减少了神经元之间复杂的共同适用性（complex co-adaptations ），一个神经元不能过度依赖于特定的其他神经元，因为每个神经元可能被丢弃。每个神经元会学到更加健壮的特征。</p>
+<p>以 0.5 的概率随机失活是一个合理的近似值。</p>
+<p>Dropout 在训练过程中只需要花费大约 2 倍的成本，会使收敛所需的迭代次数增加约一倍。</p>
+<h2 id="学习的细节">学习的细节<a hidden class="anchor" aria-hidden="true" href="#学习的细节">#</a></h2>
+<p>本篇论文使用随机梯度下降法训练模型，其中的一些超参数设置如下：Batch 的大小为 128，momentum 设置为 0.9，权重衰减为 0.0005。</p>
+<p>权重衰减不仅仅是一个正则化：它降低了模型的训练误差。权重 w 的更新规则是：</p>
+<p><img loading="lazy" src="./20201024/6.png" alt=""  />
+</p>
+<p>$i$ 是迭代次数，$v$ 是动量变量，$\epsilon$ 是学习率，</p>
+<p>$$\langle \frac{\partial L}{\partial w}|<em>{w_i}\rangle</em>{D_i}$$</p>
+<p>是目标对于 $w$ 的导数在第 $i$ 个批次 $D_i$ 上的平均值，评价为 $w_i$ （is the average over the $i$ th batch $D_i$ of the derivative of the objective with respect to $w$, evaluated at $w_i$. ）</p>
+<h3 id="权重初始化">权重初始化<a hidden class="anchor" aria-hidden="true" href="#权重初始化">#</a></h3>
+<p>以标准差为 0.01、均值为 0 的高斯分布初始化每层的权重。第 2、4、5 层以及全连接层的偏置初始化为 1，其余的神经元偏置初始化为 0。这种初始化通过为 ReLU 提供正输入来加速学习的早期阶段。</p>
+<h3 id="学习率">学习率<a hidden class="anchor" aria-hidden="true" href="#学习率">#</a></h3>
+<p>所有层使用了相同的学习率，在整个训练过程中进行手动调整。遵循的启发式方法是：当验证误差率在当前学习率下停止改善时，将学习率除以 10。</p>
+<p>学习率初始化为 0.01，并在终止前降低三次。通过 120 万张图像的训练集对网络进行了大约 90 个周期的训练，在两颗 NVIDIA GTX 580 3GB GPU 上花了 5 到 6 天时间。</p>
+<h2 id="结果">结果<a hidden class="anchor" aria-hidden="true" href="#结果">#</a></h2>
+<p>在 ILSVRC-2010 上的结果如表 1 所示。</p>
+<p><img loading="lazy" src="./20201024/7.png" alt=""  />
+</p>
+<p>ILSVRC-2012 比赛结果如表 2。</p>
+<p><img loading="lazy" src="./20201024/8.png" alt=""  />
+</p>
+<p>最后，在 2009 年秋季版 ImageNet 上的错误率，共有 10184 个类别和 890 万张图片。</p>
+<p>使用一半的图像进行训练，一半的图像进行测试。由于没有既定的测试集，这种的拆分必然与前人使用的拆分不同，但这并不会明显影响结果。</p>
+<p>在这一数据集上的 top-1 和 top-5 错误率分别为 67.4% 和 40.9%。</p>
+<p>如果在最后一个池化层上增加第六个卷积层，则在这个数据集上的最佳结果是 78.1% 和 60.9%。</p>
+<h3 id="定性评估">定性评估<a hidden class="anchor" aria-hidden="true" href="#定性评估">#</a></h3>
+<p>Figure 3 显示了网络的两个数据连接层学习到的卷积核。这个网络已经学习了各种频率和方向选择的核。</p>
+<p><img loading="lazy" src="./20201024/9.png" alt=""  />
+</p>
+<p>这两块 GPU 表现出了不同分工。</p>
+<p>Figure 4：（左）八张 ILSVRC-2010 测试图像和模型认为最有可能的五个标签。正确的标签写在每张图像下面，分配给正确标签的概率也用红条显示（如果它恰好在前5名）。</p>
+<p>右）第一列是五张 ILSVRC-2010 测试图像。其余的几列显示了在最后一个隐藏层中产生特征向量的六张训练图像，这些图像与测试图像的特征向量的欧氏距离最小。</p>
+<p><img loading="lazy" src="./20201024/10.png" alt=""  />
+</p>
+<p>在图 4 的左图中，通过计算其在 8 张测试图像上的前 5 名预测结果，定性评估网络已经学到了什么。</p>
+<p>右上角的螨虫（mite）虽然偏离图像的中心，但是仍可以被网络正确识别分类。</p>
+<p>大多数前 5 名的标签都显得很合理。少数情况，例如：马达加斯加的猫被认为是猴子、在某些情况下（格栅、樱桃），照片的预期焦点确实会影响分类结果。</p>
+<p>探究网络视觉知识的另一种方法是考虑图像在最后的一个 4096 维向量。如果两幅图像产生的特征激活向量具有较小的欧式距离，则可以认为它们是相似的。</p>
+<p>Figure 4 (left) 显示了来自测试集的五幅图像和来自训练集的六幅图像，根据欧式距离的衡量标准，它们各自的相似度最高。</p>
+<blockquote>
+<p>Notice that at the pixel level, the retrieved training images are generally not close in L2 to the query images in the first column. For example, the retrieved dogs and elephants appear in a variety of poses. We present the results for many more test images in the supplementary material.</p>
+</blockquote>
+<p>使用两个 4096 维实值向量来计算欧式距离是低效的。可以通过训练自动编码器将这些向量压缩成短二进制代码来提高效率。</p>
+<h2 id="总结">总结<a hidden class="anchor" aria-hidden="true" href="#总结">#</a></h2>
+<p>结果表明，一个大型的深度卷积神经网络能够在一个高度挑战的数据集上使用纯监督学习实现破纪录的结果。</p>
+<p>如果去掉一个卷积层，此网络性能就会下降。例如，去掉任何一个中间层会导致网络的 top-1 性能损失约 2%。所以深度对于实现的结果确实很重要。</p>
+<p>为了简化，本实验没有使用任何无监督的预训练。</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://landodo.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">论文阅读</a></li>
+      <li><a href="http://landodo.github.io/tags/cnn/">CNN</a></li>
+      <li><a href="http://landodo.github.io/tags/classification/">Classification</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://landodo.github.io/posts/20201103-svm-notes/">
+    <span class="title">« Prev Page</span>
+    <br>
+    <span>SVM 支持向量机推导</span>
+  </a>
+  <a class="next" href="http://landodo.github.io/posts/20210128-deep-learning-from-scrach/">
+    <span class="title">Next Page »</span>
+    <br>
+    <span>深度学习基础图书</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>Landon</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+<meta name="robots" content="index, follow">
+<title>Image Segmentation Using Deep Learning: A Survey | Landodo&#39;s NoteBook</title>
+<meta name="keywords" content="Segmentation, Survey, 论文阅读" />
+<meta name="description" content="Image Segmentation Using Deep Learning: A Survey 一篇图像分割的综述。 arXiv：https://arxiv.org/abs/2001.05566 写这篇笔记时（2021.04.">
+<meta name="author" content="">
+<link rel="canonical" href="http://landodo.github.io/posts/20210401-image-segmentation-survey/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://landodo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://landodo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://landodo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://landodo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://landodo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Image Segmentation Using Deep Learning: A Survey" />
+<meta property="og:description" content="Image Segmentation Using Deep Learning: A Survey 一篇图像分割的综述。 arXiv：https://arxiv.org/abs/2001.05566 写这篇笔记时（2021.04." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://landodo.github.io/posts/20210401-image-segmentation-survey/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-04-01T10:17:29&#43;08:00" />
+<meta property="article:modified_time" content="2021-04-01T10:17:29&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Image Segmentation Using Deep Learning: A Survey"/>
+<meta name="twitter:description" content="Image Segmentation Using Deep Learning: A Survey 一篇图像分割的综述。 arXiv：https://arxiv.org/abs/2001.05566 写这篇笔记时（2021.04."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://landodo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Image Segmentation Using Deep Learning: A Survey",
+      "item": "http://landodo.github.io/posts/20210401-image-segmentation-survey/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Image Segmentation Using Deep Learning: A Survey",
+  "name": "Image Segmentation Using Deep Learning: A Survey",
+  "description": "Image Segmentation Using Deep Learning: A Survey 一篇图像分割的综述。 arXiv：https://arxiv.org/abs/2001.05566 写这篇笔记时（2021.04.",
+  "keywords": [
+    "Segmentation", "Survey", "论文阅读"
+  ],
+  "articleBody": "Image Segmentation Using Deep Learning: A Survey 一篇图像分割的综述。\n arXiv：https://arxiv.org/abs/2001.05566  写这篇笔记时（2021.04.01），被引用量为 140。2020 年 01 月份发布的论文，对在此之前的文献进行了全面的回顾。\n Abstract 这篇 Survey 涵盖了语义和实例级分割的前沿工作（pioneering works for semantic and instance-level segmentation）\n (FCN) fully convolutional pixel-labeling networks, encoder-decoder architectures, multi-scale and pyramid based approaches, recurrent networks, visual attention models, (GAN) and generative models in adversarial settings   1 Introduction 早期的图像分割算法：thresholding, histogram-based bundling, regiongrowing, k-means clustering, watersheds, to more advanced algorithms such as active contours, graph cuts, conditional and Markov random fields, and sparsity-based methods.\n在过去的几年里，深度学习（DL）模型已经产生了新一代的图像分割模型，其性能得到了显著的提高——通常可以达到最高的准确率。\n图像分割（Image segmentation）可以表述为带有语义标签的像素的分类问题（semantic segmentation）或单个对象的分割问题（instance segmentation）。\n Semantic Segmentation： 语义分割用一组对象类别（如人、车、树、天空）对所有图像像素进行像素级标签。它一般比图像分类更难进行，因为图像分类预测整个图像的单一标签。 Instance Segmentation：实例分割通过检测和划分图像中的每一个感兴趣的对象（例如，各个人的分区），进一步扩大了语义分割的范围。  这篇综述包含到 2019 年图像分割的最新文献，讨论了一百多种基于深度学习的细分方法。\n将基于深度学习的工作按照其主要技术贡献进行如下划分：\n 2 OVERVIEW OF DEEP NEURAL NETWORKS 介绍最杰出的深度学习架构，包含，CNN、RNN、LSTM、GAN。\n之后的发展出来的 Transformer、GRU 等不进行介绍。\nTransfer Learning\n在图像分割的任务，许多人使用在 ImageNet（比大多数图像分割数据集更大的数据集）上训练的模型作为分割网络的 encoder 部分。\n 2.1 Convolutional Neural Networks (CNNs) Fukushima：“Neocognitron”\nHubel，Waibel：视觉皮层的层次性感受野模型。\nLeNet\nCNN 主要由三类层组成。\n Convolution layer Nonlinear layer Pooling layer  一些最著名的 CNN 架构包括：AlexNet、VGGNet、ResNet、GoogLeNet、MobileNet 和 DenseNet。\n 2.2 Recurrent Neural Networks (RNNs) and the LSTM 处理序列数据（sequential data）\nRNN 通常在长序列上存在问题，它们在许多情况下无法捕捉到长期的依赖性。LSTM 被设计用来解决这个问题，结构内部包含三个门（input gate, output gate, forget gate），它们调节信息流入和流出一个存储单元，该单元在任意时间间隔内存储数值。\n 2.3 Encoder-Decoder and Auto-Encoder Models encoder：compresses the input into a latent-space representation. feature(vector) representation\ndecoder：predict the output from the latent space representation.\n 2.4 Generative Adversarial Networks (GANs) generator and a discriminator.\n传统 GAN 中的生成器网络 G = z → y 学习从噪声 z（有一个先验分布）到目标分布 y 的映射，这与“真实”样本相似。\n判别器网络 D 试图将生成的样本与“真实”样本区分开来。\n自 GAN 发明以来，研究者们努力从多个方面改进/改造 GAN。\n 3 基于DL的图像分割模型 对 2019 年之前提出的百余种基于深度学习的细分方法进行了详细的评述。\n This section provides a detailed review of more than a hundred deep learning-based segmentation methods proposed until 2019\n  3.1 Fully Convolutional Networks 语义图像分割的第一个深度学习作品之一，使用完全卷积网络（FCN），只包括卷积层。\n通过使用跳层连接进行特征图融合，将语义信息（深层）和外观信息（浅层）结合起来，以产生准确的分割。\nmilestone\nParseNet：通过使用一层的平均特征来增强每个位置的特征，为 FCN 增加全局上下文。\n unpooled 和 concatenated  3.2 Convolutional Models With Graphical Models FCN 忽略了潜在有用的场景级语义上下文，为了整合更多的上下文，一些方法将概率图形模型，如条件随机场（CRFs）和马尔科夫随机场（MRFs）纳入 DL 架构。\n为了克服深度 CNN 的本地化特性差的问题（poor localization property of deep CNNs），（1）将最后 CNN 层的响应与全连接的 CRF 相结合。\n（2）还有方法通过联合训练 CNN 和全连接 CRF 进行语义图像分割。\n（3）另一方式是基于 contextual deep CRFs，探索了 “patch-patch” context (between image regions) 和 “patch-background” context，通过使用上下文信息来改善语义分割。\n（4）将丰富的信息纳入 MRF，包括高阶关系和标签上下文的混合（high-order relations and mixture of label contexts）。\n3.3 Encoder-Decoder Based Models ",
+  "wordCount" : "1672",
+  "inLanguage": "en",
+  "datePublished": "2021-04-01T10:17:29+08:00",
+  "dateModified": "2021-04-01T10:17:29+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://landodo.github.io/posts/20210401-image-segmentation-survey/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Landodo's NoteBook",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://landodo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://landodo.github.io/" accesskey="h" title="Landodo&#39;s NoteBook (Alt + H)">Landodo&#39;s NoteBook</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://landodo.github.io/search" title="🔍Search (Alt &#43; /)" accesskey=/>
+                    <span>🔍Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/tags" title="Tag">
+                    <span>Tag</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/cs-zoo" title="CS ZOO">
+                    <span>CS ZOO</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://landodo.github.io/">Home</a>&nbsp;»&nbsp;<a href="http://landodo.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      Image Segmentation Using Deep Learning: A Survey
+    </h1>
+    <div class="post-meta"><span title='2021-04-01 10:17:29 +0800 CST'>April 1, 2021</span>&nbsp;·&nbsp;4 min&nbsp;·&nbsp;1672 words
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#image-segmentation-using-deep-learning-a-survey" aria-label="Image Segmentation Using Deep Learning: A Survey">Image Segmentation Using Deep Learning: A Survey</a><ul>
+                        
+                <li>
+                    <a href="#abstract" aria-label="Abstract">Abstract</a></li>
+                <li>
+                    <a href="#1-introduction" aria-label="1 Introduction">1 Introduction</a></li>
+                <li>
+                    <a href="#2-overview-of-deep-neural-networks" aria-label="2 OVERVIEW OF DEEP NEURAL NETWORKS">2 OVERVIEW OF DEEP NEURAL NETWORKS</a><ul>
+                        
+                <li>
+                    <a href="#21-convolutional-neural-networks-cnns" aria-label="2.1 Convolutional Neural Networks (CNNs)">2.1 Convolutional Neural Networks (CNNs)</a></li>
+                <li>
+                    <a href="#22-recurrent-neural-networks-rnns-and-the-lstm" aria-label="2.2 Recurrent Neural Networks (RNNs) and the LSTM">2.2 Recurrent Neural Networks (RNNs) and the LSTM</a></li>
+                <li>
+                    <a href="#23-encoder-decoder-and-auto-encoder-models" aria-label="2.3 Encoder-Decoder and Auto-Encoder Models">2.3 Encoder-Decoder and Auto-Encoder Models</a></li>
+                <li>
+                    <a href="#24-generative-adversarial-networks-gans" aria-label="2.4 Generative Adversarial Networks (GANs)">2.4 Generative Adversarial Networks (GANs)</a></li></ul>
+                </li>
+                <li>
+                    <a href="#3-%e5%9f%ba%e4%ba%8edl%e7%9a%84%e5%9b%be%e5%83%8f%e5%88%86%e5%89%b2%e6%a8%a1%e5%9e%8b" aria-label="3 基于DL的图像分割模型">3 基于DL的图像分割模型</a><ul>
+                        
+                <li>
+                    <a href="#31-fully-convolutional-networks" aria-label="3.1 Fully Convolutional Networks">3.1 Fully Convolutional Networks</a></li>
+                <li>
+                    <a href="#32-convolutional-models-with-graphical-models" aria-label="3.2 Convolutional Models With Graphical Models">3.2 Convolutional Models With Graphical Models</a></li>
+                <li>
+                    <a href="#33-encoder-decoder-based-models" aria-label="3.3 Encoder-Decoder Based Models">3.3 Encoder-Decoder Based Models</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h1 id="image-segmentation-using-deep-learning-a-survey">Image Segmentation Using Deep Learning: A Survey<a hidden class="anchor" aria-hidden="true" href="#image-segmentation-using-deep-learning-a-survey">#</a></h1>
+<p>一篇图像分割的综述。</p>
+<ul>
+<li>arXiv：<a href="https://arxiv.org/abs/2001.05566">https://arxiv.org/abs/2001.05566</a></li>
+</ul>
+<p>写这篇笔记时（2021.04.01），被引用量为 140。2020 年 01 月份发布的论文，对在此之前的文献进行了全面的回顾。</p>
+<hr>
+<h2 id="abstract">Abstract<a hidden class="anchor" aria-hidden="true" href="#abstract">#</a></h2>
+<p>这篇 Survey 涵盖了语义和实例级分割的前沿工作（pioneering works for semantic and instance-level segmentation）</p>
+<ul>
+<li>(FCN) fully convolutional pixel-labeling networks,</li>
+<li>encoder-decoder architectures,</li>
+<li>multi-scale and pyramid based approaches,</li>
+<li>recurrent networks,</li>
+<li>visual attention models,</li>
+<li>(GAN) and generative models in adversarial settings</li>
+</ul>
+<hr>
+<h2 id="1-introduction">1 Introduction<a hidden class="anchor" aria-hidden="true" href="#1-introduction">#</a></h2>
+<p>早期的图像分割算法：thresholding, histogram-based bundling, regiongrowing, k-means clustering, watersheds, to more advanced algorithms such as active contours, graph cuts, conditional and Markov random fields, and sparsity-based methods.</p>
+<p>在过去的几年里，深度学习（DL）模型已经产生了新一代的图像分割模型，其性能得到了显著的提高——通常可以达到最高的准确率。</p>
+<p>图像分割（Image segmentation）可以表述为带有语义标签的像素的分类问题（semantic segmentation）或单个对象的分割问题（instance segmentation）。</p>
+<ul>
+<li>Semantic Segmentation： 语义分割用一组对象类别（如人、车、树、天空）对所有图像像素进行像素级标签。它一般比图像分类更难进行，因为图像分类预测整个图像的单一标签。</li>
+<li>Instance Segmentation：实例分割通过检测和划分图像中的每一个感兴趣的对象（例如，各个人的分区），进一步扩大了语义分割的范围。</li>
+</ul>
+<p>这篇综述包含到 2019 年图像分割的最新文献，讨论了一百多种基于深度学习的细分方法。</p>
+<p>将基于深度学习的工作按照其主要技术贡献进行如下划分：</p>
+<p><img loading="lazy" src="./20210401/1.png" alt=""  />
+</p>
+<hr>
+<h2 id="2-overview-of-deep-neural-networks">2 OVERVIEW OF DEEP NEURAL NETWORKS<a hidden class="anchor" aria-hidden="true" href="#2-overview-of-deep-neural-networks">#</a></h2>
+<p>介绍最杰出的深度学习架构，包含，CNN、RNN、LSTM、GAN。</p>
+<p>之后的发展出来的 Transformer、GRU 等不进行介绍。</p>
+<p>Transfer Learning</p>
+<p>在图像分割的任务，许多人使用在 ImageNet（比大多数图像分割数据集更大的数据集）上训练的模型作为分割网络的 <strong>encoder</strong> 部分。</p>
+<hr>
+<h3 id="21-convolutional-neural-networks-cnns">2.1 Convolutional Neural Networks (CNNs)<a hidden class="anchor" aria-hidden="true" href="#21-convolutional-neural-networks-cnns">#</a></h3>
+<p>Fukushima：“Neocognitron”</p>
+<p>Hubel，Waibel：视觉皮层的层次性感受野模型。</p>
+<p>LeNet</p>
+<p>CNN 主要由三类层组成。</p>
+<ul>
+<li>Convolution layer</li>
+<li>Nonlinear layer</li>
+<li>Pooling layer</li>
+</ul>
+<p>一些最著名的 CNN 架构包括：AlexNet、VGGNet、ResNet、GoogLeNet、MobileNet 和 DenseNet。</p>
+<hr>
+<h3 id="22-recurrent-neural-networks-rnns-and-the-lstm">2.2 Recurrent Neural Networks (RNNs) and the LSTM<a hidden class="anchor" aria-hidden="true" href="#22-recurrent-neural-networks-rnns-and-the-lstm">#</a></h3>
+<p>处理序列数据（sequential data）</p>
+<p>RNN 通常在长序列上存在问题，它们在许多情况下无法捕捉到长期的依赖性。LSTM 被设计用来解决这个问题，结构内部包含三个门（input gate, output gate, forget gate），它们调节信息流入和流出一个存储单元，该单元在任意时间间隔内存储数值。</p>
+<hr>
+<h3 id="23-encoder-decoder-and-auto-encoder-models">2.3 Encoder-Decoder and Auto-Encoder Models<a hidden class="anchor" aria-hidden="true" href="#23-encoder-decoder-and-auto-encoder-models">#</a></h3>
+<p>encoder：compresses the input into a latent-space representation. feature(vector) representation</p>
+<p>decoder：predict the output from the latent space representation.</p>
+<hr>
+<h3 id="24-generative-adversarial-networks-gans">2.4 Generative Adversarial Networks (GANs)<a hidden class="anchor" aria-hidden="true" href="#24-generative-adversarial-networks-gans">#</a></h3>
+<p>generator and a discriminator.</p>
+<p>传统 GAN 中的生成器网络 G = z → y 学习从噪声 z（有一个先验分布）到目标分布 y 的映射，这与“真实”样本相似。</p>
+<p>判别器网络 D 试图将生成的样本与“真实”样本区分开来。</p>
+<p>自 GAN 发明以来，研究者们努力从多个方面改进/改造 GAN。</p>
+<hr>
+<h2 id="3-基于dl的图像分割模型">3 基于DL的图像分割模型<a hidden class="anchor" aria-hidden="true" href="#3-基于dl的图像分割模型">#</a></h2>
+<p>对 2019 年之前提出的百余种基于深度学习的细分方法进行了详细的评述。</p>
+<blockquote>
+<p>This section provides a detailed review of more than a hundred deep learning-based segmentation methods proposed until 2019</p>
+</blockquote>
+<hr>
+<h3 id="31-fully-convolutional-networks">3.1 Fully Convolutional Networks<a hidden class="anchor" aria-hidden="true" href="#31-fully-convolutional-networks">#</a></h3>
+<p>语义图像分割的第一个深度学习作品之一，使用完全卷积网络（FCN），只包括卷积层。</p>
+<p>通过使用跳层连接进行特征图融合，将语义信息（深层）和外观信息（浅层）结合起来，以产生准确的分割。</p>
+<p>milestone</p>
+<p>ParseNet：通过使用一层的平均特征来增强每个位置的特征，为 FCN 增加全局上下文。</p>
+<ul>
+<li>unpooled 和 concatenated</li>
+</ul>
+<h3 id="32-convolutional-models-with-graphical-models">3.2 Convolutional Models With Graphical Models<a hidden class="anchor" aria-hidden="true" href="#32-convolutional-models-with-graphical-models">#</a></h3>
+<p>FCN 忽略了潜在有用的场景级语义上下文，<strong>为了整合更多的上下文</strong>，一些方法将概率图形模型，如条件随机场（CRFs）和马尔科夫随机场（MRFs）纳入 DL 架构。</p>
+<p>为了克服深度 CNN 的本地化特性差的问题（poor localization property of deep CNNs），（1）将最后 CNN 层的响应与全连接的 CRF 相结合。</p>
+<p>（2）还有方法通过联合训练 CNN 和全连接 CRF 进行语义图像分割。</p>
+<p>（3）另一方式是基于 contextual deep CRFs，探索了 “patch-patch” context (between image regions) 和 “patch-background” context，通过使用上下文信息来改善语义分割。</p>
+<p>（4）将丰富的信息纳入 MRF，包括高阶关系和标签上下文的混合（high-order relations and mixture of label contexts）。</p>
+<h3 id="33-encoder-decoder-based-models">3.3 Encoder-Decoder Based Models<a hidden class="anchor" aria-hidden="true" href="#33-encoder-decoder-based-models">#</a></h3>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://landodo.github.io/tags/segmentation/">Segmentation</a></li>
+      <li><a href="http://landodo.github.io/tags/survey/">Survey</a></li>
+      <li><a href="http://landodo.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">论文阅读</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://landodo.github.io/posts/20210413-segnet-notes/">
+    <span class="title">« Prev Page</span>
+    <br>
+    <span>SegNet</span>
+  </a>
+  <a class="next" href="http://landodo.github.io/posts/20210325-resnest-review/">
+    <span class="title">Next Page »</span>
+    <br>
+    <span>ResNeSt</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>Landon</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

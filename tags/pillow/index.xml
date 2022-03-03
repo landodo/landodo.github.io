@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Pillow on Landodo&#39;s NoteBook</title>
+    <link>http://landodo.github.io/tags/pillow/</link>
+    <description>Recent content in Pillow on Landodo&#39;s NoteBook</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Landon</copyright>
+    <lastBuildDate>Fri, 14 May 2021 22:53:19 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/pillow/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>绘制频率直方图</title>
+      <link>http://landodo.github.io/posts/20210514-histogram-and-roi/</link>
+      <pubDate>Fri, 14 May 2021 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210514-histogram-and-roi/</guid>
+      <description>!ls Histogram and RoI.ipynb axon02.tif test.jpg Question 2.1 .ipynb cell_nucleus.tif axon01.tif roi.tif from PIL import Image import numpy as np from PIL import ImageOps import matplotlib.pyplot as plt # 打开图片并转换成灰度图 im = Image.open(&amp;#39;axon01.tif&amp;#39;).convert(&amp;#39;L&amp;#39;) # 反转颜色 im = ImageOps.invert(im) # display in macOS /Applications/Preview.app # im.show() # display in Jupyter Notebook im ​ ​ # 将灰度</description>
+    </item>
+    
+  </channel>
+</rss>

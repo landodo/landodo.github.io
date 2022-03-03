@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+<meta name="robots" content="index, follow">
+<title>Attentive Inception Module based Convolutional Neural Network for Image Enhancement | Landodo&#39;s NoteBook</title>
+<meta name="keywords" content="CNN, 数据增强, 论文阅读" />
+<meta name="description" content="Attentive Inception Module based Convolutional Neural Network for Image Enhancement “基于 Attentive Inception Module 的卷积神经网络在图像增强中的应用” high quality：高质量 low distortion：低失真 singleimage superresolution (SISR)：单">
+<meta name="author" content="">
+<link rel="canonical" href="http://landodo.github.io/posts/20210310-attentive-inception-module/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://landodo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://landodo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://landodo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://landodo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://landodo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Attentive Inception Module based Convolutional Neural Network for Image Enhancement" />
+<meta property="og:description" content="Attentive Inception Module based Convolutional Neural Network for Image Enhancement “基于 Attentive Inception Module 的卷积神经网络在图像增强中的应用” high quality：高质量 low distortion：低失真 singleimage superresolution (SISR)：单" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://landodo.github.io/posts/20210310-attentive-inception-module/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-03-10T10:17:29&#43;08:00" />
+<meta property="article:modified_time" content="2021-03-10T10:17:29&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Attentive Inception Module based Convolutional Neural Network for Image Enhancement"/>
+<meta name="twitter:description" content="Attentive Inception Module based Convolutional Neural Network for Image Enhancement “基于 Attentive Inception Module 的卷积神经网络在图像增强中的应用” high quality：高质量 low distortion：低失真 singleimage superresolution (SISR)：单"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://landodo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Attentive Inception Module based Convolutional Neural Network for Image Enhancement",
+      "item": "http://landodo.github.io/posts/20210310-attentive-inception-module/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Attentive Inception Module based Convolutional Neural Network for Image Enhancement",
+  "name": "Attentive Inception Module based Convolutional Neural Network for Image Enhancement",
+  "description": "Attentive Inception Module based Convolutional Neural Network for Image Enhancement “基于 Attentive Inception Module 的卷积神经网络在图像增强中的应用” high quality：高质量 low distortion：低失真 singleimage superresolution (SISR)：单",
+  "keywords": [
+    "CNN", "数据增强", "论文阅读"
+  ],
+  "articleBody": "Attentive Inception Module based Convolutional Neural Network for Image Enhancement “基于 Attentive Inception Module 的卷积神经网络在图像增强中的应用”\n high quality：高质量 low distortion：低失真 singleimage superresolution (SISR)：单一图像超分辨率 JPEG compression artifact removal：消除 JPEG 压缩伪影 image distortions：图像失真 denoising CNN (DnCNN) which developed a successful single model for image denoising, superresolution and compression artifact removal.  摘要 本篇论文通过提出一种卷积神经网络，其内含注意机制的 Inception 模块，解决了以单幅图像超分辨率和压缩伪影形式进行图像增强的问题。\n方法是通过注意力机制对 Inception 多分支结构聚合的多尺度特征进行过滤，使学习的特征图加权，以减少冗余。\n In this paper, the problem of image enhancement in the form of single image superresolution and compression artifact reduction is addressed by proposing a convolutional neural network with an inception module containing an attention mechanism.\n I. INTRODUCTION 图像的增强方法可以从低级的图像处理算法到高级的机器学习和深度学习方法。\n这篇论文的主要工作：解决了单一图像超分辨率（SISR）和 JPEG 压缩伪影去除的问题。In image superresolution，一个高分辨率（HR）图像是由单个低分辨率（LR）图像或多个低分辨率图像构建而成。\n近年来，深度学习模型在图像增强领域取得了令人瞩目的成果。卷积神经网络（CNN）主要用于此类增强任务，当在自然图像的数据集上训练时，它试图通过迭代更新其参数来学习低质量和相应的高质量图像之间的映射。\n这种数据驱动的监督方法可以使模型近似于高质量图像的自然性，而基于回归的损失函数和正则化方法可以对训练过程施加特定的前因和约束。\n  One of the first networks for SISR (SRCNN)\n  The efficient sub-pixel convolutional network (ESPCN)\n  ARCNN: introduced for JPEG compression artifact removal\n  …\n   ✅ In this work, we propose a convolutional neural network with an inception module having dilated filters for multi-resolution feature extraction, along with short and long skip attention modules.\n II. MODEL OVERVIEW CNN 模型是一个端到端的结构，包含一系列具有注意力的 Inception 块。为了创建训练数据集，将 DIV2K 数据集中的一组 RGB 图像转换为 YCbCr 图像，并提取 Y 通道，即亮度分量。\n （1）The low-quality input images for the compression artifact reduction task are generated by compressing them with different factors by the JPEG compression algorithm.\n通过 JPEG 压缩算法对低质量的输入图像进行不同因子的压缩.\n  （2）For the superresolution task, the low-quality images are generated by resampling the original images or patches of images by various resampling factors. Overlapping patches are cropped from the low and high quality images.\n通过对原始图像或图像的补丁按不同的重采样因子重采样生成的\n 从低质量图像（上面两种方式生成）和高质量图像（原图）中裁剪出重叠的 patch。低质量的 patch 被用作模型的输入，而高质量的 patch 被用作 ground truth。\n Overlapping patches are cropped from the low and high quality images. The low-quality patches are used as inputs to the model while the original patches are used as the ground truth examples. The following section describes the proposed network architecture and the training of the model.\n A. Network architecture 网络架构图如 Fig.1 所示。\n 有多个 Inception 模块堆叠而成 每个 Inception 包含 4 条平行的卷积分支卷积块， 卷积层中使用的卷积核具有相同数量的可学习系数，但具有不同的扩张因子（different dilation factors），因此增加了卷积核的感受野。  在低质量的图像中，某些区域或邻域具有非常相似的信息，对于给定的网络深度，一个小的卷积核无法从这些邻域中提取和重建足够好的特征。因此，空洞卷积核有助于聚合多分辨率信息，同时忽略冗余像素，有利于图像的最终重建。\n卷积层使用 3 × 3 × D 的核（D=64），四个分支的 dilation factors 分别为 0、1、2、4，其卷积核的数量或输出特征图的深度分别为 D、D/2、D/4 和 D/4。每一个卷积层之后都有一个批量归一化层（BN）。\n在批归一化层之后，在每个分支中还有一个额外的卷积和批归一化层，这个卷积是普通的卷积。\n分支的特征图 concatenated 后，得到深度为 2×D=128 的特征图。然后经过一个整流线性单元（ReLU）。\n在 Inception 模块的内部，引入了一个通道维度的注意力机制（channel-wise attention）。\n经过 Concat+ReLU 后，得到特征图 X，对其进行全局平均池化（global average pooling），得到一个长度为 2×D=128 的向量。\n 公式中的 i, j 表示特征图空间维度的索引（spatial indices） k 代表特征图的通道  然后将全局平均池化后得到的向量，输入到包含一个隐藏层神经元个数为 4×D 的神经网络中，最后得到一个长度为 D 的最终向量 y。然后在 y 向量上应用一个 sigmoid 函数得到向量 s。\n同时，在下面的分支，卷积层将通道数为 2D 的特征图 X 转换为通道数为 D 的特征图 Y，并与给定的注意力向量 s 元素进行通道的乘积（channel-wise product），得到最后的特征图 $Y^{att}$。\n另外，网络还包含一个长跳接的注意力。channel-wise 软注意力独立地权衡每个特征通道，并为下面各层学习每个特征图的重要性分配。最早的注意力向量与具体的输入图像相关性更强，因此引入长跳接的注意力连接意在增强这种基于 CNN 输入的动态性质。\nB. Loss Function and Hyperparameters C. Experimental Observations Fig.2 显示了不同的网络架构。\n Arch1 是一个简单的前馈网络，采用瓶颈结构，特征图在特征通道数上进行了扩展和压缩； Arch2 是 Inception 前馈架构； Arch3 是本篇论文提出的架构，引入了 Attention 模块  所有的架构都是残差性的，具有相同的层数和相似的特征量，从原始图像中以 192 的步幅，裁剪出 64px × 64px 的 patch 输入到网络中进行训练。\nTABLE I 显示了组合数据集上的结果，峰值信噪比（PSNR）和结构相似性指数指标（SSIM）以 dB 为单位。\n可以看出，inception blocks with dilation and attention mechanism 提升了性能。\n在不同的网络深度下，通过改变批量归一化 Inception 模块数量，对提出的网络（Arch3）进行实验。\n本篇论文的工作中的最终模型有 6 个 Inception 模块，但结果清楚地表明，随着网络深度的增加，性能有进一步改进的可能。\n最终提出的网络（Arch3）有近 1.6M 的参数，而其他没有注意机制的架构有近 1.3M 的参数。\nIII. EVALUATION   DIV2K dataset\n  Classic5、LIVE1、Set5、Set14 和 BSD100(Berkeley segmentation dataset) 数据集\n  低质量的压缩图像是由 Matlab JPEG 编解码器产生。\n最终网络由 6 个 Inception 模块组成，并进行批量归一化处理。\n对于 SISR 的定量评估，使用了 PSNR 和 SSIM 指标，PSNR- B 用于 compression artifact removal。\n针对超分辨率和 JPEG 伪影去除（for superresolution and JPEG artifact removal）。\nTABLE III 列出了本篇论文提出的网络在 PSNR、SSIM 和 PSNR-B 方面的结果。\n在两个数据集上，比 JPEG 结果平均提高了约 1.89dB PSNR，而比 MemNet 平均提高了约 0.095dB。\nTABLE IV，本篇论文提出的网络在 Set5 和所有超分辨率因子上比 bicubic interpolation（二次方插值）实现了近3.9dB 的 PSNR 平均改进，而在 Set14 和 BSDS100 上的平均改进分别接近 2.7dB 和 2dB。在所有数据集上，比 MemNet 的平均改进幅度接近 0.13dB。\nFig 3 是 compression artifact removal and SISR 的结果（压缩伪影去除和 SISR）。\n图 3 分别显示了 Classic5 和 LIVE1 测试数据集的两个例子，以及一对裁剪的部分。在图像中可以观察到，与其他 CNN 相比，本篇论文提出的模型执行的重建效果相对更好。DnCNN 和 ARCNN 在某些高纹理区域存在块状伪影和模糊现象，而本篇论文的模型的结果显示，相同的区域相对来说更加平滑。\n在上边一行的例子中，可以观察到本论文模型能够比其他方法更好地重建围巾上的图案并去除某些伪影。在下边一行的例子中，可以看到在右边的补丁上，本论文的模型相比于其他方法去除了大部分字母周围的块状伪影，而在左边的补丁上，边缘相对更清晰。然而，整个图像中的某些区域由于在压缩的 JPEG 图像中完全丧失了信息，所以根本没有重建。\nFig.4 可以观察到的是，本论文的模型产生的结果与原始图像有更好或更接近的相似度，并在模式变化过程中产生更平滑的过渡。在斑马的图像中，从补丁中可以看出，与其他方法相比，产生的伪影更少，图案更平滑。\n同样，在最下面一行的例子中，从补丁中可以看出，本论文的模型试图更可靠地重建图案。然而，对于某些图像，其他 CNN 似乎在某些区域产生了更清晰的纹理。\n总的来说，可以得出结论，所提出的模型在引入了带有注意力机制的 Inception 模块后，对于这两个增强任务的表现令人钦佩。该模型的深度比较适中，作为未来的努力方向，可以尝试降低 Inception 块内的特征图深度，而增加 Inception 模块的数量，因为实验表明随着网络深度的增加，该模型还有进一步改进的空间。由于文献中存在更多的注意力形式，可以对其进行详细研究并适当实现。另外值得注意的是，与 SISR 相应的相对改进相比，compression artifact（压缩伪影）去除的相对定量改进较为一致，未来应从网络架构和各个任务的损失函数的角度进行仔细研究。\nIV. SUMMARY AND CONCLUSION 实验采用不同的网络深度和模型架构来研究它们对整体重建质量的影响。在基准数据集上对所提出的网络进行评估，结果显示，与其他模型相比，attentive inception modules 网络在伪影抑制和重建质量上都有改善。\n",
+  "wordCount" : "3246",
+  "inLanguage": "en",
+  "datePublished": "2021-03-10T10:17:29+08:00",
+  "dateModified": "2021-03-10T10:17:29+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://landodo.github.io/posts/20210310-attentive-inception-module/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Landodo's NoteBook",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://landodo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://landodo.github.io/" accesskey="h" title="Landodo&#39;s NoteBook (Alt + H)">Landodo&#39;s NoteBook</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://landodo.github.io/search" title="🔍Search (Alt &#43; /)" accesskey=/>
+                    <span>🔍Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/tags" title="Tag">
+                    <span>Tag</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/cs-zoo" title="CS ZOO">
+                    <span>CS ZOO</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://landodo.github.io/">Home</a>&nbsp;»&nbsp;<a href="http://landodo.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      Attentive Inception Module based Convolutional Neural Network for Image Enhancement
+    </h1>
+    <div class="post-meta"><span title='2021-03-10 10:17:29 +0800 CST'>March 10, 2021</span>&nbsp;·&nbsp;7 min&nbsp;·&nbsp;3246 words
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#attentive-inception-module-based-convolutional-neural-network-for-image-enhancement" aria-label="Attentive Inception Module based Convolutional Neural Network for Image Enhancement">Attentive Inception Module based Convolutional Neural Network for Image Enhancement</a><ul>
+                        
+                <li>
+                    <a href="#%e6%91%98%e8%a6%81" aria-label="摘要">摘要</a></li>
+                <li>
+                    <a href="#i-introduction" aria-label="I. INTRODUCTION">I. INTRODUCTION</a></li>
+                <li>
+                    <a href="#ii-model-overview" aria-label="II. MODEL OVERVIEW">II. MODEL OVERVIEW</a><ul>
+                        
+                <li>
+                    <a href="#a-network-architecture" aria-label="A. Network architecture">A. Network architecture</a></li>
+                <li>
+                    <a href="#b-loss-function-and-hyperparameters" aria-label="B. Loss Function and Hyperparameters">B. Loss Function and Hyperparameters</a></li>
+                <li>
+                    <a href="#c-experimental-observations" aria-label="C. Experimental Observations">C. Experimental Observations</a></li></ul>
+                </li>
+                <li>
+                    <a href="#iii-evaluation" aria-label="III. EVALUATION">III. EVALUATION</a></li>
+                <li>
+                    <a href="#iv-summary-and-conclusion" aria-label="IV. SUMMARY AND CONCLUSION">IV. SUMMARY AND CONCLUSION</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h1 id="attentive-inception-module-based-convolutional-neural-network-for-image-enhancement">Attentive Inception Module based Convolutional Neural Network for Image Enhancement<a hidden class="anchor" aria-hidden="true" href="#attentive-inception-module-based-convolutional-neural-network-for-image-enhancement">#</a></h1>
+<p>“基于 Attentive Inception Module 的卷积神经网络在图像增强中的应用”</p>
+<ul>
+<li>high quality：高质量</li>
+<li>low distortion：低失真</li>
+<li>singleimage superresolution (SISR)：单一图像超分辨率</li>
+<li>JPEG compression artifact removal：消除 JPEG 压缩伪影</li>
+<li>image distortions：图像失真</li>
+<li>denoising CNN (DnCNN) which developed a successful single model for image denoising, superresolution and compression artifact removal.</li>
+</ul>
+<h2 id="摘要">摘要<a hidden class="anchor" aria-hidden="true" href="#摘要">#</a></h2>
+<p>本篇论文通过提出一种卷积神经网络，其内含注意机制的 Inception 模块，解决了以单幅图像超分辨率和压缩伪影形式进行图像增强的问题。</p>
+<p>方法是通过注意力机制对 Inception 多分支结构聚合的多尺度特征进行过滤，使学习的特征图加权，以减少冗余。</p>
+<blockquote>
+<p>In this paper, the problem of image enhancement in the form of single image superresolution and compression artifact reduction is addressed by proposing a convolutional neural network with an inception module containing an attention mechanism.</p>
+</blockquote>
+<h2 id="i-introduction">I. INTRODUCTION<a hidden class="anchor" aria-hidden="true" href="#i-introduction">#</a></h2>
+<p>图像的增强方法可以从低级的图像处理算法到高级的机器学习和深度学习方法。</p>
+<p>这篇论文的主要工作：解决了单一图像超分辨率（SISR）和 JPEG 压缩伪影去除的问题。In image superresolution，一个高分辨率（HR）图像是由单个低分辨率（LR）图像或多个低分辨率图像构建而成。</p>
+<p>近年来，深度学习模型在图像增强领域取得了令人瞩目的成果。卷积神经网络（CNN）主要用于此类增强任务，当在自然图像的数据集上训练时，它试图通过迭代更新其参数来学习低质量和相应的高质量图像之间的映射。</p>
+<p>这种数据驱动的监督方法可以使模型近似于高质量图像的自然性，而基于回归的损失函数和正则化方法可以对训练过程施加特定的前因和约束。</p>
+<ul>
+<li>
+<p>One of the first networks for SISR (SRCNN)</p>
+</li>
+<li>
+<p>The efficient sub-pixel convolutional network (ESPCN)</p>
+</li>
+<li>
+<p>ARCNN: introduced for JPEG compression artifact removal</p>
+</li>
+<li>
+<p>&hellip;</p>
+</li>
+</ul>
+<blockquote>
+<p>✅ In this work, we propose a convolutional neural network with an inception module having dilated filters for multi-resolution feature extraction, along with short and long skip attention modules.</p>
+</blockquote>
+<h2 id="ii-model-overview">II. MODEL OVERVIEW<a hidden class="anchor" aria-hidden="true" href="#ii-model-overview">#</a></h2>
+<p>CNN 模型是一个端到端的结构，包含一系列具有注意力的 Inception 块。为了<strong>创建训练数据集</strong>，将 DIV2K 数据集中的一组 RGB 图像转换为 YCbCr 图像，并提取 Y 通道，即亮度分量。</p>
+<blockquote>
+<p>（1）<strong>The low-quality input images for the compression artifact reduction task</strong> are generated by compressing them with different factors by the JPEG compression algorithm.</p>
+<p>通过 JPEG 压缩算法对低质量的输入图像进行不同因子的压缩.</p>
+</blockquote>
+<blockquote>
+<p>（2）<strong>For the superresolution task</strong>, the low-quality images are generated by resampling the original images or patches of images by various resampling factors. Overlapping patches are cropped from the low and high quality images.</p>
+<p>通过对原始图像或图像的补丁按不同的重采样因子重采样生成的</p>
+</blockquote>
+<p>从低质量图像（上面两种方式生成）和高质量图像（原图）中裁剪出重叠的 patch。低质量的 patch 被用作模型的输入，而高质量的 patch 被用作 ground truth。</p>
+<blockquote>
+<p>Overlapping patches are cropped from the low and high quality images. The low-quality patches are used as inputs to the model while the original patches are used as the ground truth examples. The following section describes the proposed network architecture and the training of the model.</p>
+</blockquote>
+<h3 id="a-network-architecture">A. Network architecture<a hidden class="anchor" aria-hidden="true" href="#a-network-architecture">#</a></h3>
+<p>网络架构图如 Fig.1 所示。</p>
+<p><img loading="lazy" src="./20210310/1.png" alt=""  />
+</p>
+<ul>
+<li>有多个 Inception 模块堆叠而成</li>
+<li>每个 Inception 包含 4 条平行的卷积分支卷积块，</li>
+<li>卷积层中使用的卷积核具有相同数量的可学习系数，但具有不同的扩张因子（different dilation factors），因此增加了卷积核的感受野。</li>
+</ul>
+<p>在低质量的图像中，某些区域或邻域具有非常相似的信息，对于给定的网络深度，一个小的卷积核无法从这些邻域中提取和重建足够好的特征。因此，空洞卷积核有助于聚合多分辨率信息，同时忽略冗余像素，有利于图像的最终重建。</p>
+<p>卷积层使用 3 × 3 × D 的核（D=64），四个分支的 dilation factors 分别为 0、1、2、4，其卷积核的数量或输出特征图的深度分别为 D、D/2、D/4 和 D/4。每一个卷积层之后都有一个批量归一化层（BN）。</p>
+<p>在批归一化层之后，在每个分支中还有一个额外的卷积和批归一化层，这个卷积是普通的卷积。</p>
+<p>分支的特征图 concatenated 后，得到深度为 2×D=128 的特征图。然后经过一个整流线性单元（ReLU）。</p>
+<p>在 Inception 模块的内部，引入了一个通道维度的注意力机制（channel-wise attention）。</p>
+<p>经过 Concat+ReLU 后，得到特征图 X，对其进行全局平均池化（global average pooling），得到一个长度为 2×D=128 的向量。</p>
+<p><img loading="lazy" src="./20210310/2.png" alt=""  />
+</p>
+<ul>
+<li>公式中的 i, j 表示特征图空间维度的索引（spatial indices）</li>
+<li>k 代表特征图的通道</li>
+</ul>
+<p>然后将全局平均池化后得到的向量，输入到包含一个隐藏层神经元个数为 4×D 的神经网络中，最后得到一个长度为 D 的最终向量 y。然后在 y 向量上应用一个 sigmoid 函数得到向量 s。</p>
+<p><img loading="lazy" src="./20210310/3.png" alt=""  />
+</p>
+<p>同时，在下面的分支，卷积层将通道数为 2D 的特征图 X 转换为通道数为 D 的特征图 Y，并与给定的注意力向量 s 元素进行通道的乘积（channel-wise product），得到最后的特征图 $Y^{att}$。</p>
+<p><img loading="lazy" src="./20210310/4.png" alt=""  />
+</p>
+<p>另外，网络还包含一个长跳接的注意力。channel-wise 软注意力独立地权衡每个特征通道，并为下面各层学习每个特征图的重要性分配。最早的注意力向量与具体的输入图像相关性更强，因此引入长跳接的注意力连接意在增强这种基于 CNN 输入的动态性质。</p>
+<h3 id="b-loss-function-and-hyperparameters">B. Loss Function and Hyperparameters<a hidden class="anchor" aria-hidden="true" href="#b-loss-function-and-hyperparameters">#</a></h3>
+<p><img loading="lazy" src="./20210310/5.png" alt=""  />
+</p>
+<h3 id="c-experimental-observations">C. Experimental Observations<a hidden class="anchor" aria-hidden="true" href="#c-experimental-observations">#</a></h3>
+<p><img loading="lazy" src="./20210310/6.png" alt=""  />
+</p>
+<p>Fig.2 显示了不同的网络架构。</p>
+<ul>
+<li>Arch1 是一个简单的前馈网络，采用瓶颈结构，特征图在特征通道数上进行了扩展和压缩；</li>
+<li>Arch2 是 Inception 前馈架构；</li>
+<li>Arch3 是本篇论文提出的架构，引入了 Attention 模块</li>
+</ul>
+<p>所有的架构都是残差性的，具有相同的层数和相似的特征量，从原始图像中以 192 的步幅，裁剪出 64px × 64px 的 patch 输入到网络中进行训练。</p>
+<p>TABLE I 显示了组合数据集上的结果，峰值信噪比（PSNR）和结构相似性指数指标（SSIM）以 dB 为单位。</p>
+<p><img loading="lazy" src="./20210310/7.png" alt=""  />
+</p>
+<p>可以看出，inception blocks with <strong>dilation</strong> and <strong>attention</strong> mechanism 提升了性能。</p>
+<p>在不同的网络深度下，通过改变批量归一化 Inception 模块数量，对提出的网络（Arch3）进行实验。</p>
+<p><img loading="lazy" src="./20210310/8.png" alt=""  />
+</p>
+<p>本篇论文的工作中的最终模型有 <strong>6 个 Inception 模块</strong>，但结果清楚地表明，随着网络深度的增加，性能有进一步改进的可能。</p>
+<p>最终提出的网络（Arch3）有近 1.6M 的参数，而其他没有注意机制的架构有近 1.3M 的参数。</p>
+<h2 id="iii-evaluation">III. EVALUATION<a hidden class="anchor" aria-hidden="true" href="#iii-evaluation">#</a></h2>
+<ul>
+<li>
+<p>DIV2K dataset</p>
+</li>
+<li>
+<p>Classic5、LIVE1、Set5、Set14 和 BSD100(Berkeley segmentation dataset) 数据集</p>
+</li>
+</ul>
+<p>低质量的压缩图像是由 Matlab JPEG 编解码器产生。</p>
+<p>最终网络由 6 个 Inception 模块组成，并进行批量归一化处理。</p>
+<p>对于 SISR 的定量评估，使用了 PSNR 和 SSIM 指标，PSNR- B 用于 compression artifact removal。</p>
+<p>针对超分辨率和 JPEG 伪影去除（for superresolution and JPEG artifact removal）。</p>
+<p><img loading="lazy" src="./20210310/9.png" alt=""  />
+</p>
+<p>TABLE III 列出了本篇论文提出的网络在 PSNR、SSIM 和 PSNR-B 方面的结果。</p>
+<p>在两个数据集上，比 JPEG 结果平均提高了约 1.89dB PSNR，而比 MemNet 平均提高了约 0.095dB。</p>
+<p><img loading="lazy" src="./20210310/10.png" alt=""  />
+</p>
+<p>TABLE IV，本篇论文提出的网络在 Set5 和所有超分辨率因子上比 bicubic interpolation（二次方插值）实现了近3.9dB 的 PSNR 平均改进，而在 Set14 和 BSDS100 上的平均改进分别接近 2.7dB 和 2dB。在所有数据集上，比 MemNet 的平均改进幅度接近 0.13dB。</p>
+<p>Fig 3 是 compression artifact removal and SISR 的结果（压缩伪影去除和 SISR）。</p>
+<p><img loading="lazy" src="./20210310/11.png" alt=""  />
+</p>
+<p>图 3 分别显示了 Classic5 和 LIVE1 测试数据集的两个例子，以及一对裁剪的部分。在图像中可以观察到，与其他 CNN 相比，本篇论文提出的模型执行的重建效果相对更好。DnCNN 和 ARCNN 在某些高纹理区域存在块状伪影和模糊现象，而本篇论文的模型的结果显示，相同的区域相对来说更加平滑。</p>
+<p>在上边一行的例子中，可以观察到本论文模型能够比其他方法更好地重建围巾上的图案并去除某些伪影。在下边一行的例子中，可以看到在右边的补丁上，本论文的模型相比于其他方法去除了大部分字母周围的块状伪影，而在左边的补丁上，边缘相对更清晰。然而，整个图像中的某些区域由于在压缩的 JPEG 图像中完全丧失了信息，所以根本没有重建。</p>
+<p><img loading="lazy" src="./20210310/12.png" alt=""  />
+</p>
+<p>Fig.4 可以观察到的是，本论文的模型产生的结果与原始图像有更好或更接近的相似度，并在模式变化过程中产生更平滑的过渡。在斑马的图像中，从补丁中可以看出，与其他方法相比，产生的伪影更少，图案更平滑。</p>
+<p>同样，在最下面一行的例子中，从补丁中可以看出，本论文的模型试图更可靠地重建图案。然而，对于某些图像，其他 CNN 似乎在某些区域产生了更清晰的纹理。</p>
+<p>总的来说，可以得出结论，所提出的模型在引入了带有注意力机制的 Inception 模块后，对于这两个增强任务的表现令人钦佩。该模型的深度比较适中，作为未来的努力方向，可以尝试降低 Inception 块内的特征图深度，而增加 Inception 模块的数量，因为实验表明随着网络深度的增加，该模型还有进一步改进的空间。由于文献中存在更多的注意力形式，可以对其进行详细研究并适当实现。另外值得注意的是，与 SISR 相应的相对改进相比，compression artifact（压缩伪影）去除的相对定量改进较为一致，未来应从网络架构和各个任务的损失函数的角度进行仔细研究。</p>
+<h2 id="iv-summary-and-conclusion">IV. SUMMARY AND CONCLUSION<a hidden class="anchor" aria-hidden="true" href="#iv-summary-and-conclusion">#</a></h2>
+<p>实验采用不同的网络深度和模型架构来研究它们对整体重建质量的影响。在基准数据集上对所提出的网络进行评估，结果显示，与其他模型相比，attentive inception modules 网络在伪影抑制和重建质量上都有改善。</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://landodo.github.io/tags/cnn/">CNN</a></li>
+      <li><a href="http://landodo.github.io/tags/%E6%95%B0%E6%8D%AE%E5%A2%9E%E5%BC%BA/">数据增强</a></li>
+      <li><a href="http://landodo.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">论文阅读</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://landodo.github.io/posts/20210311-dual-attention-network/">
+    <span class="title">« Prev Page</span>
+    <br>
+    <span>Dual Attention Network for Scene Segmentation</span>
+  </a>
+  <a class="next" href="http://landodo.github.io/posts/20210308-non-local-neural-networks/">
+    <span class="title">Next Page »</span>
+    <br>
+    <span>Non-local Neural Networks</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>Landon</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

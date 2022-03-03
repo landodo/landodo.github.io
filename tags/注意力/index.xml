@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>注意力 on Landodo&#39;s NoteBook</title>
+    <link>http://landodo.github.io/tags/%E6%B3%A8%E6%84%8F%E5%8A%9B/</link>
+    <description>Recent content in 注意力 on Landodo&#39;s NoteBook</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Landon</copyright>
+    <lastBuildDate>Sun, 11 Jul 2021 10:17:29 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/%E6%B3%A8%E6%84%8F%E5%8A%9B/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Graph Attention Networks(GATs) </title>
+      <link>http://landodo.github.io/posts/20210711-gat/</link>
+      <pubDate>Sun, 11 Jul 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210711-gat/</guid>
+      <description>GAT 地址：https://arxiv.org/abs/1710.10903 期刊：International Conference on Learning Representations (ICLR) 2018 被引用次数：4116 Abstract Graph</description>
+    </item>
+    
+    <item>
+      <title>Non-local Neural Networks</title>
+      <link>http://landodo.github.io/posts/20210308-non-local-neural-networks/</link>
+      <pubDate>Mon, 08 Mar 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210308-non-local-neural-networks/</guid>
+      <description>注意力机制 Non-local Neural Networks 注意力机制的文献，arXiv:1711.07971v3 FaceBook Research Abstract 论文提出了一种非局部操作（non-local operations</description>
+    </item>
+    
+    <item>
+      <title>Selective Kernel Networks</title>
+      <link>http://landodo.github.io/posts/20210306-selective-kernel-networks/</link>
+      <pubDate>Sat, 06 Mar 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210306-selective-kernel-networks/</guid>
+      <description>论文阅读 Selective Kernel Networks 注意力机制论文阅读，第二次汇报的论文为： 下载地址：（SKNet）Selective Kernel Networks (arXiv: 1903.06586) 发表时间（e-prints posted on arX</description>
+    </item>
+    
+    <item>
+      <title>Attention mechanism: SENet &amp; SKNet</title>
+      <link>http://landodo.github.io/posts/20210301-attention-mechanism/</link>
+      <pubDate>Mon, 01 Mar 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210301-attention-mechanism/</guid>
+      <description>Attention mechanism: SENet &amp;amp; SKNet 注意力机制论文阅读，第二次汇报的论文为： 下载地址：（SKNet）Selective Kernel Networks (arXiv: 1903.06586) 发表时间（e-prints posted on arXiv</description>
+    </item>
+    
+    <item>
+      <title>SENet 和它的孪生兄弟 SKNet</title>
+      <link>http://landodo.github.io/posts/20210122-senet-sknet/</link>
+      <pubDate>Fri, 22 Jan 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210122-senet-sknet/</guid>
+      <description>SENet 和它的孪生兄弟 SKNet ✅ 论文地址： Squeeze-and-Excitation Networks: https://arxiv.org/pdf/1709.01507.pdf Selective Kernel Networks: https://arxiv.org/pdf/1903.06586.pdf ✅ 论文发表时间（arXiv V1） SENet：2017 年 9 月 5 日 SKNet：2019 年 3 月 15 日 相关</description>
+    </item>
+    
+    <item>
+      <title>Squeeze-and-Excitation Networks</title>
+      <link>http://landodo.github.io/posts/20210112-senet/</link>
+      <pubDate>Tue, 12 Jan 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210112-senet/</guid>
+      <description>论文题目 “Squeeze-and-Excitation Networks” ✅ 论文地址：https://arxiv.org/abs/1709.0</description>
+    </item>
+    
+  </channel>
+</rss>

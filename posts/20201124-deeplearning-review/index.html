@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+<meta name="robots" content="index, follow">
+<title>Deep learning Review | Landodo&#39;s NoteBook</title>
+<meta name="keywords" content="深度学习, 论文阅读" />
+<meta name="description" content="Deep learning Review 深度学习综述 深度学习：一个含多个处理层组成的计算模型学习多层次抽象的数据表示。 应用：语音识别、视觉对象识别、对象检测以及药物发现和基因">
+<meta name="author" content="">
+<link rel="canonical" href="http://landodo.github.io/posts/20201124-deeplearning-review/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://landodo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://landodo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://landodo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://landodo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://landodo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Deep learning Review" />
+<meta property="og:description" content="Deep learning Review 深度学习综述 深度学习：一个含多个处理层组成的计算模型学习多层次抽象的数据表示。 应用：语音识别、视觉对象识别、对象检测以及药物发现和基因" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://landodo.github.io/posts/20201124-deeplearning-review/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-11-24T10:17:29&#43;08:00" />
+<meta property="article:modified_time" content="2020-11-24T10:17:29&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Deep learning Review"/>
+<meta name="twitter:description" content="Deep learning Review 深度学习综述 深度学习：一个含多个处理层组成的计算模型学习多层次抽象的数据表示。 应用：语音识别、视觉对象识别、对象检测以及药物发现和基因"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://landodo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Deep learning Review",
+      "item": "http://landodo.github.io/posts/20201124-deeplearning-review/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Deep learning Review",
+  "name": "Deep learning Review",
+  "description": "Deep learning Review 深度学习综述 深度学习：一个含多个处理层组成的计算模型学习多层次抽象的数据表示。 应用：语音识别、视觉对象识别、对象检测以及药物发现和基因",
+  "keywords": [
+    "深度学习", "论文阅读"
+  ],
+  "articleBody": "Deep learning Review 深度学习综述\n  深度学习：一个含多个处理层组成的计算模型学习多层次抽象的数据表示。\n  应用：语音识别、视觉对象识别、对象检测以及药物发现和基因组学等领域。\n  反向传播算法（backpropagation algorithm）来改变模型内部的参数，发现数据集中的复杂结构。\n  卷积神经网络（Deep convolutional nets）在处理图像、视频、语音和音频方面取得了突破性的进展。\n  循环网络（recurrent nets）在文本和语音等序列数据方面大放异彩。\n  网络搜索、内容过滤、推荐系统、识别图像中的对象、将语音转成文本、将新闻项目、帖子或产品与用户的兴趣进行匹配，这些应用广泛的应用一种叫做深度学习的技术（deep learning）。\n  深度学习的关键点是，特征层不是由人类工程师设计的：它们是使用通用的学习程序从数据中学习的。\n The key aspect of deep learning is that these layers of features are not designed by human engineers: they are learned from data using a general-purpose learning procedure.\n 深度学习非常擅长发现高维数据中的复杂结构。\n It has turned out to be very good at discovering intricate structures in high-dimensional data and is therefore applicable to many domains of science, business and government.\n 深度学习只需要很少的手工工程。\n it requires very little engineering by hand.\n Supervised learning 以与梯度向量相反的方向调整权重向量。\n The weight vector is then adjusted in the opposite direction to the gradient vector.\n 负梯度向量表示最陡峭的下降方向，朝这个方向修正，输出误差平均较低。\n The negative gradient vector indicates the direction of steepest descent in this landscape, taking it closer to a minimum, where the output error is low on average.\n  使用随机梯度下降 SGD  完成训练后，在测试集上进行评估。\n After training, the prefermance of the system is measured on a different set of example called a test set.\n  泛化能力（generalization ability）  多层神经网络和反向传播\n线性分类器或者其他浅层的网络对微小的细节不敏感，而且需要好的特征提取器才能工作得更好。\n深度学习对细小的细节敏感（区分萨摩耶犬和白狼），对大的不相关的变化如背景、姿势、灯光和周围的物体不敏感。\n system can implement extremely intricate functions of its inputs that are simultaneously sensitive to minute details — distinguishing Samoyeds from white wolves — and insensitive to large irrelevant variations such as the background, pose, lighting and surrounding objects.\n Backpropagation to train multilayer architectures   使用可训练的多层网络取代手工设计的特征，通过简单的随机梯度下降来训练。\n  反向传播过程是导数链式规则（chain rule）的实际应用。\n  目前，最流行的非线性函数是整流线性单元（ReLU），$f(z)=max(z，0)$。在过去的几十年里，神经网络使用了更平滑的非线性函数，如 $tanh(z)$ 或 $sigmoid(z)$。ReLU 通常在具有许多层的网络中学习速度更快。\n  20 世纪 90 年代末，神经网络和反向传播在很大程度上被机器学习界所抛弃。那时普遍认为，梯度下降法会陷入局部最小值。\n  对于大型的网络，几乎不会陷入局部最小值，更多遇到的是鞍点（saddle points）。算法并不会卡在鞍点。\n  2006 年，deep feedforward networks 开始恢复生机。\n  预训练方法的第一个主要应用是在语音识别，使得能够以 10～20 倍的速度训练网络。\n  对于较小的数据集，无监督的预训练有助于防止过拟合。\n  卷积神经网络 “convolutional neural network (ConvNet)” 比全连接网络更容易训练和泛化。\n  卷积神经网络 Convolutional neural networks  ConvNets 被设计用来处理以多个数组形式出现的数据。1-D 的信号和序列、2-D 的图像或音频谱图、3-D 的视频等。 特点：局部连接、参数共享、池化和使用多层。 ConvNets 的结构如图 2，前几个阶段由卷积层和池化层组成。卷积层中的单元以特征图（feature map）的形式组织，一个特征图对应一个卷积核。 一个图案可能出现在图像的任何地方，可以共用一个卷积核。 卷积层的作用是检测前一层特征的局部连接。  池化层的作用是将语义上相似的特征合并为一个特征。\n the role of the pooling layer is to merge semantically similar features into one\n  Conv/ReLU/Pooling 堆叠起来，最后是全连接层。反向传播可以训练所有的卷积核参数。  高层次的特征是通过组成较低层次的特征来获得的。\n higher-level features are obtained by composing lower-level ones\n Image understanding with deep convolutional networks  自 2000 年以来，ConvNets 被成功地应用于图像中物体和区域的检测、分割和识别。 图像可以进行像素级别的标记。 类似 Mobileye 和 NVIDIA 等公司在他们即将推出的汽车视觉系统中使用基于 ConvNet 的方法。 尽管 ConvNets 取得了不少的成绩，但是在当时还是不被看好。直到 2012 年的 ImageNet 挑战赛，ConvNets 取得了压倒性的胜利。 它成功源自：GPU 的高效使用、ReLU 激活函数、Dropout 正则化方法以及数据增强技术。这带来了计算机视觉的革命。 ConvNets 现在几乎是所有识别和检测任务的主流方法。下图将 ConvNets 和 RNN 结合的应用。  Distributed representations and language processing PS：每一篇论文都有让人懵逼的部分。\n深度学习理论表明，与不使用分布式表示的经典学习算法相比，深度网络有两个不同的指数优势。\n 学习分布式表示能够泛化到学习特征值的新组合，超出训练过程中看到的组合。 深度指数（exponential in the depth）  多层神经网络的隐藏层学习以一种易于预测目标输出的方式来表示网络的输入。\n one-of-N 向量 网络的其他层学习将输入的单词向量转换为预测下一个单词的输出单词向量，它可以用来预测词汇中任何单词作为下一个单词出现的概率。 词向量由学习到的特征组成，这些特征不是由专家提前确定的，而是由神经网络自动发现的。Tuesday and Wednesday 的词向量相似、Sweden and Norway 的词向量相似。 神经网络使用 big activity vectors、大的权重矩阵和标量非线性来进行推理。  在引入神经语言模型之前，语言统计建模的标准方法是基于对长度为 N 的短字符序列（称为 N-grams）的出现频率进行计数。\n N-grams 表示的两个词没有什么联系。 神经语言模型则将每个单词与实值特征的向量相关联，语义相关的单词在该向量空间中相互接近。  RNN(Recurrent neural networks) 对于涉及顺序输入的任务，如语音和文本，使用 RNNs 更好。\nRNNs 每次只处理一个元素的输入序列，在它们的隐藏单元中维护着一个状态向量，隐含着序列中所有过去元素的历史信息。\n RNNs 在时间上展开（图5），就可以看作是非常深的前馈网络，其中所有层都共享相同的权重。 训练 RNNs 时，反向传播的梯度在每个时间增大或缩小，即梯度爆炸或梯度消失。 解决梯度问题的方法是使用特殊的隐藏单元的长短期记忆（LSTM）网络。 LSTM 网络或相关形式的门控单元也被用于机器翻译中表现出色的编码和解码网络。  深度学习的未来  无监督学习激起了人们对深度学习的兴趣，预计从长远来看，无监督学习将变得更加重要。 预计未来视觉领域的大部分进展将来自于端到端训练的系统，并将 ConvNets 与使用强化学习来决定看哪里的RNNs 相结合。 深度学习将会在自然语言理解领域产生重大影响。 人工智能的重大进展将通过结合表征学习和复杂推理的系统来实现。  ",
+  "wordCount" : "2490",
+  "inLanguage": "en",
+  "datePublished": "2020-11-24T10:17:29+08:00",
+  "dateModified": "2020-11-24T10:17:29+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://landodo.github.io/posts/20201124-deeplearning-review/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Landodo's NoteBook",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://landodo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://landodo.github.io/" accesskey="h" title="Landodo&#39;s NoteBook (Alt + H)">Landodo&#39;s NoteBook</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://landodo.github.io/search" title="🔍Search (Alt &#43; /)" accesskey=/>
+                    <span>🔍Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/tags" title="Tag">
+                    <span>Tag</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/cs-zoo" title="CS ZOO">
+                    <span>CS ZOO</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://landodo.github.io/">Home</a>&nbsp;»&nbsp;<a href="http://landodo.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      Deep learning Review
+    </h1>
+    <div class="post-meta"><span title='2020-11-24 10:17:29 +0800 CST'>November 24, 2020</span>&nbsp;·&nbsp;5 min&nbsp;·&nbsp;2490 words
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#deep-learning-review" aria-label="Deep learning Review">Deep learning Review</a><ul>
+                        
+                <li>
+                    <a href="#supervised-learning" aria-label="Supervised learning">Supervised learning</a></li>
+                <li>
+                    <a href="#backpropagation-to-train-multilayer-architectures" aria-label="Backpropagation to train multilayer architectures">Backpropagation to train multilayer architectures</a></li>
+                <li>
+                    <a href="#%e5%8d%b7%e7%a7%af%e7%a5%9e%e7%bb%8f%e7%bd%91%e7%bb%9c-convolutional-neural-networks" aria-label="卷积神经网络 Convolutional neural networks">卷积神经网络 Convolutional neural networks</a></li>
+                <li>
+                    <a href="#image-understanding-with-deep-convolutional-networks" aria-label="Image understanding with deep convolutional networks">Image understanding with deep convolutional networks</a></li>
+                <li>
+                    <a href="#distributed-representations-and-language-processing" aria-label="Distributed representations and language processing">Distributed representations and language processing</a></li>
+                <li>
+                    <a href="#rnnrecurrent-neural-networks" aria-label="RNN(Recurrent neural networks)">RNN(Recurrent neural networks)</a></li>
+                <li>
+                    <a href="#%e6%b7%b1%e5%ba%a6%e5%ad%a6%e4%b9%a0%e7%9a%84%e6%9c%aa%e6%9d%a5" aria-label="深度学习的未来">深度学习的未来</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h1 id="deep-learning-review">Deep learning Review<a hidden class="anchor" aria-hidden="true" href="#deep-learning-review">#</a></h1>
+<p>深度学习综述</p>
+<p><img loading="lazy" src="./20201124/1.png" alt=""  />
+</p>
+<ul>
+<li>
+<p>深度学习：一个含多个处理层组成的计算模型学习多层次抽象的数据表示。</p>
+</li>
+<li>
+<p>应用：语音识别、视觉对象识别、对象检测以及药物发现和基因组学等领域。</p>
+</li>
+<li>
+<p>反向传播算法（backpropagation algorithm）来改变模型内部的参数，发现数据集中的复杂结构。</p>
+</li>
+<li>
+<p>卷积神经网络（Deep convolutional nets）在处理图像、视频、语音和音频方面取得了突破性的进展。</p>
+</li>
+<li>
+<p>循环网络（recurrent nets）在文本和语音等序列数据方面大放异彩。</p>
+</li>
+<li>
+<p>网络搜索、内容过滤、推荐系统、识别图像中的对象、将语音转成文本、将新闻项目、帖子或产品与用户的兴趣进行匹配，这些应用广泛的应用一种叫做深度学习的技术（deep learning）。</p>
+</li>
+</ul>
+<p>深度学习的关键点是，特征层不是由人类工程师设计的：它们是使用通用的学习程序<strong>从数据中学习</strong>的。</p>
+<blockquote>
+<p>The key aspect of deep learning is that these layers of features are not designed by human engineers: they are learned from data using a general-purpose learning procedure.</p>
+</blockquote>
+<p>深度学习非常擅长发现高维数据中的复杂结构。</p>
+<blockquote>
+<p>It has turned out to be very good at discovering intricate structures in high-dimensional data and is therefore applicable to many domains of science, business and government.</p>
+</blockquote>
+<p>深度学习只需要很少的手工工程。</p>
+<blockquote>
+<p>it requires very little engineering by hand.</p>
+</blockquote>
+<h2 id="supervised-learning">Supervised learning<a hidden class="anchor" aria-hidden="true" href="#supervised-learning">#</a></h2>
+<p>以与梯度向量相反的方向调整权重向量。</p>
+<blockquote>
+<p>The weight vector is then adjusted in the opposite direction to the gradient vector.</p>
+</blockquote>
+<p>负梯度向量表示最陡峭的下降方向，朝这个方向修正，输出误差平均较低。</p>
+<blockquote>
+<p>The negative gradient vector indicates the direction of steepest descent in this landscape, taking it closer to a minimum, where the output error is low on average.</p>
+</blockquote>
+<ul>
+<li>使用随机梯度下降 SGD</li>
+</ul>
+<p>完成训练后，在测试集上进行评估。</p>
+<blockquote>
+<p>After training, the prefermance of the system is measured on a different set of example  called a test set.</p>
+</blockquote>
+<ul>
+<li>泛化能力（generalization ability）</li>
+</ul>
+<p>多层神经网络和反向传播</p>
+<p><img loading="lazy" src="./20201124/2.png" alt=""  />
+</p>
+<p>线性分类器或者其他浅层的网络对微小的细节不敏感，而且需要好的特征提取器才能工作得更好。</p>
+<p><img loading="lazy" src="./20201124/3.png" alt=""  />
+</p>
+<p>深度学习对细小的细节敏感（区分萨摩耶犬和白狼），对大的不相关的变化如背景、姿势、灯光和周围的物体不敏感。</p>
+<blockquote>
+<p>system can implement extremely intricate functions of its inputs that are simultaneously sensitive to minute details — distinguishing Samoyeds from white wolves — and insensitive to large irrelevant variations such as the background, pose, lighting and surrounding objects.</p>
+</blockquote>
+<h2 id="backpropagation-to-train-multilayer-architectures">Backpropagation to train multilayer architectures<a hidden class="anchor" aria-hidden="true" href="#backpropagation-to-train-multilayer-architectures">#</a></h2>
+<ul>
+<li>
+<p>使用可训练的多层网络取代手工设计的特征，通过简单的随机梯度下降来训练。</p>
+</li>
+<li>
+<p>反向传播过程是导数链式规则（chain rule）的实际应用。</p>
+</li>
+<li>
+<p>目前，最流行的非线性函数是整流线性单元（ReLU），$f(z)=max(z，0)$。在过去的几十年里，神经网络使用了更平滑的非线性函数，如 $tanh(z)$ 或 $sigmoid(z)$。ReLU 通常在具有许多层的网络中学习速度更快。</p>
+</li>
+<li>
+<p>20 世纪 90 年代末，神经网络和反向传播在很大程度上被机器学习界所抛弃。那时普遍认为，梯度下降法会陷入局部最小值。</p>
+</li>
+<li>
+<p>对于大型的网络，几乎不会陷入局部最小值，更多遇到的是鞍点（saddle points）。算法并不会卡在鞍点。</p>
+</li>
+<li>
+<p>2006 年，deep feedforward networks 开始恢复生机。</p>
+</li>
+<li>
+<p>预训练方法的第一个主要应用是在语音识别，使得能够以 10～20 倍的速度训练网络。</p>
+</li>
+<li>
+<p>对于较小的数据集，无监督的预训练有助于防止过拟合。</p>
+</li>
+<li>
+<p>卷积神经网络 &ldquo;convolutional neural network (ConvNet)&rdquo; 比全连接网络更容易训练和泛化。</p>
+</li>
+</ul>
+<h2 id="卷积神经网络-convolutional-neural-networks">卷积神经网络 Convolutional neural networks<a hidden class="anchor" aria-hidden="true" href="#卷积神经网络-convolutional-neural-networks">#</a></h2>
+<ul>
+<li>ConvNets 被设计用来处理以多个数组形式出现的数据。1-D 的信号和序列、2-D 的图像或音频谱图、3-D 的视频等。</li>
+<li>特点：局部连接、参数共享、池化和使用多层。</li>
+<li>ConvNets 的结构如图 2，前几个阶段由卷积层和池化层组成。卷积层中的单元以特征图（feature map）的形式组织，一个特征图对应一个卷积核。</li>
+<li>一个图案可能出现在图像的任何地方，可以共用一个卷积核。</li>
+<li>卷积层的作用是检测前一层特征的局部连接。</li>
+</ul>
+<p>池化层的作用是将语义上相似的特征合并为一个特征。</p>
+<blockquote>
+<p>the role of the pooling layer is to merge semantically similar features into one</p>
+</blockquote>
+<ul>
+<li>Conv/ReLU/Pooling 堆叠起来，最后是全连接层。反向传播可以训练所有的卷积核参数。</li>
+</ul>
+<p>高层次的特征是通过组成较低层次的特征来获得的。</p>
+<blockquote>
+<p>higher-level features are obtained by composing lower-level ones</p>
+</blockquote>
+<h2 id="image-understanding-with-deep-convolutional-networks">Image understanding with deep convolutional networks<a hidden class="anchor" aria-hidden="true" href="#image-understanding-with-deep-convolutional-networks">#</a></h2>
+<ul>
+<li>自 2000 年以来，ConvNets 被成功地应用于图像中物体和区域的检测、分割和识别。</li>
+<li>图像可以进行像素级别的标记。</li>
+<li>类似 Mobileye 和 NVIDIA 等公司在他们即将推出的汽车视觉系统中使用基于 ConvNet 的方法。</li>
+<li>尽管 ConvNets 取得了不少的成绩，但是在当时还是不被看好。直到 2012 年的 ImageNet 挑战赛，ConvNets 取得了压倒性的胜利。</li>
+<li>它成功源自：GPU 的高效使用、ReLU 激活函数、Dropout 正则化方法以及数据增强技术。这带来了计算机视觉的革命。</li>
+<li>ConvNets 现在几乎是所有识别和检测任务的主流方法。下图将 ConvNets 和 RNN 结合的应用。</li>
+</ul>
+<p><img loading="lazy" src="./20201124/4.png" alt=""  />
+</p>
+<h2 id="distributed-representations-and-language-processing">Distributed representations and language processing<a hidden class="anchor" aria-hidden="true" href="#distributed-representations-and-language-processing">#</a></h2>
+<p><del>PS：每一篇论文都有让人懵逼的部分。</del></p>
+<p>深度学习理论表明，与不使用分布式表示的经典学习算法相比，深度网络有两个不同的指数优势。</p>
+<ul>
+<li>学习分布式表示能够泛化到学习特征值的新组合，超出训练过程中看到的组合。</li>
+<li>深度指数（exponential in the depth）</li>
+</ul>
+<p>多层神经网络的隐藏层学习以一种易于预测目标输出的方式来表示网络的输入。</p>
+<ul>
+<li>one-of-N 向量</li>
+<li>网络的其他层学习将输入的单词向量转换为预测下一个单词的输出单词向量，它可以用来预测词汇中任何单词作为下一个单词出现的概率。</li>
+<li>词向量由学习到的特征组成，这些特征不是由专家提前确定的，而是由神经网络自动发现的。Tuesday and Wednesday 的词向量相似、Sweden and Norway 的词向量相似。</li>
+<li>神经网络使用 big activity vectors、大的权重矩阵和标量非线性来进行推理。</li>
+</ul>
+<p>在引入神经语言模型之前，语言统计建模的标准方法是基于对长度为 N 的短字符序列（称为 N-grams）的出现频率进行计数。</p>
+<ul>
+<li>N-grams 表示的两个词没有什么联系。</li>
+<li>神经语言模型则将每个单词与实值特征的向量相关联，语义相关的单词在该向量空间中相互接近。</li>
+</ul>
+<p><img loading="lazy" src="./20201124/5.png" alt=""  />
+</p>
+<h2 id="rnnrecurrent-neural-networks">RNN(Recurrent neural networks)<a hidden class="anchor" aria-hidden="true" href="#rnnrecurrent-neural-networks">#</a></h2>
+<p>对于涉及顺序输入的任务，如语音和文本，使用 RNNs 更好。</p>
+<p><img loading="lazy" src="./20201124/6.png" alt=""  />
+</p>
+<p>RNNs 每次只处理一个元素的输入序列，在它们的隐藏单元中维护着一个状态向量，隐含着序列中所有过去元素的历史信息。</p>
+<ul>
+<li>RNNs 在时间上展开（图5），就可以看作是非常深的前馈网络，其中所有层都共享相同的权重。</li>
+<li>训练 RNNs 时，反向传播的梯度在每个时间增大或缩小，即梯度爆炸或梯度消失。</li>
+<li>解决梯度问题的方法是使用特殊的隐藏单元的长短期记忆（LSTM）网络。</li>
+<li>LSTM 网络或相关形式的门控单元也被用于机器翻译中表现出色的编码和解码网络。</li>
+</ul>
+<h2 id="深度学习的未来">深度学习的未来<a hidden class="anchor" aria-hidden="true" href="#深度学习的未来">#</a></h2>
+<ul>
+<li>无监督学习激起了人们对深度学习的兴趣，预计从长远来看，无监督学习将变得更加重要。</li>
+<li>预计未来视觉领域的大部分进展将来自于端到端训练的系统，并将 ConvNets 与使用强化学习来决定看哪里的RNNs 相结合。</li>
+<li>深度学习将会在自然语言理解领域产生重大影响。</li>
+<li>人工智能的重大进展将通过结合表征学习和复杂推理的系统来实现。</li>
+</ul>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://landodo.github.io/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></li>
+      <li><a href="http://landodo.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">论文阅读</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://landodo.github.io/posts/20201207-hackers-delight/">
+    <span class="title">« Prev Page</span>
+    <br>
+    <span>Hacker’s Delight——高效算法的奥秘</span>
+  </a>
+  <a class="next" href="http://landodo.github.io/posts/20201123-paper-vgg/">
+    <span class="title">Next Page »</span>
+    <br>
+    <span>VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>Landon</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>VGG on Landodo&#39;s NoteBook</title>
+    <link>http://landodo.github.io/tags/vgg/</link>
+    <description>Recent content in VGG on Landodo&#39;s NoteBook</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Landon</copyright>
+    <lastBuildDate>Mon, 23 Nov 2020 10:17:29 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/vgg/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION</title>
+      <link>http://landodo.github.io/posts/20201123-paper-vgg/</link>
+      <pubDate>Mon, 23 Nov 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201123-paper-vgg/</guid>
+      <description>VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION ✅ 论文地址：https://arxiv.org/pdf/1409.1556.pdf ✅ 发表时间：2015 年（Published</description>
+    </item>
+    
+  </channel>
+</rss>

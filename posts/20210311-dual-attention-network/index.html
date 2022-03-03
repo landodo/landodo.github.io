@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false}
+            ]
+        });
+    });
+</script>
+<meta name="robots" content="index, follow">
+<title>Dual Attention Network for Scene Segmentation | Landodo&#39;s NoteBook</title>
+<meta name="keywords" content="CNN, 论文阅读" />
+<meta name="description" content="Dual Attention Network for Scene Segmentation arXiv: 1809.02983 “用于场景分割的双注意力网络“ Abstract 针对场景分割任务，基于 self-Attention 机制捕捉丰富的上下文依赖关系。 与以往通过多尺度特征融合来捕捉上下文的">
+<meta name="author" content="">
+<link rel="canonical" href="http://landodo.github.io/posts/20210311-dual-attention-network/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://landodo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://landodo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://landodo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://landodo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://landodo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Dual Attention Network for Scene Segmentation" />
+<meta property="og:description" content="Dual Attention Network for Scene Segmentation arXiv: 1809.02983 “用于场景分割的双注意力网络“ Abstract 针对场景分割任务，基于 self-Attention 机制捕捉丰富的上下文依赖关系。 与以往通过多尺度特征融合来捕捉上下文的" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://landodo.github.io/posts/20210311-dual-attention-network/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-03-11T10:17:29&#43;08:00" />
+<meta property="article:modified_time" content="2021-03-11T10:17:29&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Dual Attention Network for Scene Segmentation"/>
+<meta name="twitter:description" content="Dual Attention Network for Scene Segmentation arXiv: 1809.02983 “用于场景分割的双注意力网络“ Abstract 针对场景分割任务，基于 self-Attention 机制捕捉丰富的上下文依赖关系。 与以往通过多尺度特征融合来捕捉上下文的"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://landodo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Dual Attention Network for Scene Segmentation",
+      "item": "http://landodo.github.io/posts/20210311-dual-attention-network/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Dual Attention Network for Scene Segmentation",
+  "name": "Dual Attention Network for Scene Segmentation",
+  "description": "Dual Attention Network for Scene Segmentation arXiv: 1809.02983 “用于场景分割的双注意力网络“ Abstract 针对场景分割任务，基于 self-Attention 机制捕捉丰富的上下文依赖关系。 与以往通过多尺度特征融合来捕捉上下文的",
+  "keywords": [
+    "CNN", "论文阅读"
+  ],
+  "articleBody": "Dual Attention Network for Scene Segmentation arXiv: 1809.02983\n“用于场景分割的双注意力网络“\nAbstract 针对场景分割任务，基于 self-Attention 机制捕捉丰富的上下文依赖关系。\n与以往通过多尺度特征融合来捕捉上下文的工作不同，本篇论文提出了一种双注意力网络（Dual Attention Network, DANet）来自适应地整合局部特征与其全局依赖性。\ntwo types of attention modules：分别在空间维度和通道维度上建立语义相互依赖的模型。\n（1）position attention module\n 对所有位置的特征进行加权和，选择性地聚合每个位置的特征。  （2）channel attention module\n 通道关注模块有选择地强调相互依赖的通道图，通过整合所有通道图之间的相关特征。  将两个注意力模块的输出相加，以进一步实现改善特征表示，这有助于更精确的分割结果。\n在 Cityscapes、PASCAL Context 和 COCO Stuff 数据集上取得了 SOTA。\n1. Introduction 本篇论文提出了一种新颖的框架工作，称为作为双注意力网络（Dual Attention Network, DANet），用于自然场景图像分割，如 Figure 2。\n它引入了一种自注意力机制，分别捕捉空间和通道维度的特征依赖性。具体来说，在扩张的 FCN 之上附加了两个平行的注意力模块。一个是位置注意力模块（position attention module），另一个是通道注意力模块（channel attention module）。\n对于位置注意力模块，引入自关注机制来捕捉特征图中任意两个位置之间的空间依赖性。\n对于通道注意力模块，使用类似的自注意力机制来捕捉任意两个通道图之间的通道依赖性。\n最后，将这两个注意力模块的输出进行融合，以进一步增强特征表示。\n 图 1：场景分割的目标是识别每个像素，包括东西、不同的物体。物体/东西的各种尺度、遮挡和光照变化，使得解析每个像素具有挑战性。\n 2. Related Work “Attention is all your need” 率先提出了绘制输入的全局依赖性的自注意机制，并将其应用于机器翻译中。\n3. Dual Attention Network 在本节中，首先介绍网络的总体框架，然后介绍了两个注意力模块，它们分别在空间和通道维度上捕捉长程上下文信息。最后介绍如何将它们聚合在一起进行进一步的完善。\n3.1. Overview 去掉了向下采样操作，并在最后两个 ResNet 块中采用了空洞卷积，从而将最后的特征图的大小放大到输入图像的 1/8。它保留了更多的细节，而没有增加额外的参数。然后，残差网络的特征将被输入到两个平行的注意力模块中。\nFigure 2 在上部分是 spatial attention modules。首先应用卷积层来获得降维的特征。然后将这些特征反馈到位置注意力模块中，通过以下三个步骤生成新的空间长程上下文信息特征（spatial long-range contextual information）。\n（1）第一步是生成一个空间注意力矩阵，该矩阵对特征的任意两个像素之间的空间关系进行建模。\n（2）在注意力矩阵和原始特征之间进行矩阵乘法。\n（3）对上述乘法结果矩阵和原始特征进行元素求和操作，以获得反映远距离上下文的最终表示。\n同时，通道维度的远距离上下文信息由通道注意力模块捕获。捕捉通道关系的过程与位置关注模块类似，只是第一步，在通道维度上计算通道注意力矩阵。\n最后，将两个注意力模块的输出汇总，以获得更好的特征表示，用于像素级预测。\n3.2. Position Attention Module 给定一个局部特征图 $A \\in \\mathbb{R}^{C×H× W}$，首先将其送入卷积层，分别生成两个新的特征图 B 和 C，$(B, C) \\in \\mathbb{R}^{C \\times H \\times W}$。\n然后将 B、C reshape 为 $(B, C) \\in \\mathbb{R}^{C \\times N}$，其中 $N = H \\times W$，表示一个通道的特征图的像素总数。\n之后，矩阵乘法 $C^T \\cdot B$，并应用 softmax 层计算空间注意力图 $S \\in \\mathbb{R}^{N×N}$。\n $s_{ji}$ 衡量的是衡量第 i 个位置对第 j 个位置的影响。两种位置的特征表征越相似，有助于提高它们之间的相关性。  同时，需要将 A 经过一个卷积层得到特征图 D，$D \\in \\mathbb{R}^{C \\times H \\times W}$，然后将 D reshape 成 $D \\in \\mathbb{R}^{C \\times N}$。然后再 D 和 S 进行矩阵乘法后，将得到的结果 reshape 为 $\\mathbb{R}^{C \\times H \\times W}$。乘以比例参数（scale parameter）$\\alpha$ 后与特征图 A 进行 element-wise sum operation 得到最终的结果 $E \\in \\mathbb{R}^{C \\times H \\times W}$。\n由公式 (2) 可以推断，每个位置的结果特征 E 是所有位置的特征和原始特征的加权和。因此，它具有全局的上下文视图，并根据空间注意力图有选择地聚合上下文。相似的语义特征实现了相互增益，从而导入了类内紧凑和语义一致性。\n3.3. Channel Attention Module 通过利用通道图之间的相互依赖性，可以强调相互依赖的特征图，改善特定语义的特征表示。\n因此，构建一个通道注意力模块来明确建模通道之间的相互依赖关系。\n与位置注意力模块不同，这里直接通过原始特征图 $A \\in \\mathbb{R}^{C \\times H \\times W}$ 计算通道注意力图（channel attention map）$X \\in \\mathbb{R}^{C \\times C}$。\n细节上，先将 $A \\in \\mathbb{R}^{C \\times H \\times W}$ reshape 成 $A \\in \\mathbb{R}^{C \\times N}$，然后 A 与 A 的转置进行矩阵乘法，$A \\cdot A^T$。最后，应用 softmax 层得到通道注意力图 $X \\in \\mathbb{R}^{C \\times C}$：\n 其中，其中 $x_{ji}$衡量第 i 个通道对第 j 个通道的影响。  $X^T \\cdot A$ 并将结果 reshape 为 $\\mathbb{R}^{C \\times H \\times W}$，最后的操作和 Position Attention Module 类似，scale parameter 为 $\\beta$。\n从公式 (4) 可以看出，每个通道的最终特征是所有通道的特征和原始特征的加权和，它模拟了特征图之间的长程语义依赖关系。它有助于提升特征的可分辨性。\n利用所有相关位置的空间信息来模拟通道相关性。\n we exploit spatial information at all corresponding positions to model channel correlations.\n 3.4. Attention Module Embedding with Networks 本篇论文提出的注意力模块很简单，可以直接插入到现有的 FCN pipeline 中。它们不会增加太多参数，却能有效地加强特征表示。\n4. Experiments 4.2.1 Ablation Study for Attention Modules: Table 1, Figure 4, Figure 5.\n4.2.2 Study for Improvement Strategies: Table 2.\n4.2.3 Visualization of Attention Module: Figure 6.\n4.2.4 Comparing with State-of-the-art: Table 3.\n4.3. Results on PASCAL VOC 2012 Dataset: Table4, Table5.\n4.4. Results on PASCAL Context Dataset: Table 6\n4.5. Results on COCO Stuff Dataset: Table 7.\n5. Conclusion  presented a Dual Attention Network (DANet) for scene segmentation, which adaptively integrates local semantic features using the self-attention mechanism. position attention module and a channel attention module to capture global dependencies in the spatial and channel dimensions respectively. dual attention modules capture long-range contextual information effectively and give more precise segmentation results. Dual Attention Network (DANet) achieves outstanding performance consistently on four scene segmentation datasets, Cityscapes, Pascal VOC 2012, Pascal Context, and COCO Stuff.  ",
+  "wordCount" : "2236",
+  "inLanguage": "en",
+  "datePublished": "2021-03-11T10:17:29+08:00",
+  "dateModified": "2021-03-11T10:17:29+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://landodo.github.io/posts/20210311-dual-attention-network/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Landodo's NoteBook",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://landodo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://landodo.github.io/" accesskey="h" title="Landodo&#39;s NoteBook (Alt + H)">Landodo&#39;s NoteBook</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://landodo.github.io/search" title="🔍Search (Alt &#43; /)" accesskey=/>
+                    <span>🔍Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/tags" title="Tag">
+                    <span>Tag</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/cs-zoo" title="CS ZOO">
+                    <span>CS ZOO</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://landodo.github.io/">Home</a>&nbsp;»&nbsp;<a href="http://landodo.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      Dual Attention Network for Scene Segmentation
+    </h1>
+    <div class="post-meta"><span title='2021-03-11 10:17:29 +0800 CST'>March 11, 2021</span>&nbsp;·&nbsp;5 min&nbsp;·&nbsp;2236 words
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#dual-attention-network-for-scene-segmentation" aria-label="Dual Attention Network for Scene Segmentation">Dual Attention Network for Scene Segmentation</a><ul>
+                        
+                <li>
+                    <a href="#abstract" aria-label="Abstract">Abstract</a></li>
+                <li>
+                    <a href="#1-introduction" aria-label="1. Introduction">1. Introduction</a></li>
+                <li>
+                    <a href="#2-related-work" aria-label="2. Related Work">2. Related Work</a></li>
+                <li>
+                    <a href="#3-dual-attention-network" aria-label="3. Dual Attention Network">3. Dual Attention Network</a><ul>
+                        
+                <li>
+                    <a href="#31-overview" aria-label="3.1. Overview">3.1. Overview</a></li>
+                <li>
+                    <a href="#32-position-attention-module" aria-label="3.2. Position Attention Module">3.2. Position Attention Module</a></li>
+                <li>
+                    <a href="#33-channel-attention-module" aria-label="3.3. Channel Attention Module">3.3. Channel Attention Module</a></li>
+                <li>
+                    <a href="#34-attention-module-embedding-with-networks" aria-label="3.4. Attention Module Embedding with Networks">3.4. Attention Module Embedding with Networks</a></li></ul>
+                </li>
+                <li>
+                    <a href="#4-experiments" aria-label="4. Experiments">4. Experiments</a></li>
+                <li>
+                    <a href="#5-conclusion" aria-label="5. Conclusion">5. Conclusion</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h1 id="dual-attention-network-for-scene-segmentation">Dual Attention Network for Scene Segmentation<a hidden class="anchor" aria-hidden="true" href="#dual-attention-network-for-scene-segmentation">#</a></h1>
+<p>arXiv: 1809.02983</p>
+<p>“用于场景分割的双注意力网络“</p>
+<h2 id="abstract">Abstract<a hidden class="anchor" aria-hidden="true" href="#abstract">#</a></h2>
+<p>针对场景分割任务，基于 self-Attention 机制捕捉丰富的上下文依赖关系。</p>
+<p>与以往通过多尺度特征融合来捕捉上下文的工作不同，本篇论文提出了一种双注意力网络（Dual Attention Network, DANet）来自适应地整合局部特征与其全局依赖性。</p>
+<p>two types of attention modules：分别在空间维度和通道维度上建立语义相互依赖的模型。</p>
+<p>（1）position attention module</p>
+<ul>
+<li>对所有位置的特征进行加权和，选择性地聚合每个位置的特征。</li>
+</ul>
+<p>（2）channel attention module</p>
+<ul>
+<li>通道关注模块有选择地强调相互依赖的通道图，通过整合所有通道图之间的相关特征。</li>
+</ul>
+<p>将两个注意力模块的输出相加，以进一步实现改善特征表示，这有助于更精确的分割结果。</p>
+<p>在 Cityscapes、PASCAL Context 和 COCO Stuff 数据集上取得了 SOTA。</p>
+<h2 id="1-introduction">1. Introduction<a hidden class="anchor" aria-hidden="true" href="#1-introduction">#</a></h2>
+<p>本篇论文提出了一种新颖的框架工作，称为作为双注意力网络（Dual Attention Network, DANet），用于自然场景图像分割，如 Figure 2。</p>
+<p><img loading="lazy" src="./20210311/1.png" alt=""  />
+</p>
+<p>它引入了一种自注意力机制，分别捕捉空间和通道维度的特征依赖性。具体来说，在扩张的 FCN 之上附加了两个平行的注意力模块。一个是位置注意力模块（position attention module），另一个是通道注意力模块（channel attention module）。</p>
+<p>对于位置注意力模块，引入自关注机制来捕捉特征图中<strong>任意两个位置之间的空间依赖性</strong>。</p>
+<p>对于通道注意力模块，使用类似的自注意力机制来捕捉<strong>任意两个通道图之间的通道依赖性</strong>。</p>
+<p>最后，将这两个注意力模块的输出进行融合，以进一步增强特征表示。</p>
+<p><img loading="lazy" src="./20210311/2.png" alt=""  />
+</p>
+<blockquote>
+<p>图 1：场景分割的目标是识别每个像素，包括东西、不同的物体。物体/东西的各种尺度、遮挡和光照变化，使得解析每个像素具有挑战性。</p>
+</blockquote>
+<h2 id="2-related-work">2. Related Work<a hidden class="anchor" aria-hidden="true" href="#2-related-work">#</a></h2>
+<p>“Attention is all your need” 率先提出了绘制输入的全局依赖性的自注意机制，并将其应用于机器翻译中。</p>
+<h2 id="3-dual-attention-network">3. Dual Attention Network<a hidden class="anchor" aria-hidden="true" href="#3-dual-attention-network">#</a></h2>
+<p>在本节中，首先介绍网络的总体框架，然后介绍了两个注意力模块，它们分别在空间和通道维度上捕捉长程上下文信息。最后介绍如何将它们聚合在一起进行进一步的完善。</p>
+<h3 id="31-overview">3.1. Overview<a hidden class="anchor" aria-hidden="true" href="#31-overview">#</a></h3>
+<p><img loading="lazy" src="./20210311/1.png" alt=""  />
+</p>
+<p>去掉了向下采样操作，并在最后两个 ResNet 块中采用了空洞卷积，从而将最后的特征图的大小放大到输入图像的 1/8。它保留了更多的细节，而没有增加额外的参数。然后，残差网络的特征将被输入到两个平行的注意力模块中。</p>
+<p>Figure 2 在上部分是 spatial attention modules。首先应用卷积层来获得降维的特征。然后将这些特征反馈到位置注意力模块中，通过以下三个步骤生成新的空间长程上下文信息特征（spatial long-range contextual information）。</p>
+<p>（1）第一步是生成一个空间注意力矩阵，该矩阵对特征的任意两个像素之间的空间关系进行建模。</p>
+<p>（2）在注意力矩阵和原始特征之间进行矩阵乘法。</p>
+<p>（3）对上述乘法结果矩阵和原始特征进行元素求和操作，以获得反映远距离上下文的最终表示。</p>
+<p>同时，通道维度的远距离上下文信息由通道注意力模块捕获。捕捉通道关系的过程与位置关注模块类似，只是第一步，在通道维度上计算通道注意力矩阵。</p>
+<p>最后，将两个注意力模块的输出汇总，以获得更好的特征表示，用于像素级预测。</p>
+<h3 id="32-position-attention-module">3.2. Position Attention Module<a hidden class="anchor" aria-hidden="true" href="#32-position-attention-module">#</a></h3>
+<p><img loading="lazy" src="./20210311/3.png" alt=""  />
+</p>
+<p>给定一个局部特征图 $A \in \mathbb{R}^{C×H× W}$，首先将其送入卷积层，分别生成两个新的特征图 B 和 C，$(B, C) \in \mathbb{R}^{C \times H \times W}$。</p>
+<p>然后将 B、C reshape 为 $(B, C) \in \mathbb{R}^{C \times N}$，其中 $N = H \times W$，表示一个通道的特征图的像素总数。</p>
+<p>之后，矩阵乘法 $C^T \cdot B$，并应用 softmax 层计算空间注意力图 $S \in \mathbb{R}^{N×N}$。</p>
+<p><img loading="lazy" src="./20210311/4.png" alt=""  />
+</p>
+<ul>
+<li>$s_{ji}$ 衡量的是衡量第 i 个位置对第 j 个位置的影响。两种位置的特征表征越相似，有助于提高它们之间的相关性。</li>
+</ul>
+<p>同时，需要将 A 经过一个卷积层得到特征图 D，$D \in \mathbb{R}^{C \times H \times W}$，然后将 D reshape 成 $D \in \mathbb{R}^{C \times N}$。然后再 D 和 S 进行矩阵乘法后，将得到的结果 reshape 为 $\mathbb{R}^{C \times H \times W}$。乘以比例参数（scale parameter）$\alpha$ 后与特征图 A 进行 element-wise sum operation 得到最终的结果 $E \in \mathbb{R}^{C \times H \times W}$。</p>
+<p><img loading="lazy" src="./20210311/5.png" alt=""  />
+</p>
+<p>由公式 (2) 可以推断，每个位置的结果特征 E 是所有位置的特征和原始特征的加权和。因此，它具有全局的上下文视图，并根据空间注意力图有选择地聚合上下文。相似的语义特征实现了相互增益，从而导入了类内紧凑和语义一致性。</p>
+<h3 id="33-channel-attention-module">3.3. Channel Attention Module<a hidden class="anchor" aria-hidden="true" href="#33-channel-attention-module">#</a></h3>
+<p>通过利用通道图之间的相互依赖性，可以强调相互依赖的特征图，改善特定语义的特征表示。</p>
+<p>因此，构建一个通道注意力模块来明确建模通道之间的相互依赖关系。</p>
+<p><img loading="lazy" src="./20210311/6.png" alt=""  />
+</p>
+<p>与位置注意力模块不同，这里直接通过原始特征图 $A \in \mathbb{R}^{C \times H \times W}$ 计算通道注意力图（channel attention map）$X \in \mathbb{R}^{C \times C}$。</p>
+<p>细节上，先将 $A \in \mathbb{R}^{C \times H \times W}$ reshape 成 $A \in \mathbb{R}^{C \times N}$，然后 A 与 A 的转置进行矩阵乘法，$A \cdot A^T$。最后，应用 softmax 层得到通道注意力图 $X \in \mathbb{R}^{C \times C}$：</p>
+<p><img loading="lazy" src="./20210311/7.png" alt=""  />
+</p>
+<ul>
+<li>其中，其中 $x_{ji}$衡量第 i 个通道对第 j 个通道的影响。</li>
+</ul>
+<p>$X^T \cdot A$ 并将结果 reshape 为 $\mathbb{R}^{C \times H \times W}$，最后的操作和 Position Attention Module 类似，scale parameter 为 $\beta$。</p>
+<p><img loading="lazy" src="./20210311/8.png" alt=""  />
+</p>
+<p>从公式 (4) 可以看出，每个通道的最终特征是所有通道的特征和原始特征的加权和，它模拟了特征图之间的长程语义依赖关系。它有助于提升特征的可分辨性。</p>
+<p>利用所有相关位置的空间信息来模拟通道相关性。</p>
+<blockquote>
+<p>we exploit <strong>spatial information</strong> at all corresponding positions to model <strong>channel correlations</strong>.</p>
+</blockquote>
+<h3 id="34-attention-module-embedding-with-networks">3.4. Attention Module Embedding with Networks<a hidden class="anchor" aria-hidden="true" href="#34-attention-module-embedding-with-networks">#</a></h3>
+<p>本篇论文提出的注意力模块很简单，可以直接插入到现有的 FCN pipeline 中。它们不会增加太多参数，却能有效地加强特征表示。</p>
+<h2 id="4-experiments">4. Experiments<a hidden class="anchor" aria-hidden="true" href="#4-experiments">#</a></h2>
+<p>4.2.1 Ablation Study for Attention Modules: Table 1, Figure 4, Figure 5.</p>
+<p>4.2.2 Study for Improvement Strategies: Table 2.</p>
+<p><img loading="lazy" src="./20210311/9.png" alt=""  />
+</p>
+<p><img loading="lazy" src="./20210311/10.png" alt=""  />
+</p>
+<p>4.2.3 Visualization of Attention Module: Figure 6.</p>
+<p><img loading="lazy" src="./20210311/11.png" alt=""  />
+</p>
+<p>4.2.4 Comparing with State-of-the-art: Table 3.</p>
+<p><img loading="lazy" src="./20210311/12.png" alt=""  />
+</p>
+<p>4.3. Results on PASCAL VOC 2012 Dataset: Table4, Table5.</p>
+<p><img loading="lazy" src="./20210311/13.png" alt=""  />
+</p>
+<p>4.4. Results on PASCAL Context Dataset: Table 6</p>
+<p><img loading="lazy" src="./20210311/14.png" alt=""  />
+</p>
+<p>4.5. Results on COCO Stuff Dataset: Table 7.</p>
+<p><img loading="lazy" src="./20210311/15.png" alt=""  />
+</p>
+<h2 id="5-conclusion">5. Conclusion<a hidden class="anchor" aria-hidden="true" href="#5-conclusion">#</a></h2>
+<ul>
+<li>presented a Dual Attention Network (DANet) for scene segmentation, which adaptively integrates local semantic features using the <strong>self-attention mechanism</strong>.</li>
+<li><strong>position attention module</strong> and a <strong>channel attention module</strong> to capture global dependencies in the spatial and channel dimensions respectively.</li>
+<li>dual attention modules <strong>capture long-range contextual information</strong> effectively and give more precise segmentation results.</li>
+<li>Dual Attention Network (DANet) achieves <strong>outstanding performance</strong> consistently on four scene segmentation datasets, Cityscapes, Pascal VOC 2012, Pascal Context, and COCO Stuff.</li>
+</ul>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://landodo.github.io/tags/cnn/">CNN</a></li>
+      <li><a href="http://landodo.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">论文阅读</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://landodo.github.io/posts/20210313-wrn/">
+    <span class="title">« Prev Page</span>
+    <br>
+    <span>Wide Residual Networks</span>
+  </a>
+  <a class="next" href="http://landodo.github.io/posts/20210310-attentive-inception-module/">
+    <span class="title">Next Page »</span>
+    <br>
+    <span>Attentive Inception Module based Convolutional Neural Network for Image Enhancement</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>Landon</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

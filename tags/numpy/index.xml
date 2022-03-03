@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>NumPy on Landodo&#39;s NoteBook</title>
+    <link>http://landodo.github.io/tags/numpy/</link>
+    <description>Recent content in NumPy on Landodo&#39;s NoteBook</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Landon</copyright>
+    <lastBuildDate>Wed, 04 Nov 2020 10:17:29 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/numpy/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Array Programming with NumPy</title>
+      <link>http://landodo.github.io/posts/20201104-paper-numpy/</link>
+      <pubDate>Wed, 04 Nov 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201104-paper-numpy/</guid>
+      <description>#论文阅读-NumPy# 论文名称：Array Programming with NumPy 这是一篇关于 NumPy 的论文，最近也在学习 Python，NumPy 也是常用的一个包，可以花点时间读</description>
+    </item>
+    
+  </channel>
+</rss>
