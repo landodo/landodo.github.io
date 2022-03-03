@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>树莓派 on Landodo&#39;s NoteBook</title>
+    <link>http://landodo.github.io/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/</link>
+    <description>Recent content in 树莓派 on Landodo&#39;s NoteBook</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Landon</copyright>
+    <lastBuildDate>Fri, 03 Nov 2017 22:53:19 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>树莓派——初探</title>
+      <link>http://landodo.github.io/posts/20171103-raspberry-pi/</link>
+      <pubDate>Fri, 03 Nov 2017 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20171103-raspberry-pi/</guid>
+      <description>背景 我接触树莓派已有几个月的时间了，一直在使用树莓派作为一个平台学习去其他方面的知识，可以很确定的说，我的 Linux 学习之路，是树莓派带我入的门。但</description>
+    </item>
+    
+  </channel>
+</rss>

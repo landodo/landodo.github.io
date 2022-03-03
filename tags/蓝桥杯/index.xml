@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>蓝桥杯 on Landodo&#39;s NoteBook</title>
+    <link>http://landodo.github.io/tags/%E8%93%9D%E6%A1%A5%E6%9D%AF/</link>
+    <description>Recent content in 蓝桥杯 on Landodo&#39;s NoteBook</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Landon</copyright>
+    <lastBuildDate>Tue, 17 Apr 2018 22:53:19 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/%E8%93%9D%E6%A1%A5%E6%9D%AF/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>蓝桥杯个人赛电子类_单片机资料整理</title>
+      <link>http://landodo.github.io/posts/20180417-lan-qiao/</link>
+      <pubDate>Tue, 17 Apr 2018 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20180417-lan-qiao/</guid>
+      <description>这是我参加 2018 届蓝桥杯所学习的资料。虽然比赛结果不尽如人意，但是学习 51 单片机的过程是值得回忆的，也是有所收获的。 一、准备工作 1、硬件 CT107</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>HTML on Landodo&#39;s NoteBook</title>
+    <link>http://landodo.github.io/tags/html/</link>
+    <description>Recent content in HTML on Landodo&#39;s NoteBook</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Landon</copyright>
+    <lastBuildDate>Thu, 28 Dec 2017 22:53:19 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/html/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>网页留言板</title>
+      <link>http://landodo.github.io/posts/20171228-message-board/</link>
+      <pubDate>Thu, 28 Dec 2017 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20171228-message-board/</guid>
+      <description>制作一个简单的网页留言板，将游客的留言存储到数据库，管理员登录查看所有的留言并选择是否回复，游客可以查看到管理员的回复。学会使用基本的数据库</description>
+    </item>
+    
+  </channel>
+</rss>

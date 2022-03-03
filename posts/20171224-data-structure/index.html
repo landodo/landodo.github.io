@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+<meta name="robots" content="index, follow">
+<title>数据结构课程设计 | Landodo&#39;s NoteBook</title>
+<meta name="keywords" content="数据结构" />
+<meta name="description" content="任务书 设计名称：学生宿舍管理 宿舍信息包括：宿舍号、性别、容纳人数、住宿费用、住宿学生姓名。试设计一学生宿舍信息管理系统，使之能提供以下功能：">
+<meta name="author" content="">
+<link rel="canonical" href="http://landodo.github.io/posts/20171224-data-structure/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://landodo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://landodo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://landodo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://landodo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://landodo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="数据结构课程设计" />
+<meta property="og:description" content="任务书 设计名称：学生宿舍管理 宿舍信息包括：宿舍号、性别、容纳人数、住宿费用、住宿学生姓名。试设计一学生宿舍信息管理系统，使之能提供以下功能：" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://landodo.github.io/posts/20171224-data-structure/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2017-12-24T22:53:19&#43;08:00" />
+<meta property="article:modified_time" content="2017-12-24T22:53:19&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="数据结构课程设计"/>
+<meta name="twitter:description" content="任务书 设计名称：学生宿舍管理 宿舍信息包括：宿舍号、性别、容纳人数、住宿费用、住宿学生姓名。试设计一学生宿舍信息管理系统，使之能提供以下功能："/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://landodo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "数据结构课程设计",
+      "item": "http://landodo.github.io/posts/20171224-data-structure/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "数据结构课程设计",
+  "name": "数据结构课程设计",
+  "description": "任务书 设计名称：学生宿舍管理 宿舍信息包括：宿舍号、性别、容纳人数、住宿费用、住宿学生姓名。试设计一学生宿舍信息管理系统，使之能提供以下功能：",
+  "keywords": [
+    "数据结构"
+  ],
+  "articleBody": "任务书  设计名称：学生宿舍管理 宿舍信息包括：宿舍号、性别、容纳人数、住宿费用、住宿学生姓名。试设计一学生宿舍信息管理系统，使之能提供以下功能：\n1．宿舍基本信息（包含宿舍号、性别、容纳人数、住宿费用）录入；\n2．将学生分配到指定宿舍号的宿舍；\n3．已住宿的学生退宿舍；\n4．查询宿舍信息，包括宿舍号、性别、容纳人数、住宿费用、已住宿的人数、已住宿学生姓名。\n5．系统以菜单方式工作。\n 分析逻辑图 程序结构图 项目源程序 GitHub\n [https://github.com/dongleilan/University/tree/master/data-structure/DormitoryManagement]\n ",
+  "wordCount" : "202",
+  "inLanguage": "en",
+  "datePublished": "2017-12-24T22:53:19+08:00",
+  "dateModified": "2017-12-24T22:53:19+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://landodo.github.io/posts/20171224-data-structure/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Landodo's NoteBook",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://landodo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://landodo.github.io/" accesskey="h" title="Landodo&#39;s NoteBook (Alt + H)">Landodo&#39;s NoteBook</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://landodo.github.io/search" title="🔍Search (Alt &#43; /)" accesskey=/>
+                    <span>🔍Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/tags" title="Tag">
+                    <span>Tag</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/cs-zoo" title="CS ZOO">
+                    <span>CS ZOO</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://landodo.github.io/">Home</a>&nbsp;»&nbsp;<a href="http://landodo.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      数据结构课程设计
+    </h1>
+    <div class="post-meta"><span title='2017-12-24 22:53:19 +0800 CST'>December 24, 2017</span>&nbsp;·&nbsp;1 min&nbsp;·&nbsp;202 words
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#%e4%bb%bb%e5%8a%a1%e4%b9%a6" aria-label="任务书">任务书</a><ul>
+                        
+                <li>
+                    <a href="#%e8%ae%be%e8%ae%a1%e5%90%8d%e7%a7%b0%e5%ad%a6%e7%94%9f%e5%ae%bf%e8%88%8d%e7%ae%a1%e7%90%86" aria-label="设计名称：学生宿舍管理">设计名称：学生宿舍管理</a></li></ul>
+                </li>
+                <li>
+                    <a href="#%e5%88%86%e6%9e%90%e9%80%bb%e8%be%91%e5%9b%be" aria-label="分析逻辑图">分析逻辑图</a></li>
+                <li>
+                    <a href="#%e7%a8%8b%e5%ba%8f%e7%bb%93%e6%9e%84%e5%9b%be" aria-label="程序结构图">程序结构图</a></li>
+                <li>
+                    <a href="#%e9%a1%b9%e7%9b%ae%e6%ba%90%e7%a8%8b%e5%ba%8f" aria-label="项目源程序">项目源程序</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h3 id="任务书">任务书<a hidden class="anchor" aria-hidden="true" href="#任务书">#</a></h3>
+<blockquote>
+<h4 id="设计名称学生宿舍管理">设计名称：学生宿舍管理<a hidden class="anchor" aria-hidden="true" href="#设计名称学生宿舍管理">#</a></h4>
+<p>宿舍信息包括：宿舍号、性别、容纳人数、住宿费用、住宿学生姓名。试设计一学生宿舍信息管理系统，使之能提供以下功能：</p>
+<p>1．宿舍基本信息（包含宿舍号、性别、容纳人数、住宿费用）录入；</p>
+<p>2．将学生分配到指定宿舍号的宿舍；</p>
+<p>3．已住宿的学生退宿舍；</p>
+<p>4．查询宿舍信息，包括宿舍号、性别、容纳人数、住宿费用、已住宿的人数、已住宿学生姓名。</p>
+<p>5．系统以菜单方式工作。</p>
+</blockquote>
+<h3 id="分析逻辑图">分析逻辑图<a hidden class="anchor" aria-hidden="true" href="#分析逻辑图">#</a></h3>
+<p><img loading="lazy" src="./20171224/2017-12-16-2.07.18.png" alt=""  />
+</p>
+<h3 id="程序结构图">程序结构图<a hidden class="anchor" aria-hidden="true" href="#程序结构图">#</a></h3>
+<p><img loading="lazy" src="./20171224/2017-12-16-2.08.17.png" alt=""  />
+</p>
+<h3 id="项目源程序">项目源程序<a hidden class="anchor" aria-hidden="true" href="#项目源程序">#</a></h3>
+<p><a href="https://github.com/dongleilan/University/tree/master/data-structure/DormitoryManagement">GitHub</a></p>
+<blockquote>
+<p>[https://github.com/dongleilan/University/tree/master/data-structure/DormitoryManagement]</p>
+</blockquote>
+<p><img loading="lazy" src="./20171224/2017-12-24-2.28.26.png" alt=""  />
+</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://landodo.github.io/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/">数据结构</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://landodo.github.io/posts/20171228-message-board/">
+    <span class="title">« Prev Page</span>
+    <br>
+    <span>网页留言板</span>
+  </a>
+  <a class="next" href="http://landodo.github.io/posts/20171224-study-english/">
+    <span class="title">Next Page »</span>
+    <br>
+    <span>每个人都要有属于自己的英语学习方法</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>Landon</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

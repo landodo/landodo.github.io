@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>操作系统 on Landodo&#39;s NoteBook</title>
+    <link>http://landodo.github.io/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</link>
+    <description>Recent content in 操作系统 on Landodo&#39;s NoteBook</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Landon</copyright>
+    <lastBuildDate>Tue, 27 Feb 2018 22:53:19 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Windows 7 操作系统的安装</title>
+      <link>http://landodo.github.io/posts/20180227-windows7/</link>
+      <pubDate>Tue, 27 Feb 2018 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20180227-windows7/</guid>
+      <description>背景 因为急需一台 Windows 操作系统的电脑，装些短期需要用到的软件。而手里有的是一台预装了 Windows 10 操作系统的电脑，配置很差，右键刷新都得等好一会。 安装了 Windows</description>
+    </item>
+    
+  </channel>
+</rss>

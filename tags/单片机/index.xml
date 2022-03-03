@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>单片机 on Landodo&#39;s NoteBook</title>
+    <link>http://landodo.github.io/tags/%E5%8D%95%E7%89%87%E6%9C%BA/</link>
+    <description>Recent content in 单片机 on Landodo&#39;s NoteBook</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Landon</copyright>
+    <lastBuildDate>Thu, 11 Jan 2018 22:53:19 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/%E5%8D%95%E7%89%87%E6%9C%BA/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>IAR Embedded Workbench 基本使用</title>
+      <link>http://landodo.github.io/posts/20180111-iar/</link>
+      <pubDate>Thu, 11 Jan 2018 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20180111-iar/</guid>
+      <description>生成烧录文件 Create New Project 选择 Empty Project 。这个看个人喜好，我一般会选择创建空的工程。` 在 File 新建一个 Document 用于编写程序，保存时注意添加后缀 .c，然后（Add）添</description>
+    </item>
+    
+  </channel>
+</rss>

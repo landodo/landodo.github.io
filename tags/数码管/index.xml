@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>数码管 on Landodo&#39;s NoteBook</title>
+    <link>http://landodo.github.io/tags/%E6%95%B0%E7%A0%81%E7%AE%A1/</link>
+    <description>Recent content in 数码管 on Landodo&#39;s NoteBook</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Landon</copyright>
+    <lastBuildDate>Fri, 20 Apr 2018 22:53:19 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/%E6%95%B0%E7%A0%81%E7%AE%A1/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>【MSP430G2553】数码管</title>
+      <link>http://landodo.github.io/posts/20180420-smg/</link>
+      <pubDate>Fri, 20 Apr 2018 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20180420-smg/</guid>
+      <description>认识七段数码管 数码管的一种是半导体发光器件，数码管可分为七段数码管和八段数码管，区别在于八段数码管比七段数码管多一个用于显示小数点的发光二极</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+<meta name="robots" content="index, follow">
+<title>树莓派——初探 | Landodo&#39;s NoteBook</title>
+<meta name="keywords" content="树莓派" />
+<meta name="description" content="背景 我接触树莓派已有几个月的时间了，一直在使用树莓派作为一个平台学习去其他方面的知识，可以很确定的说，我的 Linux 学习之路，是树莓派带我入的门。但">
+<meta name="author" content="">
+<link rel="canonical" href="http://landodo.github.io/posts/20171103-raspberry-pi/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://landodo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://landodo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://landodo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://landodo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://landodo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="树莓派——初探" />
+<meta property="og:description" content="背景 我接触树莓派已有几个月的时间了，一直在使用树莓派作为一个平台学习去其他方面的知识，可以很确定的说，我的 Linux 学习之路，是树莓派带我入的门。但" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://landodo.github.io/posts/20171103-raspberry-pi/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2017-11-03T22:53:19&#43;08:00" />
+<meta property="article:modified_time" content="2017-11-03T22:53:19&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="树莓派——初探"/>
+<meta name="twitter:description" content="背景 我接触树莓派已有几个月的时间了，一直在使用树莓派作为一个平台学习去其他方面的知识，可以很确定的说，我的 Linux 学习之路，是树莓派带我入的门。但"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://landodo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "树莓派——初探",
+      "item": "http://landodo.github.io/posts/20171103-raspberry-pi/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "树莓派——初探",
+  "name": "树莓派——初探",
+  "description": "背景 我接触树莓派已有几个月的时间了，一直在使用树莓派作为一个平台学习去其他方面的知识，可以很确定的说，我的 Linux 学习之路，是树莓派带我入的门。但",
+  "keywords": [
+    "树莓派"
+  ],
+  "articleBody": "背景 我接触树莓派已有几个月的时间了，一直在使用树莓派作为一个平台学习去其他方面的知识，可以很确定的说，我的 Linux 学习之路，是树莓派带我入的门。但是现在我正在使用的操作系统为 Mac OX ，所以树莓派被我闲置了有一段时间了。\n树莓派对我的帮助是巨大的，所以，我特意写这一篇博客，用来记录并保存树莓派的进度。希望几个月或者更长的时间过后再次拿起树莓派，我可以不用在网上找教程，而是复习自己的笔记，就可以从现在停留的地方继续的开始；又或者是，通过看一遍自己的笔记，并结合网上的教程，让我能在很少的时间里快速的想起自己在树莓派上曾经做过了什么、遇到的问题、解决的办法等等。\n学习的网站 关于树莓派的学习网站。我在玩树莓派的时候不知道任何有关树莓派的论坛，大多是在浏览器上直接进行搜索，但是从我的亲身经历来看，这并不是一个好的入坑方式。所以，我记录下了一些对我帮助很大的网站。\n 官方网站 - https://www.raspberrypi.org 树莓派实验室 - http://shumeipai.nxez.com CSDN http://www.csdn.net  以上三个网站是我学习树莓派的过程中使用得最多的网站。\n我首推的是树莓派的官方网站，官方网站上拥有更加权威的教程，若是英语能力强，我强烈建议阅读官方提供的指导手册，这比看博客要好多。\n然后是「树莓派实验室」，「树莓派实验室」是一个关于树莓派的中文资讯站，提供丰富的树莓派使用教程和DIY资讯。根据它提供的教程，可以很快的完成树莓派环境的搭建，还可以根据里面的博文教程，使用树莓派完成很多小项目，而且，里面还很贴心的提供给使用者可能会需要到的软件了链接，比如 PUTTY、IP SCANNER、SD格式化工具等等。\n其次是 CSDN，它是中国最大的 IT 社区和服务平台，里面有很多高质量的博客、教程、资源，可以助你一臂之力。\n目录  树莓派的简介 准备工作 安装操作系统 登录到树莓派 使用树莓派做些事  树莓派的简介 树莓派（Raspberry Pi）是一款由英国的树莓派基金会开发的、信用卡大小的单板电脑，最初目的是促进及提升在校学生的基础计算机教育水平，但由于其价格低廉，并且已经有大量操作系统（主要是 Linux）被移植到了树莓派上，越来越多的技术人员及爱好者都开始使用树莓派来开发有用或有趣的软件硬件系统。\n准备工作 以下是我在树莓派的学习过程中所使用到的东西：\n  树莓派\n  SD 卡\n  读卡器\n  网线\n  HDMI 转 VGA\n  键盘和鼠标\n  安装操作系统 树莓派的官方网站提供了针对树莓派的操作系统，如下：\n关于树莓派的操作系统可有不同的选择，我选择的是以下这个带图形界面的：\n安装的过程很简单，安装教程很容易找得到。我使用的是一台 Windows7 的台式点脑，使用 [Win32DiskImager] 将下载好的操作系统镜像写入 SD 卡，再将 SD 卡插入树莓派，通电启动即可。\n登录树莓派 操作系统安装完毕后，如何登录自己的树莓派呢？方法有两种：\n 使用 HDMI 转 VGA 连接外接显示器 通过 SSH 或 VNG 远程登录  第一种方法很简单，也最直接，但是成本过高。在没有转接线和显示器的情况下，可以使用第二种方法。通过 SSH 远程登录，SSH 远程登录需要知道树莓派的 IP 地址，我使用 [Advanced IP Scanner] 获取到树莓派的 IP。\n使用树莓派做些事 以下是我使用树莓派做的一个小工程：\n GPIO  我使用树莓派的 GPIO 外接一个小风扇，并通过一个Python 脚本开机自启、后台执行，实现对树莓派芯片的控温。只须一行代码就可读取到树莓派芯片的温度，根据此时的芯片温度判断是否开启／关闭风扇。\n USB 摄像头  我尝试安装 OpenCV，并使用摄像头做监控、识别，但是 OpenCV 在编译安装的时候频频报错，安装过程持续了好几个晚上，每次我执行 make 指令后，便回寝室休息，第二天早上再查看安装状况，可是结果总是不尽人意。目前只能监控、拍照，还无法识别。\n我用到的软件 以下的这些软件是我在学习树莓派时使用到的工具：\n PuTTY SD 卡格式化工具 —— 有墙 Win32DiskImager Advanced IP Scanne VNC Viewer  最后 关于树莓派的第一阶段学习我做了一个总结性的 PPT ，主要是一些我遇到的问题和解决方法。托管在了 GitHub 上。\n 2017-12-22更：\n树莓派的 OpenCV 已经安装完成，环境配置问题已得到解决。下载源码编译安装，出现了报错，几经尝试也无法得到解决，所以使用了 apt-get 的方式安装，很顺利。\n最近实验室购买了一台 TURTLEBOT3（http://www.turtlebot.com）。TurtleBot是一个低成本的个人机器人工具包，具有开源软件。 TurtleBot 是由 Melonee Wise 和 Tully Foote 于 2010 年 11 月由 Willow Garage 创建的。 通过TurtleBot，可以建立一个机器人，可以在房子周围导航，观看 3D，并有足够的力量来创造令人兴奋的应用程序。我对 TURTLEBOT3 上搭载的树莓派很感兴趣，目前在学习 TURTLEBOT3 的图像处理相关方面内容。\nSBC : Respberry Pi 3\nMCU : OpenCR\n目前环境基本配置完成，Ubuntu16.04、ROS。\n ",
+  "wordCount" : "1829",
+  "inLanguage": "en",
+  "datePublished": "2017-11-03T22:53:19+08:00",
+  "dateModified": "2017-11-03T22:53:19+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://landodo.github.io/posts/20171103-raspberry-pi/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Landodo's NoteBook",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://landodo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://landodo.github.io/" accesskey="h" title="Landodo&#39;s NoteBook (Alt + H)">Landodo&#39;s NoteBook</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://landodo.github.io/search" title="🔍Search (Alt &#43; /)" accesskey=/>
+                    <span>🔍Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/tags" title="Tag">
+                    <span>Tag</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/cs-zoo" title="CS ZOO">
+                    <span>CS ZOO</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://landodo.github.io/">Home</a>&nbsp;»&nbsp;<a href="http://landodo.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      树莓派——初探
+    </h1>
+    <div class="post-meta"><span title='2017-11-03 22:53:19 +0800 CST'>November 3, 2017</span>&nbsp;·&nbsp;4 min&nbsp;·&nbsp;1829 words
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#%e8%83%8c%e6%99%af" aria-label="背景">背景</a></li>
+                <li>
+                    <a href="#%e5%ad%a6%e4%b9%a0%e7%9a%84%e7%bd%91%e7%ab%99" aria-label="学习的网站">学习的网站</a></li>
+                <li>
+                    <a href="#%e7%9b%ae%e5%bd%95" aria-label="目录">目录</a></li>
+                <li>
+                    <a href="#%e6%a0%91%e8%8e%93%e6%b4%be%e7%9a%84%e7%ae%80%e4%bb%8b" aria-label="树莓派的简介">树莓派的简介</a></li>
+                <li>
+                    <a href="#%e5%87%86%e5%a4%87%e5%b7%a5%e4%bd%9c" aria-label="准备工作">准备工作</a></li>
+                <li>
+                    <a href="#%e5%ae%89%e8%a3%85%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f" aria-label="安装操作系统">安装操作系统</a></li>
+                <li>
+                    <a href="#%e7%99%bb%e5%bd%95%e6%a0%91%e8%8e%93%e6%b4%be" aria-label="登录树莓派">登录树莓派</a></li>
+                <li>
+                    <a href="#%e4%bd%bf%e7%94%a8%e6%a0%91%e8%8e%93%e6%b4%be%e5%81%9a%e4%ba%9b%e4%ba%8b" aria-label="使用树莓派做些事">使用树莓派做些事</a></li>
+                <li>
+                    <a href="#%e6%88%91%e7%94%a8%e5%88%b0%e7%9a%84%e8%bd%af%e4%bb%b6" aria-label="我用到的软件">我用到的软件</a></li>
+                <li>
+                    <a href="#%e6%9c%80%e5%90%8e" aria-label="最后">最后</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h2 id="背景">背景<a hidden class="anchor" aria-hidden="true" href="#背景">#</a></h2>
+<p>我接触树莓派已有几个月的时间了，一直在使用树莓派作为一个平台学习去其他方面的知识，可以很确定的说，我的 Linux 学习之路，是树莓派带我入的门。但是现在我正在使用的操作系统为 Mac OX ，所以树莓派被我闲置了有一段时间了。</p>
+<p>树莓派对我的帮助是巨大的，所以，我特意写这一篇博客，用来记录并保存树莓派的进度。希望几个月或者更长的时间过后再次拿起树莓派，我可以不用在网上找教程，而是复习自己的笔记，就可以从现在停留的地方继续的开始；又或者是，通过看一遍自己的笔记，并结合网上的教程，让我能在很少的时间里快速的想起自己在树莓派上曾经做过了什么、遇到的问题、解决的办法等等。</p>
+<h2 id="学习的网站">学习的网站<a hidden class="anchor" aria-hidden="true" href="#学习的网站">#</a></h2>
+<p>关于树莓派的学习网站。我在玩树莓派的时候不知道任何有关树莓派的论坛，大多是在浏览器上直接进行搜索，但是从我的亲身经历来看，这并不是一个好的入坑方式。所以，我记录下了一些对我帮助很大的网站。</p>
+<ol>
+<li>官方网站 - <a href="https://www.raspberrypi.org">https://www.raspberrypi.org</a></li>
+<li>树莓派实验室 - <a href="http://shumeipai.nxez.com">http://shumeipai.nxez.com</a></li>
+<li>CSDN <a href="http://www.csdn.net">http://www.csdn.net</a></li>
+</ol>
+<p>以上三个网站是我学习树莓派的过程中使用得最多的网站。</p>
+<p>我首推的是树莓派的官方网站，官方网站上拥有更加权威的教程，若是英语能力强，我强烈建议阅读官方提供的指导手册，这比看博客要好多。</p>
+<p>然后是「树莓派实验室」，「树莓派实验室」是一个关于树莓派的中文资讯站，提供丰富的树莓派使用教程和DIY资讯。根据它提供的教程，可以很快的完成树莓派环境的搭建，还可以根据里面的博文教程，使用树莓派完成很多小项目，而且，里面还很贴心的提供给使用者可能会需要到的软件了链接，比如 PUTTY、IP SCANNER、SD格式化工具等等。</p>
+<p>其次是 CSDN，它是中国最大的 IT 社区和服务平台，里面有很多高质量的博客、教程、资源，可以助你一臂之力。</p>
+<h2 id="目录">目录<a hidden class="anchor" aria-hidden="true" href="#目录">#</a></h2>
+<ol>
+<li>树莓派的简介</li>
+<li>准备工作</li>
+<li>安装操作系统</li>
+<li>登录到树莓派</li>
+<li>使用树莓派做些事</li>
+</ol>
+<h2 id="树莓派的简介">树莓派的简介<a hidden class="anchor" aria-hidden="true" href="#树莓派的简介">#</a></h2>
+<p><img loading="lazy" src="./20171103/raspberry-pi.png" alt=""  />
+</p>
+<p>树莓派（Raspberry Pi）是一款由英国的树莓派基金会开发的、信用卡大小的单板电脑，最初目的是促进及提升在校学生的基础计算机教育水平，但由于其价格低廉，并且已经有大量操作系统（主要是 Linux）被移植到了树莓派上，越来越多的技术人员及爱好者都开始使用树莓派来开发有用或有趣的软件硬件系统。</p>
+<h2 id="准备工作">准备工作<a hidden class="anchor" aria-hidden="true" href="#准备工作">#</a></h2>
+<p>以下是我在树莓派的学习过程中所使用到的东西：</p>
+<ul>
+<li>
+<p>树莓派</p>
+</li>
+<li>
+<p>SD 卡</p>
+</li>
+<li>
+<p>读卡器</p>
+</li>
+<li>
+<p>网线</p>
+</li>
+<li>
+<p>HDMI 转 VGA</p>
+</li>
+<li>
+<p>键盘和鼠标</p>
+</li>
+</ul>
+<h2 id="安装操作系统">安装操作系统<a hidden class="anchor" aria-hidden="true" href="#安装操作系统">#</a></h2>
+<p>树莓派的官方网站提供了针对树莓派的操作系统，如下：</p>
+<p><img loading="lazy" src="./20171103/raspbian.png" alt=""  />
+</p>
+<p>关于树莓派的操作系统可有不同的选择，我选择的是以下这个带图形界面的：</p>
+<p><img loading="lazy" src="./20171103/me-raspbian.png" alt=""  />
+</p>
+<p>安装的过程很简单，安装教程很容易找得到。我使用的是一台 Windows7 的台式点脑，使用 [Win32DiskImager] 将下载好的操作系统镜像写入 SD 卡，再将 SD 卡插入树莓派，通电启动即可。</p>
+<h2 id="登录树莓派">登录树莓派<a hidden class="anchor" aria-hidden="true" href="#登录树莓派">#</a></h2>
+<p>操作系统安装完毕后，如何登录自己的树莓派呢？方法有两种：</p>
+<ol>
+<li>使用 HDMI 转 VGA 连接外接显示器</li>
+<li>通过 SSH 或 VNG 远程登录</li>
+</ol>
+<p>第一种方法很简单，也最直接，但是成本过高。在没有转接线和显示器的情况下，可以使用第二种方法。通过 SSH 远程登录，SSH 远程登录需要知道树莓派的 IP 地址，我使用 [Advanced IP Scanner] 获取到树莓派的 IP。</p>
+<h2 id="使用树莓派做些事">使用树莓派做些事<a hidden class="anchor" aria-hidden="true" href="#使用树莓派做些事">#</a></h2>
+<p>以下是我使用树莓派做的一个小工程：</p>
+<ul>
+<li>GPIO</li>
+</ul>
+<p>我使用树莓派的 GPIO 外接一个小风扇，并通过一个Python 脚本开机自启、后台执行，实现对树莓派芯片的控温。只须一行代码就可读取到树莓派芯片的温度，根据此时的芯片温度判断是否开启／关闭风扇。</p>
+<ul>
+<li>USB 摄像头</li>
+</ul>
+<p>我尝试安装 OpenCV，并使用摄像头做监控、识别，但是 OpenCV 在编译安装的时候频频报错，安装过程持续了好几个晚上，每次我执行 make 指令后，便回寝室休息，第二天早上再查看安装状况，可是结果总是不尽人意。目前只能监控、拍照，还无法识别。</p>
+<h2 id="我用到的软件">我用到的软件<a hidden class="anchor" aria-hidden="true" href="#我用到的软件">#</a></h2>
+<p>以下的这些软件是我在学习树莓派时使用到的工具：</p>
+<ol>
+<li><a href="https://pan.baidu.com/share/link?shareid=2217335081&amp;uk=605377859">PuTTY</a></li>
+<li><a href="https://www.sdcard.org/downloads/formatter_4/">SD 卡格式化工具</a> —— 有墙</li>
+<li><a href="http://sourceforge.net/projects/win32diskimager/files/Archive/win32diskimager-v0.9-binary.zip/download">Win32DiskImager</a></li>
+<li><a href="https://pan.baidu.com/share/link?shareid=3434443053&amp;uk=605377859">Advanced IP Scanne</a></li>
+<li><a href="https://www.realvnc.com/en/connect/download/viewer/">VNC Viewer</a></li>
+</ol>
+<h2 id="最后">最后<a hidden class="anchor" aria-hidden="true" href="#最后">#</a></h2>
+<p>关于树莓派的第一阶段学习我做了一个总结性的 <a href="https://github.com/dongleilan/My-University/tree/master/Raspberry-Pi">PPT</a> ，主要是一些我遇到的问题和解决方法。托管在了 GitHub 上。</p>
+<p><img loading="lazy" src="./20171103/raspberry-ppt.png" alt=""  />
+</p>
+<hr>
+<p>2017-12-22更：</p>
+<p>树莓派的 OpenCV 已经安装完成，环境配置问题已得到解决。下载源码编译安装，出现了报错，几经尝试也无法得到解决，所以使用了 apt-get 的方式安装，很顺利。</p>
+<p>最近实验室购买了一台 TURTLEBOT3（http://www.turtlebot.com）。TurtleBot是一个低成本的个人机器人工具包，具有开源软件。 TurtleBot 是由 Melonee Wise 和 Tully Foote 于 2010 年 11 月由 Willow Garage 创建的。 通过TurtleBot，可以建立一个机器人，可以在房子周围导航，观看 3D，并有足够的力量来创造令人兴奋的应用程序。我对 TURTLEBOT3 上搭载的树莓派很感兴趣，目前在学习 TURTLEBOT3 的图像处理相关方面内容。</p>
+<p><img loading="lazy" src="./20171103/turtlebot3_with_logo.png" alt=""  />
+</p>
+<p>SBC : Respberry Pi 3</p>
+<p>MCU : OpenCR</p>
+<p>目前环境基本配置完成，Ubuntu16.04、ROS。</p>
+<hr>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://landodo.github.io/tags/%E6%A0%91%E8%8E%93%E6%B4%BE/">树莓派</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://landodo.github.io/posts/20171224-study-english/">
+    <span class="title">« Prev Page</span>
+    <br>
+    <span>每个人都要有属于自己的英语学习方法</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>Landon</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

@@ -530,5 +530,113 @@
       <description>深度学习基础图书 今天又花了点时间看了一本书（第二遍）——《深度学习入门——基于 Python 的理论与实践》。 全书下载地址：https://github.</description>
     </item>
     
+    <item>
+      <title>【MSP430G2553】数码管</title>
+      <link>http://landodo.github.io/posts/20180420-smg/</link>
+      <pubDate>Fri, 20 Apr 2018 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20180420-smg/</guid>
+      <description>认识七段数码管 数码管的一种是半导体发光器件，数码管可分为七段数码管和八段数码管，区别在于八段数码管比七段数码管多一个用于显示小数点的发光二极</description>
+    </item>
+    
+    <item>
+      <title>蓝桥杯个人赛电子类_单片机资料整理</title>
+      <link>http://landodo.github.io/posts/20180417-lan-qiao/</link>
+      <pubDate>Tue, 17 Apr 2018 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20180417-lan-qiao/</guid>
+      <description>这是我参加 2018 届蓝桥杯所学习的资料。虽然比赛结果不尽如人意，但是学习 51 单片机的过程是值得回忆的，也是有所收获的。 一、准备工作 1、硬件 CT107</description>
+    </item>
+    
+    <item>
+      <title>【MSP430G2553单片机】HC-05蓝牙模块</title>
+      <link>http://landodo.github.io/posts/20180414-msp430g2553-hc-05/</link>
+      <pubDate>Sat, 14 Apr 2018 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20180414-msp430g2553-hc-05/</guid>
+      <description>HC-05 产品参数 1、PCB 尺寸：37.3mm * 15.5mm 2、重量：3.5g 3、输入电压：3.6 - 6V，电源自带反接，反接不工作。 4、引出 6 个引脚：EN/V</description>
+    </item>
+    
+    <item>
+      <title>Windows 7 操作系统的安装</title>
+      <link>http://landodo.github.io/posts/20180227-windows7/</link>
+      <pubDate>Tue, 27 Feb 2018 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20180227-windows7/</guid>
+      <description>背景 因为急需一台 Windows 操作系统的电脑，装些短期需要用到的软件。而手里有的是一台预装了 Windows 10 操作系统的电脑，配置很差，右键刷新都得等好一会。 安装了 Windows</description>
+    </item>
+    
+    <item>
+      <title>IAR Embedded Workbench 基本使用</title>
+      <link>http://landodo.github.io/posts/20180111-iar/</link>
+      <pubDate>Thu, 11 Jan 2018 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20180111-iar/</guid>
+      <description>生成烧录文件 Create New Project 选择 Empty Project 。这个看个人喜好，我一般会选择创建空的工程。` 在 File 新建一个 Document 用于编写程序，保存时注意添加后缀 .c，然后（Add）添</description>
+    </item>
+    
+    <item>
+      <title>Sublime Text 编辑器快捷键</title>
+      <link>http://landodo.github.io/posts/20180105-sublime/</link>
+      <pubDate>Fri, 05 Jan 2018 16:46:00 +0000</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20180105-sublime/</guid>
+      <description>光标 ⌘→ ：行尾 ⌘← ：行首 ⌘↑：文件头 ⌘↓：文件尾 词操作 ⌘D：选中光标所占的文本，继续操作则会选中下一个相同的文本 ⌘⌥F：替换 行操作 ⌘↩ ：当前</description>
+    </item>
+    
+    <item>
+      <title>VIM 编辑器笔记</title>
+      <link>http://landodo.github.io/posts/20180102-vim/</link>
+      <pubDate>Tue, 02 Jan 2018 23:29:00 +0000</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20180102-vim/</guid>
+      <description>Normal 模式 编辑 i 光标前插入 I 当前行首插入 a 光标后插入 A 当前行尾插入 o 当前行上一行插入 O 当前行下一行插入 dd 删除（剪切）光标所在行 u 撤销 x 删除光标当</description>
+    </item>
+    
+    <item>
+      <title>我的常用工具</title>
+      <link>http://landodo.github.io/posts/20171229-tools/</link>
+      <pubDate>Thu, 28 Dec 2017 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20171229-tools/</guid>
+      <description>以下是我的个人电脑浏览器常用的工具，这篇笔记的目的是保存下我最常使用的一些工具链接，以便于我自己的电脑不在身边的时候，我能将身边的任何一台电</description>
+    </item>
+    
+    <item>
+      <title>网页留言板</title>
+      <link>http://landodo.github.io/posts/20171228-message-board/</link>
+      <pubDate>Thu, 28 Dec 2017 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20171228-message-board/</guid>
+      <description>制作一个简单的网页留言板，将游客的留言存储到数据库，管理员登录查看所有的留言并选择是否回复，游客可以查看到管理员的回复。学会使用基本的数据库</description>
+    </item>
+    
+    <item>
+      <title>数据结构课程设计</title>
+      <link>http://landodo.github.io/posts/20171224-data-structure/</link>
+      <pubDate>Sun, 24 Dec 2017 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20171224-data-structure/</guid>
+      <description>任务书 设计名称：学生宿舍管理 宿舍信息包括：宿舍号、性别、容纳人数、住宿费用、住宿学生姓名。试设计一学生宿舍信息管理系统，使之能提供以下功能：</description>
+    </item>
+    
+    <item>
+      <title>每个人都要有属于自己的英语学习方法</title>
+      <link>http://landodo.github.io/posts/20171224-study-english/</link>
+      <pubDate>Sun, 24 Dec 2017 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20171224-study-english/</guid>
+      <description>「怎样学英语才是最有效的」 我的小书屋 mebook.cc 中的一本书，书名《把你的英语用起来！新版》伍君仪&amp;amp;刘晓光 学英语，要么彻底放弃，要么就必须一鼓作</description>
+    </item>
+    
+    <item>
+      <title>树莓派——初探</title>
+      <link>http://landodo.github.io/posts/20171103-raspberry-pi/</link>
+      <pubDate>Fri, 03 Nov 2017 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20171103-raspberry-pi/</guid>
+      <description>背景 我接触树莓派已有几个月的时间了，一直在使用树莓派作为一个平台学习去其他方面的知识，可以很确定的说，我的 Linux 学习之路，是树莓派带我入的门。但</description>
+    </item>
+    
   </channel>
 </rss>

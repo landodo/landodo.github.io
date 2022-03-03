@@ -17,5 +17,14 @@
       <description>Hi, Hugo! Hello, Hugo! 这是第一篇内容！将原来的笔记从 Jellky 全部转移至 Hugo。下面是一些关于这个新站点建立时的笔记。 Hugo 默认是使用 TOML，现在将此更改为更易阅</description>
     </item>
     
+    <item>
+      <title>我的常用工具</title>
+      <link>http://landodo.github.io/posts/20171229-tools/</link>
+      <pubDate>Thu, 28 Dec 2017 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20171229-tools/</guid>
+      <description>以下是我的个人电脑浏览器常用的工具，这篇笔记的目的是保存下我最常使用的一些工具链接，以便于我自己的电脑不在身边的时候，我能将身边的任何一台电</description>
+    </item>
+    
   </channel>
 </rss>

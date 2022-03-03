@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+<meta name="robots" content="index, follow">
+<title>【MSP430G2553】数码管 | Landodo&#39;s NoteBook</title>
+<meta name="keywords" content="数码管" />
+<meta name="description" content="认识七段数码管 数码管的一种是半导体发光器件，数码管可分为七段数码管和八段数码管，区别在于八段数码管比七段数码管多一个用于显示小数点的发光二极">
+<meta name="author" content="">
+<link rel="canonical" href="http://landodo.github.io/posts/20180420-smg/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://landodo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://landodo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://landodo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://landodo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://landodo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="【MSP430G2553】数码管" />
+<meta property="og:description" content="认识七段数码管 数码管的一种是半导体发光器件，数码管可分为七段数码管和八段数码管，区别在于八段数码管比七段数码管多一个用于显示小数点的发光二极" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://landodo.github.io/posts/20180420-smg/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2018-04-20T22:53:19&#43;08:00" />
+<meta property="article:modified_time" content="2018-04-20T22:53:19&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="【MSP430G2553】数码管"/>
+<meta name="twitter:description" content="认识七段数码管 数码管的一种是半导体发光器件，数码管可分为七段数码管和八段数码管，区别在于八段数码管比七段数码管多一个用于显示小数点的发光二极"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://landodo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "【MSP430G2553】数码管",
+      "item": "http://landodo.github.io/posts/20180420-smg/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "【MSP430G2553】数码管",
+  "name": "【MSP430G2553】数码管",
+  "description": "认识七段数码管 数码管的一种是半导体发光器件，数码管可分为七段数码管和八段数码管，区别在于八段数码管比七段数码管多一个用于显示小数点的发光二极",
+  "keywords": [
+    "数码管"
+  ],
+  "articleBody": "认识七段数码管 数码管的一种是半导体发光器件，数码管可分为七段数码管和八段数码管，区别在于八段数码管比七段数码管多一个用于显示小数点的发光二极管单元 DP（decimal point），其基本单元是发光二极管。\n按发光二极管单元连接方式可分为共阳极数码管和共阴极数码管。共阳数码管是指将所有发光二极管的阳极接到一起形成公共阳极(COM)的数码管，共阳数码管在应用时应将公共极 COM 接到 +5V，当某一字段发光二极管的阴极为低电平时，相应字段就点亮，当某一字段的阴极为高电平时，相应字段就不亮。共阴数码管是指将所有发光二极管的阴极接到一起形成公共阴极(COM)的数码管，共阴数码管在应用时应将公共极 COM 接到地线 GND 上，当某一字段发光二极管的阳极为高电平时，相应字段就点亮，当某一字段的阳极为低电平时，相应字段就不亮。\n数码管的显示 数码管中有位选和段选，位选就是选择哪个数码管，段选就是被选择的数码管要显示什么数字！以共阳极数码管为例, 要想点亮某段, 只需要在相应的段上给低电平即可。\n数码管真值表\n共阳：\n共阴：\n静态显示\n数码管静态显示是对应动态显示而言的，静态显示对于一两个数码管还行，多个数码管，静态显示实现的就失去了存在的意义。静态驱动是指每个数码管的每一个段码都由一个单片机的 I/O 端口进行驱动，静态驱动的优点是编程简单，显示亮度高，缺点是占用I/O端口多。\n静态实现十分的简单，不在本篇中做更多的笔记。\n动态显示\n数码管动态显示接口是单片机中应用最为广泛的一种显示方式之一，动态驱动是将所有数码管的8个显示笔划 “a,b,c,d,e,f,g,dp” 的同名端连在一起，另外为每个数码管的公共极 COM 增加位选通控制电路，位选通由各自独立的 I/O 线控制，当单片机输出字形码时，所有数码管都接收到相同的字形码，但究竟是哪个数码管会显示出字形，取决于单片机对位选通 COM 端电路的控制，所以我们只要将需要显示的数码管的选通控制打开，该位就显示出字形，没有选通的数码管就不会亮。通过分时轮流控制各个数码管的的 COM 端，就使各个数码管轮流受控显示，这就是动态驱动。在轮流显示过程中，每位数码管的点亮时间为 1～2ms，由于人的视觉暂留现象及发光二极管的余辉效应，尽管实际上各位数码管并非同时点亮，但只要扫描的速度足够快，给人的印象就是一组稳定的显示数据，不会有闪烁感，动态显示的效果和静态显示是一样的，能够节省大量的 I/O 端口，而且功耗更低。\n——————百度百科\n程序分解  数码管的动态需要对定时器有一定的了解。  0、定义变量\ntab[] ：共阳数码管编码\nstrtab[]：显示缓冲区\ntime：倒计时长\nt：辅助定时器A，产生 1 S 计数\n // 0 1 2 3 4 5 6 7 8 9 - off unsigned char tab[] = {0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90,0xbf,0xff}; unsigned char strtab[4]; // display buffer unsigned int time = 9999; // time for 9999 unsigned char t = 0; // The auxiliary timer produces one second 1、初始化\n 关闭看门狗定时器  WDTCTL = WDTPW + WDTHOLD; // Stop WDT  I／O  设置 MSP320G2553 单片机的 P1.0 ~ P1.7 和 P2.0 ~ P2.3 为输出口，用于控制数码管的段选和位选。\n P1DIR |= 0xff; // P1.0 - P1.7 output  P2DIR |= 0x0f; // P2.0 - P2.3 for COMx  定时器  中断使能、初值 5ms。\n CCTL0 = CCIE; // CCR0 interrupt enabled  CCR0 = 5000; // Set the initial value for CCR0  TACTL = TASSEL_2 + MC_1; // SMCLK, upmode 2、中断服务函数\n动态扫描数码管。\n// Timer A0 interrupt service routine #pragma vector=TIMER0_A0_VECTOR __interrupt void Timer_A (void) {  static unsigned char num = 0;  // Scanning  switch (num)  {  case 0: P2OUT = BIT0; P1OUT = strtab[num]; break;  case 1: P2OUT = BIT1; P1OUT = strtab[num]; break;  case 2: P2OUT = BIT2; P1OUT = strtab[num]; break;  case 3: P2OUT = BIT3; P1OUT = strtab[num]; break;  default: break;  }  num++;  if (num == 4)  num = 0; } 3、倒计时、显示字符\n程序段处于中断服务函数中。\n// in Timer A0 interrupt service routine t++; if (t == 200) // 5ms * 200 = 1S (one minute time--) { if (time  0)  time--; else  time = 9999; }  // Displaying strtab[0] = tab[(time / 1000) % 10]; strtab[1] = tab[(time / 100) % 10]; strtab[2] = tab[(time / 10) % 10]; strtab[3] = tab[time % 10]; 完整源程序 #include  // 0 1 2 3 4 5 6 7 8 9 - off unsigned char tab[] = {0xc0,0xf9,0xa4,0xb0,0x99,0x92,0x82,0xf8,0x80,0x90,0xbf,0xff}; unsigned char strtab[4]; // display buffer unsigned int time = 9999; // time for 9999 unsigned char t = 0; // The auxiliary timer produces one second  int main(void) {  WDTCTL = WDTPW + WDTHOLD; // Stop WDT  P1DIR |= 0xff; // P1.0 - P1.7 output  P2DIR |= 0x0f; // P2.0 - P2.3 for COMx  CCTL0 = CCIE; // CCR0 interrupt enabled  CCR0 = 5000; // Set the initial value for CCR0  TACTL = TASSEL_2 + MC_1; // SMCLK, upmode  __bis_SR_register(LPM0_bits + GIE); // Enter LPM0 w/ interrupt  }  // Timer A0 interrupt service routine #pragma vector=TIMER0_A0_VECTOR __interrupt void Timer_A (void) {  static unsigned char num = 0;  // Scanning  switch (num)  {  case 0: P2OUT = BIT0; P1OUT = strtab[num]; break;  case 1: P2OUT = BIT1; P1OUT = strtab[num]; break;  case 2: P2OUT = BIT2; P1OUT = strtab[num]; break;  case 3: P2OUT = BIT3; P1OUT = strtab[num]; break;  default: break;  }  num++;  if (num == 4)  num = 0;   // Timing \tt++; \tif (t == 200) // 5ms * 200 = 1S (one minute time--) \t{ \tif (time  0) \ttime--; \telse \ttime = 9999; \t}  \t// Displaying \tstrtab[0] = tab[(time / 1000) % 10]; \tstrtab[1] = tab[(time / 100) % 10]; \tstrtab[2] = tab[(time / 10) % 10]; \tstrtab[3] = tab[time % 10]; } 图片记录\n",
+  "wordCount" : "1628",
+  "inLanguage": "en",
+  "datePublished": "2018-04-20T22:53:19+08:00",
+  "dateModified": "2018-04-20T22:53:19+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://landodo.github.io/posts/20180420-smg/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Landodo's NoteBook",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://landodo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://landodo.github.io/" accesskey="h" title="Landodo&#39;s NoteBook (Alt + H)">Landodo&#39;s NoteBook</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://landodo.github.io/search" title="🔍Search (Alt &#43; /)" accesskey=/>
+                    <span>🔍Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/tags" title="Tag">
+                    <span>Tag</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/cs-zoo" title="CS ZOO">
+                    <span>CS ZOO</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://landodo.github.io/">Home</a>&nbsp;»&nbsp;<a href="http://landodo.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      【MSP430G2553】数码管
+    </h1>
+    <div class="post-meta"><span title='2018-04-20 22:53:19 +0800 CST'>April 20, 2018</span>&nbsp;·&nbsp;4 min&nbsp;·&nbsp;1628 words
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#%e8%ae%a4%e8%af%86%e4%b8%83%e6%ae%b5%e6%95%b0%e7%a0%81%e7%ae%a1" aria-label="认识七段数码管">认识七段数码管</a></li>
+                <li>
+                    <a href="#%e6%95%b0%e7%a0%81%e7%ae%a1%e7%9a%84%e6%98%be%e7%a4%ba" aria-label="数码管的显示">数码管的显示</a></li>
+                <li>
+                    <a href="#%e7%a8%8b%e5%ba%8f%e5%88%86%e8%a7%a3" aria-label="程序分解">程序分解</a></li>
+                <li>
+                    <a href="#%e5%ae%8c%e6%95%b4%e6%ba%90%e7%a8%8b%e5%ba%8f" aria-label="完整源程序">完整源程序</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h3 id="认识七段数码管">认识七段数码管<a hidden class="anchor" aria-hidden="true" href="#认识七段数码管">#</a></h3>
+<p><a href="https://baike.baidu.com/item/%E6%95%B0%E7%A0%81%E7%AE%A1">数码管</a>的一种是半导体发光器件，数码管可分为七段数码管和八段数码管，区别在于八段数码管比七段数码管多一个用于显示小数点的发光二极管单元 DP（decimal point），其基本单元是<a href="https://baike.baidu.com/item/%E5%8F%91%E5%85%89%E4%BA%8C%E6%9E%81%E7%AE%A1">发光二极管</a>。</p>
+<p>按发光二极管单元连接方式可分为<strong>共阳极数码管</strong>和<strong>共阴极数码管</strong>。共阳数码管是指将所有发光二极管的阳极接到一起形成公共阳极(COM)的数码管，共阳数码管在应用时应将公共极 COM 接到 +5V，当某一字段发光二极管的阴极为低电平时，相应字段就点亮，当某一字段的阴极为高电平时，相应字段就不亮。共阴数码管是指将所有发光二极管的阴极接到一起形成公共阴极(COM)的数码管，共阴数码管在应用时应将公共极 COM 接到地线 GND 上，当某一字段发光二极管的阳极为高电平时，相应字段就点亮，当某一字段的阳极为低电平时，相应字段就不亮。</p>
+<p><img loading="lazy" src="./20180420/smg.jpg" alt=""  />
+</p>
+<h3 id="数码管的显示">数码管的显示<a hidden class="anchor" aria-hidden="true" href="#数码管的显示">#</a></h3>
+<p>数码管中有位选和段选，位选就是选择哪个数码管，段选就是被选择的数码管要显示什么数字！以共阳极数码管为例, 要想点亮某段, 只需要在相应的段上给低电平即可。</p>
+<p><strong>数码管真值表</strong></p>
+<p>共阳：</p>
+<p><img loading="lazy" src="./20180420/smg2.png" alt=""  />
+</p>
+<p>共阴：</p>
+<p><img loading="lazy" src="./20180420/smg3.png" alt=""  />
+</p>
+<p><strong>静态显示</strong></p>
+<p>数码管静态显示是对应动态显示而言的，静态显示对于一两个数码管还行，多个数码管，静态显示实现的就失去了存在的意义。静态驱动是指每个数码管的每一个段码都由一个单片机的 I/O 端口进行驱动，静态驱动的优点是编程简单，显示亮度高，缺点是占用I/O端口多。</p>
+<p>静态实现十分的简单，不在本篇中做更多的笔记。</p>
+<p><strong>动态显示</strong></p>
+<p>数码管动态显示接口是单片机中应用最为广泛的一种显示方式之一，动态驱动是将所有数码管的8个显示笔划 &ldquo;a,b,c,d,e,f,g,dp&rdquo; 的同名端连在一起，另外为每个数码管的公共极 COM 增加位选通控制电路，位选通由各自独立的 I/O 线控制，当单片机输出字形码时，所有数码管都接收到相同的字形码，但究竟是哪个数码管会显示出字形，取决于单片机对位选通 COM 端电路的控制，所以我们只要将需要显示的数码管的选通控制打开，该位就显示出字形，没有选通的数码管就不会亮。通过分时轮流控制各个数码管的的 COM 端，就使各个数码管轮流受控显示，这就是动态驱动。在轮流显示过程中，每位数码管的点亮时间为 1～2ms，由于人的视觉暂留现象及发光二极管的余辉效应，尽管实际上各位数码管并非同时点亮，但只要扫描的速度足够快，给人的印象就是一组稳定的显示数据，不会有闪烁感，动态显示的效果和静态显示是一样的，能够节省大量的 I/O 端口，而且功耗更低。</p>
+<p>——————<a href="https://baike.baidu.com/item/%E6%95%B0%E7%A0%81%E7%AE%A1/9903965">百度百科</a></p>
+<h3 id="程序分解">程序分解<a hidden class="anchor" aria-hidden="true" href="#程序分解">#</a></h3>
+<ul>
+<li>数码管的动态需要对定时器有一定的了解。</li>
+</ul>
+<p>0、定义变量</p>
+<p>tab[] ：共阳数码管编码</p>
+<p>strtab[]：显示缓冲区</p>
+<p>time：倒计时长</p>
+<p>t：辅助定时器A，产生 1 S 计数</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>                   <span style="color:#75715e">//   0    1    2    3     4   5   6     7    8    9    -    off
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> tab[] <span style="color:#f92672">=</span> {<span style="color:#ae81ff">0xc0</span>,<span style="color:#ae81ff">0xf9</span>,<span style="color:#ae81ff">0xa4</span>,<span style="color:#ae81ff">0xb0</span>,<span style="color:#ae81ff">0x99</span>,<span style="color:#ae81ff">0x92</span>,<span style="color:#ae81ff">0x82</span>,<span style="color:#ae81ff">0xf8</span>,<span style="color:#ae81ff">0x80</span>,<span style="color:#ae81ff">0x90</span>,<span style="color:#ae81ff">0xbf</span>,<span style="color:#ae81ff">0xff</span>};
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> strtab[<span style="color:#ae81ff">4</span>];    <span style="color:#75715e">// display buffer
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> time <span style="color:#f92672">=</span> <span style="color:#ae81ff">9999</span>;   <span style="color:#75715e">// time for 9999
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> t <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;        <span style="color:#75715e">// The auxiliary timer produces one second
+</span></span></span></code></pre></div><p>1、初始化</p>
+<ul>
+<li>关闭看门狗定时器</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>WDTCTL <span style="color:#f92672">=</span> WDTPW <span style="color:#f92672">+</span> WDTHOLD;                 <span style="color:#75715e">// Stop WDT
+</span></span></span></code></pre></div><ul>
+<li>I／O</li>
+</ul>
+<p>设置 MSP320G2553 单片机的 P1.0 ~ P1.7 和 P2.0 ~ P2.3 为输出口，用于控制数码管的段选和位选。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span> P1DIR <span style="color:#f92672">|=</span> <span style="color:#ae81ff">0xff</span>;                            <span style="color:#75715e">// P1.0 - P1.7 output
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span> P2DIR <span style="color:#f92672">|=</span> <span style="color:#ae81ff">0x0f</span>;                            <span style="color:#75715e">// P2.0 - P2.3 for COMx
+</span></span></span></code></pre></div><ul>
+<li>定时器</li>
+</ul>
+<p>中断使能、初值 5ms。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span> CCTL0 <span style="color:#f92672">=</span> CCIE;                             <span style="color:#75715e">// CCR0 interrupt enabled
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span> CCR0 <span style="color:#f92672">=</span> <span style="color:#ae81ff">5000</span>;                              <span style="color:#75715e">// Set the initial value for CCR0
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span> TACTL <span style="color:#f92672">=</span> TASSEL_2 <span style="color:#f92672">+</span> MC_1;                  <span style="color:#75715e">// SMCLK, upmode 
+</span></span></span></code></pre></div><p>2、中断服务函数</p>
+<p>动态扫描数码管。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">// Timer A0 interrupt service routine
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#75715e">#pragma vector=TIMER0_A0_VECTOR
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>__interrupt <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">Timer_A</span> (<span style="color:#66d9ef">void</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> num <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>   <span style="color:#75715e">// Scanning
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>   <span style="color:#66d9ef">switch</span> (num)
+</span></span><span style="display:flex;"><span>   {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">case</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">:</span> P2OUT <span style="color:#f92672">=</span> BIT0; P1OUT <span style="color:#f92672">=</span> strtab[num]; <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">case</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span> P2OUT <span style="color:#f92672">=</span> BIT1; P1OUT <span style="color:#f92672">=</span> strtab[num]; <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">case</span> <span style="color:#ae81ff">2</span><span style="color:#f92672">:</span> P2OUT <span style="color:#f92672">=</span> BIT2; P1OUT <span style="color:#f92672">=</span> strtab[num]; <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">case</span> <span style="color:#ae81ff">3</span><span style="color:#f92672">:</span> P2OUT <span style="color:#f92672">=</span> BIT3; P1OUT <span style="color:#f92672">=</span> strtab[num]; <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">default</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>   }
+</span></span><span style="display:flex;"><span>   num<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">if</span> (num <span style="color:#f92672">==</span> <span style="color:#ae81ff">4</span>)
+</span></span><span style="display:flex;"><span>     num <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>3、倒计时、显示字符</p>
+<p>程序段处于中断服务函数中。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">// in  Timer A0 interrupt service routine
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>t<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (t <span style="color:#f92672">==</span> <span style="color:#ae81ff">200</span>)    <span style="color:#75715e">// 5ms * 200 = 1S (one minute time--)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (time <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>  time<span style="color:#f92672">--</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>  time <span style="color:#f92672">=</span> <span style="color:#ae81ff">9999</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Displaying
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>strtab[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> tab[(time <span style="color:#f92672">/</span> <span style="color:#ae81ff">1000</span>) <span style="color:#f92672">%</span> <span style="color:#ae81ff">10</span>];
+</span></span><span style="display:flex;"><span>strtab[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> tab[(time <span style="color:#f92672">/</span> <span style="color:#ae81ff">100</span>) <span style="color:#f92672">%</span> <span style="color:#ae81ff">10</span>];
+</span></span><span style="display:flex;"><span>strtab[<span style="color:#ae81ff">2</span>] <span style="color:#f92672">=</span> tab[(time <span style="color:#f92672">/</span> <span style="color:#ae81ff">10</span>) <span style="color:#f92672">%</span> <span style="color:#ae81ff">10</span>];
+</span></span><span style="display:flex;"><span>strtab[<span style="color:#ae81ff">3</span>] <span style="color:#f92672">=</span> tab[time <span style="color:#f92672">%</span> <span style="color:#ae81ff">10</span>];
+</span></span></code></pre></div><h3 id="完整源程序">完整源程序<a hidden class="anchor" aria-hidden="true" href="#完整源程序">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;msp430g2553.h&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>                   <span style="color:#75715e">//   0    1    2    3     4   5   6     7    8    9    -    off
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> tab[] <span style="color:#f92672">=</span> {<span style="color:#ae81ff">0xc0</span>,<span style="color:#ae81ff">0xf9</span>,<span style="color:#ae81ff">0xa4</span>,<span style="color:#ae81ff">0xb0</span>,<span style="color:#ae81ff">0x99</span>,<span style="color:#ae81ff">0x92</span>,<span style="color:#ae81ff">0x82</span>,<span style="color:#ae81ff">0xf8</span>,<span style="color:#ae81ff">0x80</span>,<span style="color:#ae81ff">0x90</span>,<span style="color:#ae81ff">0xbf</span>,<span style="color:#ae81ff">0xff</span>};
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> strtab[<span style="color:#ae81ff">4</span>];    <span style="color:#75715e">// display buffer
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> time <span style="color:#f92672">=</span> <span style="color:#ae81ff">9999</span>;   <span style="color:#75715e">// time for 9999
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> t <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;        <span style="color:#75715e">// The auxiliary timer produces one second
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>(<span style="color:#66d9ef">void</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  WDTCTL <span style="color:#f92672">=</span> WDTPW <span style="color:#f92672">+</span> WDTHOLD;                 <span style="color:#75715e">// Stop WDT
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  P1DIR <span style="color:#f92672">|=</span> <span style="color:#ae81ff">0xff</span>;                            <span style="color:#75715e">// P1.0 - P1.7 output
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  P2DIR <span style="color:#f92672">|=</span> <span style="color:#ae81ff">0x0f</span>;                            <span style="color:#75715e">// P2.0 - P2.3 for COMx
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  CCTL0 <span style="color:#f92672">=</span> CCIE;                             <span style="color:#75715e">// CCR0 interrupt enabled
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  CCR0 <span style="color:#f92672">=</span> <span style="color:#ae81ff">5000</span>;                              <span style="color:#75715e">// Set the initial value for CCR0
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  TACTL <span style="color:#f92672">=</span> TASSEL_2 <span style="color:#f92672">+</span> MC_1;                  <span style="color:#75715e">// SMCLK, upmode 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  __bis_SR_register(LPM0_bits <span style="color:#f92672">+</span> GIE);       <span style="color:#75715e">// Enter LPM0 w/ interrupt
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// Timer A0 interrupt service routine
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#75715e">#pragma vector=TIMER0_A0_VECTOR
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>__interrupt <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">Timer_A</span> (<span style="color:#66d9ef">void</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> num <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>   <span style="color:#75715e">// Scanning
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>   <span style="color:#66d9ef">switch</span> (num)
+</span></span><span style="display:flex;"><span>   {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">case</span> <span style="color:#ae81ff">0</span><span style="color:#f92672">:</span> P2OUT <span style="color:#f92672">=</span> BIT0; P1OUT <span style="color:#f92672">=</span> strtab[num]; <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">case</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span> P2OUT <span style="color:#f92672">=</span> BIT1; P1OUT <span style="color:#f92672">=</span> strtab[num]; <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">case</span> <span style="color:#ae81ff">2</span><span style="color:#f92672">:</span> P2OUT <span style="color:#f92672">=</span> BIT2; P1OUT <span style="color:#f92672">=</span> strtab[num]; <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">case</span> <span style="color:#ae81ff">3</span><span style="color:#f92672">:</span> P2OUT <span style="color:#f92672">=</span> BIT3; P1OUT <span style="color:#f92672">=</span> strtab[num]; <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">default</span><span style="color:#f92672">:</span> <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>   }
+</span></span><span style="display:flex;"><span>   num<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">if</span> (num <span style="color:#f92672">==</span> <span style="color:#ae81ff">4</span>)
+</span></span><span style="display:flex;"><span>     num <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// Timing 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	t<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> (t <span style="color:#f92672">==</span> <span style="color:#ae81ff">200</span>)    <span style="color:#75715e">// 5ms * 200 = 1S (one minute time--)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	{
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> (time <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>	  time<span style="color:#f92672">--</span>;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>	  time <span style="color:#f92672">=</span> <span style="color:#ae81ff">9999</span>;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Displaying
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	strtab[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">=</span> tab[(time <span style="color:#f92672">/</span> <span style="color:#ae81ff">1000</span>) <span style="color:#f92672">%</span> <span style="color:#ae81ff">10</span>];
+</span></span><span style="display:flex;"><span>	strtab[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> tab[(time <span style="color:#f92672">/</span> <span style="color:#ae81ff">100</span>) <span style="color:#f92672">%</span> <span style="color:#ae81ff">10</span>];
+</span></span><span style="display:flex;"><span>	strtab[<span style="color:#ae81ff">2</span>] <span style="color:#f92672">=</span> tab[(time <span style="color:#f92672">/</span> <span style="color:#ae81ff">10</span>) <span style="color:#f92672">%</span> <span style="color:#ae81ff">10</span>];
+</span></span><span style="display:flex;"><span>	strtab[<span style="color:#ae81ff">3</span>] <span style="color:#f92672">=</span> tab[time <span style="color:#f92672">%</span> <span style="color:#ae81ff">10</span>];
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><strong>图片记录</strong></p>
+<p><img loading="lazy" src="./20180420/smg4.png" alt=""  />
+</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://landodo.github.io/tags/%E6%95%B0%E7%A0%81%E7%AE%A1/">数码管</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://landodo.github.io/posts/20210128-deep-learning-from-scrach/">
+    <span class="title">« Prev Page</span>
+    <br>
+    <span>深度学习基础图书</span>
+  </a>
+  <a class="next" href="http://landodo.github.io/posts/20180417-lan-qiao/">
+    <span class="title">Next Page »</span>
+    <br>
+    <span>蓝桥杯个人赛电子类_单片机资料整理</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>Landon</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
