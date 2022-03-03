@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+<meta name="robots" content="index, follow">
+<title>节点聚类问题的总结和思考 | Landodo&#39;s NoteBook</title>
+<meta name="keywords" content="聚类" />
+<meta name="description" content="节点聚类问题的总结和思考 摘要 聚类作为经典的无监督学习算法，在数据挖掘/机器学习等领域有着广泛地应用。聚类是针对给定的样本，依据它们的特征的相">
+<meta name="author" content="">
+<link rel="canonical" href="http://landodo.github.io/posts/20210804-clustering-method/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://landodo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://landodo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://landodo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://landodo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://landodo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="节点聚类问题的总结和思考" />
+<meta property="og:description" content="节点聚类问题的总结和思考 摘要 聚类作为经典的无监督学习算法，在数据挖掘/机器学习等领域有着广泛地应用。聚类是针对给定的样本，依据它们的特征的相" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://landodo.github.io/posts/20210804-clustering-method/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-08-04T10:24:22&#43;08:00" />
+<meta property="article:modified_time" content="2021-08-04T10:24:22&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="节点聚类问题的总结和思考"/>
+<meta name="twitter:description" content="节点聚类问题的总结和思考 摘要 聚类作为经典的无监督学习算法，在数据挖掘/机器学习等领域有着广泛地应用。聚类是针对给定的样本，依据它们的特征的相"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://landodo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "节点聚类问题的总结和思考",
+      "item": "http://landodo.github.io/posts/20210804-clustering-method/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "节点聚类问题的总结和思考",
+  "name": "节点聚类问题的总结和思考",
+  "description": "节点聚类问题的总结和思考 摘要 聚类作为经典的无监督学习算法，在数据挖掘/机器学习等领域有着广泛地应用。聚类是针对给定的样本，依据它们的特征的相",
+  "keywords": [
+    "聚类"
+  ],
+  "articleBody": "节点聚类问题的总结和思考 摘要 聚类作为经典的无监督学习算法，在数据挖掘/机器学习等领域有着广泛地应用。聚类是针对给定的样本，依据它们的特征的相似度或距离，将其归并到若干“类”或“簇”中。其目的是通过得到的类或簇来发现数据的特点，或对数据进行处理。本文的主要内容分为两个部分，在第一部分，对 K-均值聚类、凸正则化聚类、非凸正则化聚类、数据驱动的正则化聚类、子空间聚类等聚类优化方法进行简要总结。在第二部分，研究利用图神经网络强大的结构捕获能力来提升聚类算法的精度，即采用深度神经网络来学习聚类友好表征。最后，对这两部分进行简要的总结和思考。\n1 聚类优化方法 物以类聚，人以群分。经过了几十年的研究，学者们提出了大量的聚类方法。聚类分析计算方法可以作如下分类，以提供一个相对有组织的描述。\n 划分式聚类算法 层次化聚类算法 基于密度的聚类算法 基于网格的聚类算法 基于模型的聚类算法  接下来对 K-均值聚类、凸正则化聚类、非凸正则化聚类、数据驱动的正则化聚类、子空间聚类等聚类优化方法进行简要总结。\n1-1 K-均值聚类 K-均值聚类方法最早由 Steinhaus 于 1955 年提出，在不同的学科领域被广泛研究和应用，K-均值聚类方法是数据发掘领域的十大经典算法之一。对于给定的数据样本点 $a_1, a_2, …, a_n$，K-均值聚类通过求解如下优化模型实现：\n1.2 凸正则化聚类方法 Pelckmans 于 2005 年首次提出凸正则聚类方法，其优化模型如下：\n其中，$\\lambda$ 是正则化参数， $\\Vert \\cdot \\Vert_q$ 是 $l_q$ 范数。当数据量较大时，计算正则化项的值需要消耗巨大的计算量，因此，研究人员基于kNN 策略提出了带权重的正则化聚类模型：\n常见的权重 $w_ij$ 的计算方法有：k-最近邻和k-最近邻+高斯核。\n1.3 非凸正则化聚类方法 Pan 等人于 2013 年提出使用截断 Lasso 惩罚函数作为正则化的非凸正则化聚类方法，以消除凸正则化函数导致的估计偏差。其优化模型如下：\n其中 $\\tau$ 是给定的常数，截断 Lasso 可以当做是 $\\ell_0$ 范数的非凸连续松弛。\n1.4 数据驱动的正则化聚类 数据可以分为高维数据、含离群点的数据、缺失数据和其他类型数据。\n（1）高维数据驱动的正则化聚类方法\nWang 等人对高维数据集提出基于自适应组 Lasso 惩罚的正则化聚类模型：\n模型的最后一项的作用是迫使 X 的某一列为 0，从而达到剔除相应的特征的效果。\n（2）含离群点数据驱动的正则化聚类方法\n对离群点（异常点）的处理主要有三类方法：矩阵分解法、度量学习法、稳健损失函数法。\n（3）缺失数据驱动的正则化聚类方法\nPoddar 和 Jacob 基于数据间的部分距离（partial distance）提出可用于含缺失值数据的正则化聚类方法，其优化模型为：\n其中，$S_i$ 为采样矩阵。因为数据矩阵有缺失值，所以权重 $w_I$ 只能基于样本之间的部分距离进行近似计算。\n（4）其他类型数据驱动的正则化聚类方法\n其他的数据类型包括：二元数据（Binary data）、成分数据（Compositional data）、图结构数据（Graph-structure data）、直方图值数据（Histogram-valued data）。\n1.5 子空间聚类方法 很多高维数据往往分布在低维结构中，从高维数据中恢复这些低维子空间，不仅可以降低算法的计算成本和内存需求，还可以降低高位噪声的影响，进而提升算法的性能。子空间聚类方法是将特征选择技术和聚类技术相结合，并在维度空间或数据空间中搜索可能存在的子空间，从而得到聚类结果簇及其对应的子空间。现有的子空间聚类算法可以分为四大类：迭代方法、代数方法、统计方法和基于谱聚类的方法。子空间聚类方法可以归纳为如下统一模型：\n   聚类方法 优点 缺点     K-均值聚类 (1) 算法原理简单，运行速度快，收敛快 (2) 算法可解释性强 (1) 依赖于初始的聚类中心，会陷入局部最优解； (2) 需要提前给定聚类类别数K   凸正则化聚类 (1) 取得了丰富的研究成果 (1) 正则化函数可能导致估计量的偏差严重   非凸正则化聚类 (1) 消除了凸正则化函数导致的估计偏差 (1) 理论研究，高效一阶、二阶优化算法的设计还需要深入研究   数据驱动的的正则化聚类 (1) 特征选择，剔除了大量冗余的特征 (2) 消除了离群点（异常点）的干扰 (3) 缺失数据点可以通过采样数据间的部分距离解决 (4) 应用于多种数据类型    子空间聚类方法 (1) 低算法的计算成本和内存需求 (2) 降低高维噪声的影响     2 深度聚类（Deep Clustering） 图神经网络已经成为深度学习领域最热门的方向之一，那么，如何利用图神经网络强大的结构捕获能力来提升聚类算法的精度呢？深度聚类是聚类方法的一种，它采用深度神经网络来学习聚类友好表征。对于图聚类问题，其中的关键是如何捕捉结构关系和节点内容信息。很多近期的研究通过深度学习方法学习到节点的嵌入（Embedding），再利用简单的聚类算法（如 K-Means）进行聚类，以增强传统聚类算法的性能。\n图神经网络聚类与子空间聚类存在着联系与交集。研究发现，随着数据维度的上升，任何高维空间里的两点之间的距离（相似度）几乎没有区别，这就使得基于距离的相似度聚类方法失效。对于高维数据的聚类任务，最常用的处理方法就是降维，然后将降维后的特征应用于聚类算法。\n一般来说，这个降维后的特征可以称之为节点的嵌入（Embedding），相比于原来的高维空间的特征，降维后的低维度特征空间是聚类友好的特征空间（Clustering-friendly space）。所以聚类任务的其中一个目标是学习得到对聚类任务友好的特征空间的节点嵌入，再在此基础之上应用聚类算法，以取得良好的聚类结果。\n下面我介绍图聚类中的三篇经典文献：图注意力网络（Graph Attention Network）、深度聚类网络（Deep Clustering Network）和一种深度注意力的嵌入方法（A Deep Attentional Embedding Approach）。第一篇文献使用注意力机制学习节点的嵌入，第二篇介绍非目标导向的单阶段聚类方法，第三篇文献介绍以目标为导向的单阶段聚类方法。\n2.1 Graph Attention Network[2] 图注意力网络应用注意力机制将邻居节点的特征聚合到中心节点（一种Aggregate运算），注意力系数的使用，使得节点特征之间的相关性被更好的融合到模型中。\n左图为计算注意力系数（Attention coefficient）。即节点 $i$ 和其邻居节点 $j \\in N_i$ 之间的相关性，是通过可学习的参数W和映射 $\\overrightarrow{a}$ 实现的。右图为加权求和，将邻居节点的特征聚合到中心节点上，更新特征，$\\overrightarrow{h’}_l$ 就是融合了所有邻居节点的新特征表达。图注意力网络学习得到的节点嵌入融合了节点内容和图的结构信息，相当于学到了对聚类任务友好的特征空间（Clustering-friendly space）。\n2.2 two-stage方法 两阶段（two-stage）方法将聚类任务分为两个独立的阶段。第一阶段，先学习得到对聚类友好的节点嵌入（如神经网络、GAT 等 Aggregate 函数）；第二阶段，应用传统的聚类方法（如 K-means）进行聚类。两阶段方法存在一个明显的缺点，它是非目标导向的方法，我们最终的目标是得到好的聚类结果，而不是好的聚类空间节点嵌入，而且我们也无法知道所学到的聚类空间是否最优的。因此，将两阶段方法优化为单一阶段进行统一优化是非常必要的。\n2.3 single-stage方法[4] 论文[3]将数据降维和 K-means 聚类这两项任务联合起来，克服了两阶段方法的缺点，但其仍然是非目标导向的。论文[4]则提出一种以目标为导向的深度学习方法：Deep Attentional Embedded Graph Clustering (DAEGC)。这种方法包含三个主要核心点：\n（1）注意力机制的图自编码器（Graph Attentional Autoencoder）\n（2）自训练的图聚类（Self-optimizing Embedding）\n（3）自训练过程与图嵌入共同学习和优化（Joint Embedding and Clustering Optimization）\n为了实现以目标为导向，针对聚类这个无监督学习任务，提出了一个自训练的聚类组件，从“置信”的分配中生成软标签，以监督嵌入的更新。聚类损失和自动编码器重建损失被联合优化，以同时获得图嵌入和图聚类的结果。\n3 总结 聚类优化问题是不断发展的，图神经网络强大的结构捕获能力给传统的聚类方法注入了新的能量，在一定程度上缓解了传统聚类方法存在的不足，进一步提升了聚类性能。图神经网络可以聚合邻居信息来充分挖掘结构信息，为了同时实现对特征的降维抽取和对结构信息的挖掘。高阶结构信息（多层 GNN）也可以提升聚类的效果。从传统聚类到深度聚类以及现在图神经网络赋能的聚类, 各种各样的聚类算层出不穷,也在很多领域得到了广泛的应用。\n参考资料 [1] 孔令臣. 第五讲：聚类优化方法. 2021.07\n[2] Velickovic, P., Cucurull, G., Casanova, A., Romero, A., Lio’, P., \u0026 Bengio, Y. (2018). Graph Attention Networks. ArXiv, abs/1710.10903.\n[3] Bo Yang, Xiao Fu, Nicholas D. Sidiropoulos, and Mingyi Hong. 2017. Towards K-means-friendly spaces: simultaneous deep learning and clustering. In Proceedings of the 34th International Conference on Machine Learning - Volume 70 (ICML'17). JMLR.org, 3861–3870.\n[4] Wang, C., Pan, S., Hu, R., Long, G., Jiang, J., \u0026 Zhang, C. (2019). Attributed Graph Clustering: A Deep Attentional Embedding Approach. IJCAI.\n",
+  "wordCount" : "3497",
+  "inLanguage": "en",
+  "datePublished": "2021-08-04T10:24:22+08:00",
+  "dateModified": "2021-08-04T10:24:22+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://landodo.github.io/posts/20210804-clustering-method/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Landodo's NoteBook",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://landodo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://landodo.github.io/" accesskey="h" title="Landodo&#39;s NoteBook (Alt + H)">Landodo&#39;s NoteBook</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://landodo.github.io/search" title="🔍Search (Alt &#43; /)" accesskey=/>
+                    <span>🔍Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/tags" title="Tag">
+                    <span>Tag</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/cs-zoo" title="CS ZOO">
+                    <span>CS ZOO</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://landodo.github.io/">Home</a>&nbsp;»&nbsp;<a href="http://landodo.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      节点聚类问题的总结和思考
+    </h1>
+    <div class="post-meta"><span title='2021-08-04 10:24:22 +0800 CST'>August 4, 2021</span>&nbsp;·&nbsp;7 min&nbsp;·&nbsp;3497 words
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#%e8%8a%82%e7%82%b9%e8%81%9a%e7%b1%bb%e9%97%ae%e9%a2%98%e7%9a%84%e6%80%bb%e7%bb%93%e5%92%8c%e6%80%9d%e8%80%83" aria-label="节点聚类问题的总结和思考">节点聚类问题的总结和思考</a><ul>
+                        
+                <li>
+                    <a href="#%e6%91%98%e8%a6%81" aria-label="摘要">摘要</a></li>
+                <li>
+                    <a href="#1-%e8%81%9a%e7%b1%bb%e4%bc%98%e5%8c%96%e6%96%b9%e6%b3%95" aria-label="1 聚类优化方法">1 聚类优化方法</a><ul>
+                        
+                <li>
+                    <a href="#1-1-k-%e5%9d%87%e5%80%bc%e8%81%9a%e7%b1%bb" aria-label="1-1 K-均值聚类">1-1 K-均值聚类</a></li>
+                <li>
+                    <a href="#12-%e5%87%b8%e6%ad%a3%e5%88%99%e5%8c%96%e8%81%9a%e7%b1%bb%e6%96%b9%e6%b3%95" aria-label="1.2 凸正则化聚类方法">1.2 凸正则化聚类方法</a></li>
+                <li>
+                    <a href="#13-%e9%9d%9e%e5%87%b8%e6%ad%a3%e5%88%99%e5%8c%96%e8%81%9a%e7%b1%bb%e6%96%b9%e6%b3%95" aria-label="1.3 非凸正则化聚类方法">1.3 非凸正则化聚类方法</a></li>
+                <li>
+                    <a href="#14-%e6%95%b0%e6%8d%ae%e9%a9%b1%e5%8a%a8%e7%9a%84%e6%ad%a3%e5%88%99%e5%8c%96%e8%81%9a%e7%b1%bb" aria-label="1.4 数据驱动的正则化聚类">1.4 数据驱动的正则化聚类</a></li>
+                <li>
+                    <a href="#15-%e5%ad%90%e7%a9%ba%e9%97%b4%e8%81%9a%e7%b1%bb%e6%96%b9%e6%b3%95" aria-label="1.5 子空间聚类方法">1.5 子空间聚类方法</a></li></ul>
+                </li>
+                <li>
+                    <a href="#2-%e6%b7%b1%e5%ba%a6%e8%81%9a%e7%b1%bbdeep-clustering" aria-label="2 深度聚类（Deep Clustering）">2 深度聚类（Deep Clustering）</a><ul>
+                        
+                <li>
+                    <a href="#21-graph-attention-network2" aria-label="2.1 Graph Attention Network[2]">2.1 Graph Attention Network[2]</a></li>
+                <li>
+                    <a href="#22-two-stage%e6%96%b9%e6%b3%95" aria-label="2.2 two-stage方法">2.2 two-stage方法</a></li>
+                <li>
+                    <a href="#23-single-stage%e6%96%b9%e6%b3%954" aria-label="2.3 single-stage方法[4]">2.3 single-stage方法[4]</a></li></ul>
+                </li>
+                <li>
+                    <a href="#3-%e6%80%bb%e7%bb%93" aria-label="3 总结">3 总结</a></li>
+                <li>
+                    <a href="#%e5%8f%82%e8%80%83%e8%b5%84%e6%96%99" aria-label="参考资料">参考资料</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h1 id="节点聚类问题的总结和思考">节点聚类问题的总结和思考<a hidden class="anchor" aria-hidden="true" href="#节点聚类问题的总结和思考">#</a></h1>
+<h2 id="摘要">摘要<a hidden class="anchor" aria-hidden="true" href="#摘要">#</a></h2>
+<p>聚类作为经典的无监督学习算法，在数据挖掘/机器学习等领域有着广泛地应用。聚类是针对给定的样本，依据它们的特征的相似度或距离，将其归并到若干“类”或“簇”中。其目的是通过得到的类或簇来发现数据的特点，或对数据进行处理。本文的主要内容分为两个部分，在第一部分，对 K-均值聚类、凸正则化聚类、非凸正则化聚类、数据驱动的正则化聚类、子空间聚类等聚类优化方法进行简要总结。在第二部分，研究利用图神经网络强大的结构捕获能力来提升聚类算法的精度，即采用深度神经网络来学习聚类友好表征。最后，对这两部分进行简要的总结和思考。</p>
+<h2 id="1-聚类优化方法">1 聚类优化方法<a hidden class="anchor" aria-hidden="true" href="#1-聚类优化方法">#</a></h2>
+<p>物以类聚，人以群分。经过了几十年的研究，学者们提出了大量的聚类方法。聚类分析计算方法可以作如下分类，以提供一个相对有组织的描述。</p>
+<ul>
+<li>划分式聚类算法</li>
+<li>层次化聚类算法</li>
+<li>基于密度的聚类算法</li>
+<li>基于网格的聚类算法</li>
+<li>基于模型的聚类算法</li>
+</ul>
+<p>接下来对 K-均值聚类、凸正则化聚类、非凸正则化聚类、数据驱动的正则化聚类、子空间聚类等聚类优化方法进行简要总结。</p>
+<h3 id="1-1-k-均值聚类">1-1 K-均值聚类<a hidden class="anchor" aria-hidden="true" href="#1-1-k-均值聚类">#</a></h3>
+<p>K-均值聚类方法最早由 Steinhaus 于 1955 年提出，在不同的学科领域被广泛研究和应用，K-均值聚类方法是数据发掘领域的十大经典算法之一。对于给定的数据样本点 $a_1, a_2, &hellip;, a_n$，K-均值聚类通过求解如下优化模型实现：</p>
+<p><img loading="lazy" src="./20210804/1.png" alt=""  />
+</p>
+<h3 id="12-凸正则化聚类方法">1.2 凸正则化聚类方法<a hidden class="anchor" aria-hidden="true" href="#12-凸正则化聚类方法">#</a></h3>
+<p>Pelckmans 于 2005 年首次提出凸正则聚类方法，其优化模型如下：</p>
+<p><img loading="lazy" src="./20210804/2.png" alt=""  />
+</p>
+<p>其中，$\lambda$ 是正则化参数， $\Vert \cdot \Vert_q$ 是 $l_q$ 范数。当数据量较大时，计算正则化项的值需要消耗巨大的计算量，因此，研究人员基于<em>k</em>NN 策略提出了带权重的正则化聚类模型：</p>
+<p><img loading="lazy" src="./20210804/3.png" alt=""  />
+</p>
+<p>常见的权重 $w_ij$ 的计算方法有：<em>k</em>-最近邻和<em>k</em>-最近邻+高斯核。</p>
+<h3 id="13-非凸正则化聚类方法">1.3 非凸正则化聚类方法<a hidden class="anchor" aria-hidden="true" href="#13-非凸正则化聚类方法">#</a></h3>
+<p>Pan 等人于 2013 年提出使用截断 Lasso 惩罚函数作为正则化的非凸正则化聚类方法，以消除凸正则化函数导致的估计偏差。其优化模型如下：</p>
+<p><img loading="lazy" src="./20210804/4.png" alt=""  />
+</p>
+<p>其中  $\tau$ 是给定的常数，截断 Lasso 可以当做是 $\ell_0$ 范数的非凸连续松弛。</p>
+<h3 id="14-数据驱动的正则化聚类">1.4 数据驱动的正则化聚类<a hidden class="anchor" aria-hidden="true" href="#14-数据驱动的正则化聚类">#</a></h3>
+<p>数据可以分为高维数据、含离群点的数据、缺失数据和其他类型数据。</p>
+<p><strong>（1）高维数据驱动的正则化聚类方法</strong></p>
+<p>Wang 等人对高维数据集提出基于自适应组 Lasso 惩罚的正则化聚类模型：</p>
+<p><img loading="lazy" src="./20210804/5.png" alt=""  />
+</p>
+<p>模型的最后一项的作用是迫使 X 的某一列为 0，从而达到剔除相应的特征的效果。</p>
+<p><strong>（2）含离群点数据驱动的正则化聚类方法</strong></p>
+<p>对离群点（异常点）的处理主要有三类方法：矩阵分解法、度量学习法、稳健损失函数法。</p>
+<p><strong>（3）缺失数据驱动的正则化聚类方法</strong></p>
+<p>Poddar 和 Jacob 基于数据间的部分距离（partial distance）提出可用于含缺失值数据的正则化聚类方法，其优化模型为：</p>
+<p><img loading="lazy" src="./20210804/6.png" alt=""  />
+</p>
+<p>其中，$S_i$ 为采样矩阵。因为数据矩阵有缺失值，所以权重 $w_I$ 只能基于样本之间的部分距离进行近似计算。</p>
+<p><strong>（4）其他类型数据驱动的正则化聚类方法</strong></p>
+<p>其他的数据类型包括：二元数据（Binary data）、成分数据（Compositional data）、图结构数据（Graph-structure data）、直方图值数据（Histogram-valued data）。</p>
+<h3 id="15-子空间聚类方法">1.5 子空间聚类方法<a hidden class="anchor" aria-hidden="true" href="#15-子空间聚类方法">#</a></h3>
+<p>很多高维数据往往分布在低维结构中，从高维数据中恢复这些低维子空间，不仅可以降低算法的计算成本和内存需求，还可以降低高位噪声的影响，进而提升算法的性能。子空间聚类方法是将特征选择技术和聚类技术相结合，并在维度空间或数据空间中搜索可能存在的子空间，从而得到聚类结果簇及其对应的子空间。现有的子空间聚类算法可以分为四大类：迭代方法、代数方法、统计方法和基于谱聚类的方法。子空间聚类方法可以归纳为如下统一模型：</p>
+<p><img loading="lazy" src="./20210804/7.png" alt=""  />
+</p>
+<table>
+<thead>
+<tr>
+<th>聚类方法</th>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>K-均值聚类</td>
+<td>(1)    算法原理简单，运行速度快，收敛快  (2)    算法可解释性强</td>
+<td>(1)    依赖于初始的聚类中心，会陷入局部最优解；  (2)    需要提前给定聚类类别数K</td>
+</tr>
+<tr>
+<td>凸正则化聚类</td>
+<td>(1)    取得了丰富的研究成果</td>
+<td>(1)    正则化函数可能导致估计量的偏差严重</td>
+</tr>
+<tr>
+<td>非凸正则化聚类</td>
+<td>(1)    消除了凸正则化函数导致的估计偏差</td>
+<td>(1)    理论研究，高效一阶、二阶优化算法的设计还需要深入研究</td>
+</tr>
+<tr>
+<td>数据驱动的的正则化聚类</td>
+<td>(1)    特征选择，剔除了大量冗余的特征  (2)    消除了离群点（异常点）的干扰  (3)    缺失数据点可以通过采样数据间的部分距离解决  (4)    应用于多种数据类型</td>
+<td></td>
+</tr>
+<tr>
+<td>子空间聚类方法</td>
+<td>(1)    低算法的计算成本和内存需求  (2)    降低高维噪声的影响</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-深度聚类deep-clustering">2 深度聚类（Deep Clustering）<a hidden class="anchor" aria-hidden="true" href="#2-深度聚类deep-clustering">#</a></h2>
+<p>图神经网络已经成为深度学习领域最热门的方向之一，那么，如何利用图神经网络强大的结构捕获能力来提升聚类算法的精度呢？深度聚类是聚类方法的一种，它采用深度神经网络来学习聚类友好表征。对于图聚类问题，其中的关键是如何捕捉<strong>结构关系</strong>和<strong>节点内容</strong>信息。很多近期的研究通过深度学习方法学习到节点的嵌入（Embedding），再利用简单的聚类算法（如 K-Means）进行聚类，以增强传统聚类算法的性能。</p>
+<p>图神经网络聚类与子空间聚类存在着联系与交集。研究发现，随着数据维度的上升，任何高维空间里的两点之间的距离（相似度）几乎没有区别，这就使得基于距离的相似度聚类方法失效。对于高维数据的聚类任务，最常用的处理方法就是降维，然后将降维后的特征应用于聚类算法。</p>
+<p>一般来说，这个降维后的特征可以称之为节点的嵌入（Embedding），相比于原来的高维空间的特征，降维后的低维度特征空间是聚类友好的特征空间（Clustering-friendly space）。所以聚类任务的其中一个目标是学习得到对聚类任务友好的特征空间的节点嵌入，再在此基础之上应用聚类算法，以取得良好的聚类结果。</p>
+<p>下面我介绍图聚类中的三篇经典文献：图注意力网络（Graph Attention Network）、深度聚类网络（Deep Clustering Network）和一种深度注意力的嵌入方法（A Deep Attentional Embedding Approach）。第一篇文献使用注意力机制学习节点的嵌入，第二篇介绍非目标导向的单阶段聚类方法，第三篇文献介绍以目标为导向的单阶段聚类方法。</p>
+<h3 id="21-graph-attention-network2">2.1 Graph Attention Network[2]<a hidden class="anchor" aria-hidden="true" href="#21-graph-attention-network2">#</a></h3>
+<p>图注意力网络应用注意力机制将邻居节点的特征聚合到中心节点（一种Aggregate运算），注意力系数的使用，使得节点特征之间的相关性被更好的融合到模型中。</p>
+<p><img loading="lazy" src="./20210804/8.png" alt=""  />
+</p>
+<p>左图为计算注意力系数（Attention coefficient）。即节点 $i$ 和其邻居节点 $j \in N_i$ 之间的相关性，是通过可学习的参数W和映射 $\overrightarrow{a}$ 实现的。右图为加权求和，将邻居节点的特征聚合到中心节点上，更新特征，$\overrightarrow{h&rsquo;}_l$ 就是融合了所有邻居节点的新特征表达。图注意力网络学习得到的节点嵌入融合了节点内容和图的结构信息，相当于学到了对聚类任务友好的特征空间（Clustering-friendly space）。</p>
+<h3 id="22-two-stage方法">2.2 two-stage方法<a hidden class="anchor" aria-hidden="true" href="#22-two-stage方法">#</a></h3>
+<p>两阶段（two-stage）方法将聚类任务分为两个独立的阶段。第一阶段，先学习得到对聚类友好的节点嵌入（如神经网络、GAT 等 Aggregate 函数）；第二阶段，应用传统的聚类方法（如 K-means）进行聚类。两阶段方法存在一个明显的缺点，它是非目标导向的方法，我们最终的目标是得到好的聚类结果，而不是好的聚类空间节点嵌入，而且我们也无法知道所学到的聚类空间是否最优的。因此，将两阶段方法优化为单一阶段进行统一优化是非常必要的。</p>
+<h3 id="23-single-stage方法4">2.3 single-stage方法[4]<a hidden class="anchor" aria-hidden="true" href="#23-single-stage方法4">#</a></h3>
+<p>论文[3]将数据降维和 K-means 聚类这两项任务联合起来，克服了两阶段方法的缺点，但其仍然是非目标导向的。论文[4]则提出一种以目标为导向的深度学习方法：Deep Attentional Embedded Graph Clustering (DAEGC)。这种方法包含三个主要核心点：</p>
+<p>（1）注意力机制的图自编码器（Graph Attentional Autoencoder）</p>
+<p>（2）自训练的图聚类（Self-optimizing Embedding）</p>
+<p>（3）自训练过程与图嵌入共同学习和优化（Joint Embedding and Clustering Optimization）</p>
+<p><img loading="lazy" src="./20210804/9.png" alt=""  />
+</p>
+<p>为了实现以目标为导向，针对聚类这个无监督学习任务，提出了一个自训练的聚类组件，从“置信”的分配中生成软标签，以监督嵌入的更新。聚类损失和自动编码器重建损失被联合优化，以同时获得图嵌入和图聚类的结果。</p>
+<h2 id="3-总结">3 总结<a hidden class="anchor" aria-hidden="true" href="#3-总结">#</a></h2>
+<p>聚类优化问题是不断发展的，图神经网络强大的结构捕获能力给传统的聚类方法注入了新的能量，在一定程度上缓解了传统聚类方法存在的不足，进一步提升了聚类性能。图神经网络可以聚合邻居信息来充分挖掘结构信息，为了同时实现对特征的降维抽取和对结构信息的挖掘。高阶结构信息（多层 GNN）也可以提升聚类的效果。从传统聚类到深度聚类以及现在图神经网络赋能的聚类, 各种各样的聚类算层出不穷,也在很多领域得到了广泛的应用。</p>
+<h2 id="参考资料">参考资料<a hidden class="anchor" aria-hidden="true" href="#参考资料">#</a></h2>
+<p>[1] 孔令臣. 第五讲：聚类优化方法. 2021.07</p>
+<p>[2] Velickovic, P., Cucurull, G., Casanova, A., Romero, A., Lio’, P., &amp; Bengio, Y. (2018). Graph Attention Networks. ArXiv, abs/1710.10903.</p>
+<p>[3] Bo Yang, Xiao Fu, Nicholas D. Sidiropoulos, and Mingyi Hong. 2017. Towards K-means-friendly spaces: simultaneous deep learning and clustering. In Proceedings of the 34th International Conference on Machine Learning - Volume 70 (ICML'17). JMLR.org, 3861–3870.</p>
+<p>[4] Wang, C., Pan, S., Hu, R., Long, G., Jiang, J., &amp; Zhang, C. (2019). Attributed Graph Clustering: A Deep Attentional Embedding Approach. IJCAI.</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://landodo.github.io/tags/%E8%81%9A%E7%B1%BB/">聚类</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="next" href="http://landodo.github.io/posts/boundary-patch-refinement/">
+    <span class="title">Next Page »</span>
+    <br>
+    <span>Boundary Patch Refinement</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>Landon</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

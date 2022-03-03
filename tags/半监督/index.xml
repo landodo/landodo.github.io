@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>半监督 on Landodo&#39;s NoteBook</title>
+    <link>http://landodo.github.io/tags/%E5%8D%8A%E7%9B%91%E7%9D%A3/</link>
+    <description>Recent content in 半监督 on Landodo&#39;s NoteBook</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Landon</copyright>
+    <lastBuildDate>Tue, 03 Aug 2021 10:17:29 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/%E5%8D%8A%E7%9B%91%E7%9D%A3/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>20210803 Semi Self Unsupervised</title>
+      <link>http://landodo.github.io/posts/20210803-semi-self-unsupervised/</link>
+      <pubDate>Tue, 03 Aug 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210803-semi-self-unsupervised/</guid>
+      <description>摘要 目前的方法严重依赖于大量的有标注数据。因此，在训练过程中加入未标注的数据是很常见的，这样可以用更少的标注达到相同的结果。本片综述主要是专</description>
+    </item>
+    
+  </channel>
+</rss>

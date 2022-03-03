@@ -2,6 +2,9 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>http://landodo.github.io/posts/20210804-clustering-method/</loc>
+    <lastmod>2021-08-04T10:24:22+08:00</lastmod>
+  </url><url>
     <loc>http://landodo.github.io/cs-zoo/</loc>
     <lastmod>2022-03-02T20:14:58+08:00</lastmod>
   </url><url>
@@ -71,19 +74,28 @@
     <loc>http://landodo.github.io/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/</loc>
     <lastmod>2021-08-27T09:19:10+08:00</lastmod>
   </url><url>
+    <loc>http://landodo.github.io/posts/20210824-object-detection-anchor/</loc>
+    <lastmod>2021-08-24T10:12:08+08:00</lastmod>
+  </url><url>
+    <loc>http://landodo.github.io/tags/%E7%AC%94%E8%AE%B0/</loc>
+    <lastmod>2021-08-24T10:12:08+08:00</lastmod>
+  </url><url>
     <loc>http://landodo.github.io/tags/%E5%8C%BB%E5%AD%A6%E5%9B%BE%E5%83%8F/</loc>
     <lastmod>2021-08-06T09:58:19+08:00</lastmod>
   </url><url>
     <loc>http://landodo.github.io/posts/20210806-medical-image-basic/</loc>
     <lastmod>2021-08-06T09:58:19+08:00</lastmod>
   </url><url>
-    <loc>http://landodo.github.io/tags/%E7%AC%94%E8%AE%B0/</loc>
-    <lastmod>2021-08-06T09:58:19+08:00</lastmod>
+    <loc>http://landodo.github.io/tags/%E8%81%9A%E7%B1%BB/</loc>
+    <lastmod>2021-08-04T10:24:22+08:00</lastmod>
+  </url><url>
+    <loc>http://landodo.github.io/posts/20210803-semi-self-unsupervised/</loc>
+    <lastmod>2021-08-03T10:17:29+08:00</lastmod>
+  </url><url>
+    <loc>http://landodo.github.io/tags/%E5%8D%8A%E7%9B%91%E7%9D%A3/</loc>
+    <lastmod>2021-08-03T10:17:29+08:00</lastmod>
   </url><url>
     <loc>http://landodo.github.io/posts/deep-clustering-notes/</loc>
-    <lastmod>2021-07-30T17:22:19+08:00</lastmod>
-  </url><url>
-    <loc>http://landodo.github.io/tags/%E8%81%9A%E7%B1%BB/</loc>
     <lastmod>2021-07-30T17:22:19+08:00</lastmod>
   </url><url>
     <loc>http://landodo.github.io/posts/first-post/</loc>

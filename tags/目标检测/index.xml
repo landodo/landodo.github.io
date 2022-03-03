@@ -17,5 +17,14 @@
       <description>目标检测任务（1） ⛳本报告主要是针对目标检测任务中正负样本不平衡、难易样本不平衡这两个问题进行简要讨论。 论文简介 Lin, T., Goyal, P., Girshick, R.B., He, K., &amp;amp; Dollá</description>
     </item>
     
+    <item>
+      <title>关于 Object Detection Anchor 的学习笔记</title>
+      <link>http://landodo.github.io/posts/20210824-object-detection-anchor/</link>
+      <pubDate>Tue, 24 Aug 2021 10:12:08 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210824-object-detection-anchor/</guid>
+      <description>anchor 什么是 anchor？ anchor 是可能包含目标物体的矩形框。在目标检测任务中，通常会为每个像素点预设一个或多个大小和宽高比例不同的 anchor，以此</description>
+    </item>
+    
   </channel>
 </rss>
