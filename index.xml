@@ -18,6 +18,15 @@
     </item>
     
     <item>
+      <title>直肠癌 MRI 多目标精确分割及靶区自动勾画软件进展</title>
+      <link>http://landodo.github.io/app/</link>
+      <pubDate>Fri, 04 Mar 2022 11:30:14 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/app/</guid>
+      <description>（1）Simple ITK-SNAP 多个绘画区域相互独立。 class Canvas(QtWidgets.QLabel): def __init__(self): super().__init__() self.clear(Qt.yellow) self.last_x, self.last_y = None, None self.pen_color = QtGui.QColor(&amp;#39;#000000&amp;#39;) def clear(self, color): self.background = QtGui.QPixmap(self.width(), self.height()) self.background.fill(color) # 背景 self.paintboard = self.background self.setPixmap(self.paintboard) # 在这张图像上画 def mouseMoveEvent(self, event): if self.last_x is None: # First event. self.last_x =</description>
+    </item>
+    
+    <item>
       <title>Cs Zoo</title>
       <link>http://landodo.github.io/cs-zoo/</link>
       <pubDate>Wed, 02 Mar 2022 20:14:58 +0800</pubDate>
