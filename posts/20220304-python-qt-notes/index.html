@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+<meta name="robots" content="index, follow">
+<title>《Python Qt GUI 与数据可视化编程》阅读笔记 | Landodo&#39;s NoteBook</title>
+<meta name="keywords" content="Qt, 笔记" />
+<meta name="description" content="Notes Qt Charts是二维图表模块，用于绘制柱状图、饼图、曲线图等常用二维图表。 Qt Data Visualization是三维数据图表模块，用于数据的三维">
+<meta name="author" content="">
+<link rel="canonical" href="http://landodo.github.io/posts/20220304-python-qt-notes/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://landodo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://landodo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://landodo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://landodo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://landodo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="《Python Qt GUI 与数据可视化编程》阅读笔记" />
+<meta property="og:description" content="Notes Qt Charts是二维图表模块，用于绘制柱状图、饼图、曲线图等常用二维图表。 Qt Data Visualization是三维数据图表模块，用于数据的三维" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://landodo.github.io/posts/20220304-python-qt-notes/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-03-04T14:50:44&#43;08:00" />
+<meta property="article:modified_time" content="2022-03-04T14:50:44&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="《Python Qt GUI 与数据可视化编程》阅读笔记"/>
+<meta name="twitter:description" content="Notes Qt Charts是二维图表模块，用于绘制柱状图、饼图、曲线图等常用二维图表。 Qt Data Visualization是三维数据图表模块，用于数据的三维"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://landodo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "《Python Qt GUI 与数据可视化编程》阅读笔记",
+      "item": "http://landodo.github.io/posts/20220304-python-qt-notes/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "《Python Qt GUI 与数据可视化编程》阅读笔记",
+  "name": "《Python Qt GUI 与数据可视化编程》阅读笔记",
+  "description": "Notes Qt Charts是二维图表模块，用于绘制柱状图、饼图、曲线图等常用二维图表。 Qt Data Visualization是三维数据图表模块，用于数据的三维",
+  "keywords": [
+    "Qt", "笔记"
+  ],
+  "articleBody": "Notes   Qt Charts是二维图表模块，用于绘制柱状图、饼图、曲线图等常用二维图表。\n  Qt Data Visualization是三维数据图表模块，用于数据的三维显示，如散点的三维空间分布、三维曲面等。\n  pyuic5 是用于将Qt Designer（或Qt Creator内置的UI Designer）可视化设计的界面文件（.ui文件）编译转换为Python程序文件的工具软件。\n  pyrcc5 是用于将Qt Creator里设计的资源文件（.qrc文件）编译转换为Python程序文件的工具软件，资源文件一般存储了图标、图片等UI设计资源。\n  widget 是 label 的父容器。在创建时，将父容器作为参数传入。指定父容器，这样标签才能显示在窗体上。\n  widget = QtWidgets.QWidget()  label = QtWidgets.Qlabel(widget)   基于QMainWindow类的窗体，具有主窗口的特性，窗口上有主菜单栏、工具栏、状态栏等。\n  QWidget类是所有界面组件的基类，如QLabel、QPushButton等界面组件都是从QWidget类继承而来。\n  Qt Designer中的Property Editor界面，还显示了组件的继承关系。如QLabel的继承关系为：QObject→QWidget→QFrame→QLabel；QPushButton为QObject-QWidget-QAbstractButton。\n  objectName是组件的对象名称，界面上的每个组件都需要一个唯一的对象名称，以便被引用。\n  retranslateUi()函数集中设置了窗体上所有的字符串，利于实现软件的多语言界面。\n  函数setupUi()用于窗体的初始化，它创建了窗体上的所有组件并设置其属性。窗体是外部传入的，作为所有界面组件的父容器。\n  # setupUi()函数只创建窗体上的其他组件，而作为容器的窗体是靠外部传入的。 self.ui = Ui_MainWindow() # 创建UI对象 self.ui.setupUi(self) # 构造UI界面 # or baseWidget = QtWidgets.Qwidget() # 创建窗体的基类QWidget的实例 ui = Ui_MainWindow() ui.setupUi(baseWidget) # 以baseWidget作为传递参数，创建完整窗体   Ui_MainWindow的父类是object，不是Qt的窗体界面。\n  过程化的程序，难以实现业务逻辑功能的有效封装。\n  界面与业务逻辑分离的设计方法可以有多继承方法，另一种是单继承方法。\n  在多继承时，使用super()得到的是第一个基类。\n  class MainWindow(QMainWindow, Ui_MainWindow): def __init__(self, *args, **kwargs): super(MainWindow, self).__init__(*args, **kwargs) self.setupUi(self) 如上程序中，super()执行之后得到的就是一个QMainWindow对象，可以作为参数传递给setupUi()函数。通过这样的多继承，Ui_MainWindow中定义的窗体上的所有界面组件对象就变成了新定义的类MainWindow的公共属性，可以直接访问这些界面组件。\n  使用 self.__ui = Ui_MainWindow() 设置私有属性，更符合面向对象封装隔离的设计思想。self.__ui.Lab表示窗体上的对象标签，self.Lab则表示MainWindow类里新定义的属性。两者不易混淆，有利于界面与业务逻辑的分离。\n  信号（Signal）/槽（Slot）：GUI程序设计的主要内容就是对界面上各组件发射的特定信号进行响应，只需要知道什么情况下发射了哪些信号，然后合理地去响应和处理这些信号。\n  槽（Slot）：槽实质上是一个函数，它可以被直接调用。槽函数与一般的函数不同的是：槽函数可以与一个信号关联，当信号被发射（emit）时，关联的槽函数会被自动执行。\n  用Qt Designer设计界面时，对于需要在窗体业务逻辑类里访问的界面组件，修改其objectName，以便在程序中进行区分。每个组件需要有一个唯一的objectName，自动生成的槽函数名称与objectName有关。\n  添加总布局后，当窗体大小改变时，各个组件都会自动改变大小。组件之间的层次关系可以在Object Inspector获取。\n  伙伴关系（Buddy ）是为了在程序运行时，在窗体上用快捷键快速将输入焦点切换到某个组件上。\n  Qt的界面组件都是从QWidget继承而来的，都支持信号与槽的功能。\n  UI Designer工具栏里的“Edit Signals/Slots”使用可视化的方式实现信号与槽函数的关联。需要设置Sender、Signal、Receiver、Slot。\n  sender.signalName.connect(receiver.slotName)  在一个GroupBox中应用布局，体现在代码中就是：  groupBox = QGroupBox(Dialog) # 以groupBox为父容器创建布局和组件 layout = QHBoxLayout(groupBox) chkBox1 = QCheckBox(groupBox) chkBox2 = QCheckBox(groupBox) # 将部添加到layout中 layout.addWidget(chkBox1) layout.addWidget(chkBox2)   toggled(bool)信号在复选框的状态变化时发射，复选框的勾选状态作为参数传递给函数。\n  下面的函数实现了信号与槽的关联。\n  QtCore.QMetaObject.connectSlotsByName(MainWindow) # 槽函数的命名规则 on_objectName_signalName(signal parameters) # 例子 on_btnClear_clicked()   @pyqtSlot()修饰符用于声明槽函数的参数类型。自定义的槽函数的函数名可以使用“do_”作为前缀，提高可读性。\n  使用PyQt5.QtCore.pyqtSignal()为一个类定义新的信号。类必须是QObject类的子类。信号具有connect()、disconnect()和emit()，分别对应关联槽函数、断开与槽函数的关联、发射信号。\n  尽量不要定义overload型信号。\n  资源文件（.qrc）最主要的功能是存储图标和图片文件，图标通常保存为十六进制编码数据。利用pyrcc5将 .qrc 文件转为对应的Python文件。\n  Qt C++类库和PyQt5之间存在差异的类和接口函数并不多。\n  第三章 GUI 应用程序设计   在对overload型信号编写槽函数时，如果不清楚哪个是默认的信号，最好直接使用@pyqtSlot()修饰符对参数类型进行声明。\n  QPushButton有一个checkable属性，如果设置为True, QPushButton按钮可以当作CheckBox或RadioButton使用。\n  属性 autoExclusive=True, checkable=True 可以将一组QPushButton设置为互斥的。\n  QSlider和QScrollBar最常用的一个信号是valueChanged(int)，在拖动滑块改变当前值时就会发射这个信号。\n  QTimer主要的属性是interval，是定时中断的周期，单位是毫秒。QTimer主要的信号是timeout()，在定时中断时发射此信号。\n  timer.timeout.connect()   QMainWindow是主窗体类，可以作为一个应用程序的主窗体，具有主菜单栏、工具栏、状态栏等主窗体常见的界面元素。\n  QAction是直接从QObject继承而来的一个类，不是一个可视组件。QAction就是一个实现某些功能的“动作”，可以为其编写槽函数，使用一个QAction对象可以创建菜单项、工具栏按钮，点击菜单项或工具栏按钮就执行了关联的Action的槽函数。\n  互斥的 Action 通过QActionGroup分组对象实现：\n  format_group = QActionGroup(self) format_group.setExclusive(True) format_group.addAction(self.alignl_action) #左对齐 format_group.addAction(self.alignc_action) #居中 format_group.addAction(self.alignr_action) #右对齐 format_group.addAction(self.alignj_action) #两端   以Word程序为例，窗体最上方是菜单栏（Menu Bar），菜单栏下方是工具栏（Tool Bar），最下方是状态栏（Status Bar）。\n  状态栏 QStatusbar，addWidget()函数按从左到右顺序将一个组件添加到状态栏，addPermanentWidget()添加的组件则位于状态栏的最右边。\n  工具栏 QToolbar，addWidget()：添加一个界面组件到工具栏；addAction()：添加一个QAction对象并创建工具栏按钮； addSeparator()：添加一个分隔条。\n  QAction常用的信号是triggered()和triggered(bool)，它们是overload型信号。triggered(bool)是带有复选状态参数的信号。\n  QToolButton有一个setDefaultAction()函数，使其与一个Action关联，自动获取Action的文字、图标、ToolTip等设置作为按钮的相应属性。单击一个QToolButton按钮就会执行Action的槽函数，与工具栏上的按钮一样。\n  下拉菜单的实现方式：创建一个QMenu对象、选择列表项的Action添加作为菜单项；setMenu(QMenu_obj)为一个ToolButton按钮指定下拉菜单、QToolButton的setPopupMode()函数为一个ToolButton按钮的下拉式菜单设置不同的弹出方式；\n  每个从QWidget继承的类都有信号customContextMenuRequested()，这个信号在鼠标右键单击时发射，为此信号编写槽函数，可以创建和运行右键快捷菜单。\n  首先创建一个QMenu类型的对象menuList，然后利用QMenu的addAction()方法添加已经设计的Action作为菜单项。创建完菜单后，使用QMenu的exec()函数显示快捷菜单。\n  menuList = QMenu(self) menuList.addAction(...) # 类函数QCursor.pos()获得鼠标光标当前位置 menuList.exec(QCursor.pos())   QTreeWidget是创建和管理目录树结构的类。\n  ScrollArea上面放置一个QLabel组件，QLabel的pixmap属性可以显示图片。通过QPixmap对象的操作可进行缩放显示。当图片较小时，显示的图片可以自动居于scrollArea的中间，当显示的图片大小超过scrollArea可显示区域的范围时，scrollArea会自动显示水平或垂直方向的滚动条，用于显示更大范围的区域。\n  QPixmap存储图片数据，并且可以缩放图片，缩放只需调用相应函数，返回缩放后的图片副本。QPixmap.load(fileName)函数直接载入一个图片文件的内容。scaledToHeight(height, mode = Qt.FastTransformation)：返回一个缩放后的图片的副本，图片缩放到一个高度height。\n  scaledToWidth(width, mode = Qt.FastTransformation)：返回一个缩放后的图片的副本，图片缩放到一个宽度width。\n  scaled(width, height, ratio = Qt.IgnoreAspectRatio , mode = Qt.FastTransformation)：返回一个缩放后的图片的副本，图片缩放到宽度width和高度height。\n  QLabel.setPixmap(pixmap)函数显示一个QPixmap类对象pixmap存储的图片。\n  QTableWidget是PyQt5中的表格组件类，每一个单元格是一个QTableWidgetItem对象。\n  QGroupBox组件是常用的容器类组件，可以在一个GroupBox里放置其他界面组件且进行布局。QGroupBox有两个属性：checkable和checked。当checked为False时，GroupBox组件内部的所有组件都被禁用。\n  layoutLeftMargin、layoutTopMargin、layoutRightMargin和layoutBottomMargin这4个属性用于设置布局组件与父容器的4个边距，默认为9。\n  水平布局类QHBoxLayout和垂直布局类QVBoxLayout都有一个属性spacing，用于设置布局内组件之间的间隔，默认为6。\n  水平布局QHBoxLayout和垂直布局QVBoxLayout都有一个layoutStretch属性，用于设置各组件宽度分配比例。\n  # groupBox内有3的组件,如下设置只有一个组件可随窗口伸缩 self.horizontalLayout.setStretch(0, 0, 1)  Lay Out Horizontally in Splitter左右分割布局。  第4章 Model/View结构   Model/View（模型/视图）结构：源数据由模型（Model）读取，然后在视图（View）组件上显示和编辑，在界面上编辑修改的数据又通过模型保存到源数据。将数据模型和用户界面分离开来。\n  将界面组件与原始数据分离，又通过数据模型将界面和原始数据关联起来，从而实现界面与原始数据的交互操作。\n Data（源数据）是原始数据。 View（视图或视图组件）是界面组件，视图从数据模型获得数据然后显示在界面上。 Model（模型或数据模型）与源数据通信，并为视图组件提供数据接口。 Delegate（代理或委托）在视图与模型之间交互操作时提供临时编辑组件的功能。    Delegate代理负责从数据模型获取相应的数据，然后显示在编辑器里，修改数据后又将数据保存到数据模型中。\n  通过数据模型存取的每个数据都有一个模型索引，视图组件和代理都通过模型索引来获取数据。保证数据的表示与数据存取方式的分离。\n  要获得一个模型索引，必须提供3个参数：行号、列号、父项的模型索引。\n  在构造数据项的模型索引时，必须指定正确的行号、列号和父节点。\n  QFileSystemModel为本机的文件系统提供一个数据模型，可用于访问本机的文件系统。\n  QStringListModel是用于处理字符串列表的数据模型，可以作为QListView的数据模型，在界面上显示和编辑字符串列表。QListView的setModel()函数用于设置一个数据模型。\n  数据模型与视图组件之间信号与槽作用的结果，当数据模型的内容发生改变时，通知视图组件更新显示。数据模型的数据与界面上视图组件显示的内容是同步的。\n  QStandardItemModel通常与QTableView组成Model/View结构，实现通用的二维数据的管理。\n  为TableView组件的某列或某个单元格设置自定义代理组件，根据数据的类型限定使用不同的编辑组件。\n  第5章 事件处理   基于窗体（Widget）的应用程序都是由事件（event）驱动的，鼠标单击、按下某个按键、重绘某个组件、最小化窗口都会产生相应的事件，应用程序对这些事件作出相应的响应处理以实现程序的功能。\n  app.exec_()开启了应用程序的事件处理循环。\n  QEvent还有很多子类表示具体的事件，如QKeyEvent表示按键事件，QMouseEvent表示鼠标事件，QPaintEvent表示窗体绘制事件。\n  当一个事件发生时，PyQt5会根据事件的具体类型用QEvent相应的子类创建一个事件实例对象，然后传递给产生事件的对象的event()函数进行处理。\n  QWidget定义了很多的默认事件处理函数，都会传递一个event参数，但是event的类型由具体事件类型决定。\n  用户在继承于QWidget或其子类的自定义类中可以重新实现这些默认的事件处理函数，从而实现一些需要的功能。如重新实现mouseReleaseEvent()函数对鼠标单击事件进行处理，为QWidget添加clicked()信号。\n  事件与信号是有区别的，但是也有关联。Qt为某个界面组件定义的信号通常是对某个事件的封装，例如QPushButton有clicked()信号和clicked(bool)信号，就可以看作是对mouseReleaseEvent()事件的不同封装。\n  QLabel没有doubleClicked()信号，可以通过事件处理和自定义信号创建一个具有doubleClicked()信号的新的标签类。\n  事件与信号的关系：信号可以看作是对事件的一种封装。\n  QEvent.Paint事件类型的默认处理函数是paintEvent()，就是用于绘制窗体背景图片的函数。\n  事件过滤器（event filter）：将一个对象的事件委托给另一个对象来监测并处理。\n  如下程序，self是两个QLabel组件所在的窗体，这样，界面组件LabHover和LabDBClick就将窗体注册为其事件监测者，在LabHover或LabDBClick组件上触发的事件会发送给窗体进行处理。\n  self.ui.labHover.installEventFilter(self) self.ui.labelDBClick.installEventFilter(self) # 窗体通过重新实现eventFilter()函数对被监测的对象及其事件进行处理 def eventFilter(self, watched, event): # 通过watched判断哪个是被监测对象 # 根据event.type()判断事件类型并作出相应处理 # 执行父类的eventFilter()函数 return super().event.Filter(watched, event)   QApplication类型的应用程序执行exec_()函数后就开始了事件的循环处理。事件队列未能得到及时处理，用户会感觉到响应迟滞。有两种解决方案：\n 采用多线程方法。 另外一种简单的处理方法是使用QCoreApplication的类函数processEvents()。    在一个耗时较长的计算处理过程中不允许用户用鼠标或键盘操作。\n  from PyQt5.QtWidgets import qApp qApp.processEvents(QEventLoop.ExcludeUserInputEvents)   拖放操作涉及：mousePressEvent()、mouseMoveEvent()、dragEnterEvent()、dropEvent() 事件函数。\n  QLabel组件的scaledContents属性设置为True，让图片适应QLabel组件的大小。\n  setAcceptDrops()是QWidget类定义的函数，用于设置一个窗体组件是否接受放置操作。将界面组件设置为不接受放置，而窗体接受放置，事件也是传播到组件所在的父容器，也就是由窗口处理。\n  MIME (Multipurpose Internet Mail Extensions)是多功能因特网邮件扩展。QMimeData是对MIME数据的封装，在拖放操作和剪切板操作中都用QMimeData类描述传输的数据。\n  第6章 对话框与多窗口设计   若要打开一个文件，调用类函数QFileDialog.getOpenFileName()。\n  QColorDialog是选择颜色对话框，选择颜色使用类函数QColorDialog.getColor()。\n  QFontDialog是选择字体对话框，选择字体使用类函数QFontDialog.getFont()。\n  QProgressDialog是用于显示进度的对话框，可以在大的循环操作中显示操作进度。\n  QInputDialog有单行字符串输入、整数输入、浮点数输入、列表框选择输入和多行文本输入等多种输入方式。\n  消息对话框QMessageBox用于显示提示、警告、错误等信息，或进行确认选择。\n  常用的窗体基类是QWidget、QDialog和QMainWindow，在创建GUI应用程序时选择窗体基类就是从这3个类中选择。\n  QWidget：在没有指定父容器时可作为独立的窗口，指定父容器后可以作为父容器的内部组件。QWidget是所有界面组件的基类。\n  MDI（Multiple Document Interface）就是多文档界面，它是一种应用程序窗口管理方法，一般是在一个应用程序里打开多个同类型的窗口。\n  第8章 绘图   PyQt5提供了两种绘图方法。一种是使用QPainter类在QWidget类提供的画布上画图，可以绘制点、线、圆等各种基本形状，从而组成自己需要的图形。\n  所有界面组件都是QWidget的子类，界面上的按钮、编辑框等各种组件的界面效果都是使用QPainter绘制出来的。\n  PyQt5另外提供一种基于Graphics View架构的绘图方法，这种方法使用QGraphicsView、QGraphicsScene和各种QGraphicsItem图形项绘图，在一个场景中可以绘制大量图件，且每个图件是可选择、可交互的，如同矢量图编辑软件那样可以操作每个图件。Graphics View架构为用户绘制复杂的组件化图形提供了便利。\n  QPainter是用来进行绘图操作的类，一般的绘图设备包括QWidget、QPixmap、QImage等，这些绘图设备为QPainter提供了一个“画布”。\n  使用QPainter对象在一个QWidget窗体的paintEvent()事件函数里直接绘图。\n  可以从QWidget继承一个类，创建自定义界面组件。\n  在UI可视化设计时，可以使用提升法（promotion）将一个组件类提升为其某个子类。\n  PyQt5为绘制复杂的可交互的图形提供了Graphics View绘图架构，它是一种基于图形项（GraphicsItem）的模型/视图结构。\n  Graphics View架构主要由3部分组成，即场景、视图和图形项。\n  视图（View）是QGraphicsView提供绘图的视图组件，用于显示场景中的内容。可以为一个场景设置多个视图，用于对同一个数据集提供不同的视口。\n  QGraphicsItem可以被选择、拖放、组合，若编写信号的槽函数代码或事件函数响应代码，还可以实现各种编辑和操作功能。\n  QGraphicsView没有与mouseMoveEvent()相关的信号。从QGraphicsView继承定义一个类QmyGraphicsView，实现鼠标移动事件函数mouseMoveEvent()和鼠标按键事件函数mousePressEvent()的处理，并把事件转换为自定义信号，这样就可以在主程序里设计槽函数响应这些鼠标事件。\n  第9章 文件   os.gtcwd()函数获取当前路径。内建函数open()打开文本文件并读取文件内容。\n  PyQt5中用于文件读写操作的类是QFile，它提供了文件读写的接口函数，可以直接对文件进行读写。\n  Python自带的os和os.path模块中提供了大量的目录和文件操作相关的函数，如获取当前目录、新建目录、复制文件、分离文件的路径和基本文件名、判断文件是否存在等。\n  QFile类是直接与I/O设备打交道进行文件读写操作的类，使用QFile可以直接打开或保存文本文件。\n  除文本文件之外，其他的需要按照一定的格式定义读写的文件都可称为二进制文件。每种格式的二进制文件都有自己的格式定义，写入数据时按照一定的顺序，读出时也按照相应的顺序。\n  目录和文件操作包括获取当前目录、新建或删除目录、获取文件的基本文件名和后缀、复制或删除文件等操作。\n  ",
+  "wordCount" : "8430",
+  "inLanguage": "en",
+  "datePublished": "2022-03-04T14:50:44+08:00",
+  "dateModified": "2022-03-04T14:50:44+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://landodo.github.io/posts/20220304-python-qt-notes/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Landodo's NoteBook",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://landodo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://landodo.github.io/" accesskey="h" title="Landodo&#39;s NoteBook (Alt + H)">Landodo&#39;s NoteBook</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://landodo.github.io/search" title="🔍Search (Alt &#43; /)" accesskey=/>
+                    <span>🔍Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/tags" title="Tag">
+                    <span>Tag</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/cs-zoo" title="CS ZOO">
+                    <span>CS ZOO</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://landodo.github.io/">Home</a>&nbsp;»&nbsp;<a href="http://landodo.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      《Python Qt GUI 与数据可视化编程》阅读笔记
+    </h1>
+    <div class="post-meta"><span title='2022-03-04 14:50:44 +0800 CST'>March 4, 2022</span>&nbsp;·&nbsp;17 min&nbsp;·&nbsp;8430 words
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#notes" aria-label="Notes">Notes</a><ul>
+                        
+                <li>
+                    <a href="#%e7%ac%ac%e4%b8%89%e7%ab%a0-gui-%e5%ba%94%e7%94%a8%e7%a8%8b%e5%ba%8f%e8%ae%be%e8%ae%a1" aria-label="第三章 GUI 应用程序设计">第三章 GUI 应用程序设计</a></li>
+                <li>
+                    <a href="#%e7%ac%ac4%e7%ab%a0-modelview%e7%bb%93%e6%9e%84" aria-label="第4章 Model/View结构">第4章 Model/View结构</a></li>
+                <li>
+                    <a href="#%e7%ac%ac5%e7%ab%a0-%e4%ba%8b%e4%bb%b6%e5%a4%84%e7%90%86" aria-label="第5章 事件处理">第5章 事件处理</a></li></ul>
+                </li>
+                <li>
+                    <a href="#%e7%ac%ac6%e7%ab%a0-%e5%af%b9%e8%af%9d%e6%a1%86%e4%b8%8e%e5%a4%9a%e7%aa%97%e5%8f%a3%e8%ae%be%e8%ae%a1" aria-label="第6章 对话框与多窗口设计">第6章 对话框与多窗口设计</a><ul>
+                        
+                <li>
+                    <a href="#%e7%ac%ac8%e7%ab%a0-%e7%bb%98%e5%9b%be" aria-label="第8章 绘图">第8章 绘图</a></li>
+                <li>
+                    <a href="#%e7%ac%ac9%e7%ab%a0-%e6%96%87%e4%bb%b6" aria-label="第9章 文件">第9章 文件</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h1 id="notes">Notes<a hidden class="anchor" aria-hidden="true" href="#notes">#</a></h1>
+<ul>
+<li>
+<p>Qt Charts是二维图表模块，用于绘制柱状图、饼图、曲线图等常用二维图表。</p>
+</li>
+<li>
+<p>Qt Data Visualization是三维数据图表模块，用于数据的三维显示，如散点的三维空间分布、三维曲面等。</p>
+</li>
+<li>
+<p>pyuic5 是用于将Qt Designer（或Qt Creator内置的UI Designer）可视化设计的界面文件（.ui文件）编译转换为Python程序文件的工具软件。</p>
+</li>
+<li>
+<p>pyrcc5 是用于将Qt Creator里设计的资源文件（.qrc文件）编译转换为Python程序文件的工具软件，资源文件一般存储了图标、图片等UI设计资源。</p>
+</li>
+<li>
+<p>widget 是 label 的父容器。在创建时，将父容器作为参数传入。指定父容器，这样标签才能显示在窗体上。</p>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>widget <span style="color:#f92672">=</span> QtWidgets<span style="color:#f92672">.</span>QWidget()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>label <span style="color:#f92672">=</span> QtWidgets<span style="color:#f92672">.</span>Qlabel(widget)
+</span></span></code></pre></div><ul>
+<li>
+<p>基于QMainWindow类的窗体，具有主窗口的特性，窗口上有主菜单栏、工具栏、状态栏等。</p>
+</li>
+<li>
+<p>QWidget类是所有界面组件的基类，如QLabel、QPushButton等界面组件都是从QWidget类继承而来。</p>
+</li>
+<li>
+<p>Qt Designer中的Property Editor界面，还显示了组件的继承关系。如QLabel的继承关系为：QObject→QWidget→QFrame→QLabel；QPushButton为QObject-&gt;QWidget-&gt;QAbstractButton。</p>
+</li>
+<li>
+<p>objectName是组件的对象名称，界面上的每个组件都需要一个唯一的对象名称，以便被引用。</p>
+</li>
+<li>
+<p>retranslateUi()函数集中设置了窗体上所有的字符串，利于实现软件的多语言界面。</p>
+</li>
+<li>
+<p>函数setupUi()用于窗体的初始化，它创建了窗体上的所有组件并设置其属性。窗体是外部传入的，作为所有界面组件的父容器。</p>
+</li>
+</ul>
+<pre tabindex="0"><code># setupUi()函数只创建窗体上的其他组件，而作为容器的窗体是靠外部传入的。
+self.ui = Ui_MainWindow()   # 创建UI对象
+self.ui.setupUi(self)       # 构造UI界面
+
+# or
+baseWidget = QtWidgets.Qwidget()  # 创建窗体的基类QWidget的实例
+ui = Ui_MainWindow()  
+ui.setupUi(baseWidget)  # 以baseWidget作为传递参数，创建完整窗体
+</code></pre><ul>
+<li>
+<p>Ui_MainWindow的父类是object，不是Qt的窗体界面。</p>
+</li>
+<li>
+<p>过程化的程序，难以实现业务逻辑功能的有效封装。</p>
+</li>
+<li>
+<p>界面与业务逻辑分离的设计方法可以有多继承方法，另一种是单继承方法。</p>
+</li>
+<li>
+<p>在多继承时，使用super()得到的是第一个基类。</p>
+</li>
+</ul>
+<pre tabindex="0"><code>class MainWindow(QMainWindow, Ui_MainWindow):
+
+    def __init__(self, *args, **kwargs):
+        super(MainWindow, self).__init__(*args, **kwargs)
+        self.setupUi(self)
+</code></pre><p>如上程序中，super()执行之后得到的就是一个QMainWindow对象，可以作为参数传递给setupUi()函数。通过这样的多继承，Ui_MainWindow中定义的窗体上的所有界面组件对象就变成了新定义的类MainWindow的公共属性，可以直接访问这些界面组件。</p>
+<ul>
+<li>
+<p>使用 <code>self.__ui = Ui_MainWindow()</code> 设置私有属性，更符合面向对象封装隔离的设计思想。<code>self.__ui.Lab</code>表示窗体上的对象标签，<code>self.Lab</code>则表示MainWindow类里新定义的属性。两者不易混淆，有利于界面与业务逻辑的分离。</p>
+</li>
+<li>
+<p>信号（Signal）/槽（Slot）：GUI程序设计的主要内容就是对界面上各组件发射的特定信号进行响应，只需要知道什么情况下发射了哪些信号，然后合理地去响应和处理这些信号。</p>
+</li>
+<li>
+<p>槽（Slot）：槽实质上是一个函数，它可以被直接调用。槽函数与一般的函数不同的是：槽函数可以与一个信号关联，当信号被发射（emit）时，关联的槽函数会被自动执行。</p>
+</li>
+<li>
+<p>用Qt Designer设计界面时，对于需要在窗体业务逻辑类里访问的界面组件，修改其objectName，以便在程序中进行区分。每个组件需要有一个唯一的objectName，自动生成的槽函数名称与objectName有关。</p>
+</li>
+<li>
+<p>添加总布局后，当窗体大小改变时，各个组件都会自动改变大小。组件之间的层次关系可以在Object Inspector获取。</p>
+</li>
+<li>
+<p>伙伴关系（Buddy ）是为了在程序运行时，在窗体上用快捷键快速将输入焦点切换到某个组件上。</p>
+</li>
+<li>
+<p>Qt的界面组件都是从QWidget继承而来的，都支持信号与槽的功能。</p>
+</li>
+<li>
+<p>UI Designer工具栏里的“Edit Signals/Slots”使用可视化的方式实现信号与槽函数的关联。需要设置Sender、Signal、Receiver、Slot。</p>
+</li>
+</ul>
+<pre tabindex="0"><code>sender.signalName.connect(receiver.slotName)
+</code></pre><ul>
+<li>在一个GroupBox中应用布局，体现在代码中就是：</li>
+</ul>
+<pre tabindex="0"><code>groupBox = QGroupBox(Dialog)
+
+# 以groupBox为父容器创建布局和组件
+layout = QHBoxLayout(groupBox)
+chkBox1 = QCheckBox(groupBox)
+chkBox2 = QCheckBox(groupBox)
+
+# 将部添加到layout中
+layout.addWidget(chkBox1)
+layout.addWidget(chkBox2)
+</code></pre><ul>
+<li>
+<p>toggled(bool)信号在复选框的状态变化时发射，复选框的勾选状态作为参数传递给函数。</p>
+</li>
+<li>
+<p>下面的函数实现了信号与槽的关联。</p>
+</li>
+</ul>
+<pre tabindex="0"><code>QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+# 槽函数的命名规则
+on_objectName_signalName(signal parameters)
+# 例子
+on_btnClear_clicked()
+</code></pre><ul>
+<li>
+<p>@pyqtSlot()修饰符用于声明槽函数的参数类型。自定义的槽函数的函数名可以使用“do_”作为前缀，提高可读性。</p>
+</li>
+<li>
+<p>使用PyQt5.QtCore.pyqtSignal()为一个类定义新的信号。类必须是QObject类的子类。信号具有connect()、disconnect()和emit()，分别对应关联槽函数、断开与槽函数的关联、发射信号。</p>
+</li>
+<li>
+<p>尽量不要定义overload型信号。</p>
+</li>
+<li>
+<p>资源文件（.qrc）最主要的功能是存储图标和图片文件，图标通常保存为十六进制编码数据。利用pyrcc5将 .qrc 文件转为对应的Python文件。</p>
+</li>
+<li>
+<p>Qt C++类库和PyQt5之间存在差异的类和接口函数并不多。</p>
+</li>
+</ul>
+<h2 id="第三章-gui-应用程序设计">第三章 GUI 应用程序设计<a hidden class="anchor" aria-hidden="true" href="#第三章-gui-应用程序设计">#</a></h2>
+<ul>
+<li>
+<p>在对overload型信号编写槽函数时，如果不清楚哪个是默认的信号，最好直接使用@pyqtSlot()修饰符对参数类型进行声明。</p>
+</li>
+<li>
+<p>QPushButton有一个checkable属性，如果设置为True, QPushButton按钮可以当作CheckBox或RadioButton使用。</p>
+</li>
+<li>
+<p>属性 autoExclusive=True, checkable=True 可以将一组QPushButton设置为互斥的。</p>
+</li>
+<li>
+<p>QSlider和QScrollBar最常用的一个信号是valueChanged(int)，在拖动滑块改变当前值时就会发射这个信号。</p>
+</li>
+<li>
+<p>QTimer主要的属性是interval，是定时中断的周期，单位是毫秒。QTimer主要的信号是timeout()，在定时中断时发射此信号。</p>
+</li>
+</ul>
+<pre tabindex="0"><code>timer.timeout.connect()
+</code></pre><ul>
+<li>
+<p>QMainWindow是主窗体类，可以作为一个应用程序的主窗体，具有主菜单栏、工具栏、状态栏等主窗体常见的界面元素。</p>
+</li>
+<li>
+<p>QAction是直接从QObject继承而来的一个类，不是一个可视组件。QAction就是一个实现某些功能的“动作”，可以为其编写槽函数，使用一个QAction对象可以创建菜单项、工具栏按钮，点击菜单项或工具栏按钮就执行了关联的Action的槽函数。</p>
+</li>
+<li>
+<p>互斥的 Action 通过QActionGroup分组对象实现：</p>
+</li>
+</ul>
+<pre tabindex="0"><code>format_group = QActionGroup(self)
+format_group.setExclusive(True)
+format_group.addAction(self.alignl_action) #左对齐
+format_group.addAction(self.alignc_action) #居中
+format_group.addAction(self.alignr_action) #右对齐
+format_group.addAction(self.alignj_action) #两端
+</code></pre><ul>
+<li>
+<p>以Word程序为例，窗体最上方是菜单栏（Menu Bar），菜单栏下方是工具栏（Tool Bar），最下方是状态栏（Status Bar）。</p>
+</li>
+<li>
+<p>状态栏 QStatusbar，addWidget()函数按从左到右顺序将一个组件添加到状态栏，addPermanentWidget()添加的组件则位于状态栏的最右边。</p>
+</li>
+<li>
+<p>工具栏 QToolbar，addWidget()：添加一个界面组件到工具栏；addAction()：添加一个QAction对象并创建工具栏按钮； addSeparator()：添加一个分隔条。</p>
+</li>
+<li>
+<p>QAction常用的信号是triggered()和triggered(bool)，它们是overload型信号。triggered(bool)是带有复选状态参数的信号。</p>
+</li>
+<li>
+<p>QToolButton有一个setDefaultAction()函数，使其与一个Action关联，自动获取Action的文字、图标、ToolTip等设置作为按钮的相应属性。单击一个QToolButton按钮就会执行Action的槽函数，与工具栏上的按钮一样。</p>
+</li>
+<li>
+<p>下拉菜单的实现方式：创建一个QMenu对象、选择列表项的Action添加作为菜单项；setMenu(QMenu_obj)为一个ToolButton按钮指定下拉菜单、QToolButton的setPopupMode()函数为一个ToolButton按钮的下拉式菜单设置不同的弹出方式；</p>
+</li>
+<li>
+<p>每个从QWidget继承的类都有信号customContextMenuRequested()，这个信号在鼠标右键单击时发射，为此信号编写槽函数，可以创建和运行右键快捷菜单。</p>
+</li>
+<li>
+<p>首先创建一个QMenu类型的对象menuList，然后利用QMenu的addAction()方法添加已经设计的Action作为菜单项。创建完菜单后，使用QMenu的exec()函数显示快捷菜单。</p>
+</li>
+</ul>
+<pre tabindex="0"><code>menuList = QMenu(self)
+menuList.addAction(...)
+# 类函数QCursor.pos()获得鼠标光标当前位置
+menuList.exec(QCursor.pos())
+</code></pre><ul>
+<li>
+<p>QTreeWidget是创建和管理目录树结构的类。</p>
+</li>
+<li>
+<p>ScrollArea上面放置一个QLabel组件，QLabel的pixmap属性可以显示图片。通过QPixmap对象的操作可进行缩放显示。当图片较小时，显示的图片可以自动居于scrollArea的中间，当显示的图片大小超过scrollArea可显示区域的范围时，scrollArea会自动显示水平或垂直方向的滚动条，用于显示更大范围的区域。</p>
+</li>
+<li>
+<p>QPixmap存储图片数据，并且可以缩放图片，缩放只需调用相应函数，返回缩放后的图片副本。QPixmap.load(fileName)函数直接载入一个图片文件的内容。scaledToHeight(height, mode = Qt.FastTransformation)：返回一个缩放后的图片的副本，图片缩放到一个高度height。</p>
+</li>
+<li>
+<p>scaledToWidth(width, mode = Qt.FastTransformation)：返回一个缩放后的图片的副本，图片缩放到一个宽度width。</p>
+</li>
+<li>
+<p>scaled(width, height, ratio = Qt.IgnoreAspectRatio , mode = Qt.FastTransformation)：返回一个缩放后的图片的副本，图片缩放到宽度width和高度height。</p>
+</li>
+<li>
+<p>QLabel.setPixmap(pixmap)函数显示一个QPixmap类对象pixmap存储的图片。</p>
+</li>
+<li>
+<p>QTableWidget是PyQt5中的表格组件类，每一个单元格是一个QTableWidgetItem对象。</p>
+</li>
+<li>
+<p>QGroupBox组件是常用的容器类组件，可以在一个GroupBox里放置其他界面组件且进行布局。QGroupBox有两个属性：checkable和checked。当checked为False时，GroupBox组件内部的所有组件都被禁用。</p>
+</li>
+<li>
+<p>layoutLeftMargin、layoutTopMargin、layoutRightMargin和layoutBottomMargin这4个属性用于设置布局组件与父容器的4个边距，默认为9。</p>
+</li>
+<li>
+<p>水平布局类QHBoxLayout和垂直布局类QVBoxLayout都有一个属性spacing，用于设置布局内组件之间的间隔，默认为6。</p>
+</li>
+<li>
+<p>水平布局QHBoxLayout和垂直布局QVBoxLayout都有一个layoutStretch属性，用于设置各组件宽度分配比例。</p>
+</li>
+</ul>
+<pre tabindex="0"><code># groupBox内有3的组件,如下设置只有一个组件可随窗口伸缩
+self.horizontalLayout.setStretch(0, 0, 1)
+</code></pre><ul>
+<li>Lay Out Horizontally in Splitter左右分割布局。</li>
+</ul>
+<h2 id="第4章-modelview结构">第4章 Model/View结构<a hidden class="anchor" aria-hidden="true" href="#第4章-modelview结构">#</a></h2>
+<ul>
+<li>
+<p>Model/View（模型/视图）结构：源数据由模型（Model）读取，然后在视图（View）组件上显示和编辑，在界面上编辑修改的数据又通过模型保存到源数据。将数据模型和用户界面分离开来。</p>
+</li>
+<li>
+<p>将界面组件与原始数据分离，又通过数据模型将界面和原始数据关联起来，从而实现界面与原始数据的交互操作。</p>
+<ul>
+<li>Data（源数据）是原始数据。</li>
+<li>View（视图或视图组件）是界面组件，视图从数据模型获得数据然后显示在界面上。</li>
+<li>Model（模型或数据模型）与源数据通信，并为视图组件提供数据接口。</li>
+<li>Delegate（代理或委托）在视图与模型之间交互操作时提供临时编辑组件的功能。</li>
+</ul>
+</li>
+<li>
+<p>Delegate代理负责从数据模型获取相应的数据，然后显示在编辑器里，修改数据后又将数据保存到数据模型中。</p>
+</li>
+<li>
+<p>通过数据模型存取的每个数据都有一个模型索引，视图组件和代理都通过模型索引来获取数据。保证数据的表示与数据存取方式的分离。</p>
+</li>
+<li>
+<p>要获得一个模型索引，必须提供3个参数：行号、列号、父项的模型索引。</p>
+</li>
+<li>
+<p>在构造数据项的模型索引时，必须指定正确的行号、列号和父节点。</p>
+</li>
+<li>
+<p>QFileSystemModel为本机的文件系统提供一个数据模型，可用于访问本机的文件系统。</p>
+</li>
+<li>
+<p>QStringListModel是用于处理字符串列表的数据模型，可以作为QListView的数据模型，在界面上显示和编辑字符串列表。QListView的setModel()函数用于设置一个数据模型。</p>
+</li>
+<li>
+<p>数据模型与视图组件之间信号与槽作用的结果，当数据模型的内容发生改变时，通知视图组件更新显示。数据模型的数据与界面上视图组件显示的内容是同步的。</p>
+</li>
+<li>
+<p>QStandardItemModel通常与QTableView组成Model/View结构，实现通用的二维数据的管理。</p>
+</li>
+<li>
+<p>为TableView组件的某列或某个单元格设置自定义代理组件，根据数据的类型限定使用不同的编辑组件。</p>
+</li>
+</ul>
+<h2 id="第5章-事件处理">第5章 事件处理<a hidden class="anchor" aria-hidden="true" href="#第5章-事件处理">#</a></h2>
+<ul>
+<li>
+<p>基于窗体（Widget）的应用程序都是由事件（event）驱动的，鼠标单击、按下某个按键、重绘某个组件、最小化窗口都会产生相应的事件，应用程序对这些事件作出相应的响应处理以实现程序的功能。</p>
+</li>
+<li>
+<p>app.exec_()开启了应用程序的事件处理循环。</p>
+</li>
+<li>
+<p>QEvent还有很多子类表示具体的事件，如QKeyEvent表示按键事件，QMouseEvent表示鼠标事件，QPaintEvent表示窗体绘制事件。</p>
+</li>
+<li>
+<p>当一个事件发生时，PyQt5会根据事件的具体类型用QEvent相应的子类创建一个事件实例对象，然后传递给产生事件的对象的event()函数进行处理。</p>
+</li>
+<li>
+<p>QWidget定义了很多的默认事件处理函数，都会传递一个event参数，但是event的类型由具体事件类型决定。</p>
+</li>
+<li>
+<p>用户在继承于QWidget或其子类的自定义类中可以重新实现这些默认的事件处理函数，从而实现一些需要的功能。如重新实现mouseReleaseEvent()函数对鼠标单击事件进行处理，为QWidget添加clicked()信号。</p>
+</li>
+<li>
+<p>事件与信号是有区别的，但是也有关联。Qt为某个界面组件定义的信号通常是对某个事件的封装，例如QPushButton有clicked()信号和clicked(bool)信号，就可以看作是对mouseReleaseEvent()事件的不同封装。</p>
+</li>
+<li>
+<p>QLabel没有doubleClicked()信号，可以通过事件处理和自定义信号创建一个具有doubleClicked()信号的新的标签类。</p>
+</li>
+<li>
+<p>事件与信号的关系：信号可以看作是对事件的一种封装。</p>
+</li>
+<li>
+<p>QEvent.Paint事件类型的默认处理函数是paintEvent()，就是用于绘制窗体背景图片的函数。</p>
+</li>
+<li>
+<p>事件过滤器（event filter）：将一个对象的事件委托给另一个对象来监测并处理。</p>
+</li>
+<li>
+<p>如下程序，self是两个QLabel组件所在的窗体，这样，界面组件LabHover和LabDBClick就将窗体注册为其事件监测者，在LabHover或LabDBClick组件上触发的事件会发送给窗体进行处理。</p>
+</li>
+</ul>
+<pre tabindex="0"><code>self.ui.labHover.installEventFilter(self)
+self.ui.labelDBClick.installEventFilter(self)
+
+
+# 窗体通过重新实现eventFilter()函数对被监测的对象及其事件进行处理
+def eventFilter(self, watched, event):
+    # 通过watched判断哪个是被监测对象
+    # 根据event.type()判断事件类型并作出相应处理
+
+    # 执行父类的eventFilter()函数
+    return super().event.Filter(watched, event)
+</code></pre><ul>
+<li>
+<p>QApplication类型的应用程序执行exec_()函数后就开始了事件的循环处理。事件队列未能得到及时处理，用户会感觉到响应迟滞。有两种解决方案：</p>
+<ul>
+<li>采用多线程方法。</li>
+<li>另外一种简单的处理方法是使用QCoreApplication的类函数processEvents()。</li>
+</ul>
+</li>
+<li>
+<p>在一个耗时较长的计算处理过程中不允许用户用鼠标或键盘操作。</p>
+</li>
+</ul>
+<pre tabindex="0"><code>from PyQt5.QtWidgets import qApp
+
+qApp.processEvents(QEventLoop.ExcludeUserInputEvents)
+</code></pre><ul>
+<li>
+<p>拖放操作涉及：mousePressEvent()、mouseMoveEvent()、dragEnterEvent()、dropEvent() 事件函数。</p>
+</li>
+<li>
+<p>QLabel组件的scaledContents属性设置为True，让图片适应QLabel组件的大小。</p>
+</li>
+<li>
+<p>setAcceptDrops()是QWidget类定义的函数，用于设置一个窗体组件是否接受放置操作。将界面组件设置为不接受放置，而窗体接受放置，事件也是传播到组件所在的父容器，也就是由窗口处理。</p>
+</li>
+<li>
+<p>MIME (Multipurpose Internet Mail Extensions)是多功能因特网邮件扩展。QMimeData是对MIME数据的封装，在拖放操作和剪切板操作中都用QMimeData类描述传输的数据。</p>
+</li>
+</ul>
+<h1 id="第6章-对话框与多窗口设计">第6章 对话框与多窗口设计<a hidden class="anchor" aria-hidden="true" href="#第6章-对话框与多窗口设计">#</a></h1>
+<ul>
+<li>
+<p>若要打开一个文件，调用类函数QFileDialog.getOpenFileName()。</p>
+</li>
+<li>
+<p>QColorDialog是选择颜色对话框，选择颜色使用类函数QColorDialog.getColor()。</p>
+</li>
+<li>
+<p>QFontDialog是选择字体对话框，选择字体使用类函数QFontDialog.getFont()。</p>
+</li>
+<li>
+<p>QProgressDialog是用于显示进度的对话框，可以在大的循环操作中显示操作进度。</p>
+</li>
+<li>
+<p>QInputDialog有单行字符串输入、整数输入、浮点数输入、列表框选择输入和多行文本输入等多种输入方式。</p>
+</li>
+<li>
+<p>消息对话框QMessageBox用于显示提示、警告、错误等信息，或进行确认选择。</p>
+</li>
+<li>
+<p>常用的窗体基类是QWidget、QDialog和QMainWindow，在创建GUI应用程序时选择窗体基类就是从这3个类中选择。</p>
+</li>
+<li>
+<p>QWidget：在没有指定父容器时可作为独立的窗口，指定父容器后可以作为父容器的内部组件。QWidget是所有界面组件的基类。</p>
+</li>
+<li>
+<p>MDI（Multiple Document Interface）就是多文档界面，它是一种应用程序窗口管理方法，一般是在一个应用程序里打开多个同类型的窗口。</p>
+</li>
+</ul>
+<h2 id="第8章-绘图">第8章 绘图<a hidden class="anchor" aria-hidden="true" href="#第8章-绘图">#</a></h2>
+<ul>
+<li>
+<p>PyQt5提供了两种绘图方法。一种是使用QPainter类在QWidget类提供的画布上画图，可以绘制点、线、圆等各种基本形状，从而组成自己需要的图形。</p>
+</li>
+<li>
+<p>所有界面组件都是QWidget的子类，界面上的按钮、编辑框等各种组件的界面效果都是使用QPainter绘制出来的。</p>
+</li>
+<li>
+<p>PyQt5另外提供一种基于Graphics View架构的绘图方法，这种方法使用QGraphicsView、QGraphicsScene和各种QGraphicsItem图形项绘图，在一个场景中可以绘制大量图件，且每个图件是可选择、可交互的，如同矢量图编辑软件那样可以操作每个图件。Graphics View架构为用户绘制复杂的组件化图形提供了便利。</p>
+</li>
+<li>
+<p>QPainter是用来进行绘图操作的类，一般的绘图设备包括QWidget、QPixmap、QImage等，这些绘图设备为QPainter提供了一个“画布”。</p>
+</li>
+<li>
+<p>使用QPainter对象在一个QWidget窗体的paintEvent()事件函数里直接绘图。</p>
+</li>
+<li>
+<p>可以从QWidget继承一个类，创建自定义界面组件。</p>
+</li>
+<li>
+<p>在UI可视化设计时，可以使用提升法（promotion）将一个组件类提升为其某个子类。</p>
+</li>
+<li>
+<p>PyQt5为绘制复杂的可交互的图形提供了Graphics View绘图架构，它是一种基于图形项（GraphicsItem）的模型/视图结构。</p>
+</li>
+<li>
+<p>Graphics View架构主要由3部分组成，即场景、视图和图形项。</p>
+</li>
+<li>
+<p>视图（View）是QGraphicsView提供绘图的视图组件，用于显示场景中的内容。可以为一个场景设置多个视图，用于对同一个数据集提供不同的视口。</p>
+</li>
+<li>
+<p>QGraphicsItem可以被选择、拖放、组合，若编写信号的槽函数代码或事件函数响应代码，还可以实现各种编辑和操作功能。</p>
+</li>
+<li>
+<p>QGraphicsView没有与mouseMoveEvent()相关的信号。从QGraphicsView继承定义一个类QmyGraphicsView，实现鼠标移动事件函数mouseMoveEvent()和鼠标按键事件函数mousePressEvent()的处理，并把事件转换为自定义信号，这样就可以在主程序里设计槽函数响应这些鼠标事件。</p>
+</li>
+</ul>
+<h2 id="第9章-文件">第9章 文件<a hidden class="anchor" aria-hidden="true" href="#第9章-文件">#</a></h2>
+<ul>
+<li>
+<p>os.gtcwd()函数获取当前路径。内建函数open()打开文本文件并读取文件内容。</p>
+</li>
+<li>
+<p>PyQt5中用于文件读写操作的类是QFile，它提供了文件读写的接口函数，可以直接对文件进行读写。</p>
+</li>
+<li>
+<p>Python自带的os和os.path模块中提供了大量的目录和文件操作相关的函数，如获取当前目录、新建目录、复制文件、分离文件的路径和基本文件名、判断文件是否存在等。</p>
+</li>
+<li>
+<p>QFile类是直接与I/O设备打交道进行文件读写操作的类，使用QFile可以直接打开或保存文本文件。</p>
+</li>
+<li>
+<p>除文本文件之外，其他的需要按照一定的格式定义读写的文件都可称为二进制文件。每种格式的二进制文件都有自己的格式定义，写入数据时按照一定的顺序，读出时也按照相应的顺序。</p>
+</li>
+<li>
+<p>目录和文件操作包括获取当前目录、新建或删除目录、获取文件的基本文件名和后缀、复制或删除文件等操作。</p>
+</li>
+</ul>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://landodo.github.io/tags/qt/">Qt</a></li>
+      <li><a href="http://landodo.github.io/tags/%E7%AC%94%E8%AE%B0/">笔记</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="http://landodo.github.io/posts/20190304-stl-notes/">
+    <span class="title">« Prev Page</span>
+    <br>
+    <span>《STL 源码剖析》STL 学习笔记</span>
+  </a>
+  <a class="next" href="http://landodo.github.io/posts/boundary-patch-refinement/">
+    <span class="title">Next Page »</span>
+    <br>
+    <span>Boundary Patch Refinement</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>Landon</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

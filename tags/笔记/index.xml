@@ -7,7 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Landon</copyright>
-    <lastBuildDate>Tue, 24 Aug 2021 10:12:08 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/%E7%AC%94%E8%AE%B0/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 04 Mar 2022 14:50:44 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/%E7%AC%94%E8%AE%B0/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>《Python Qt GUI 与数据可视化编程》阅读笔记</title>
+      <link>http://landodo.github.io/posts/20220304-python-qt-notes/</link>
+      <pubDate>Fri, 04 Mar 2022 14:50:44 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20220304-python-qt-notes/</guid>
+      <description>Notes Qt Charts是二维图表模块，用于绘制柱状图、饼图、曲线图等常用二维图表。 Qt Data Visualization是三维数据图表模块，用于数据的三维</description>
+    </item>
+    
     <item>
       <title>关于 Object Detection Anchor 的学习笔记</title>
       <link>http://landodo.github.io/posts/20210824-object-detection-anchor/</link>
