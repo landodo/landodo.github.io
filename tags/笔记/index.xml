@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
@@ -64,3 +65,71 @@
     
   </channel>
 </rss>
+=======
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>笔记 on Landodo&#39;s NoteBook</title>
+    <link>http://landodo.github.io/tags/%E7%AC%94%E8%AE%B0/</link>
+    <description>Recent content in 笔记 on Landodo&#39;s NoteBook</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Landon</copyright>
+    <lastBuildDate>Sun, 20 Mar 2022 14:50:44 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/%E7%AC%94%E8%AE%B0/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HyperSeg: Patch-wise Hypernetwork for Real-time Semantic Segmentation</title>
+      <link>http://landodo.github.io/posts/20220320-hyperseg/</link>
+      <pubDate>Sun, 20 Mar 2022 14:50:44 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20220320-hyperseg/</guid>
+      <description>HyperSeg Nirkin, Y., Wolf, L., &amp;amp; Hassner, T. (2021). HyperSeg: Patch-wise Hypernetwork for Real-time Semantic Segmentation. 2021 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 4060-4069. 论文简介： CVPR 2021 https://arxiv.org/abs/2012.11582 💡亮点： 解码器中的 Meta block 模块，在模块中提出了 Dynamic Patch-wise Convolution(</description>
+    </item>
+    
+    <item>
+      <title>《Python Qt GUI 与数据可视化编程》阅读笔记</title>
+      <link>http://landodo.github.io/posts/20220304-python-qt-notes/</link>
+      <pubDate>Fri, 04 Mar 2022 14:50:44 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20220304-python-qt-notes/</guid>
+      <description>Notes Qt Charts是二维图表模块，用于绘制柱状图、饼图、曲线图等常用二维图表。 Qt Data Visualization是三维数据图表模块，用于数据的三维</description>
+    </item>
+    
+    <item>
+      <title>关于 Object Detection Anchor 的学习笔记</title>
+      <link>http://landodo.github.io/posts/20210824-object-detection-anchor/</link>
+      <pubDate>Tue, 24 Aug 2021 10:12:08 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210824-object-detection-anchor/</guid>
+      <description>anchor 什么是 anchor？ anchor 是可能包含目标物体的矩形框。在目标检测任务中，通常会为每个像素点预设一个或多个大小和宽高比例不同的 anchor，以此</description>
+    </item>
+    
+    <item>
+      <title>医学图像基础</title>
+      <link>http://landodo.github.io/posts/20210806-medical-image-basic/</link>
+      <pubDate>Fri, 06 Aug 2021 09:58:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210806-medical-image-basic/</guid>
+      <description>医学影像基础 现行医学影像设备所得到的医学影像在许多方面还存在不尽如人意之处。例如，某些影像的==空间分辨率不够高==，某些影像的==信噪比不</description>
+    </item>
+    
+    <item>
+      <title>计算图和反向传播（Computational Graphs and Backpropagation）</title>
+      <link>http://landodo.github.io/posts/20210129-computational-graphs-and-backpropagation/</link>
+      <pubDate>Fri, 29 Jan 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210129-computational-graphs-and-backpropagation/</guid>
+      <description>计算图和反向传播（Computational Graphs and Backpropagation） 学习资料 （0）《深度学习入门——基于 Python 的理论与实践》 我的读书</description>
+    </item>
+    
+    <item>
+      <title>深度学习基础图书</title>
+      <link>http://landodo.github.io/posts/20210128-deep-learning-from-scrach/</link>
+      <pubDate>Tue, 18 Feb 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210128-deep-learning-from-scrach/</guid>
+      <description>深度学习基础图书 今天又花了点时间看了一本书（第二遍）——《深度学习入门——基于 Python 的理论与实践》。 全书下载地址：https://github.</description>
+    </item>
+    
+  </channel>
+</rss>
+>>>>>>> 351a415af31a0561991d5014415d6ee1364940fd

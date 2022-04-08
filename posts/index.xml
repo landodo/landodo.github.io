@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
@@ -685,3 +686,692 @@
     
   </channel>
 </rss>
+=======
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Posts on Landodo&#39;s NoteBook</title>
+    <link>http://landodo.github.io/posts/</link>
+    <description>Recent content in Posts on Landodo&#39;s NoteBook</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>Landon</copyright>
+    <lastBuildDate>Sun, 20 Mar 2022 14:50:44 +0800</lastBuildDate><atom:link href="http://landodo.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>节点聚类问题的总结和思考</title>
+      <link>http://landodo.github.io/posts/20210804-clustering-method/</link>
+      <pubDate>Wed, 04 Aug 2021 10:24:22 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210804-clustering-method/</guid>
+      <description>节点聚类问题的总结和思考 摘要 聚类作为经典的无监督学习算法，在数据挖掘/机器学习等领域有着广泛地应用。聚类是针对给定的样本，依据它们的特征的相</description>
+    </item>
+    
+    <item>
+      <title>《STL 源码剖析》STL 学习笔记</title>
+      <link>http://landodo.github.io/posts/20190304-stl-notes/</link>
+      <pubDate>Mon, 04 Mar 2019 17:22:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20190304-stl-notes/</guid>
+      <description>这是我学习 STL 的笔记。 更新日志 2019-03-04 新增了[STL 概述与版本简介](#STL 概述与版本简介)、空间分配器（allocators）、迭代器（iter</description>
+    </item>
+    
+    <item>
+      <title>HyperSeg: Patch-wise Hypernetwork for Real-time Semantic Segmentation</title>
+      <link>http://landodo.github.io/posts/20220320-hyperseg/</link>
+      <pubDate>Sun, 20 Mar 2022 14:50:44 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20220320-hyperseg/</guid>
+      <description>HyperSeg Nirkin, Y., Wolf, L., &amp;amp; Hassner, T. (2021). HyperSeg: Patch-wise Hypernetwork for Real-time Semantic Segmentation. 2021 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 4060-4069. 论文简介： CVPR 2021 https://arxiv.org/abs/2012.11582 💡亮点： 解码器中的 Meta block 模块，在模块中提出了 Dynamic Patch-wise Convolution(</description>
+    </item>
+    
+    <item>
+      <title>《Python Qt GUI 与数据可视化编程》阅读笔记</title>
+      <link>http://landodo.github.io/posts/20220304-python-qt-notes/</link>
+      <pubDate>Fri, 04 Mar 2022 14:50:44 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20220304-python-qt-notes/</guid>
+      <description>Notes Qt Charts是二维图表模块，用于绘制柱状图、饼图、曲线图等常用二维图表。 Qt Data Visualization是三维数据图表模块，用于数据的三维</description>
+    </item>
+    
+    <item>
+      <title>Boundary Patch Refinement</title>
+      <link>http://landodo.github.io/posts/boundary-patch-refinement/</link>
+      <pubDate>Fri, 18 Feb 2022 22:21:52 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/boundary-patch-refinement/</guid>
+      <description>Look Closer to Segment Better: Boundary Patch Refinement for Instance Segmentation论文简介： 作者：Chufeng Tang（https://chufengt.github.io/）</description>
+    </item>
+    
+    <item>
+      <title>SETR: Rethinking semantic segmentation from a sequence-to-sequence perspective with transformers</title>
+      <link>http://landodo.github.io/posts/20211208-setr/</link>
+      <pubDate>Wed, 08 Dec 2021 08:49:45 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20211208-setr/</guid>
+      <description>SETR Dosovitskiy, Alexey, et al. &amp;ldquo;An image is worth 16x16 words: Transformers for image recognition at scale.&amp;rdquo; arXiv preprint arXiv:2010.11929 (2020). Zheng, Sixiao, et al. &amp;ldquo;Rethinking semantic segmentation from a sequence-to-sequence perspective with transformers.&amp;rdquo; Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition. 2021. 论文简介 SETR：用 Transformer 从 Sequence-to-Sequence 的角度重新思考语义分割</description>
+    </item>
+    
+    <item>
+      <title>Every Annotation Counts</title>
+      <link>http://landodo.github.io/posts/every-annotation-counts/</link>
+      <pubDate>Fri, 26 Nov 2021 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/every-annotation-counts/</guid>
+      <description>Every Annotation Counts: Multi-label Deep Supervision for Medical Image Segmentation CVPR 2021 代码未开源 关键词：semi-weakly supervised、pseudo-labels、Multi-label Deep S</description>
+    </item>
+    
+    <item>
+      <title>TumorCP: A Simple but Effective Object-Level Data Augmentation for Tumor Segmentation</title>
+      <link>http://landodo.github.io/posts/20211119-tumorcp/</link>
+      <pubDate>Fri, 19 Nov 2021 08:52:17 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20211119-tumorcp/</guid>
+      <description>论文简介 论文名称：TumorCP: A Simple but Effective Object-Level Data Augmentation for Tumor Segmentation arXiv：https://arxiv.org/pdf/2107.09843.pdf 单</description>
+    </item>
+    
+    <item>
+      <title>2.5D methods for Volumetric Medical Image Segmentation</title>
+      <link>http://landodo.github.io/posts/20211105-2-5d-network/</link>
+      <pubDate>Fri, 05 Nov 2021 08:56:59 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20211105-2-5d-network/</guid>
+      <description>🎯Topic: 2.5D methods for Volumetric Medical Image Segmentation论文简介 （1）2.5D 医学图像分割网络综述，发表于 2020 年 10 月。 Exploring Efficient Volumetric Medical Image Segmentation Using 2.5D Method: An Empirical Study （2）</description>
+    </item>
+    
+    <item>
+      <title>20211024 Latent Space Data Augmentation</title>
+      <link>http://landodo.github.io/posts/20211024-latent-space-data-augmentation/</link>
+      <pubDate>Sun, 24 Oct 2021 09:08:38 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20211024-latent-space-data-augmentation/</guid>
+      <description>Cooperative Training and Latent Space Data Augmentation for Robust Medical Image Segmentation 论文题目：协同训练和隐空间数据增强的鲁棒性医学图像分割 https://arxiv.org/abs/2107.01079 会议：MICCAI 2021 作者：Chen CHEN 陈晨 https://sites.google.com/view/morningchen-site/home Research Assistant/PhD 伦敦帝国理工学</description>
+    </item>
+    
+    <item>
+      <title>3D RoI-aware U-Net for Accurate and Efficient Colorectal Tumor Segmentation</title>
+      <link>http://landodo.github.io/posts/20210924-3d-roi-aware-u-net/</link>
+      <pubDate>Fri, 24 Sep 2021 09:14:09 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210924-3d-roi-aware-u-net/</guid>
+      <description>3D RoI-aware U-Net for Accurate and Efficient Colorectal Tumor Segmentation #结直肠癌分割📌 Cited by: 18 Publish Year: 2020 Published in: IEEE Transactions on Cybernetics 地址：https://ieeexplore.ieee.org/document/</description>
+    </item>
+    
+    <item>
+      <title>Rapid vessel segmentation and reconstruction of head and neck angiograms using 3D convolutional neural network.</title>
+      <link>http://landodo.github.io/posts/20210912-rapid-vessel-segmentation/</link>
+      <pubDate>Thu, 16 Sep 2021 09:17:12 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210912-rapid-vessel-segmentation/</guid>
+      <description>论文简介 基于三维卷积神经网络的头颈部血管图像快速分割与重建 Fu, F., Wei, J., Zhang, M., Yu, F., Xiao, Y., Rong, D., Shan, Y., Li, Y., Zhao, C., Liao, F., Yang, Z., Li, Y., Chen, Y., Wang, X., &amp;amp; Lu, J. (2020). Rapid vessel segmentation and reconstruction of head and neck</description>
+    </item>
+    
+    <item>
+      <title>Structure Boundary Preserving Segmentation for Medical Image with Ambiguous Boundary</title>
+      <link>http://landodo.github.io/posts/20210831-structure-boundary-preserving-segmentation/</link>
+      <pubDate>Tue, 31 Aug 2021 10:03:43 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210831-structure-boundary-preserving-segmentation/</guid>
+      <description>Structure Boundary Preserving Segmentation for Medical Image with Ambiguous Boundary 边界模糊医学图像的结构边界保持分割 简介 韩国一个大学的文章。 CVPR 2020 与医学图像分割有关 Cited by: 5 没有代码，没啥意思😭，想去看看它的</description>
+    </item>
+    
+    <item>
+      <title>Focal Loss for Dense Object Detection</title>
+      <link>http://landodo.github.io/posts/20210827-focal-loss/</link>
+      <pubDate>Fri, 27 Aug 2021 09:19:10 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210827-focal-loss/</guid>
+      <description>目标检测任务（1） ⛳本报告主要是针对目标检测任务中正负样本不平衡、难易样本不平衡这两个问题进行简要讨论。 论文简介 Lin, T., Goyal, P., Girshick, R.B., He, K., &amp;amp; Dollá</description>
+    </item>
+    
+    <item>
+      <title>关于 Object Detection Anchor 的学习笔记</title>
+      <link>http://landodo.github.io/posts/20210824-object-detection-anchor/</link>
+      <pubDate>Tue, 24 Aug 2021 10:12:08 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210824-object-detection-anchor/</guid>
+      <description>anchor 什么是 anchor？ anchor 是可能包含目标物体的矩形框。在目标检测任务中，通常会为每个像素点预设一个或多个大小和宽高比例不同的 anchor，以此</description>
+    </item>
+    
+    <item>
+      <title>医学图像基础</title>
+      <link>http://landodo.github.io/posts/20210806-medical-image-basic/</link>
+      <pubDate>Fri, 06 Aug 2021 09:58:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210806-medical-image-basic/</guid>
+      <description>医学影像基础 现行医学影像设备所得到的医学影像在许多方面还存在不尽如人意之处。例如，某些影像的==空间分辨率不够高==，某些影像的==信噪比不</description>
+    </item>
+    
+    <item>
+      <title>20210803 Semi Self Unsupervised</title>
+      <link>http://landodo.github.io/posts/20210803-semi-self-unsupervised/</link>
+      <pubDate>Tue, 03 Aug 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210803-semi-self-unsupervised/</guid>
+      <description>摘要 目前的方法严重依赖于大量的有标注数据。因此，在训练过程中加入未标注的数据是很常见的，这样可以用更少的标注达到相同的结果。本片综述主要是专</description>
+    </item>
+    
+    <item>
+      <title>深度聚类 Deep Clustering</title>
+      <link>http://landodo.github.io/posts/deep-clustering-notes/</link>
+      <pubDate>Fri, 30 Jul 2021 17:22:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/deep-clustering-notes/</guid>
+      <description>Deep Clustering 深度聚类 🎯研究图神经网络的聚类问题，利用图神经网络强大的结构捕获能力来提升聚类算法的效果。 1. 聚类问题简介 聚类是针对给定的样本，依据它们的</description>
+    </item>
+    
+    <item>
+      <title>Graph Attention Networks(GATs) </title>
+      <link>http://landodo.github.io/posts/20210711-gat/</link>
+      <pubDate>Sun, 11 Jul 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210711-gat/</guid>
+      <description>GAT 地址：https://arxiv.org/abs/1710.10903 期刊：International Conference on Learning Representations (ICLR) 2018 被引用次数：4116 Abstract Graph</description>
+    </item>
+    
+    <item>
+      <title>#DeepLab# 中的空洞卷积和条件随机场</title>
+      <link>http://landodo.github.io/posts/20210620-deeplab-v1-v2/</link>
+      <pubDate>Sun, 20 Jun 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210620-deeplab-v1-v2/</guid>
+      <description>#DeepLab# 中的空洞卷积和条件随机场 简要总结 DeepLab V1 和 DeepLab V2，DeepLab 是语义分割的经典网络架构。其有两个核心要点： （1）空洞卷积（Atrous Con</description>
+    </item>
+    
+    <item>
+      <title>Boundary loss for highly unbalanced segmentation</title>
+      <link>http://landodo.github.io/posts/20210530-boundary-loss/</link>
+      <pubDate>Sun, 30 May 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210530-boundary-loss/</guid>
+      <description>Boundary loss for highly unbalanced segmentation Csurka, G., Larlus, D., &amp;amp; Perronnin, F. (2013). What is a good evaluation measure for semantic segmentation? BMVC. (218 Citations.) Kervadec, H., Bouchtiba, J., Desrosiers, C., Granger, É., Dolz, J., &amp;amp; Ayed, I.B. (2019). Boundary loss for highly unbalanced segmentation. Medical image analysis, 67, 101851 . (95 Citations) 论文 PDF : https://openreview.net/pdf?id=S1gTA5VggE 或者（https:</description>
+    </item>
+    
+    <item>
+      <title>视网膜血管分割 Retinal vessel segmentation</title>
+      <link>http://landodo.github.io/posts/20210516-retinal-vesse-segmentation/</link>
+      <pubDate>Sun, 16 May 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210516-retinal-vesse-segmentation/</guid>
+      <description>视网膜血管分割 Retinal vessel segmentation 1. 数据集（Datasets） 视网膜血管分割的公开集最常用的有 DRIVE、STARE 和 CHASE_DB。 1.1 DRIVE DRIVE: Digital Retinal Images for Vessel Extraction</description>
+    </item>
+    
+    <item>
+      <title>绘制频率直方图</title>
+      <link>http://landodo.github.io/posts/20210514-histogram-and-roi/</link>
+      <pubDate>Fri, 14 May 2021 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210514-histogram-and-roi/</guid>
+      <description>!ls Histogram and RoI.ipynb axon02.tif test.jpg Question 2.1 .ipynb cell_nucleus.tif axon01.tif roi.tif from PIL import Image import numpy as np from PIL import ImageOps import matplotlib.pyplot as plt # 打开图片并转换成灰度图 im = Image.open(&amp;#39;axon01.tif&amp;#39;).convert(&amp;#39;L&amp;#39;) # 反转颜色 im = ImageOps.invert(im) # display in macOS /Applications/Preview.app # im.show() # display in Jupyter Notebook im ​ ​ # 将灰度</description>
+    </item>
+    
+    <item>
+      <title>MNIST (Mixed National Institute of Standards and Technology database)</title>
+      <link>http://landodo.github.io/posts/20210514-mnist/</link>
+      <pubDate>Fri, 14 May 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210514-mnist/</guid>
+      <description>MNIST (Mixed National Institute of Standards and Technology database) 参考链接： http://yann.lecun.com/exdb/mnist/ https://stackoverflow.com/questions/40427435/extract-images-from-idx3-ubyte-file-or-gzip-via-python 下载 import glob path = glob.glob(&amp;#39;./../data/MNIST/raw/*.gz&amp;#39;) path [&#39;./../data/MNIST/raw/t10k-images-idx3-ubyte.gz&#39;, &#39;./../data/MNIST/raw/train-images-idx3-ubyte.gz&#39;, &#39;./../data/MNIST/raw/train-labels-idx1-ubyte.gz&#39;, &#39;./../data/MNIST/raw/t10k-labels-idx1-ubyte.gz&#39;] # train-images-idx3-ubyte.gz # 60000张训练集图片 # train-labels-idx1-ubyte.gz # 60000张训练集图片对应的标签 # t10k-images-idx3-ubyte.gz # 10000张</description>
+    </item>
+    
+    <item>
+      <title>图像预处理</title>
+      <link>http://landodo.github.io/posts/20210514-preprocessing/</link>
+      <pubDate>Fri, 14 May 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210514-preprocessing/</guid>
+      <description>数据预处理 import matplotlib.pyplot as plt import glob from PIL import Image import numpy as np import cv2 # 训练集图像 img_paths = glob.glob(&amp;#39;./../data/vesselseg/DRIVE/training/images/*.tif&amp;#39;) img_paths.sort() img_paths [&#39;./../data/vesselseg/DRIVE/training/images/21_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/22_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/23_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/24_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/25_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/26_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/27_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/28_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/29_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/30_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/31_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/32_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/33_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/34_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/35_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/36_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/37_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/38_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/39_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/40_training.tif&#39;] 查看不同通道 # 读取其中一张图像 rgb_img = Image.open(img_paths[0])</description>
+    </item>
+    
+    <item>
+      <title>SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation</title>
+      <link>http://landodo.github.io/posts/20210418-segnet/</link>
+      <pubDate>Sun, 18 Apr 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210418-segnet/</guid>
+      <description>FCN：Fully Convolutional Networks for Semantic Segmentation https://arxiv.org/abs/1411.4038 U-Net：U-Net: Convolutional Networks for Biomedical Image Segmentation https://arxiv.org/abs/1505.04597 SegNet：SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation https://arxiv.org/pdf/1511.00561.pdf 概览 论文所要解决的问题： encoder</description>
+    </item>
+    
+    <item>
+      <title>SegNet</title>
+      <link>http://landodo.github.io/posts/20210413-segnet-notes/</link>
+      <pubDate>Tue, 13 Apr 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210413-segnet-notes/</guid>
+      <description>SegNet http://mi.eng.cam.ac.uk/projects/segnet/ 时间：2015 年 Max Pooling 后特征图会变小，空间分辨率的下降对于边界的勾画是不利的，在文章的论述中，作者认为需要对这种边界信息进行存储保留，比如</description>
+    </item>
+    
+    <item>
+      <title>Image Segmentation Using Deep Learning: A Survey</title>
+      <link>http://landodo.github.io/posts/20210401-image-segmentation-survey/</link>
+      <pubDate>Thu, 01 Apr 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210401-image-segmentation-survey/</guid>
+      <description>Image Segmentation Using Deep Learning: A Survey 一篇图像分割的综述。 arXiv：https://arxiv.org/abs/2001.05566 写这篇笔记时（2021.04.</description>
+    </item>
+    
+    <item>
+      <title>ResNeSt</title>
+      <link>http://landodo.github.io/posts/20210325-resnest-review/</link>
+      <pubDate>Thu, 25 Mar 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210325-resnest-review/</guid>
+      <description>arXiv: https://arxiv.org/abs/2004.08955 时间：2020 年 04 月 SENet（17.09）、SKNet（19.03） 和 ResNeSt（20.04） 可以放在一起进行阅读，这三篇都是注意</description>
+    </item>
+    
+    <item>
+      <title>Selective Kernel Network 解析</title>
+      <link>http://landodo.github.io/posts/20210315-sknet-review/</link>
+      <pubDate>Mon, 15 Mar 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210315-sknet-review/</guid>
+      <description>（SKNet）Selective Kernel Network 解析 Selective Kernel Network 是注意力机制的一篇经典文献。 其实我现在的论文阅读量不多，连基础的基干系列网络都还没看完，但是为</description>
+    </item>
+    
+    <item>
+      <title>Wide Residual Networks</title>
+      <link>http://landodo.github.io/posts/20210313-wrn/</link>
+      <pubDate>Sat, 13 Mar 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210313-wrn/</guid>
+      <description>Wide Residual Networks arXiv: 1605.07146v4 法国 Abstract 深度残差网络被证明能够扩展到数千层，不断的提高性能。 但是，精度提高的每一小部分都要增加近一倍的层数，而训练很深的残差网络有一</description>
+    </item>
+    
+    <item>
+      <title>Dual Attention Network for Scene Segmentation</title>
+      <link>http://landodo.github.io/posts/20210311-dual-attention-network/</link>
+      <pubDate>Thu, 11 Mar 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210311-dual-attention-network/</guid>
+      <description>Dual Attention Network for Scene Segmentation arXiv: 1809.02983 “用于场景分割的双注意力网络“ Abstract 针对场景分割任务，基于 self-Attention 机制捕捉丰富的上下文依赖关系。 与以往通过多尺度特征融合来捕捉上下文的</description>
+    </item>
+    
+    <item>
+      <title>Attentive Inception Module based Convolutional Neural Network for Image Enhancement</title>
+      <link>http://landodo.github.io/posts/20210310-attentive-inception-module/</link>
+      <pubDate>Wed, 10 Mar 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210310-attentive-inception-module/</guid>
+      <description>Attentive Inception Module based Convolutional Neural Network for Image Enhancement “基于 Attentive Inception Module 的卷积神经网络在图像增强中的应用” high quality：高质量 low distortion：低失真 singleimage superresolution (SISR)：单</description>
+    </item>
+    
+    <item>
+      <title>Non-local Neural Networks</title>
+      <link>http://landodo.github.io/posts/20210308-non-local-neural-networks/</link>
+      <pubDate>Mon, 08 Mar 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210308-non-local-neural-networks/</guid>
+      <description>注意力机制 Non-local Neural Networks 注意力机制的文献，arXiv:1711.07971v3 FaceBook Research Abstract 论文提出了一种非局部操作（non-local operations</description>
+    </item>
+    
+    <item>
+      <title>Selective Kernel Networks</title>
+      <link>http://landodo.github.io/posts/20210306-selective-kernel-networks/</link>
+      <pubDate>Sat, 06 Mar 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210306-selective-kernel-networks/</guid>
+      <description>论文阅读 Selective Kernel Networks 注意力机制论文阅读，第二次汇报的论文为： 下载地址：（SKNet）Selective Kernel Networks (arXiv: 1903.06586) 发表时间（e-prints posted on arX</description>
+    </item>
+    
+    <item>
+      <title>First Post for Hugo</title>
+      <link>http://landodo.github.io/posts/first-post/</link>
+      <pubDate>Tue, 02 Mar 2021 17:22:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/first-post/</guid>
+      <description>Hi, Hugo! Hello, Hugo! 这是第一篇内容！将原来的笔记从 Jellky 全部转移至 Hugo。下面是一些关于这个新站点建立时的笔记。 Hugo 默认是使用 TOML，现在将此更改为更易阅</description>
+    </item>
+    
+    <item>
+      <title>Inside-Outside Net</title>
+      <link>http://landodo.github.io/posts/20210302-inside-outside-net/</link>
+      <pubDate>Tue, 02 Mar 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210302-inside-outside-net/</guid>
+      <description>Inside-Outside Net 论文阅读笔记 Inside-Outside Net: Detecting Objects in Context with Skip Pooling and Recurrent Neural Networks 时间：2015 年 12 月 SENet——胡杰：https://www.sohu.com/a/161633</description>
+    </item>
+    
+    <item>
+      <title>Attention mechanism: SENet &amp; SKNet</title>
+      <link>http://landodo.github.io/posts/20210301-attention-mechanism/</link>
+      <pubDate>Mon, 01 Mar 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210301-attention-mechanism/</guid>
+      <description>Attention mechanism: SENet &amp;amp; SKNet 注意力机制论文阅读，第二次汇报的论文为： 下载地址：（SKNet）Selective Kernel Networks (arXiv: 1903.06586) 发表时间（e-prints posted on arXiv</description>
+    </item>
+    
+    <item>
+      <title>AlexNet 中的 LRN（Local Response Normalization） 是什么</title>
+      <link>http://landodo.github.io/posts/20210205-what-is-lrn/</link>
+      <pubDate>Mon, 15 Feb 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210205-what-is-lrn/</guid>
+      <description>AlexNet 中的 LRN（Local Response Normalization） 是什么 对我而言，LRN 是 AleNet 论文中的一个难点，今天就来更加细致的理解一下。 LRN 操作在哪一步</description>
+    </item>
+    
+    <item>
+      <title>PyTorch: An Imperative Style, High-Performance Deep Learning Library</title>
+      <link>http://landodo.github.io/posts/20210130-pytorch-paper-reading-1/</link>
+      <pubDate>Sat, 30 Jan 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210130-pytorch-paper-reading-1/</guid>
+      <description>PyTorch: An Imperative Style, High-Performance Deep Learning Library ✅ 论文题目：PyTorch: An Imperative Style, High-Performance Deep Learning Library 发表时间：2019 年 12 月 摘要 Abstract 深度学习框架通常无法同时兼顾可用性（usabilit</description>
+    </item>
+    
+    <item>
+      <title>计算图和反向传播（Computational Graphs and Backpropagation）</title>
+      <link>http://landodo.github.io/posts/20210129-computational-graphs-and-backpropagation/</link>
+      <pubDate>Fri, 29 Jan 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210129-computational-graphs-and-backpropagation/</guid>
+      <description>计算图和反向传播（Computational Graphs and Backpropagation） 学习资料 （0）《深度学习入门——基于 Python 的理论与实践》 我的读书</description>
+    </item>
+    
+    <item>
+      <title>深度学习-卷积神经网络中文综述</title>
+      <link>http://landodo.github.io/posts/202101227-cnn-xiushen-wei/</link>
+      <pubDate>Wed, 27 Jan 2021 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/202101227-cnn-xiushen-wei/</guid>
+      <description>深度学习-卷积神经网络中文综述 《解析卷积神经网络——深度学习实践手册》是南京大学博士魏秀参写的一本小册子，给很多初学者提供了很多帮助。 魏秀参</description>
+    </item>
+    
+    <item>
+      <title>SENet 和它的孪生兄弟 SKNet</title>
+      <link>http://landodo.github.io/posts/20210122-senet-sknet/</link>
+      <pubDate>Fri, 22 Jan 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210122-senet-sknet/</guid>
+      <description>SENet 和它的孪生兄弟 SKNet ✅ 论文地址： Squeeze-and-Excitation Networks: https://arxiv.org/pdf/1709.01507.pdf Selective Kernel Networks: https://arxiv.org/pdf/1903.06586.pdf ✅ 论文发表时间（arXiv V1） SENet：2017 年 9 月 5 日 SKNet：2019 年 3 月 15 日 相关</description>
+    </item>
+    
+    <item>
+      <title>Squeeze-and-Excitation Networks</title>
+      <link>http://landodo.github.io/posts/20210112-senet/</link>
+      <pubDate>Tue, 12 Jan 2021 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210112-senet/</guid>
+      <description>论文题目 “Squeeze-and-Excitation Networks” ✅ 论文地址：https://arxiv.org/abs/1709.0</description>
+    </item>
+    
+    <item>
+      <title>十大经典的排序算法</title>
+      <link>http://landodo.github.io/posts/20201230-ten-classic-sorting-algorithms/</link>
+      <pubDate>Wed, 30 Dec 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201230-ten-classic-sorting-algorithms/</guid>
+      <description>十大经典的排序算法 #ifndef SORT_ALGO_H #define SORT_ALGO_H #include &amp;lt;vector&amp;gt;using std::vector; using std::swap; // 1. Bubble Sort // Time complexity: O(n^2) // Space complexity: O(1) void bubble_sort(vector&amp;lt;int&amp;gt;&amp;amp; nums) { bool sorted = false; for (int i = 0; i &amp;lt; nums.size() &amp;amp;&amp;amp; !sorted; ++i) { sorted = true; for (int j = 1; j &amp;lt; nums.size() - i; ++j) { if (nums[j] &amp;lt; nums[j -</description>
+    </item>
+    
+    <item>
+      <title>计算机网络基础（3）</title>
+      <link>http://landodo.github.io/posts/20201225-computer-network-review/</link>
+      <pubDate>Fri, 25 Dec 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201225-computer-network-review/</guid>
+      <description>计算机网络复习 OSI (Open Systems Interconnection) 参考模型和 TCP/IP 模型 TCP/IP 四层模型的代表协议： 网络接口层（Link Layer）：ARP 协议（IP addr &amp;mdash;ARP&amp;mdash;&amp;gt;MAC addr） IP 网络层（Int</description>
+    </item>
+    
+    <item>
+      <title>计算机网络基础（2）</title>
+      <link>http://landodo.github.io/posts/20201218-computer-network/</link>
+      <pubDate>Fri, 18 Dec 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201218-computer-network/</guid>
+      <description>计算机网络基础 第一讲主要介绍了计算机网络的体系结构、性能、安全以及挑战和机遇。并且还讲了中科院在网络方面的相关工作。 互联网不仅仅改变生活与社</description>
+    </item>
+    
+    <item>
+      <title>最短路径问题 Shortest Path</title>
+      <link>http://landodo.github.io/posts/20201214-shortest-path/</link>
+      <pubDate>Mon, 14 Dec 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201214-shortest-path/</guid>
+      <description>最短路径问题 Shortest Path 广度优先遍历 最短路径树 Shorted Path Tree 单源最短路径 Single Shorted Path Tree。 无权图的最短路径和带权图的最短路径不同，带权图需要考虑松弛操作（Re</description>
+    </item>
+    
+    <item>
+      <title>Xception: Deep Learning with Depthwise Separable Convolutions</title>
+      <link>http://landodo.github.io/posts/20201208-xception/</link>
+      <pubDate>Tue, 08 Dec 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201208-xception/</guid>
+      <description>论文题目：Xception: Deep Learning with Depthwise Separable Convolutions ✅ 论文地址：https://arxiv.org/pdf/1610.02357.pdf ✅ 发表时间：20</description>
+    </item>
+    
+    <item>
+      <title>Hacker’s Delight——高效算法的奥秘</title>
+      <link>http://landodo.github.io/posts/20201207-hackers-delight/</link>
+      <pubDate>Mon, 07 Dec 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201207-hackers-delight/</guid>
+      <description>Hacker’s Delight——高效算法的奥秘 1. 二进制：Google的浪漫 先从一张图片开始。如上图 1 是 Google 在 2018 年 7 月 1 日的首页涂鸦，当天是戈</description>
+    </item>
+    
+    <item>
+      <title>Deep learning Review</title>
+      <link>http://landodo.github.io/posts/20201124-deeplearning-review/</link>
+      <pubDate>Tue, 24 Nov 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201124-deeplearning-review/</guid>
+      <description>Deep learning Review 深度学习综述 深度学习：一个含多个处理层组成的计算模型学习多层次抽象的数据表示。 应用：语音识别、视觉对象识别、对象检测以及药物发现和基因</description>
+    </item>
+    
+    <item>
+      <title>VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION</title>
+      <link>http://landodo.github.io/posts/20201123-paper-vgg/</link>
+      <pubDate>Mon, 23 Nov 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201123-paper-vgg/</guid>
+      <description>VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION ✅ 论文地址：https://arxiv.org/pdf/1409.1556.pdf ✅ 发表时间：2015 年（Published</description>
+    </item>
+    
+    <item>
+      <title>使用 C 语言实现一个 HTTP 服务器（2）</title>
+      <link>http://landodo.github.io/posts/20201113-http/</link>
+      <pubDate>Fri, 13 Nov 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201113-http/</guid>
+      <description>HTTP 服务器的一些截图记录 HTML 页面 服务器的 HTML 页面有两个分别是 index.html 和 README.html。这个 css 风格是我最喜欢的，因此也就应用在了这个小项目上。 README.html 是</description>
+    </item>
+    
+    <item>
+      <title>CIFAR-10、PyTorch 和 AlexNet</title>
+      <link>http://landodo.github.io/posts/20201109-alexnet-code/</link>
+      <pubDate>Mon, 09 Nov 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201109-alexnet-code/</guid>
+      <description>CIFAR-10、PyTorch 和 AlexNet 先在自己的电脑上走一遍，保证语法和逻辑不会错。再放到远程配置高的电脑上跑。 这些经典的神经网络结构，要熟悉</description>
+    </item>
+    
+    <item>
+      <title>Network In Network</title>
+      <link>http://landodo.github.io/posts/20201215-network-in-network/</link>
+      <pubDate>Sat, 07 Nov 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201215-network-in-network/</guid>
+      <description>Network In Network 论文阅读 ✅ 论文地址：https://arxiv.org/pdf/1312.4400.pdf ✅ 论文发表时间：2014 年 论文提出了一种名为</description>
+    </item>
+    
+    <item>
+      <title>使用 C 语言实现一个 HTTP 服务器（1）</title>
+      <link>http://landodo.github.io/posts/20201107-http-server-1/</link>
+      <pubDate>Sat, 07 Nov 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201107-http-server-1/</guid>
+      <description>HTTP Server⟹HTTPS Server: 实验要求 这是网络课的一个小作业，具体要求如下： 使用 C 语言实现一个 HTTP 服务器 支持 HTTP Post/Get 方法，可以上传或下载文件 支持 HTTP 分</description>
+    </item>
+    
+    <item>
+      <title>Prim 算法&amp;Kruskal 算法求最小生成树</title>
+      <link>http://landodo.github.io/posts/20201106-prim-kruskal/</link>
+      <pubDate>Fri, 06 Nov 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201106-prim-kruskal/</guid>
+      <description>Prim 算法&amp;amp;Kruskal 算法求最小生成树 最小生成树 概述：在一给定的无向图 G=(V,E) 中，(u,v) 代表连接顶点 u 与顶点 v 的边，而 w(u,v) 代表此边的权值</description>
+    </item>
+    
+    <item>
+      <title>Array Programming with NumPy</title>
+      <link>http://landodo.github.io/posts/20201104-paper-numpy/</link>
+      <pubDate>Wed, 04 Nov 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201104-paper-numpy/</guid>
+      <description>#论文阅读-NumPy# 论文名称：Array Programming with NumPy 这是一篇关于 NumPy 的论文，最近也在学习 Python，NumPy 也是常用的一个包，可以花点时间读</description>
+    </item>
+    
+    <item>
+      <title>SVM 支持向量机推导</title>
+      <link>http://landodo.github.io/posts/20201103-svm-notes/</link>
+      <pubDate>Tue, 03 Nov 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201103-svm-notes/</guid>
+      <description>SVM 笔记 1: $\min_{w,b}\frac{1}{2}\left\Vert w \right\Vert^2_2$ 的推导 学习率应该怎样去选择？ 鲁莽司机（Bold Driver） 每轮之后在一个 dataset 上进行评价 $$\alpha_t=\frac{\al</description>
+    </item>
+    
+    <item>
+      <title>ImageNet Classification with Deep Convolutional Neural Networks</title>
+      <link>http://landodo.github.io/posts/20201024-paper-alexnet/</link>
+      <pubDate>Sat, 24 Oct 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20201024-paper-alexnet/</guid>
+      <description>[2021.02.04] 第三层用 384 个大小为 $3\times3\times256$ 的核进行卷积。 但是每个 GPU 的前一层的特征图都是 $27\times 27 \times 128$，通道数是不同的。因此是要将两块 GPU 上的特征图进行 concat</description>
+    </item>
+    
+    <item>
+      <title>深度学习基础图书</title>
+      <link>http://landodo.github.io/posts/20210128-deep-learning-from-scrach/</link>
+      <pubDate>Tue, 18 Feb 2020 10:17:29 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210128-deep-learning-from-scrach/</guid>
+      <description>深度学习基础图书 今天又花了点时间看了一本书（第二遍）——《深度学习入门——基于 Python 的理论与实践》。 全书下载地址：https://github.</description>
+    </item>
+    
+    <item>
+      <title>十大排序算法</title>
+      <link>http://landodo.github.io/posts/20191231-10-sort-algo/</link>
+      <pubDate>Tue, 31 Dec 2019 11:50:09 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20191231-10-sort-algo/</guid>
+      <description>十大排序算法 #面经 #算法与数据结构 冒泡排序（Bubble Sort） 选择排序（Selection Sort） 插入排序（Insertion Sort</description>
+    </item>
+    
+    <item>
+      <title>计数排序（Counting Sort）</title>
+      <link>http://landodo.github.io/posts/20191230-counting-sort/</link>
+      <pubDate>Mon, 30 Dec 2019 11:50:09 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20191230-counting-sort/</guid>
+      <description>计数排序（Counting Sort） #面经 #算法与数据结构 计数排序是一种通过对每个数组中的每个元素进行相应的计数统计，通过计数值确定元素的正</description>
+    </item>
+    
+    <item>
+      <title>【MSP430G2553】数码管</title>
+      <link>http://landodo.github.io/posts/20180420-smg/</link>
+      <pubDate>Fri, 20 Apr 2018 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20180420-smg/</guid>
+      <description>认识七段数码管 数码管的一种是半导体发光器件，数码管可分为七段数码管和八段数码管，区别在于八段数码管比七段数码管多一个用于显示小数点的发光二极</description>
+    </item>
+    
+    <item>
+      <title>蓝桥杯个人赛电子类_单片机资料整理</title>
+      <link>http://landodo.github.io/posts/20180417-lan-qiao/</link>
+      <pubDate>Tue, 17 Apr 2018 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20180417-lan-qiao/</guid>
+      <description>这是我参加 2018 届蓝桥杯所学习的资料。虽然比赛结果不尽如人意，但是学习 51 单片机的过程是值得回忆的，也是有所收获的。 一、准备工作 1、硬件 CT107</description>
+    </item>
+    
+    <item>
+      <title>【MSP430G2553单片机】HC-05蓝牙模块</title>
+      <link>http://landodo.github.io/posts/20180414-msp430g2553-hc-05/</link>
+      <pubDate>Sat, 14 Apr 2018 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20180414-msp430g2553-hc-05/</guid>
+      <description>HC-05 产品参数 1、PCB 尺寸：37.3mm * 15.5mm 2、重量：3.5g 3、输入电压：3.6 - 6V，电源自带反接，反接不工作。 4、引出 6 个引脚：EN/V</description>
+    </item>
+    
+    <item>
+      <title>Windows 7 操作系统的安装</title>
+      <link>http://landodo.github.io/posts/20180227-windows7/</link>
+      <pubDate>Tue, 27 Feb 2018 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20180227-windows7/</guid>
+      <description>背景 因为急需一台 Windows 操作系统的电脑，装些短期需要用到的软件。而手里有的是一台预装了 Windows 10 操作系统的电脑，配置很差，右键刷新都得等好一会。 安装了 Windows</description>
+    </item>
+    
+    <item>
+      <title>IAR Embedded Workbench 基本使用</title>
+      <link>http://landodo.github.io/posts/20180111-iar/</link>
+      <pubDate>Thu, 11 Jan 2018 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20180111-iar/</guid>
+      <description>生成烧录文件 Create New Project 选择 Empty Project 。这个看个人喜好，我一般会选择创建空的工程。` 在 File 新建一个 Document 用于编写程序，保存时注意添加后缀 .c，然后（Add）添</description>
+    </item>
+    
+    <item>
+      <title>Sublime Text 编辑器快捷键</title>
+      <link>http://landodo.github.io/posts/20180105-sublime/</link>
+      <pubDate>Fri, 05 Jan 2018 16:46:00 +0000</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20180105-sublime/</guid>
+      <description>光标 ⌘→ ：行尾 ⌘← ：行首 ⌘↑：文件头 ⌘↓：文件尾 词操作 ⌘D：选中光标所占的文本，继续操作则会选中下一个相同的文本 ⌘⌥F：替换 行操作 ⌘↩ ：当前</description>
+    </item>
+    
+    <item>
+      <title>VIM 编辑器笔记</title>
+      <link>http://landodo.github.io/posts/20180102-vim/</link>
+      <pubDate>Tue, 02 Jan 2018 23:29:00 +0000</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20180102-vim/</guid>
+      <description>Normal 模式 编辑 i 光标前插入 I 当前行首插入 a 光标后插入 A 当前行尾插入 o 当前行上一行插入 O 当前行下一行插入 dd 删除（剪切）光标所在行 u 撤销 x 删除光标当</description>
+    </item>
+    
+    <item>
+      <title>我的常用工具</title>
+      <link>http://landodo.github.io/posts/20171229-tools/</link>
+      <pubDate>Thu, 28 Dec 2017 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20171229-tools/</guid>
+      <description>以下是我的个人电脑浏览器常用的工具，这篇笔记的目的是保存下我最常使用的一些工具链接，以便于我自己的电脑不在身边的时候，我能将身边的任何一台电</description>
+    </item>
+    
+    <item>
+      <title>网页留言板</title>
+      <link>http://landodo.github.io/posts/20171228-message-board/</link>
+      <pubDate>Thu, 28 Dec 2017 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20171228-message-board/</guid>
+      <description>制作一个简单的网页留言板，将游客的留言存储到数据库，管理员登录查看所有的留言并选择是否回复，游客可以查看到管理员的回复。学会使用基本的数据库</description>
+    </item>
+    
+    <item>
+      <title>数据结构课程设计</title>
+      <link>http://landodo.github.io/posts/20171224-data-structure/</link>
+      <pubDate>Sun, 24 Dec 2017 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20171224-data-structure/</guid>
+      <description>任务书 设计名称：学生宿舍管理 宿舍信息包括：宿舍号、性别、容纳人数、住宿费用、住宿学生姓名。试设计一学生宿舍信息管理系统，使之能提供以下功能：</description>
+    </item>
+    
+    <item>
+      <title>每个人都要有属于自己的英语学习方法</title>
+      <link>http://landodo.github.io/posts/20171224-study-english/</link>
+      <pubDate>Sun, 24 Dec 2017 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20171224-study-english/</guid>
+      <description>「怎样学英语才是最有效的」 我的小书屋 mebook.cc 中的一本书，书名《把你的英语用起来！新版》伍君仪&amp;amp;刘晓光 学英语，要么彻底放弃，要么就必须一鼓作</description>
+    </item>
+    
+    <item>
+      <title>树莓派——初探</title>
+      <link>http://landodo.github.io/posts/20171103-raspberry-pi/</link>
+      <pubDate>Fri, 03 Nov 2017 22:53:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20171103-raspberry-pi/</guid>
+      <description>背景 我接触树莓派已有几个月的时间了，一直在使用树莓派作为一个平台学习去其他方面的知识，可以很确定的说，我的 Linux 学习之路，是树莓派带我入的门。但</description>
+    </item>
+    
+  </channel>
+</rss>
+>>>>>>> 351a415af31a0561991d5014415d6ee1364940fd
