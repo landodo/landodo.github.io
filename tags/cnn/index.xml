@@ -7,7 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Landon</copyright>
-    <lastBuildDate>Sun, 20 Jun 2021 10:17:29 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/cnn/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 20 Mar 2022 14:50:44 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/cnn/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>HyperSeg: Patch-wise Hypernetwork for Real-time Semantic Segmentation</title>
+      <link>http://landodo.github.io/posts/20220320-hyperseg/</link>
+      <pubDate>Sun, 20 Mar 2022 14:50:44 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20220320-hyperseg/</guid>
+      <description>HyperSeg Nirkin, Y., Wolf, L., &amp;amp; Hassner, T. (2021). HyperSeg: Patch-wise Hypernetwork for Real-time Semantic Segmentation. 2021 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR), 4060-4069. 论文简介： CVPR 2021 https://arxiv.org/abs/2012.11582 💡亮点： 解码器中的 Meta block 模块，在模块中提出了 Dynamic Patch-wise Convolution(</description>
+    </item>
+    
     <item>
       <title>#DeepLab# 中的空洞卷积和条件随机场</title>
       <link>http://landodo.github.io/posts/20210620-deeplab-v1-v2/</link>
