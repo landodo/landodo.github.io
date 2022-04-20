@@ -7,7 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Landon</copyright>
-    <lastBuildDate>Fri, 04 Mar 2022 14:50:44 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/qt/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 19 Apr 2022 14:50:44 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/qt/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Visual Studio&#43; Qt &#43; VTK 环境配置</title>
+      <link>http://landodo.github.io/posts/20220419-vs-qt-vtk/</link>
+      <pubDate>Tue, 19 Apr 2022 14:50:44 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20220419-vs-qt-vtk/</guid>
+      <description>Visual Studio+ Qt + VTK 环境配置 最终选择的版本为 Visual Studio Community 2019。不选择最新的 VS 2022 是因为 Qt6 配置会出现一些问题，在使用 CMake 编译 VTK 时，只能选择 Qt Version = 5。（问题为 Qt</description>
+    </item>
+    
     <item>
       <title>《Python Qt GUI 与数据可视化编程》阅读笔记</title>
       <link>http://landodo.github.io/posts/20220304-python-qt-notes/</link>
@@ -15,15 +24,6 @@
       
       <guid>http://landodo.github.io/posts/20220304-python-qt-notes/</guid>
       <description>Notes Qt Charts是二维图表模块，用于绘制柱状图、饼图、曲线图等常用二维图表。 Qt Data Visualization是三维数据图表模块，用于数据的三维</description>
-    </item>
-    
-    <item>
-      <title>Visual Studio&#43; Qt &#43; VTK 环境配置</title>
-      <link>http://landodo.github.io/posts/20220420-visual-studio-qt-vtk/</link>
-      <pubDate>Tue, 20 Apr 2021 17:22:19 +0800</pubDate>
-      
-      <guid>http://landodo.github.io/posts/20220420-visual-studio-qt-vtk/</guid>
-      <description>Visual Studio+ Qt + VTK 环境配置 最终选择的版本为 Visual Studio Community 2019。不选择最新的 VS 2022 是因为 Qt6 配置会出现一些问题，在使用 CMake 编译 VTK 时，只能选择 Qt Version = 5。（问题为 Qt</description>
     </item>
     
   </channel>

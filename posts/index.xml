@@ -7,7 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Landon</copyright>
-    <lastBuildDate>Sun, 20 Mar 2022 14:50:44 +0800</lastBuildDate><atom:link href="http://landodo.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 19 Apr 2022 14:50:44 +0800</lastBuildDate><atom:link href="http://landodo.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Visual Studio&#43; Qt &#43; VTK 环境配置</title>
+      <link>http://landodo.github.io/posts/20220419-vs-qt-vtk/</link>
+      <pubDate>Tue, 19 Apr 2022 14:50:44 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20220419-vs-qt-vtk/</guid>
+      <description>Visual Studio+ Qt + VTK 环境配置 最终选择的版本为 Visual Studio Community 2019。不选择最新的 VS 2022 是因为 Qt6 配置会出现一些问题，在使用 CMake 编译 VTK 时，只能选择 Qt Version = 5。（问题为 Qt</description>
+    </item>
+    
     <item>
       <title>HyperSeg: Patch-wise Hypernetwork for Real-time Semantic Segmentation</title>
       <link>http://landodo.github.io/posts/20220320-hyperseg/</link>
@@ -222,15 +231,6 @@
       
       <guid>http://landodo.github.io/posts/20210514-preprocessing/</guid>
       <description>数据预处理 import matplotlib.pyplot as plt import glob from PIL import Image import numpy as np import cv2 # 训练集图像 img_paths = glob.glob(&amp;#39;./../data/vesselseg/DRIVE/training/images/*.tif&amp;#39;) img_paths.sort() img_paths [&#39;./../data/vesselseg/DRIVE/training/images/21_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/22_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/23_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/24_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/25_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/26_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/27_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/28_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/29_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/30_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/31_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/32_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/33_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/34_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/35_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/36_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/37_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/38_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/39_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/40_training.tif&#39;] 查看不同通道 # 读取其中一张图像 rgb_img = Image.open(img_paths[0])</description>
-    </item>
-    
-    <item>
-      <title>Visual Studio&#43; Qt &#43; VTK 环境配置</title>
-      <link>http://landodo.github.io/posts/20220420-visual-studio-qt-vtk/</link>
-      <pubDate>Tue, 20 Apr 2021 17:22:19 +0800</pubDate>
-      
-      <guid>http://landodo.github.io/posts/20220420-visual-studio-qt-vtk/</guid>
-      <description>Visual Studio+ Qt + VTK 环境配置 最终选择的版本为 Visual Studio Community 2019。不选择最新的 VS 2022 是因为 Qt6 配置会出现一些问题，在使用 CMake 编译 VTK 时，只能选择 Qt Version = 5。（问题为 Qt</description>
     </item>
     
     <item>

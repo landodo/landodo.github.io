@@ -8,10 +8,10 @@
 
 <meta name="robots" content="index, follow">
 <title>Visual Studio&#43; Qt &#43; VTK 环境配置 | Landodo&#39;s NoteBook</title>
-<meta name="keywords" content="C&#43;&#43;, Qt, Visual Studio, VTK" />
+<meta name="keywords" content="Visual Studio, Qt, VTK" />
 <meta name="description" content="Visual Studio&#43; Qt &#43; VTK 环境配置 最终选择的版本为 Visual Studio Community 2019。不选择最新的 VS 2022 是因为 Qt6 配置会出现一些问题，在使用 CMake 编译 VTK 时，只能选择 Qt Version = 5。（问题为 Qt">
 <meta name="author" content="">
-<link rel="canonical" href="http://landodo.github.io/posts/20220420-visual-studio-qt-vtk/" />
+<link rel="canonical" href="http://landodo.github.io/posts/20220419-vs-qt-vtk/" />
 <link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
 <script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
     onload="hljs.initHighlightingOnLoad();"></script>
@@ -61,9 +61,9 @@
 </noscript><meta property="og:title" content="Visual Studio&#43; Qt &#43; VTK 环境配置" />
 <meta property="og:description" content="Visual Studio&#43; Qt &#43; VTK 环境配置 最终选择的版本为 Visual Studio Community 2019。不选择最新的 VS 2022 是因为 Qt6 配置会出现一些问题，在使用 CMake 编译 VTK 时，只能选择 Qt Version = 5。（问题为 Qt" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://landodo.github.io/posts/20220420-visual-studio-qt-vtk/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2021-04-20T17:22:19&#43;08:00" />
-<meta property="article:modified_time" content="2021-04-20T17:22:19&#43;08:00" />
+<meta property="og:url" content="http://landodo.github.io/posts/20220419-vs-qt-vtk/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-04-19T14:50:44&#43;08:00" />
+<meta property="article:modified_time" content="2022-04-19T14:50:44&#43;08:00" />
 
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Visual Studio&#43; Qt &#43; VTK 环境配置"/>
@@ -85,7 +85,7 @@
       "@type": "ListItem",
       "position":  2 ,
       "name": "Visual Studio+ Qt + VTK 环境配置",
-      "item": "http://landodo.github.io/posts/20220420-visual-studio-qt-vtk/"
+      "item": "http://landodo.github.io/posts/20220419-vs-qt-vtk/"
     }
   ]
 }
@@ -98,16 +98,16 @@
   "name": "Visual Studio\u002b Qt \u002b VTK 环境配置",
   "description": "Visual Studio+ Qt + VTK 环境配置 最终选择的版本为 Visual Studio Community 2019。不选择最新的 VS 2022 是因为 Qt6 配置会出现一些问题，在使用 CMake 编译 VTK 时，只能选择 Qt Version = 5。（问题为 Qt",
   "keywords": [
-    "C++", "Qt", "Visual Studio", "VTK"
+    "Visual Studio", "Qt", "VTK"
   ],
   "articleBody": "Visual Studio+ Qt + VTK 环境配置 最终选择的版本为 Visual Studio Community 2019。不选择最新的 VS 2022 是因为 Qt6 配置会出现一些问题，在使用 CMake 编译 VTK 时，只能选择 Qt Version = 5。（问题为 Qt Designer 无法加载 VTKWidgets）\n1. 安装提示 （1）下载 VTK 源码文件：VTK-8.2.0.zip ，解压，创建 build 和 VTK-PREFIX 文件夹；\n（2）下载安装 CMake，配置环境变量；\n 使用 cmake-gui 编译时，VTK_Group_Qt 记得打勾✔；  （3）使用 VS 打开 build 目录下的 VTK.sln\n 右键 ALL_BUILD ，点击“生成”； 右键 INSTALL，选择“仅用于项目(J)/仅生成INSTALL(B)”  （4）安装 Qt 5：qt-opensource-windows-x86-5.10.1.exe\n 记得选择 mscv 编译器（可以全选）  2. VS 2019 + Qt 5.10.1 + VTK 8.2.0 完成 “1. 安装提示” 后，会生成 QVTKWidgetPlugin.dll 文件，路径如下：\nVTK-8.2.0/VTK-FREFIX/plugins/designer/QVTKWidgetPlugin.dll 将此文件拷贝到如下路径之下：\nQt\\5.10.1\\msvc2017_64\\plugins\\designer 这样 Qt Designer 将获得 VTK 组件，如下图所示。\n接下来配置 Qt，使得 Qt 项目可以运行。首先安装 Qt Visual Studio Tools： qt-vsaddin-msvc2019-2.5.1.vsix，下载地址 https://download.qt.io/official_releases/vsaddin/2.5.1/。\n创建新项目，选择 Qt Widgets Application； 下图是配置好了才会有，没有也没有关系。后面会配置；\n下图开始配置 Qt 编译器：\n配置 QMake.exe 的路径：\n右键项目选择“属性”，如下两项需要注意：\n关于 VTK 的配置： （1）VC++目录下的“包含目录”，设置为 VTK-PREFIX/include 目录\n（2）链接器/输入/附加依赖项，设置为 VTK-PREFIX/lib/*.lib\n（3）动态库 .dll 文件\n将 VTK-8.2.0\\VTK-PREFIX\\bin 目录下的所有 .dll 文件拷贝到与工程 main.cc 同一路径之下，即可运行。\nVTK 测试程序 #include #include #include #include #include #include #include #include #include #include #include #include #include  #include #include \"vtkAutoInit.h\" VTK_MODULE_INIT(vtkRenderingOpenGL2); VTK_MODULE_INIT(vtkInteractionStyle); VTK_MODULE_INIT(vtkRenderingVolumeOpenGL2); #define vtkRenderingCore_AUTOINIT 4(vtkInteractionStyle,vtkRenderingFreeType,vtkRenderingFreeTypeOpenGL2,vtkRenderingOpenGL2) #define vtkRenderingVolume_AUTOINIT 1(vtkRenderingVolumeOpenGL2)  int main() {  vtkNewvtkNamedColors colors;   std::arraystd::arraydouble, 3, 8 pts = { {{{0, 0, 0}},  {{1, 0, 0}},  {{1, 1, 0}},  {{0, 1, 0}},  {{0, 0, 1}},  {{1, 0, 1}},  {{1, 1, 1}},  {{0, 1, 1}}} };  // The ordering of the corner points on each face.  std::arraystd::arrayvtkIdType, 4, 6 ordering = { {{{0, 1, 2, 3}},  {{4, 5, 6, 7}},  {{0, 1, 5, 4}},  {{1, 2, 6, 5}},  {{2, 3, 7, 6}},  {{3, 0, 4, 7}}} };   // We'll create the building blocks of polydata including data attributes.  vtkNewvtkPolyData cube;  vtkNewvtkPoints points;  vtkNewvtkCellArray polys;  vtkNewvtkFloatArray scalars;   // Load the point, cell, and data attributes.  for (auto i = 0ul; i  pts.size(); ++i)  {  points-InsertPoint(i, pts[i].data());  scalars-InsertTuple1(i, i);  }  for (auto\u0026\u0026 i : ordering)  {  polys-InsertNextCell(vtkIdType(i.size()), i.data());  }   // We now assign the pieces to the vtkPolyData.  cube-SetPoints(points);  cube-SetPolys(polys);  cube-GetPointData()-SetScalars(scalars);   // Now we'll look at it.  vtkNewvtkPolyDataMapper cubeMapper;  cubeMapper-SetInputData(cube);  cubeMapper-SetScalarRange(cube-GetScalarRange());  vtkNewvtkActor cubeActor;  cubeActor-SetMapper(cubeMapper);   // The usual rendering stuff.  vtkNewvtkCamera camera;  camera-SetPosition(1, 1, 1);  camera-SetFocalPoint(0, 0, 0);   vtkNewvtkRenderer renderer;  vtkNewvtkRenderWindow renWin;  renWin-AddRenderer(renderer);   vtkNewvtkRenderWindowInteractor iren;  iren-SetRenderWindow(renWin);   renderer-AddActor(cubeActor);  renderer-SetActiveCamera(camera);  renderer-ResetCamera();  renderer-SetBackground(colors-GetColor3d(\"Cornsilk\").GetData());   renWin-SetSize(600, 600);   // interact with data  renWin-Render();  iren-Start();   return EXIT_SUCCESS; } 程序运行结果：\n",
   "wordCount" : "882",
   "inLanguage": "en",
-  "datePublished": "2021-04-20T17:22:19+08:00",
-  "dateModified": "2021-04-20T17:22:19+08:00",
+  "datePublished": "2022-04-19T14:50:44+08:00",
+  "dateModified": "2022-04-19T14:50:44+08:00",
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "http://landodo.github.io/posts/20220420-visual-studio-qt-vtk/"
+    "@id": "http://landodo.github.io/posts/20220419-vs-qt-vtk/"
   },
   "publisher": {
     "@type": "Organization",
@@ -202,7 +202,7 @@
     <h1 class="post-title">
       Visual Studio&#43; Qt &#43; VTK 环境配置
     </h1>
-    <div class="post-meta"><span title='2021-04-20 17:22:19 +0800 CST'>April 20, 2021</span>&nbsp;·&nbsp;2 min&nbsp;·&nbsp;882 words
+    <div class="post-meta"><span title='2022-04-19 14:50:44 +0800 CST'>April 19, 2022</span>&nbsp;·&nbsp;2 min&nbsp;·&nbsp;882 words
 
 </div>
   </header> <div class="toc">
@@ -390,21 +390,15 @@
 
   <footer class="post-footer">
     <ul class="post-tags">
-      <li><a href="http://landodo.github.io/tags/c&#43;&#43;/">C&#43;&#43;</a></li>
-      <li><a href="http://landodo.github.io/tags/qt/">Qt</a></li>
       <li><a href="http://landodo.github.io/tags/visual-studio/">Visual Studio</a></li>
+      <li><a href="http://landodo.github.io/tags/qt/">Qt</a></li>
       <li><a href="http://landodo.github.io/tags/vtk/">VTK</a></li>
     </ul>
 <nav class="paginav">
-  <a class="prev" href="http://landodo.github.io/posts/20210514-preprocessing/">
-    <span class="title">« Prev Page</span>
-    <br>
-    <span>图像预处理</span>
-  </a>
-  <a class="next" href="http://landodo.github.io/posts/20210418-segnet/">
+  <a class="next" href="http://landodo.github.io/posts/20220320-hyperseg/">
     <span class="title">Next Page »</span>
     <br>
-    <span>SegNet: A Deep Convolutional Encoder-Decoder Architecture for Image Segmentation</span>
+    <span>HyperSeg: Patch-wise Hypernetwork for Real-time Semantic Segmentation</span>
   </a>
 </nav>
 
