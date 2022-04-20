@@ -9,24 +9,6 @@
     <copyright>Landon</copyright>
     <lastBuildDate>Sun, 20 Mar 2022 14:50:44 +0800</lastBuildDate><atom:link href="http://landodo.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>节点聚类问题的总结和思考</title>
-      <link>http://landodo.github.io/posts/20210804-clustering-method/</link>
-      <pubDate>Wed, 04 Aug 2021 10:24:22 +0800</pubDate>
-      
-      <guid>http://landodo.github.io/posts/20210804-clustering-method/</guid>
-      <description>节点聚类问题的总结和思考 摘要 聚类作为经典的无监督学习算法，在数据挖掘/机器学习等领域有着广泛地应用。聚类是针对给定的样本，依据它们的特征的相</description>
-    </item>
-    
-    <item>
-      <title>《STL 源码剖析》STL 学习笔记</title>
-      <link>http://landodo.github.io/posts/20190304-stl-notes/</link>
-      <pubDate>Mon, 04 Mar 2019 17:22:19 +0800</pubDate>
-      
-      <guid>http://landodo.github.io/posts/20190304-stl-notes/</guid>
-      <description>这是我学习 STL 的笔记。 更新日志 2019-03-04 新增了[STL 概述与版本简介](#STL 概述与版本简介)、空间分配器（allocators）、迭代器（iter</description>
-    </item>
-    
-    <item>
       <title>HyperSeg: Patch-wise Hypernetwork for Real-time Semantic Segmentation</title>
       <link>http://landodo.github.io/posts/20220320-hyperseg/</link>
       <pubDate>Sun, 20 Mar 2022 14:50:44 +0800</pubDate>
@@ -180,6 +162,15 @@
     </item>
     
     <item>
+      <title>节点聚类问题的总结和思考</title>
+      <link>http://landodo.github.io/posts/20210804-clustering-method/</link>
+      <pubDate>Wed, 04 Aug 2021 10:24:22 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20210804-clustering-method/</guid>
+      <description>节点聚类问题的总结和思考 摘要 聚类作为经典的无监督学习算法，在数据挖掘/机器学习等领域有着广泛地应用。聚类是针对给定的样本，依据它们的特征的相</description>
+    </item>
+    
+    <item>
       <title>20210803 Semi Self Unsupervised</title>
       <link>http://landodo.github.io/posts/20210803-semi-self-unsupervised/</link>
       <pubDate>Tue, 03 Aug 2021 10:17:29 +0800</pubDate>
@@ -258,6 +249,15 @@
       
       <guid>http://landodo.github.io/posts/20210514-preprocessing/</guid>
       <description>数据预处理 import matplotlib.pyplot as plt import glob from PIL import Image import numpy as np import cv2 # 训练集图像 img_paths = glob.glob(&amp;#39;./../data/vesselseg/DRIVE/training/images/*.tif&amp;#39;) img_paths.sort() img_paths [&#39;./../data/vesselseg/DRIVE/training/images/21_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/22_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/23_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/24_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/25_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/26_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/27_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/28_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/29_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/30_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/31_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/32_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/33_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/34_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/35_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/36_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/37_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/38_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/39_training.tif&#39;, &#39;./../data/vesselseg/DRIVE/training/images/40_training.tif&#39;] 查看不同通道 # 读取其中一张图像 rgb_img = Image.open(img_paths[0])</description>
+    </item>
+    
+    <item>
+      <title>Visual Studio&#43; Qt &#43; VTK 环境配置</title>
+      <link>http://landodo.github.io/posts/20220420-visual-studio-qt-vtk/</link>
+      <pubDate>Tue, 20 Apr 2021 17:22:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20220420-visual-studio-qt-vtk/</guid>
+      <description>Visual Studio+ Qt + VTK 环境配置 最终选择的版本为 Visual Studio Community 2019。不选择最新的 VS 2022 是因为 Qt6 配置会出现一些问题，在使用 CMake 编译 VTK 时，只能选择 Qt Version = 5。（问题为 Qt</description>
     </item>
     
     <item>
@@ -600,6 +600,15 @@
       
       <guid>http://landodo.github.io/posts/20191230-counting-sort/</guid>
       <description>计数排序（Counting Sort） #面经 #算法与数据结构 计数排序是一种通过对每个数组中的每个元素进行相应的计数统计，通过计数值确定元素的正</description>
+    </item>
+    
+    <item>
+      <title>《STL 源码剖析》STL 学习笔记</title>
+      <link>http://landodo.github.io/posts/20190304-stl-notes/</link>
+      <pubDate>Mon, 04 Mar 2019 17:22:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20190304-stl-notes/</guid>
+      <description>这是我学习 STL 的笔记。 更新日志 2019-03-04 新增了[STL 概述与版本简介](#STL 概述与版本简介)、空间分配器（allocators）、迭代器（iter</description>
     </item>
     
     <item>
