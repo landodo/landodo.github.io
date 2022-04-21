@@ -7,14 +7,14 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Landon</copyright>
-    <lastBuildDate>Tue, 19 Apr 2022 14:50:44 +0800</lastBuildDate><atom:link href="http://landodo.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 20 Apr 2022 17:22:19 +0800</lastBuildDate><atom:link href="http://landodo.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Visual Studio&#43; Qt &#43; VTK 环境配置</title>
-      <link>http://landodo.github.io/posts/20220419-vs-qt-vtk/</link>
-      <pubDate>Tue, 19 Apr 2022 14:50:44 +0800</pubDate>
+      <title>实现C&#43;&#43;类的基本函数：3构造、2赋值、1析构、运算符重载</title>
+      <link>http://landodo.github.io/posts/20220420-cpp-implement-string-class/</link>
+      <pubDate>Wed, 20 Apr 2022 17:22:19 +0800</pubDate>
       
-      <guid>http://landodo.github.io/posts/20220419-vs-qt-vtk/</guid>
-      <description>Visual Studio+ Qt + VTK 环境配置 最终选择的版本为 Visual Studio Community 2019。不选择最新的 VS 2022 是因为 Qt6 配置会出现一些问题，在使用 CMake 编译 VTK 时，只能选择 Qt Version = 5。（问题为 Qt</description>
+      <guid>http://landodo.github.io/posts/20220420-cpp-implement-string-class/</guid>
+      <description>字节二面面试题：使用实现一个基础的 string 类。要求类中成员函数包含： 默认构造函数 拷贝构造函数 移动构造函数 —————— 拷贝赋值运算 移动赋值运算 ———</description>
     </item>
     
     <item>
