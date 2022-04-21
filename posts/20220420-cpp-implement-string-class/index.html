@@ -7,7 +7,7 @@
 
 
 <meta name="robots" content="index, follow">
-<title>实现C&#43;&#43;类的基本函数：3构造、2赋值、1析构、运算符重载 | Landodo&#39;s NoteBook</title>
+<title>实现C&#43;&#43;类的基本函数：3构造、2赋值、1析构、运算符重载 | NoteBook</title>
 <meta name="keywords" content="C&#43;&#43;" />
 <meta name="description" content="字节二面面试题：使用实现一个基础的 string 类。要求类中成员函数包含： 默认构造函数 拷贝构造函数 移动构造函数 —————— 拷贝赋值运算 移动赋值运算 ———">
 <meta name="author" content="">
@@ -61,11 +61,13 @@
 </noscript><meta property="og:title" content="实现C&#43;&#43;类的基本函数：3构造、2赋值、1析构、运算符重载" />
 <meta property="og:description" content="字节二面面试题：使用实现一个基础的 string 类。要求类中成员函数包含： 默认构造函数 拷贝构造函数 移动构造函数 —————— 拷贝赋值运算 移动赋值运算 ———" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://landodo.github.io/posts/20220420-cpp-implement-string-class/" /><meta property="article:section" content="posts" />
+<meta property="og:url" content="http://landodo.github.io/posts/20220420-cpp-implement-string-class/" />
+<meta property="og:image" content="http://landodo.github.io/happy-cat.png" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-04-20T17:22:19&#43;08:00" />
 <meta property="article:modified_time" content="2022-04-20T17:22:19&#43;08:00" />
 
-<meta name="twitter:card" content="summary"/>
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="http://landodo.github.io/happy-cat.png" />
 <meta name="twitter:title" content="实现C&#43;&#43;类的基本函数：3构造、2赋值、1析构、运算符重载"/>
 <meta name="twitter:description" content="字节二面面试题：使用实现一个基础的 string 类。要求类中成员函数包含： 默认构造函数 拷贝构造函数 移动构造函数 —————— 拷贝赋值运算 移动赋值运算 ———"/>
 
@@ -103,7 +105,7 @@
   "articleBody": "字节二面面试题：使用实现一个基础的 string 类。要求类中成员函数包含：\n 默认构造函数 拷贝构造函数 移动构造函数 —————— 拷贝赋值运算 移动赋值运算 —————— 析构函数 —————— 重载 +, ==,  等基本运算符  实现结果：\n#include #include #include #include using std::ostream; using std::istream;  class String { public: \t// 1. 默认构造函数 \t// 加上 const 作用：(1)不会修改指向值, (2)使得str可以指向右值 \t// String s(\"HELLO\"); \t// String s = \"HELLO\"; \t// String s; \tString(const char* str = nullptr) { \tstd::cout  \"[\"  this  \"] \"; \tstd::cout  \"Call: String(const char* str = nullptr)\"  std::endl; \tif (str == nullptr) { \tlen_ = 0; \tstr_ = new char[1]; \t} \telse { \tlen_ = strlen(str); \tstr_ = new char[len_ + 1]; \tstrcpy(str_, str); \t} \tstr_[len_] = '\\0'; \t}  \t\t// 2. 析构函数 \t~String() { \tstd::cout  \"[\"  this  \"] \"; \tstd::cout  \"Call: ~String()\"  std::endl; \tdelete[] str_; \tstr_ = nullptr; \t}  \t\t// 3.拷贝构造函数 \t// String s1 = s; \t// String s1(s); \tString(const String\u0026 other) { \tstd::cout  \"[\"  this  \"] \"; \tstd::cout  \"Call: String(const String\u0026 other)\"  std::endl; \tthis-len_ = other.len_; \tthis-str_ = new char[this-len_ + 1]; \tstrcpy(this-str_, other.str_); \tthis-str_[this-len_] = '\\0'; \t}  \t\t// 4. 移动构造函数 \t// String s1(std::move(s)); \tString(String\u0026\u0026 other) noexcept { // 告诉编译器不会发生异常，便于优化；如若运行时发生异常，则调用std::terminate()函数终止. \tstd::cout  \"[\"  this  \"] \"; \tstd::cout  \"Call: String(String\u0026\u0026 other)\"  std::endl; \tthis-len_ = other.len_; \tthis-str_ = other.str_; \t// 阻止 other 析构数据 \tother.str_ = nullptr; // C++ delete nullptr 是安全的行为! 因此不影响 other 对象析构函数 \t}  \t\t// 5. 拷贝赋值函数 \t// String s1; \t// s1 = s; \tString\u0026 operator=(const String\u0026 other) { \tstd::cout  \"[\"  this  \"] \"; \tstd::cout  \"Call: String\u0026 operator=(const String\u0026 other)\"  std::endl; \tif (\u0026other == this) { // String s; s = s; \treturn *this; \t} \tdelete[] this-str_; // this-str_ 至少包含 '\\0' \tthis-len_ = other.len_; \tthis-str_ = new char[this-len_ + 1]; \tstrcpy(this-str_, other.str_); \tthis-str_[this-len_] = '\\0'; \treturn *this; \t}  \t// 6. 移动赋值函数 \t// String s1 = std::move(s); \tString\u0026 operator=(String\u0026\u0026 other) noexcept { \tstd::cout  \"[\"  this  \"] \"; \tstd::cout  \"Call: String\u0026 operator=(String\u0026\u0026 other)\"  std::endl; \tif (\u0026other == this) { \treturn *this; \t} \tdelete[] this-str_; \tthis-len_ = other.len_; \tthis-str_ = other.str_; \t// 阻止 other 析构数据 \tother.str_ = nullptr; // C++ delete nullptr 是安全的行为! 因此不影响 other 对象析构函数 \treturn *this; \t}  \t// 7. 重载运算符 \t// +, ==, \tbool operator==(const String\u0026 other) { \tstd::cout  \"Call: bool operator==(const String\u0026 other)\"  std::endl; \t// strcmp(str1, str2); 相等返回0，不等为-1 \treturn (strcmp(this-str_, other.str_) == 0 \u0026\u0026 this-len_ == other.len_); \t}  \tString\u0026 operator+(const String\u0026 other) { \tthis-len_ += other.len_; \tchar* tmp = this-str_; \tthis-str_ = new char[this-len_ + 1]; \tstrcpy(this-str_, tmp); \tstrcat(this-str_, other.str_); \tthis-str_[this-len_] = '\\0';  \tdelete[] tmp; \ttmp = nullptr; \treturn *this; \t}  \t\t// 需要声明为友元函数 \tfriend ostream\u0026 operator(ostream\u0026 os, const String\u0026 s) { \tos  \"str: \"  s.str_  \", len: \"  s.len_; \treturn os; \t}  private: \tchar* str_; \tunsigned int len_; };  int main() { \t// 1.默认构造 \tString s = \"12345\"; \t// 3. 拷贝构造 \tString s1(s); // or String s1 = s; \t// 4. 移动构造 \tString s2(std::move(s));  \tString s3 = \"ABCDE\"; \t// 5. 拷贝赋值 \ts = s3; \t// 6. 移动赋值 \ts = std::move(s3);  \tString s4 = \"XYZ\"; \t// 7. 重载 +, ==, \ts = s + s4; \tif (s == s4) \tstd::cout  \"s == s4\"  std::endl; \telse \tstd::cout  \"s != s4\"  std::endl; \tstd::cout  s  std::endl; \treturn 0; }  /*** 运行结果 [008FFBA4] Call : String(const char* str = nullptr) [008FFB94] Call : String(const String\u0026 other) [008FFB84] Call : String(String\u0026\u0026 other) [008FFB74] Call : String(const char* str = nullptr) [008FFBA4] Call : String \u0026 operator=(const String\u0026 other) [008FFBA4] Call : String \u0026 operator=(String\u0026\u0026 other) [008FFB64] Call : String(const char* str = nullptr) [008FFBA4] Call : String \u0026 operator=(const String\u0026 other) Call : bool operator==(const String\u0026 other) s != s4 str : ABCDEXYZ, len : 8 [008FFB64] Call : ~String() [008FFB74] Call : ~String() [008FFB84] Call : ~String() [008FFB94] Call : ~String() [008FFBA4] Call : ~String()*/ ",
   "wordCount" : "934",
   "inLanguage": "en",
-  "datePublished": "2022-04-20T17:22:19+08:00",
+  "image":"http://landodo.github.io/happy-cat.png","datePublished": "2022-04-20T17:22:19+08:00",
   "dateModified": "2022-04-20T17:22:19+08:00",
   "mainEntityOfPage": {
     "@type": "WebPage",
@@ -111,7 +113,7 @@
   },
   "publisher": {
     "@type": "Organization",
-    "name": "Landodo's NoteBook",
+    "name": "NoteBook",
     "logo": {
       "@type": "ImageObject",
       "url": "http://landodo.github.io/favicon.ico"
@@ -136,7 +138,7 @@
 <header class="header">
     <nav class="nav">
         <div class="logo">
-            <a href="http://landodo.github.io/" accesskey="h" title="Landodo&#39;s NoteBook (Alt + H)">Landodo&#39;s NoteBook</a>
+            <a href="http://landodo.github.io/" accesskey="h" title="NoteBook (Alt + H)">NoteBook</a>
             <span class="logo-switches">
                 <button id="theme-toggle" accesskey="t" title="(Alt + T)">
                     <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -162,8 +164,8 @@
         </div>
         <ul id="menu">
             <li>
-                <a href="http://landodo.github.io/search" title="🔍Search (Alt &#43; /)" accesskey=/>
-                    <span>🔍Search</span>
+                <a href="http://landodo.github.io/search" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
                 </a>
             </li>
             <li>
@@ -206,6 +208,9 @@
 
 </div>
   </header> 
+<figure class="entry-cover"><img loading="lazy" src="http://landodo.github.io/happy-cat.png" alt="">
+        
+</figure>
 
   <div class="post-content"><p>字节二面面试题：使用实现一个基础的 <code>string</code> 类。要求类中成员函数包含：</p>
 <ul>
