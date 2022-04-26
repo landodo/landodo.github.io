@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+
+<meta name="robots" content="index, follow">
+<title>PointRend: Image Segmentation as Rendering | Notes</title>
+<meta name="keywords" content="论文阅读, CNN" />
+<meta name="description" content="论文简介 会议：CVPR 2020 arXiv: 1912.08193 [PDF下载] 代码在 mmsegmentation 中有实现。 目前总引用数：225 Citations Kirillov, A., Wu, Y., He, K., &amp; Girshick, R.B. (2020). PointRend: Image Segmentation As Rendering. 2020 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , 9796-9805. Abstract 该">
+<meta name="author" content="">
+<link rel="canonical" href="http://landodo.github.io/posts/20220424-pointrend-image-segmentation-as-rendering/" />
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
+<link rel="preload" href="./logo.png" as="image">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="http://landodo.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://landodo.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://landodo.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://landodo.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="http://landodo.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="PointRend: Image Segmentation as Rendering" />
+<meta property="og:description" content="论文简介 会议：CVPR 2020 arXiv: 1912.08193 [PDF下载] 代码在 mmsegmentation 中有实现。 目前总引用数：225 Citations Kirillov, A., Wu, Y., He, K., &amp; Girshick, R.B. (2020). PointRend: Image Segmentation As Rendering. 2020 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , 9796-9805. Abstract 该" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://landodo.github.io/posts/20220424-pointrend-image-segmentation-as-rendering/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-04-24T17:22:19&#43;08:00" />
+<meta property="article:modified_time" content="2022-04-24T17:22:19&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="PointRend: Image Segmentation as Rendering"/>
+<meta name="twitter:description" content="论文简介 会议：CVPR 2020 arXiv: 1912.08193 [PDF下载] 代码在 mmsegmentation 中有实现。 目前总引用数：225 Citations Kirillov, A., Wu, Y., He, K., &amp; Girshick, R.B. (2020). PointRend: Image Segmentation As Rendering. 2020 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , 9796-9805. Abstract 该"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "http://landodo.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "PointRend: Image Segmentation as Rendering",
+      "item": "http://landodo.github.io/posts/20220424-pointrend-image-segmentation-as-rendering/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "PointRend: Image Segmentation as Rendering",
+  "name": "PointRend: Image Segmentation as Rendering",
+  "description": "论文简介 会议：CVPR 2020 arXiv: 1912.08193 [PDF下载] 代码在 mmsegmentation 中有实现。 目前总引用数：225 Citations Kirillov, A., Wu, Y., He, K., \u0026amp; Girshick, R.B. (2020). PointRend: Image Segmentation As Rendering. 2020 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , 9796-9805. Abstract 该",
+  "keywords": [
+    "论文阅读", "CNN"
+  ],
+  "articleBody": "论文简介  会议：CVPR 2020 arXiv: 1912.08193 [PDF下载] 代码在 mmsegmentation 中有实现。 目前总引用数：225 Citations   Kirillov, A., Wu, Y., He, K., \u0026 Girshick, R.B. (2020). PointRend: Image Segmentation As Rendering. 2020 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , 9796-9805.\n Abstract 该项工作创新地采用计算机图形学的渲染思路来解决计算机视觉领域的图像分割问题。\n作者提出了 PointRend（Point-based Rendering）神经网络模块：该模块基于迭代细分算法，在自适应选择的位置执行基于点的分割预测。PointRend 可以与现有的最新模型结合，灵活地应用于实例和语义分割任务。定性实验表明，对于先前的方法过度平滑的区域，PointRend 可以输出清晰的对象边界。定量实验表明，PointRend 在 COCO 和 Cityscapes 数据集上的实例分割和语义分割任务的表现都有显著提高。在同样的内存和算力情况下，PointRend 与现有方法相比能输出更高的分辨率。\n1 Introduction 用于图像分割任务的卷积神经网络通常在规则网格（regular grid）上操作：输入的是图像像素的规则网格，隐藏表征是规则网格上的特征向量，而输出则是基于规则网格的标签图。\n规则网格会对对象区域过采样，而同时对对象边界欠采样。使得预测结果的轮廓变得模糊（如图 1 左上）。PointRend 的细节效果更好，并且分辨率高，甚至五指的轮廓都可以分割出来。\n这篇论文的核心思想是将图像分割视为渲染问题，并利用计算机图形学中的经典思想来高效地“渲染”高质量标签图。作者将这一思想实现为一个新型神经网络模块——PointRend，该模块使用细分策略来自适应地选择一组非均匀点，进而计算标签。PointRend 可以整合到常用的实例分割元架构（如 Mask R-CNN）和语义分割元架构（如 FCN）中。PointRend 的细分策略所需的浮点数运算相比于直接密集计算减少了一个数量级，能高效地计算高分辨率分割图。\nPointRend 不对输出网格上的所有点执行过度预测，仅对精心选择的点执行预测。\n作者在 COCO 和 Cityscapes 基准数据集上评估了 PointRend 在实例分割和语义分割任务上的性能。定性结果显示，PointRend 能够高效计算不同对象之间的清晰边界。定量实验结果显示，PointRend 显著提升了 Mask R-CNN 和 DeepLabV3 的性能。\n3. Method PointRend 模块包含 3 个主要组件：\n(i) 点选择策略（point selection strategy）：选择少量真值点执行预测，避免对高分辨率输出网格中的所有像素进行过度计算。 (ii) 点特征表示（point-wise feature representation）：使用每个选中点在 f 规则网格上的 4 个最近邻点，对 f 进行双线性内插，计算点的特征。 (iii) point head：一个小型神经网络，基于逐点特征表示预测标签。\n3.1 Point Selection PointRend 的核心思想是在图像中自适应地选择预测分割标签的点。理论上来说，这些点的位置应该在邻近高频区域（如边界区域）分布较为稠密。\n作者提出的用于推断的点选择策略受到计算机图形学中自适应细分（adaptive subdivision）这一经典技术的启发。该技术仅在与近邻值显著不同的位置上进行计算，来高效渲染高分辨率图像；其他位置的值则保留原来的预测结果。\nPointRend 使用双线性插值对其先前预测的分割进行上采样，然后在这个更密集的网格上选择N个最不确定的点（例如，binay mask 概率最接近 0.5）。然后，PointRend 为这 N 个点中的每一个计算点的特征表示（第3.2节）并预测其标签。这个过程不断重复，直到分割图被升采样到一个理想的分辨率。\nPointRend 输入的特征图大小为 $M_0 \\times M_0$，需要升采样至 $M\\times M$，则采样点的数量不超过 $Nlog_2 \\frac{M}{M_0}$ 。\nTrtaining：Figure 4 的迭代策略对于利用反向传播训练神经网络不够友好。因此，训练过程采用基于随机采样的非迭代策略。\n点采样策略选择特征图上的 N 个点进行训练。它的目的是偏向不确定区域的选择，同时保持一定程度的均匀覆盖。基于以下三个原则：\n（i）Over generation（过度生成）：通过从均匀分布中随机抽样 kN 个点（k1）来过度生成候选点。 （ii）Importance sampling（重要性抽样）：通过在所有 kN 个点对粗略预测插值，并计算特定任务的不确定性估计来关注具有不确定粗略预测的点。从 kN 个候选点中选出最不确定的βN 个点（β∈[0，1]）。 （iii）Coverage（覆盖范围）：其余（1-β）N 个点从均匀分布中采样得到。\n3.2 Point-wise Representation PointRend 通过组合细粒度特征（fine-grained features）和粗略预测特征（coarse prediction features），来构建所选点的逐点特征表示。\n通过在特征图上对应位置进行双线性插值来计算特征向量。\n coarse prediction features：decoder_head1 得到的粗分割结果； fine-grained features：将 backbone 输出的几组多尺度特征图进行融合的结果。  3.3 Point Head 对于每个选定点的逐点特征表示，PointRend 使用简单的多层感知器（MLP）进行逐点分割预测。损失函数使用常规的交叉熵损失。\n5. Experiments 分别进行了实例分割和语义分割实验。下面列出语义分割的实验结果。\n采用 Cityscapes 语义分割数据集，采用 mIoU 评价指标。作者采用 DeeplabV3 和 SemanticFPN 作为语义分割网络。PointRend 中的粗略预测特征来自语义分割网络的输出，细粒度特征分别从 DeeplabV3 的 res2 层以及 SemanticFPN 的 P2 层插值得到。\n（1）表 6 展示了 DeepLabV3 和 DeeplabV3 + PointRend 的对比情况。\nDeeplabV3 + PointRend 在 Cityscapes 语义分割任务上的性能超过基线 DeepLabV3\n（2）表 4 展示了 PointRend 在训练过程中使用不同点选择策略时的性能。\n（3）模型在 Cityscapes 样本上的实例分割和语义分割结果。\n",
+  "wordCount" : "2158",
+  "inLanguage": "en",
+  "datePublished": "2022-04-24T17:22:19+08:00",
+  "dateModified": "2022-04-24T17:22:19+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "http://landodo.github.io/posts/20220424-pointrend-image-segmentation-as-rendering/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Notes",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "http://landodo.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="http://landodo.github.io/" accesskey="h" title="Notes (Alt + H)">
+                <img src="http://landodo.github.io/logo.png" alt="logo" aria-label="logo"
+                    height="30">Notes</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://landodo.github.io/search" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/archives/" title="Archives">
+                    <span>Archives</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/tags" title="Tag">
+                    <span>Tag</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/about" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://landodo.github.io/cs-zoo" title="CS ZOO">
+                    <span>CS ZOO</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="http://landodo.github.io/">Home</a>&nbsp;»&nbsp;<a href="http://landodo.github.io/posts/">Posts</a></div>
+    <h1 class="post-title">
+      PointRend: Image Segmentation as Rendering
+    </h1>
+    <div class="post-meta"><span title='2022-04-24 17:22:19 +0800 CST'>April 24, 2022</span>&nbsp;·&nbsp;5 min&nbsp;·&nbsp;2158 words
+
+</div>
+  </header> <div class="toc">
+    <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#%e8%ae%ba%e6%96%87%e7%ae%80%e4%bb%8b" aria-label="论文简介">论文简介</a></li>
+                <li>
+                    <a href="#abstract" aria-label="Abstract">Abstract</a></li>
+                <li>
+                    <a href="#1-introduction" aria-label="1 Introduction">1 Introduction</a></li>
+                <li>
+                    <a href="#3-method" aria-label="3. Method">3. Method</a><ul>
+                        
+                <li>
+                    <a href="#31-point-selection" aria-label="3.1 Point Selection">3.1 Point Selection</a></li>
+                <li>
+                    <a href="#32-point-wise-representation" aria-label="3.2 Point-wise Representation">3.2 Point-wise Representation</a></li>
+                <li>
+                    <a href="#33-point-head" aria-label="3.3 Point Head">3.3 Point Head</a></li></ul>
+                </li>
+                <li>
+                    <a href="#5-experiments" aria-label="5. Experiments">5. Experiments</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><h2 id="论文简介">论文简介<a hidden class="anchor" aria-hidden="true" href="#论文简介">#</a></h2>
+<p><img loading="lazy" src="./20220424/Untitled.png" alt="Untitled"  />
+</p>
+<ul>
+<li>会议：CVPR  2020</li>
+<li>arXiv: 1912.08193</li>
+<li>[<a href="https://openaccess.thecvf.com/content_CVPR_2020/papers/Kirillov_PointRend_Image_Segmentation_As_Rendering_CVPR_2020_paper.pdf">PDF</a>下载]</li>
+<li>代码在 mmsegmentation 中有实现。</li>
+<li>目前总引用数：<strong>225 Citations</strong></li>
+</ul>
+<blockquote>
+<p>Kirillov, A., Wu, Y., He, K., &amp; Girshick, R.B. (2020). PointRend: Image Segmentation As Rendering. <em>2020 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)</em>
+, 9796-9805.</p>
+</blockquote>
+<h2 id="abstract">Abstract<a hidden class="anchor" aria-hidden="true" href="#abstract">#</a></h2>
+<p>该项工作创新地采用计算机图形学的渲染思路来解决计算机视觉领域的图像分割问题。</p>
+<p>作者提出了 PointRend（Point-based Rendering）神经网络模块：该模块基于迭代细分算法，在自适应选择的位置执行基于点的分割预测。PointRend 可以与现有的最新模型结合，灵活地应用于实例和语义分割任务。定性实验表明，对于先前的方法过度平滑的区域，PointRend 可以输出清晰的对象边界。定量实验表明，PointRend 在 COCO 和 Cityscapes 数据集上的实例分割和语义分割任务的表现都有显著提高。在同样的内存和算力情况下，PointRend 与现有方法相比能输出更高的分辨率。</p>
+<h2 id="1-introduction">1 Introduction<a hidden class="anchor" aria-hidden="true" href="#1-introduction">#</a></h2>
+<p>用于图像分割任务的卷积神经网络通常在规则网格（regular grid）上操作：输入的是图像像素的规则网格，隐藏表征是规则网格上的特征向量，而输出则是基于规则网格的标签图。</p>
+<p>规则网格会对对象区域过采样，而同时对对象边界欠采样。使得预测结果的轮廓变得模糊（如图 1 左上）。PointRend 的细节效果更好，并且分辨率高，甚至五指的轮廓都可以分割出来。</p>
+<p><img loading="lazy" src="./20220424/Untitled%201.png" alt="Untitled"  />
+</p>
+<p>这篇论文的核心思想是将图像分割视为渲染问题，并利用计算机图形学中的经典思想来高效地“渲染”高质量标签图。作者将这一思想实现为一个新型神经网络模块——PointRend，该模块使用细分策略来自适应地选择一组非均匀点，进而计算标签。PointRend 可以整合到常用的实例分割元架构（如 Mask R-CNN）和语义分割元架构（如 FCN）中。PointRend 的细分策略所需的浮点数运算相比于直接密集计算减少了一个数量级，能高效地计算高分辨率分割图。</p>
+<p>PointRend 不对输出网格上的所有点执行过度预测，<strong>仅对精心选择的点执行预测。</strong></p>
+<p>作者在 COCO 和 Cityscapes 基准数据集上评估了 PointRend 在实例分割和语义分割任务上的性能。定性结果显示，PointRend 能够高效计算不同对象之间的清晰边界。定量实验结果显示，PointRend 显著提升了 Mask R-CNN 和 DeepLabV3 的性能。</p>
+<h2 id="3-method">3. Method<a hidden class="anchor" aria-hidden="true" href="#3-method">#</a></h2>
+<p><img loading="lazy" src="./20220424/Untitled%202.png" alt="Untitled"  />
+</p>
+<p><strong>PointRend 模块包含 3 个主要组件：</strong></p>
+<p>(i) 点选择策略（<em>point selection strategy</em>）：选择少量真值点执行预测，避免对高分辨率输出网格中的所有像素进行过度计算。
+(ii) 点特征表示（<em>point-wise feature representation</em>）：使用每个选中点在 f 规则网格上的 4 个最近邻点，对 f 进行双线性内插，计算点的特征。
+(iii) point head：一个小型神经网络，基于逐点特征表示预测标签。</p>
+<h3 id="31-point-selection">3.1 Point Selection<a hidden class="anchor" aria-hidden="true" href="#31-point-selection">#</a></h3>
+<p>PointRend 的核心思想是在图像中自适应地选择预测分割标签的点。理论上来说，这些点的位置应该在邻近高频区域（如边界区域）分布较为稠密。</p>
+<p>作者提出的用于推断的点选择策略受到计算机图形学中自适应细分（adaptive subdivision）这一经典技术的启发。该技术仅在与近邻值显著不同的位置上进行计算，来高效渲染高分辨率图像；其他位置的值则保留原来的预测结果。</p>
+<p>PointRend 使用双线性插值对其先前预测的分割进行上采样，然后在这个更密集的网格上选择N个最不确定的点（例如，binay mask 概率最接近 0.5）。然后，PointRend 为这 N 个点中的每一个计算点的特征表示（第3.2节）并预测其标签。这个过程不断重复，直到分割图被升采样到一个理想的分辨率。</p>
+<p><img loading="lazy" src="./20220424/Untitled%203.png" alt="Untitled"  />
+</p>
+<p>PointRend 输入的特征图大小为 $M_0 \times M_0$，需要升采样至 $M\times M$，则采样点的数量不超过 $Nlog_2 \frac{M}{M_0}$ 。</p>
+<p><strong>Trtaining：Figure 4 的迭代策略对于利用反向传播训练神经网络不够友好。因此，训练过程采用基于随机采样的非迭代策略。</strong></p>
+<p>点采样策略选择特征图上的 N 个点进行训练。它的目的是偏向不确定区域的选择，同时保持一定程度的均匀覆盖。基于以下三个原则：</p>
+<p>（i）Over generation（过度生成）：通过从均匀分布中随机抽样 kN 个点（k&gt;1）来过度生成候选点。
+（ii）Importance sampling（重要性抽样）：通过在所有 kN 个点对粗略预测插值，并计算特定任务的不确定性估计来关注具有不确定粗略预测的点。从 kN 个候选点中选出最不确定的βN 个点（β∈[0，1]）。
+（iii）Coverage（覆盖范围）：其余（1-β）N 个点从均匀分布中采样得到。</p>
+<p><img loading="lazy" src="./20220424/Untitled%204.png" alt="Untitled"  />
+</p>
+<h3 id="32-point-wise-representation">3.2 Point-wise Representation<a hidden class="anchor" aria-hidden="true" href="#32-point-wise-representation">#</a></h3>
+<p>PointRend 通过组合细粒度特征（fine-grained features）和粗略预测特征（coarse prediction features），来构建所选点的逐点特征表示。</p>
+<p>通过在特征图上对应位置进行双线性插值来计算特征向量。</p>
+<ul>
+<li>coarse prediction features：decoder_head1 得到的粗分割结果；</li>
+<li>fine-grained features：将 backbone 输出的几组多尺度特征图进行融合的结果。</li>
+</ul>
+<h3 id="33-point-head">3.3 Point Head<a hidden class="anchor" aria-hidden="true" href="#33-point-head">#</a></h3>
+<p>对于每个选定点的逐点特征表示，PointRend 使用简单的多层感知器（MLP）进行逐点分割预测。损失函数使用常规的交叉熵损失。</p>
+<h2 id="5-experiments">5. Experiments<a hidden class="anchor" aria-hidden="true" href="#5-experiments">#</a></h2>
+<p>分别进行了实例分割和语义分割实验。下面列出语义分割的实验结果。</p>
+<p>采用 Cityscapes 语义分割数据集，采用 mIoU 评价指标。作者采用 DeeplabV3 和 SemanticFPN 作为语义分割网络。PointRend 中的粗略预测特征来自语义分割网络的输出，细粒度特征分别从 DeeplabV3 的 res2 层以及 SemanticFPN 的 P2 层插值得到。</p>
+<p>（1）表 6 展示了 DeepLabV3 和 DeeplabV3 + PointRend 的对比情况。</p>
+<p>DeeplabV3 + PointRend 在 Cityscapes 语义分割任务上的性能超过基线 DeepLabV3</p>
+<p><img loading="lazy" src="./20220424/Untitled%205.png" alt="Untitled"  />
+</p>
+<p>（2）表 4 展示了 PointRend 在训练过程中使用不同点选择策略时的性能。</p>
+<p><img loading="lazy" src="./20220424/Untitled%206.png" alt="Untitled"  />
+</p>
+<p>（3）模型在 Cityscapes 样本上的实例分割和语义分割结果。</p>
+<p><img loading="lazy" src="./20220424/Untitled%207.png" alt="Untitled"  />
+</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="http://landodo.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">论文阅读</a></li>
+      <li><a href="http://landodo.github.io/tags/cnn/">CNN</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="next" href="http://landodo.github.io/posts/20220420-cpp-implement-string-class/">
+    <span class="title">Next Page »</span>
+    <br>
+    <span>实现C&#43;&#43;类的基本函数：3构造、2赋值、1析构、运算符重载</span>
+  </a>
+</nav>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>Landon</span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

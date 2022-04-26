@@ -7,7 +7,16 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>Landon</copyright>
-    <lastBuildDate>Sun, 20 Mar 2022 14:50:44 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 24 Apr 2022 17:22:19 +0800</lastBuildDate><atom:link href="http://landodo.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>PointRend: Image Segmentation as Rendering</title>
+      <link>http://landodo.github.io/posts/20220424-pointrend-image-segmentation-as-rendering/</link>
+      <pubDate>Sun, 24 Apr 2022 17:22:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20220424-pointrend-image-segmentation-as-rendering/</guid>
+      <description>论文简介 会议：CVPR 2020 arXiv: 1912.08193 [PDF下载] 代码在 mmsegmentation 中有实现。 目前总引用数：225 Citations Kirillov, A., Wu, Y., He, K., &amp;amp; Girshick, R.B. (2020). PointRend: Image Segmentation As Rendering. 2020 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR) , 9796-9805. Abstract 该</description>
+    </item>
+    
     <item>
       <title>HyperSeg: Patch-wise Hypernetwork for Real-time Semantic Segmentation</title>
       <link>http://landodo.github.io/posts/20220320-hyperseg/</link>

@@ -2,16 +2,25 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://landodo.github.io/tags/c&#43;&#43;/</loc>
-    <lastmod>2022-04-20T17:22:19+08:00</lastmod>
+    <loc>http://landodo.github.io/tags/cnn/</loc>
+    <lastmod>2022-04-24T17:22:19+08:00</lastmod>
   </url><url>
     <loc>http://landodo.github.io/</loc>
-    <lastmod>2022-04-20T17:22:19+08:00</lastmod>
+    <lastmod>2022-04-24T17:22:19+08:00</lastmod>
+  </url><url>
+    <loc>http://landodo.github.io/posts/20220424-pointrend-image-segmentation-as-rendering/</loc>
+    <lastmod>2022-04-24T17:22:19+08:00</lastmod>
   </url><url>
     <loc>http://landodo.github.io/posts/</loc>
-    <lastmod>2022-04-20T17:22:19+08:00</lastmod>
+    <lastmod>2022-04-24T17:22:19+08:00</lastmod>
   </url><url>
     <loc>http://landodo.github.io/tags/</loc>
+    <lastmod>2022-04-24T17:22:19+08:00</lastmod>
+  </url><url>
+    <loc>http://landodo.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/</loc>
+    <lastmod>2022-04-24T17:22:19+08:00</lastmod>
+  </url><url>
+    <loc>http://landodo.github.io/tags/c&#43;&#43;/</loc>
     <lastmod>2022-04-20T17:22:19+08:00</lastmod>
   </url><url>
     <loc>http://landodo.github.io/posts/20220420-cpp-implement-string-class/</loc>
@@ -20,16 +29,10 @@
     <loc>http://landodo.github.io/tags/%E9%9D%A2%E8%AF%95/</loc>
     <lastmod>2022-04-20T17:22:19+08:00</lastmod>
   </url><url>
-    <loc>http://landodo.github.io/tags/cnn/</loc>
-    <lastmod>2022-03-20T14:50:44+08:00</lastmod>
-  </url><url>
     <loc>http://landodo.github.io/posts/20220320-hyperseg/</loc>
     <lastmod>2022-03-20T14:50:44+08:00</lastmod>
   </url><url>
     <loc>http://landodo.github.io/tags/%E7%AC%94%E8%AE%B0/</loc>
-    <lastmod>2022-03-20T14:50:44+08:00</lastmod>
-  </url><url>
-    <loc>http://landodo.github.io/tags/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/</loc>
     <lastmod>2022-03-20T14:50:44+08:00</lastmod>
   </url><url>
     <loc>http://landodo.github.io/tags/qt/</loc>
