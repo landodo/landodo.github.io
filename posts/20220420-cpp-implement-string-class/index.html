@@ -101,8 +101,8 @@
   "keywords": [
     "C++", "面试"
   ],
-  "articleBody": "字节二面面试题：使用实现一个基础的 string 类。要求类中成员函数包含：\n默认构造函数 拷贝构造函数 移动构造函数 —————— 拷贝赋值运算 移动赋值运算 —————— 析构函数 —————— 重载 +, ==, \u003c\u003c 等基本运算符 实现结果：\n#include #include #include #include using std::ostream; using std::istream; class String { public: // 1. 默认构造函数 // 加上 const 作用：(1)不会修改指向值, (2)使得str可以指向右值 // String s(\"HELLO\"); // String s = \"HELLO\"; // String s; String(const char* str = nullptr) { std::cout \u003c\u003c \"[\" \u003c\u003c this \u003c\u003c \"] \"; std::cout \u003c\u003c \"Call: String(const char* str = nullptr)\" \u003c\u003c std::endl; if (str == nullptr) { len_ = 0; str_ = new char[1]; } else { len_ = strlen(str); str_ = new char[len_ + 1]; strcpy(str_, str); } str_[len_] = '\\0'; } // 2. 析构函数 ~String() { std::cout \u003c\u003c \"[\" \u003c\u003c this \u003c\u003c \"] \"; std::cout \u003c\u003c \"Call: ~String()\" \u003c\u003c std::endl; delete[] str_; str_ = nullptr; } // 3.拷贝构造函数 // String s1 = s; // String s1(s); String(const String\u0026 other) { std::cout \u003c\u003c \"[\" \u003c\u003c this \u003c\u003c \"] \"; std::cout \u003c\u003c \"Call: String(const String\u0026 other)\" \u003c\u003c std::endl; this-\u003elen_ = other.len_; this-\u003estr_ = new char[this-\u003elen_ + 1]; strcpy(this-\u003estr_, other.str_); this-\u003estr_[this-\u003elen_] = '\\0'; } // 4. 移动构造函数 // String s1(std::move(s)); String(String\u0026\u0026 other) noexcept { // 告诉编译器不会发生异常，便于优化；如若运行时发生异常，则调用std::terminate()函数终止. std::cout \u003c\u003c \"[\" \u003c\u003c this \u003c\u003c \"] \"; std::cout \u003c\u003c \"Call: String(String\u0026\u0026 other)\" \u003c\u003c std::endl; this-\u003elen_ = other.len_; this-\u003estr_ = other.str_; // 阻止 other 析构数据 other.str_ = nullptr; // C++ delete nullptr 是安全的行为! 因此不影响 other 对象析构函数 } // 5. 拷贝赋值函数 // String s1; // s1 = s; String\u0026 operator=(const String\u0026 other) { std::cout \u003c\u003c \"[\" \u003c\u003c this \u003c\u003c \"] \"; std::cout \u003c\u003c \"Call: String\u0026 operator=(const String\u0026 other)\" \u003c\u003c std::endl; if (\u0026other == this) { // String s; s = s; return *this; } delete[] this-\u003estr_; // this-\u003estr_ 至少包含 '\\0' this-\u003elen_ = other.len_; this-\u003estr_ = new char[this-\u003elen_ + 1]; strcpy(this-\u003estr_, other.str_); this-\u003estr_[this-\u003elen_] = '\\0'; return *this; } // 6. 移动赋值函数 // String s1 = std::move(s); String\u0026 operator=(String\u0026\u0026 other) noexcept { std::cout \u003c\u003c \"[\" \u003c\u003c this \u003c\u003c \"] \"; std::cout \u003c\u003c \"Call: String\u0026 operator=(String\u0026\u0026 other)\" \u003c\u003c std::endl; if (\u0026other == this) { return *this; } delete[] this-\u003estr_; this-\u003elen_ = other.len_; this-\u003estr_ = other.str_; // 阻止 other 析构数据 other.str_ = nullptr; // C++ delete nullptr 是安全的行为! 因此不影响 other 对象析构函数 return *this; } // 7. 重载运算符 // +, ==, \u003c\u003c：字符串拼接、判断两个字符串是否相等、输出. bool operator==(const String\u0026 other) { std::cout \u003c\u003c \"Call: bool operator==(const String\u0026 other)\" \u003c\u003c std::endl; // strcmp(str1, str2); 相等返回0，不等为-1 return (strcmp(this-\u003estr_, other.str_) == 0 \u0026\u0026 this-\u003elen_ == other.len_); } String\u0026 operator+(const String\u0026 other) { this-\u003elen_ += other.len_; char* tmp = this-\u003estr_; this-\u003estr_ = new char[this-\u003elen_ + 1]; strcpy(this-\u003estr_, tmp); strcat(this-\u003estr_, other.str_); this-\u003estr_[this-\u003elen_] = '\\0'; delete[] tmp; tmp = nullptr; return *this; } // 需要声明为友元函数 friend ostream\u0026 operator\u003c\u003c(ostream\u0026 os, const String\u0026 s) { os \u003c\u003c \"str: \" \u003c\u003c s.str_ \u003c\u003c \", len: \" \u003c\u003c s.len_; return os; } private: char* str_; unsigned int len_; }; int main() { // 1.默认构造 String s = \"12345\"; // 3. 拷贝构造 String s1(s); // or String s1 = s; // 4. 移动构造 String s2(std::move(s)); String s3 = \"ABCDE\"; // 5. 拷贝赋值 s = s3; // 6. 移动赋值 s = std::move(s3); String s4 = \"XYZ\"; // 7. 重载 +, ==, \u003c\u003c s = s + s4; if (s == s4) std::cout \u003c\u003c \"s == s4\" \u003c\u003c std::endl; else std::cout \u003c\u003c \"s != s4\" \u003c\u003c std::endl; std::cout \u003c\u003c s \u003c\u003c std::endl; return 0; } /*** 运行结果 [008FFBA4] Call : String(const char* str = nullptr) [008FFB94] Call : String(const String\u0026 other) [008FFB84] Call : String(String\u0026\u0026 other) [008FFB74] Call : String(const char* str = nullptr) [008FFBA4] Call : String \u0026 operator=(const String\u0026 other) [008FFBA4] Call : String \u0026 operator=(String\u0026\u0026 other) [008FFB64] Call : String(const char* str = nullptr) [008FFBA4] Call : String \u0026 operator=(const String\u0026 other) Call : bool operator==(const String\u0026 other) s != s4 str : ABCDEXYZ, len : 8 [008FFB64] Call : ~String() [008FFB74] Call : ~String() [008FFB84] Call : ~String() [008FFB94] Call : ~String() [008FFBA4] Call : ~String()*/ ",
-  "wordCount" : "938",
+  "articleBody": "字节二面面试题：使用实现一个基础的 string 类。要求类中成员函数包含：\n默认构造函数 拷贝构造函数 移动构造函数 —————— 拷贝赋值运算 移动赋值运算 —————— 析构函数 —————— 重载 +, ==, \u003c\u003c 等基本运算符 实现结果：\n#include #include #include #include using std::ostream; using std::istream; class String { public: // 1. 默认构造函数 // 加上 const 作用：(1)不会修改指向值, (2)使得str可以指向右值 // String s(\"HELLO\"); // String s = \"HELLO\"; // String s; String(const char* str = nullptr) { std::cout \u003c\u003c \"[\" \u003c\u003c this \u003c\u003c \"] \"; std::cout \u003c\u003c \"Call: String(const char* str = nullptr)\" \u003c\u003c std::endl; if (str == nullptr) { len_ = 0; str_ = new char[1]; } else { len_ = strlen(str); str_ = new char[len_ + 1]; strcpy(str_, str); } str_[len_] = '\\0'; } // 2. 析构函数 ~String() { std::cout \u003c\u003c \"[\" \u003c\u003c this \u003c\u003c \"] \"; std::cout \u003c\u003c \"Call: ~String()\" \u003c\u003c std::endl; delete[] str_; str_ = nullptr; } // 3.拷贝构造函数 // String s1 = s; // String s1(s); String(const String\u0026 other) { std::cout \u003c\u003c \"[\" \u003c\u003c this \u003c\u003c \"] \"; std::cout \u003c\u003c \"Call: String(const String\u0026 other)\" \u003c\u003c std::endl; this-\u003elen_ = other.len_; this-\u003estr_ = new char[this-\u003elen_ + 1]; strcpy(this-\u003estr_, other.str_); this-\u003estr_[this-\u003elen_] = '\\0'; } // 4. 移动构造函数 // String s1(std::move(s)); String(String\u0026\u0026 other) noexcept { // 告诉编译器不会发生异常，便于优化；如若运行时发生异常，则调用std::terminate()函数终止. std::cout \u003c\u003c \"[\" \u003c\u003c this \u003c\u003c \"] \"; std::cout \u003c\u003c \"Call: String(String\u0026\u0026 other)\" \u003c\u003c std::endl; this-\u003elen_ = other.len_; this-\u003estr_ = other.str_; // 阻止 other 析构数据 other.str_ = nullptr; // C++ delete nullptr 是安全的行为! 因此不影响 other 对象析构函数 } // 5. 拷贝赋值函数 // String s1; // s1 = s; String\u0026 operator=(const String\u0026 other) { std::cout \u003c\u003c \"[\" \u003c\u003c this \u003c\u003c \"] \"; std::cout \u003c\u003c \"Call: String\u0026 operator=(const String\u0026 other)\" \u003c\u003c std::endl; if (\u0026other == this) { // String s; s = s; return *this; } delete[] this-\u003estr_; // this-\u003estr_ 至少包含 '\\0' this-\u003elen_ = other.len_; this-\u003estr_ = new char[this-\u003elen_ + 1]; strcpy(this-\u003estr_, other.str_); this-\u003estr_[this-\u003elen_] = '\\0'; return *this; } // 6. 移动赋值函数 // String s1 = std::move(s); String\u0026 operator=(String\u0026\u0026 other) noexcept { std::cout \u003c\u003c \"[\" \u003c\u003c this \u003c\u003c \"] \"; std::cout \u003c\u003c \"Call: String\u0026 operator=(String\u0026\u0026 other)\" \u003c\u003c std::endl; if (\u0026other == this) { return *this; } delete[] this-\u003estr_; this-\u003elen_ = other.len_; this-\u003estr_ = other.str_; // 阻止 other 析构数据 other.str_ = nullptr; // C++ delete nullptr 是安全的行为! 因此不影响 other 对象析构函数 return *this; } // 7. 重载运算符 // +, ==, \u003c\u003c：字符串拼接、判断两个字符串是否相等、输出. bool operator==(const String\u0026 other) { std::cout \u003c\u003c \"Call: bool operator==(const String\u0026 other)\" \u003c\u003c std::endl; // strcmp(str1, str2); 相等返回0，不等为-1 return (strcmp(this-\u003estr_, other.str_) == 0 \u0026\u0026 this-\u003elen_ == other.len_); } String\u0026 operator+(const String\u0026 other) { this-\u003elen_ += other.len_; char* tmp = this-\u003estr_; this-\u003estr_ = new char[this-\u003elen_ + 1]; strcpy(this-\u003estr_, tmp); strcat(this-\u003estr_, other.str_); this-\u003estr_[this-\u003elen_] = '\\0'; delete[] tmp; tmp = nullptr; return *this; } // 需要声明为友元函数 friend ostream\u0026 operator\u003c\u003c(ostream\u0026 os, const String\u0026 s) { os \u003c\u003c \"str: \" \u003c\u003c s.str_ \u003c\u003c \", len: \" \u003c\u003c s.len_; return os; } private: char* str_; unsigned int len_; }; int main() { // 1.默认构造 String(const char* str = nullptr) String s = \"12345\"; // 3. 拷贝构造 String(const String\u0026 other) or String s1 = s; String s1(s); // 4. 移动构造 String(String\u0026\u0026 other) String s2(std::move(s)); // 5. 拷贝赋值 String\u0026 operator=(const String\u0026 other) String s3 = \"ABCDE\"; s = s3; // 6. 移动赋值 String\u0026 operator=(String\u0026\u0026 other) s = std::move(s3); // 7. 重载 +, ==, \u003c\u003c String\u0026 operator+(const String\u0026 other) String s4 = \"XYZ\"; s = s + s4; if (s == s4) std::cout \u003c\u003c \"s == s4\" \u003c\u003c std::endl; else std::cout \u003c\u003c \"s != s4\" \u003c\u003c std::endl; std::cout \u003c\u003c s \u003c\u003c std::endl; return 0; } // 运行结果 // [0x7ffee6fbb9b8] Call: String(const char* str = nullptr) // [0x7ffee6fbb9a8] Call: String(const String\u0026 other) // [0x7ffee6fbb988] Call: String(String\u0026\u0026 other) // [0x7ffee6fbb978] Call: String(const char* str = nullptr) // [0x7ffee6fbb9b8] Call: String\u0026 operator=(const String\u0026 other) // [0x7ffee6fbb9b8] Call: String\u0026 operator=(String\u0026\u0026 other) // [0x7ffee6fbb968] Call: String(const char* str = nullptr) // [0x7ffee6fbb9b8] Call: String\u0026 operator=(const String\u0026 other) // Call: bool operator==(const String\u0026 other) // s != s4 // str: ABCDEXYZ, len: 8 // [0x7ffee6fbb968] Call: ~String() // [0x7ffee6fbb978] Call: ~String() // [0x7ffee6fbb988] Call: ~String() // [0x7ffee6fbb9a8] Call: ~String() // [0x7ffee6fbb9b8] Call: ~String() ",
+  "wordCount" : "955",
   "inLanguage": "en",
   "datePublished": "2022-04-20T17:22:19+08:00",
   "dateModified": "2022-04-20T17:22:19+08:00",
@@ -205,7 +205,7 @@
     <h1 class="post-title">
       实现C&#43;&#43;类的基本函数：3构造、2赋值、1析构、运算符重载
     </h1>
-    <div class="post-meta"><span title='2022-04-20 17:22:19 +0800 CST'>April 20, 2022</span>&nbsp;·&nbsp;2 min&nbsp;·&nbsp;938 words
+    <div class="post-meta"><span title='2022-04-20 17:22:19 +0800 CST'>April 20, 2022</span>&nbsp;·&nbsp;2 min&nbsp;·&nbsp;955 words
 
 </div>
   </header> 
@@ -329,6 +329,7 @@
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>		<span style="color:#66d9ef">return</span> (strcmp(<span style="color:#66d9ef">this</span><span style="color:#f92672">-&gt;</span>str_, other.str_) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">-&gt;</span>len_ <span style="color:#f92672">==</span> other.len_);
 </span></span><span style="display:flex;"><span>	}
 </span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>	String<span style="color:#f92672">&amp;</span> <span style="color:#66d9ef">operator</span><span style="color:#f92672">+</span>(<span style="color:#66d9ef">const</span> String<span style="color:#f92672">&amp;</span> other) {
 </span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">this</span><span style="color:#f92672">-&gt;</span>len_ <span style="color:#f92672">+=</span> other.len_;
 </span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">char</span><span style="color:#f92672">*</span> tmp <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">-&gt;</span>str_;
@@ -354,23 +355,27 @@
 </span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> len_;
 </span></span><span style="display:flex;"><span>};
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>() {
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 1.默认构造
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	String s <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;12345&#34;</span>;
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 3. 拷贝构造
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	String s1(s); <span style="color:#75715e">// or String s1 = s;
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">// 4. 移动构造
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	String s2(std<span style="color:#f92672">::</span>move(s));
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	String s3 <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;ABCDE&#34;</span>;
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 5. 拷贝赋值
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	s <span style="color:#f92672">=</span> s3;
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 6. 移动赋值
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 1.默认构造 String(const char* str = nullptr)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	String s <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;12345&#34;</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 3. 拷贝构造 String(const String&amp; other) or String s1 = s;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	String s1(s); 
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">// 4. 移动构造 String(String&amp;&amp; other)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	String s2(std<span style="color:#f92672">::</span>move(s)); 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 5. 拷贝赋值 String&amp; operator=(const String&amp; other)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	String s3 <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;ABCDE&#34;</span>;
+</span></span><span style="display:flex;"><span>	s <span style="color:#f92672">=</span> s3;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 6. 移动赋值 String&amp; operator=(String&amp;&amp; other)
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	s <span style="color:#f92672">=</span> std<span style="color:#f92672">::</span>move(s3);
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	String s4 <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;XYZ&#34;</span>;
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 7. 重载 +, ==, &lt;&lt;
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	s <span style="color:#f92672">=</span> s <span style="color:#f92672">+</span> s4;
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// 7. 重载 +, ==, &lt;&lt; String&amp; operator+(const String&amp; other)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	String s4 <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;XYZ&#34;</span>;
+</span></span><span style="display:flex;"><span>	s <span style="color:#f92672">=</span> s <span style="color:#f92672">+</span> s4;
 </span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> (s <span style="color:#f92672">==</span> s4)
 </span></span><span style="display:flex;"><span>		std<span style="color:#f92672">::</span>cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;s == s4&#34;</span> <span style="color:#f92672">&lt;&lt;</span> std<span style="color:#f92672">::</span>endl;
 </span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">else</span>
@@ -379,24 +384,24 @@
 </span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
 </span></span><span style="display:flex;"><span>}
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e">/*** 运行结果
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">[008FFBA4] Call : String(const char* str = nullptr)
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">[008FFB94] Call : String(const String&amp; other)
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">[008FFB84] Call : String(String&amp;&amp; other)
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">[008FFB74] Call : String(const char* str = nullptr)
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">[008FFBA4] Call : String &amp; operator=(const String&amp; other)
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">[008FFBA4] Call : String &amp; operator=(String&amp;&amp; other)
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">[008FFB64] Call : String(const char* str = nullptr)
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">[008FFBA4] Call : String &amp; operator=(const String&amp; other)
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">Call : bool operator==(const String&amp; other)
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">s != s4
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">str : ABCDEXYZ, len : 8
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">[008FFB64] Call : ~String()
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">[008FFB74] Call : ~String()
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">[008FFB84] Call : ~String()
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">[008FFB94] Call : ~String()
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e">[008FFBA4] Call : ~String()*/</span>
-</span></span></code></pre></div>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 运行结果
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// [0x7ffee6fbb9b8] Call: String(const char* str = nullptr)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// [0x7ffee6fbb9a8] Call: String(const String&amp; other)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// [0x7ffee6fbb988] Call: String(String&amp;&amp; other)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// [0x7ffee6fbb978] Call: String(const char* str = nullptr)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// [0x7ffee6fbb9b8] Call: String&amp; operator=(const String&amp; other)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// [0x7ffee6fbb9b8] Call: String&amp; operator=(String&amp;&amp; other)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// [0x7ffee6fbb968] Call: String(const char* str = nullptr)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// [0x7ffee6fbb9b8] Call: String&amp; operator=(const String&amp; other)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// Call: bool operator==(const String&amp; other)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// s != s4
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// str: ABCDEXYZ, len: 8
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// [0x7ffee6fbb968] Call: ~String()
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// [0x7ffee6fbb978] Call: ~String()
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// [0x7ffee6fbb988] Call: ~String()
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// [0x7ffee6fbb9a8] Call: ~String()
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">// [0x7ffee6fbb9b8] Call: ~String()
+</span></span></span></code></pre></div>
 
   </div>
 
