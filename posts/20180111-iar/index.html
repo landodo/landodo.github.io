@@ -14,7 +14,7 @@
 <link rel="canonical" href="http://landodo.github.io/posts/20180111-iar/" />
 <link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
 <link rel="preload" href="./logo.png" as="image">
-<script defer crossorigin="anonymous" src="/assets/js/highlight.min.4dcb3c4f38462f66c6b6137227726f5543cb934cca9788f041c087e374491df2.js" integrity="sha256-Tcs8TzhGL2bGthNyJ3JvVUPLk0zKl4jwQcCH43RJHfI="
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.b95bacdc39e37a332a9f883b1e78be4abc1fdca2bc1f2641f55e3cd3dabd4d61.js" integrity="sha256-uVus3DnjejMqn4g7Hni&#43;Srwf3KK8HyZB9V4809q9TWE="
     onload="hljs.initHighlightingOnLoad();"></script>
 <link rel="icon" href="http://landodo.github.io/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="http://landodo.github.io/favicon-16x16.png">
@@ -101,7 +101,7 @@
   "keywords": [
     "单片机"
   ],
-  "articleBody": "生成烧录文件  Create New Project 选择 Empty Project 。这个看个人喜好，我一般会选择创建空的工程。` 在 File 新建一个 Document 用于编写程序，保存时注意添加后缀 .c，然后（Add）添加进工程。xxx.h 等自己编写的头文件也可如此添加。 在工程的 General Option - Device 选择对应的单片机型号。MSP430f149 单片机使用 BSL 工具进行烧录，所以需要生成 .txt 格式的文件，在 Linker - Output 下选择 Other ，即 Output 为 msp430-txt。 Compile 编译通过后，点击Make ，就可以在工程的文件夹的 Debug/Exe/ 目录下看到生成的 .txt 文件。 使用 BSL 工具装载烧录文件，点击执行。这一步常见的错误有 ：打开串口出错、BSL 初始化失败。通过搜索可以解决。  截图  选择相应的单片机型号   生成烧录文件  在线仿真 这里指的是不需要生成烧录文件，即不需要通过 BSL 等烧录软件转载烧录文件，可以使用 IAR 的 Download and Debug 一键将程序下载到单片机中。注意以下配置：\n Option 下首先选择 Debugger ，在 Setup 页面中的 Driver 栏选择 FET Debugger 。 其次，选择 FET Debugger， 在Setup 页面中的 Connection 栏选择 Texas Instrument USB-IF ，然后再选择旁边的 COM口。  截图  配置 Debugger   配置 FET Debugger   配置完成、下载程序  ",
+  "articleBody": "生成烧录文件 Create New Project 选择 Empty Project 。这个看个人喜好，我一般会选择创建空的工程。` 在 File 新建一个 Document 用于编写程序，保存时注意添加后缀 .c，然后（Add）添加进工程。xxx.h 等自己编写的头文件也可如此添加。 在工程的 General Option -\u003e Device 选择对应的单片机型号。MSP430f149 单片机使用 BSL 工具进行烧录，所以需要生成 .txt 格式的文件，在 Linker -\u003e Output 下选择 Other ，即 Output 为 msp430-txt。 Compile 编译通过后，点击Make ，就可以在工程的文件夹的 Debug/Exe/ 目录下看到生成的 .txt 文件。 使用 BSL 工具装载烧录文件，点击执行。这一步常见的错误有 ：打开串口出错、BSL 初始化失败。通过搜索可以解决。 截图 选择相应的单片机型号 生成烧录文件 在线仿真 这里指的是不需要生成烧录文件，即不需要通过 BSL 等烧录软件转载烧录文件，可以使用 IAR 的 Download and Debug 一键将程序下载到单片机中。注意以下配置：\nOption 下首先选择 Debugger ，在 Setup 页面中的 Driver 栏选择 FET Debugger 。 其次，选择 FET Debugger， 在Setup 页面中的 Connection 栏选择 Texas Instrument USB-IF ，然后再选择旁边的 COM口。 截图 配置 Debugger 配置 FET Debugger 配置完成、下载程序 ",
   "wordCount" : "434",
   "inLanguage": "en",
   "datePublished": "2018-01-11T22:53:19+08:00",

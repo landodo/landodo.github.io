@@ -50,7 +50,7 @@
       <pubDate>Fri, 18 Feb 2022 22:21:52 +0800</pubDate>
       
       <guid>http://landodo.github.io/posts/boundary-patch-refinement/</guid>
-      <description>Look Closer to Segment Better: Boundary Patch Refinement for Instance Segmentation论文简介： 作者：Chufeng Tang（https://chufengt.github.io/）</description>
+      <description>Look Closer to Segment Better: Boundary Patch Refinement for Instance Segmentation 论文简介： 作者：Chufeng Tang（https://chufengt.github.io/） CVPR 2021 单位：清华大学计算</description>
     </item>
     
     <item>
@@ -86,7 +86,7 @@
       <pubDate>Fri, 05 Nov 2021 08:56:59 +0800</pubDate>
       
       <guid>http://landodo.github.io/posts/20211105-2-5d-network/</guid>
-      <description>🎯Topic: 2.5D methods for Volumetric Medical Image Segmentation论文简介 （1）2.5D 医学图像分割网络综述，发表于 2020 年 10 月。 Exploring Efficient Volumetric Medical Image Segmentation Using 2.5D Method: An Empirical Study （2）</description>
+      <description>🎯Topic: 2.5D methods for Volumetric Medical Image Segmentation 论文简介 （1）2.5D 医学图像分割网络综述，发表于 2020 年 10 月。 Exploring Efficient Volumetric Medical Image Segmentation Using 2.5D Method: An Empirical Study （2）2.5D 分割网络实例，</description>
     </item>
     
     <item>
@@ -419,7 +419,7 @@
       <pubDate>Wed, 30 Dec 2020 10:17:29 +0800</pubDate>
       
       <guid>http://landodo.github.io/posts/20201230-ten-classic-sorting-algorithms/</guid>
-      <description>十大经典的排序算法 #ifndef SORT_ALGO_H #define SORT_ALGO_H #include &amp;lt;vector&amp;gt;using std::vector; using std::swap; // 1. Bubble Sort // Time complexity: O(n^2) // Space complexity: O(1) void bubble_sort(vector&amp;lt;int&amp;gt;&amp;amp; nums) { bool sorted = false; for (int i = 0; i &amp;lt; nums.size() &amp;amp;&amp;amp; !sorted; ++i) { sorted = true; for (int j = 1; j &amp;lt; nums.size() - i; ++j) { if (nums[j] &amp;lt; nums[j -</description>
+      <description>十大经典的排序算法 #ifndef SORT_ALGO_H #define SORT_ALGO_H #include &amp;lt;vector&amp;gt; using std::vector; using std::swap; // 1. Bubble Sort // Time complexity: O(n^2) // Space complexity: O(1) void bubble_sort(vector&amp;lt;int&amp;gt;&amp;amp; nums) { bool sorted = false; for (int i = 0; i &amp;lt; nums.size() &amp;amp;&amp;amp; !sorted; ++i) { sorted = true; for (int j = 1; j &amp;lt; nums.size() - i; ++j) { if (nums[j] &amp;lt; nums[j</description>
     </item>
     
     <item>

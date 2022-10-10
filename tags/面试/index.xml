@@ -17,5 +17,14 @@
       <description>字节二面面试题：使用实现一个基础的 string 类。要求类中成员函数包含： 默认构造函数 拷贝构造函数 移动构造函数 —————— 拷贝赋值运算 移动赋值运算 ———</description>
     </item>
     
+    <item>
+      <title>《STL 源码剖析》STL 学习笔记</title>
+      <link>http://landodo.github.io/posts/20190304-stl-notes/</link>
+      <pubDate>Mon, 04 Mar 2019 17:22:19 +0800</pubDate>
+      
+      <guid>http://landodo.github.io/posts/20190304-stl-notes/</guid>
+      <description>这是我学习 STL 的笔记。 更新日志 2019-03-04 新增了[STL 概述与版本简介](#STL 概述与版本简介)、空间分配器（allocators）、迭代器（iter</description>
+    </item>
+    
   </channel>
 </rss>
